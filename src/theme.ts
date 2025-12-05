@@ -23,13 +23,13 @@ export const theme = {
   },
   images: {
     onboarding: {
-      step1: require('../assets/images/Onboarding_6.png'),
-      step2: require('../assets/images/Onboarding_2.png'),
-      step3: require('../assets/images/Onboarding_3.png'),
-      step4: require('../assets/images/Onboarding_7.png'),
+      step1: require('../assets/images/on7.png'),
+      step2: require('../assets/images/on4.png'),
+      step3: require('../assets/images/on1.png'),
+      step4: require('../assets/images/on3.png'),
     },
     start: {
-      hero: require('../assets/images/maskonanya4.png'),
+      hero: require('../assets/images/Mamascota_2.png'),
     },
     animalSelection: {
       dog: require('../assets/images/perro.png'),

@@ -9,10 +9,14 @@ export default function TermsScreen() {
   const [visible, setVisible] = useState(true); // показываем модалку сразу
 
   const handleAccept = async () => {
-    await AsyncStorage.setItem('termsAccepted', 'true');
+    await AsyncStorage.multiSet([
+      ['acceptedTerms', 'true'],
+      ['termsAccepted', 'true'],
+    ]);
     setVisible(false);
-    router.replace('/animal-selection'); // переход после согласия
+    router.replace('/onboarding'); // теперь после Условий всегда идём в онбординг
   };
+
 
   const handleDecline = () => {
     setVisible(false);

@@ -35,6 +35,12 @@ export async function clearAllAppData() {
       'restoreFromSummary',
       'restoreFromHistory',
 
+      // ⚖️ Согласие с условиями и онбординг
+      'acceptedTerms',
+      'termsAccepted',
+      'seenOnboarding',   // каноничный флаг
+      'onboardingSeen',   // на всякий случай: чистим старый ключ, если где-то остался
+
       // 🤒 Симптомы
       'symptomKeys',
       'selectedSymptoms',

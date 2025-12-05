@@ -4,10 +4,10 @@
   "ok_button": "Entendido",
 
   "exit_title": "¿Deseas salir?",
-  "exit_message": "Puedes guardar tu sesión para continuar más tarde o eliminar todos los datos.",
+  "exit_message": "Puedes guardar tu sesión para continuar más tarde.",
   "exit_save": "Guardar sesión",
-  "exit_delete": "Eliminar sesión",
-  "exit_button": "Salir",
+  "exit_delete": "Salir y empezar de nuevo",
+  "exit_button": "Inicio",
 
   "terms_title": "Términos y condiciones",
   "terms_paragraph1": "Quiero que sepas algo importante.",
@@ -36,6 +36,8 @@
   "animal_reptile": "Reptil",
   "animal_fish": "Pez",
   "animal_exotic": "Exótico",
+  "coming_soon": "Pronto",
+
 
   "animal_question": "¿Sobre qué animal quieres preguntar?",
   "not_in_list": "¿No está en la lista?",
@@ -64,7 +66,7 @@
   "continue_session": "Continuar sesión",
 
   "menu": {
-    "animal_selection": "Al inicio",
+    "animal_selection": "Mis mascotas",
     "change_language": "Cambiar idioma",
     "lang_en": "Inglés",
     "lang_es": "Español",
@@ -84,7 +86,8 @@
     "p2": "Está basada en algoritmos veterinarios y lógica de comportamiento, adaptados al nivel del usuario familiar.",
     "p3": "No damos diagnósticos. Ayudamos a hacer las preguntas correctas y buscar ayuda a tiempo.",
     "signature": "Creado con amor por los animales y atención a las personas.",
-    "follow": "Seguir el proyecto en Instagram"
+    "follow": "Seguir el proyecto en Instagram",
+    "show_onboarding_again": "Más…"
   },
 
   "symptomSelector": {
@@ -94,16 +97,29 @@
   },
 
   "symptoms": {
-    "lethargy": "Letargo",
-    "vomiting": "Vómito",
+    "lethargy": "Decaimiento",
+    "vomiting": "Vómitos",
     "diarrhea": "Diarrea",
+    "constipation": "Estreñimiento",
     "cough": "Tos",
+    "breathing_difficulty": "Dificultad para respirar",
+    "sneezing": "Estornudos / mocos",
     "appetite_loss": "Falta de apetito",
+    "weight_loss": "Pérdida de peso",
     "limping": "Cojera",
-    "drinking_too_much": "Bebe en exceso",
+    "pain_signs": "Parece que le duele",
+    "drinking_too_much": "Bebe mucho",
+    "urinating_too_often": "Orina muy seguido",
     "blood_in_urine": "Sangre en la orina",
+    "itching_skin": "Picores, se rasca",
+    "skin_lesions": "Problemas de piel",
+    "ear_problems": "Problemas de oídos",
+    "eye_problems": "Problemas de ojos",
+    "behavior_change": "Cambio de conducta",
+    "anxiety_stress": "Ansiedad / estrés",
     "seizures": "Convulsiones",
-    "custom": "Otro síntoma"
+    "collapse_fainting": "Desmayo / colapso",
+    "custom": "Otro"
   },
 
   "chat": {
@@ -115,17 +131,22 @@
 
   },
 
-  "onboarding_1_title": "¡Bienvenido!",
-  "onboarding_1_subtitle": "Mamascota te ayuda a notar lo importante y no olvidar lo esencial. Es fácil",
-  "onboarding_2_title": "Tú observas — yo te guío",
-  "onboarding_2_subtitle": "No tienes que saberlo todo. Solo cuéntame lo que ves y te diré qué puede ser relevante",
-  "onboarding_3_title": "Sin diagnósticos, pero con claridad",
-  "onboarding_3_subtitle": "La app no da diagnósticos, pero te ayuda a entender qué pasa y cuándo ir al veterinario",
-  "onboarding_4_title": "Cada animal es un mundo",
-  "onboarding_4_subtitle": "Edad, especie, carácter — todo cuenta. Me adapto a tu realidad",
+  "onboarding_1_title": "Mamascota es tu asistente",
+  "onboarding_1_subtitle": "La app te ayuda a no pasar por alto síntomas importantes y a prepararte con calma para la visita al veterinario.",
+  "onboarding_2_title": "Tú observas — yo organizo",
+  "onboarding_2_subtitle": "Tú eliges a tu mascota y los síntomas, y yo convierto tus observaciones en un lenguaje claro, sin diagnósticos ni términos que asusten.",
+  "onboarding_3_title": "El historial siempre a mano",
+  "onboarding_3_subtitle": "Cada consulta se guarda en la sección «Resumen», para que puedas volver al diálogo y continuar desde donde lo dejaste.",
+  "onboarding_4_title": "Chuleta para la clínica",
+  "onboarding_4_subtitle": "Puedes convertir la conversación en un informe PDF ordenado con el anamnesis y llevarlo a la clínica para que el veterinario vea enseguida el cuadro completo.",
   "onboarding_skip": "Saltar",
   "onboarding_next": "Siguiente",
   "onboarding_start": "Empezar",
+
+  "summary": {
+    "empty_title": "Tus consultas aparecerán aquí",
+    "empty_subtitle": "Inicia un nuevo chat y guárdalo al terminar. Aparecerá en esta lista."
+  }, 
 
   "settings": {
     "remind_in_6h": "Recordar de nuevo en 6 horas",

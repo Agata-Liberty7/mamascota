@@ -4,10 +4,10 @@
   "ok_button": "OK",
 
   "exit_title": "Möchten Sie beenden?",
-  "exit_message": "Sie können Ihre Sitzung speichern, um später fortzufahren, oder alle Daten löschen.",
+  "exit_message": "Sie können Ihre Sitzung speichern, um später fortzufahren.",
   "exit_save": "Sitzung speichern",
-  "exit_delete": "Sitzung löschen",
-  "exit_button": "Beenden",
+  "exit_delete": "Beenden und neu starten",
+  "exit_button": "Startseite",
 
   "terms_title": "Allgemeine Geschäftsbedingungen",
   "terms_paragraph1": "Ich möchte Ihnen etwas Wichtiges mitteilen.",
@@ -35,6 +35,7 @@
   "animal_reptile": "Reptil",
   "animal_fish": "Fisch",
   "animal_exotic": "Exotisch",
+  "coming_soon": "Bald",
 
   "animal_question": "Über welches Tier möchten Sie fragen?",
   "not_in_list": "Nicht in der Liste?",
@@ -63,7 +64,7 @@
   "continue_session": "Sitzung fortsetzen",
 
   "menu": {
-    "animal_selection": "Start",
+    "animal_selection": "Meine Haustiere",
     "change_language": "Sprache ändern",
     "lang_en": "Englisch",
     "lang_es": "Spanisch",
@@ -83,7 +84,8 @@
     "p2": "Sie basiert auf tierärztlichen Entscheidungsbäumen und Verhaltenslogik, angepasst für den Alltag.",
     "p3": "Wir stellen keine Diagnosen. Wir helfen Ihnen, die richtigen Fragen zu stellen und rechtzeitig Hilfe zu suchen.",
     "signature": "Mit Liebe zu Tieren und Aufmerksamkeit für Menschen erstellt.",
-    "follow": "Folgen Sie dem Projekt auf Instagram"
+    "follow": "Folgen Sie dem Projekt auf Instagram",
+    "show_onboarding_again": "Mehr…"
   },
 
   "symptomSelector": {
@@ -93,16 +95,29 @@
   },
 
   "symptoms": {
-    "lethargy": "Trägheit",
+    "lethargy": "Müde, teilnahmslos",
     "vomiting": "Erbrechen",
     "diarrhea": "Durchfall",
+    "constipation": "Verstopfung",
     "cough": "Husten",
-    "appetite_loss": "Appetitverlust",
-    "limping": "Lahmheit",
-    "drinking_too_much": "Trinkt zu viel",
+    "breathing_difficulty": "Atemnot",
+    "sneezing": "Niesen / Nasenausfluss",
+    "appetite_loss": "Kein Appetit",
+    "weight_loss": "Gewichtsverlust",
+    "limping": "Humpeln",
+    "pain_signs": "Wirkt schmerzhaft",
+    "drinking_too_much": "Trinkt sehr viel",
+    "urinating_too_often": "Sehr häufiges Urinieren",
     "blood_in_urine": "Blut im Urin",
-    "seizures": "Krämpfe",
-    "custom": "Anderes Symptom"
+    "itching_skin": "Starker Juckreiz",
+    "skin_lesions": "Hautprobleme",
+    "ear_problems": "Ohrenprobleme",
+    "eye_problems": "Augenprobleme",
+    "behavior_change": "Verhaltensänderung",
+    "anxiety_stress": "Angst / Stress",
+    "seizures": "Anfälle / Krämpfe",
+    "collapse_fainting": "Zusammenbruch / Ohnmacht",
+    "custom": "Anderes"
   },
   "chat": {
     "pet_default": "Das Tier",
@@ -111,17 +126,22 @@
     "placeholder": "Gib deine Nachricht ein...",
     "invite": "Kannst du mir helfen zu verstehen, was das bedeuten könnte?"
   },
-  "onboarding_1_title": "Willkommen!",
-  "onboarding_1_subtitle": "Mamascota hilft Ihnen, Wichtiges zu bemerken und nichts zu vergessen. Ganz einfach.",
-  "onboarding_2_title": "Sie beobachten – ich unterstütze",
-  "onboarding_2_subtitle": "Sie müssen nicht alles wissen. Teilen Sie einfach, was Sie sehen, und ich hebe das Wichtige hervor.",
-  "onboarding_3_title": "Keine Diagnosen, nur Klarheit",
-  "onboarding_3_subtitle": "Diese App stellt keine Diagnose, hilft Ihnen aber zu verstehen, was passiert, und wann es Zeit ist, einen Tierarzt aufzusuchen.",
-  "onboarding_4_title": "Jedes Tier ist eine eigene Welt",
-  "onboarding_4_subtitle": "Alter, Art, Persönlichkeit – alles zählt. Ich passe mich Ihrer Realität an.",
+  "onboarding_1_title": "Mamascota – dein Assistent",
+  "onboarding_1_subtitle": "Die App hilft dir, wichtige Symptome nicht zu übersehen und dich in Ruhe auf den Tierarztbesuch vorzubereiten.",
+  "onboarding_2_title": "Du beobachtest – ich ordne ein",
+  "onboarding_2_subtitle": "Du wählst dein Tier und die Symptome aus, und ich übersetze deine Beobachtungen in verständliche Sprache – ohne Diagnosen und ohne erschreckende Fachbegriffe.",
+  "onboarding_3_title": "Verlauf immer zur Hand",
+  "onboarding_3_subtitle": "Jede Beratung wird im Bereich «Zusammenfassung» gespeichert, damit du zum Chat zurückkehren und genau dort weitermachen kannst, wo du aufgehört hast.",
+  "onboarding_4_title": "Spickzettel für die Praxis",
+  "onboarding_4_subtitle": "Aus dem Dialog kannst du einen übersichtlichen PDF-Bericht über die Anamnese erstellen und mit in die Praxis nehmen, damit die Tierärztin oder der Tierarzt sofort das gesamte Bild sieht.",
   "onboarding_skip": "Überspringen",
   "onboarding_next": "Weiter",
   "onboarding_start": "Start",
+
+  "summary": {
+    "empty_title": "Ihre Beratungsgespräche werden hier angezeigt",
+    "empty_subtitle": "Starten Sie einen neuen Chat und speichern Sie ihn nach Beendigung – er wird dann in dieser Liste erscheinen."
+  },
   
   "settings": {
     "remind_in_6h": "In 6 Stunden erneut erinnern",

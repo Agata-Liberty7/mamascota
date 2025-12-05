@@ -37,9 +37,9 @@ const DoneButton: React.FC<TouchableOpacityProps> = (p) => (
 
 const styles = StyleSheet.create({
   onbImage: {
-    width: '95%',
+    width: '100%',
     height: undefined,
-    aspectRatio: 1,   // квадратная область, масштабируется
+    aspectRatio: 2,   // квадратная область, масштабируется
     marginTop: 8,
     marginBottom: 0, 
   },
@@ -50,8 +50,9 @@ export default function OnboardingScreen() {
 
   const handleDone = async () => {
     await AsyncStorage.setItem('seenOnboarding', 'true');
-    router.replace('/terms-screen');
+    router.replace('/animal-selection');
   };
+
 
   return (
     <Onboarding

@@ -45,6 +45,9 @@ export default function AnimalSelection() {
   const [myPets, setMyPets] = useState<Pet[]>([]);
   const [editingPetId, setEditingPetId] = useState<string | null>(null);
   const [showTermsModal, setShowTermsModal] = useState(false);
+  // ✅ Разрешённые виды для MVP (только собака и кошка)
+  const enabledSpecies = new Set<Species>(["dog", "cat"]);
+
 
   const resetFields = () => {
     setSpecies('');
@@ -76,13 +79,21 @@ export default function AnimalSelection() {
   useEffect(() => {
     const checkTermsAccepted = async () => {
       const accepted = await AsyncStorage.getItem('acceptedTerms');
-      if (!accepted) setShowTermsModal(true);
+      const legacy = await AsyncStorage.getItem('termsAccepted');
+
+      if (accepted !== 'true' && legacy !== 'true') {
+        setShowTermsModal(true);
+      }
     };
     checkTermsAccepted();
   }, []);
 
+
   const handleAcceptTerms = async () => {
-    await AsyncStorage.setItem('acceptedTerms', 'true');
+    await AsyncStorage.multiSet([
+      ['acceptedTerms', 'true'],
+      ['termsAccepted', 'true'],
+    ]);
     setShowTermsModal(false);
   };
 
@@ -107,21 +118,31 @@ export default function AnimalSelection() {
 
     if (!name.trim()) {
       Alert.alert(
-        i18n.t('continue_without_data_title'),
-        i18n.t('continue_without_data_message'),
+        i18n.t("continue_without_data_title"),
+        i18n.t("continue_without_data_message"),
         [
-          { text: i18n.t('cancel'), style: 'cancel' },
           {
-            text: i18n.t('continue'),
+            // 🔵 «Назад» — просто закрывает алерт, остаёмся в форме
+            text: i18n.t("alert-back"),
+            style: "cancel",
             onPress: () => {
-              setModalVisible(false);
-              router.push('/chat');
+              // ничего не делаем, остаёмся в модалке PetForm
             },
           },
-        ],
+          {
+            // 🔴 «Продолжить» — выходим из формы, возвращаемся к выбору животного
+            text: i18n.t("continue"),
+            style: "destructive",
+            onPress: () => {
+              setModalVisible(false);
+              // НИКУДА не переходим, остаёмся на экране animal-selection
+            },
+          },
+        ]
       );
       return;
     }
+
 
     const candidate: Partial<Pet> = {
       id: editingPetId || undefined,
@@ -169,10 +190,10 @@ export default function AnimalSelection() {
             <Text style={styles.footerText}>{i18n.t('not_in_list')}</Text>
             <TouchableOpacity
               onPress={() => {
-                setSelectedAnimal(null);
-                setSpecies('');
-                setEditingPetId(null);
-                setModalVisible(true);
+                Alert.alert(
+                  String(i18n.t('coming_soon')),   // заголовок: "Скоро"
+                  String(i18n.t('not_in_list'))    // текст: "Если вашего питомца нет в списке…"
+                );
               }}
               style={styles.footerButton}
             >
@@ -180,12 +201,33 @@ export default function AnimalSelection() {
             </TouchableOpacity>
           </View>
         }
-        renderItem={({ item }) => (
-          <TouchableOpacity style={[styles.card, { width: itemWidth }]} onPress={() => handleSelect(item.id)}>
-            <Image source={item.image} style={styles.image} resizeMode="contain" />
-            <Text style={styles.label}>{i18n.t(item.label)}</Text>
-          </TouchableOpacity>
-        )}
+
+        renderItem={({ item }) => {
+          const isEnabled = enabledSpecies.has(item.id as Species);
+
+          return (
+            <TouchableOpacity
+              style={[
+                styles.card,
+                { width: itemWidth },
+                !isEnabled && styles.cardDisabled,
+              ]}
+              disabled={!isEnabled}
+              onPress={isEnabled ? () => handleSelect(item.id) : undefined}
+              activeOpacity={isEnabled ? 0.7 : 1}
+            >
+              <Image source={item.image} style={styles.image} resizeMode="contain" />
+              <Text style={styles.label}>{i18n.t(item.label)}</Text>
+
+              {!isEnabled && (
+                <Text style={styles.comingSoon}>
+                  {i18n.t("coming_soon")}
+                </Text>
+              )}
+            </TouchableOpacity>
+          );
+        }}
+
       />
       <Modal visible={modalVisible} transparent animationType="slide">
         <View style={styles.modalOverlay}>
@@ -210,11 +252,22 @@ export default function AnimalSelection() {
                           setSpecies(p.species ?? '');
                           setName(p.name ?? '');
                           setAge(p.ageYears ? String(p.ageYears) : '');
+
+                          // 🐾 НОВОЕ — подтягиваем породу
+                          if (p.breed) {
+                            // если в карточке есть сохранённая порода — используем её
+                            setBreed(p.breed);
+                          } else {
+                            // если вдруг порода не сохранена — сбрасываем в "__other"
+                            setBreed("__other");
+                          }
+
                           if (p.sex) setSex(p.sex as any);
                           if (p.neutered != null) setNeutered(!!p.neutered);
                           setEditingPetId(p.id ?? null); // редактируем существующего
                           setPetsOpen(false);
                         }}
+
                       >
                         <Text style={styles.petName}>{p.name || '—'}</Text>
                       </TouchableOpacity>
@@ -254,9 +307,30 @@ const styles = StyleSheet.create({
   container: { flex: 1, paddingTop: 16, backgroundColor: theme.colors.background },
   title: { fontSize: 18, fontWeight: '600', marginBottom: 16, textAlign: 'center' },
   grid: { paddingHorizontal: 16, paddingBottom: 32 },
-  card: { borderRadius: 12, paddingVertical: 8, margin: 8, alignItems: 'center' },
-  image: { width: 100, height: 100 },
-  label: { marginTop: 8, fontSize: 14, textAlign: 'center' },
+  // 🟦 Карточка-животное как кнопка
+  card: {
+    borderRadius: 16,
+    paddingVertical: 10,
+    margin: 8,
+    alignItems: "center",
+    backgroundColor: "#F5F7FB", // мягкая светлая подложка
+  },
+  // 🔒 Для заблокированных видов
+  cardDisabled: {
+    opacity: 0.4,
+  },
+  image: { width: 100, height: 80
+   },
+  label: {
+    marginTop: 8,
+    fontSize: 14,
+    textAlign: "center",
+  },
+    comingSoon: {
+    marginTop: 4,
+    fontSize: 11,
+    color: "#999",
+  },
   modalOverlay: { flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.5)' },
   modalContent: { backgroundColor: theme.colors.background, borderTopLeftRadius: 16, borderTopRightRadius: 16, padding: 20, minHeight: '50%' },
   modalTitle: { fontSize: 18, fontWeight: '600', marginBottom: 12, textAlign: 'center' },

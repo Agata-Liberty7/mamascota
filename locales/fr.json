@@ -4,10 +4,10 @@
   "ok_button": "OK",
 
   "exit_title": "Voulez-vous quitter ?",
-  "exit_message": "Vous pouvez enregistrer votre session pour continuer plus tard ou supprimer toutes les données.",
+  "exit_message": "Vous pouvez enregistrer votre session pour continuer plus tard.",
   "exit_save": "Enregistrer la session",
-  "exit_delete": "Supprimer la session",
-  "exit_button": "Quitter",
+  "exit_delete": "Abandonnez et recommencez.",
+  "exit_button": "Accueil",
 
   "terms_title": "Conditions générales",
   "terms_paragraph1": "Je veux vous dire quelque chose d’important.",
@@ -35,6 +35,7 @@
   "animal_reptile": "Reptile",
   "animal_fish": "Poisson",
   "animal_exotic": "Exotique",
+  "coming_soon": "Bientôt",
 
   "animal_question": "De quel animal voulez-vous parler ?",
   "not_in_list": "Pas dans la liste ?",
@@ -63,7 +64,7 @@
   "continue_session": "Reprendre la session",
 
   "menu": {
-    "animal_selection": "Commencer",
+    "animal_selection": "Mes animaux",
     "change_language": "Changer de langue",
     "lang_en": "Anglais",
     "lang_es": "Espagnol",
@@ -83,7 +84,8 @@
     "p2": "Elle est basée sur des arbres décisionnels vétérinaires et une logique comportementale, adaptés au quotidien.",
     "p3": "Nous ne donnons pas de diagnostics. Nous vous aidons à poser les bonnes questions et à demander de l’aide à temps.",
     "signature": "Créé avec amour pour les animaux et attention pour les humains.",
-    "follow": "Suivez le projet sur Instagram"
+    "follow": "Suivez le projet sur Instagram",
+    "show_onboarding_again": "Plus…"
   },
 
   "symptomSelector": {
@@ -96,13 +98,26 @@
     "lethargy": "Léthargie",
     "vomiting": "Vomissements",
     "diarrhea": "Diarrhée",
+    "constipation": "Constipation",
     "cough": "Toux",
-    "appetite_loss": "Perte d’appétit",
+    "breathing_difficulty": "Difficulté à respirer",
+    "sneezing": "Éternuements / nez qui coule",
+    "appetite_loss": "Perte d'appétit",
+    "weight_loss": "Perte de poids",
     "limping": "Boiterie",
-    "drinking_too_much": "Boit trop",
+    "pain_signs": "Semble douloureux",
+    "drinking_too_much": "Boit beaucoup",
+    "urinating_too_often": "Urine très souvent",
     "blood_in_urine": "Sang dans les urines",
-    "seizures": "Convulsions",
-    "custom": "Autre symptôme"
+    "itching_skin": "Démangeaisons, se gratte",
+    "skin_lesions": "Problèmes de peau",
+    "ear_problems": "Problèmes d'oreilles",
+    "eye_problems": "Problèmes des yeux",
+    "behavior_change": "Comportement changé",
+    "anxiety_stress": "Anxiété / stress",
+    "seizures": "Crises / convulsions",
+    "collapse_fainting": "Malaise / évanouissement",
+    "custom": "Autre"
   },
   "chat": {
     "pet_default": "L’animal",
@@ -111,17 +126,22 @@
     "placeholder": "Tape ton message...",
     "invite": "Peux-tu m'aider à comprendre ce que cela pourrait signifier ?"
   },
-  "onboarding_1_title": "Bienvenue !",
-  "onboarding_1_subtitle": "Mamascota vous aide à remarquer ce qui est important et à ne rien oublier. C’est simple.",
-  "onboarding_2_title": "Vous observez — je soutiens",
-  "onboarding_2_subtitle": "Vous n’avez pas besoin de tout savoir. Partagez simplement ce que vous voyez et je mettrai en avant ce qui compte.",
-  "onboarding_3_title": "Pas de diagnostics, juste de la clarté",
-  "onboarding_3_subtitle": "Cette application ne pose pas de diagnostic, mais vous aide à comprendre ce qui se passe et quand il est temps de consulter un vétérinaire.",
-  "onboarding_4_title": "Chaque animal est un monde à part",
-  "onboarding_4_subtitle": "Âge, espèce, personnalité — tout compte. Je m’adapte à votre réalité.",
+  "onboarding_1_title": "Mamascota — votre assistant",
+  "onboarding_1_subtitle": "L’application vous aide à ne pas manquer les symptômes importants et à vous préparer sereinement à la visite chez le vétérinaire.",
+  "onboarding_2_title": "Vous observez — j’organise",
+  "onboarding_2_subtitle": "Vous choisissez l’animal et les symptômes, et je transforme vos observations en langage clair — sans diagnostic ni termes effrayants.",
+  "onboarding_3_title": "L’historique toujours à portée de main",
+  "onboarding_3_subtitle": "Chaque consultation est enregistrée dans la section « Résumé » : vous pouvez revenir à la conversation et la reprendre là où vous l’avez laissée.",
+  "onboarding_4_title": "Anti-sèche pour la clinique",
+  "onboarding_4_subtitle": "Vous pouvez transformer le dialogue en un compte-rendu PDF soigné de l’anamnèse et l’emmener à la clinique pour que le vétérinaire voie immédiatement l’ensemble de la situation.",
   "onboarding_skip": "Passer",
   "onboarding_next": "Suivant",
   "onboarding_start": "Commencer",
+
+  "summary": {
+    "empty_title": "Vos consultations apparaîtront ici",
+    "empty_subtitle": "Démarrez une nouvelle conversation et enregistrez-la une fois terminée; elle apparaîtra dans cette liste."
+  }, 
   
   "settings": {
     "remind_in_6h": "Rappeler dans 6 heures",

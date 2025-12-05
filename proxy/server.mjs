@@ -57,10 +57,13 @@ app.post("/agent", async (req, res) => {
     const { message = "", pet = {}, symptomKeys = [], userLang } = req.body || {};
 
     if (!pet?.species) {
-      return res.status(400).json({ ok: false, error: "Нет данных о питомце" });
+      return res.status(400).json({ ok: false, error: "NO_PET_DATA" });
     }
 
     const lang = userLang || pet?.lang || process.env.DEFAULT_LANG || "en";
+    // 🌐 LANG OVERRIDE — принудительная смена языка агента в текущей сессии
+    const langOverride = userLang || "en";
+
 
     const conversationId = req.body.conversationId || Date.now().toString();
 
@@ -74,10 +77,12 @@ app.post("/agent", async (req, res) => {
       message,
       pet,
       symptomKeys,
-      lang,
+      lang,              // старое поведение не трогаем
       conversationId,
-      conversationMemory[conversationId]
+      conversationMemory[conversationId],
+      langOverride       // добавляем override
     );
+
 
     if (reply?.reply) {
       conversationMemory[conversationId].push({

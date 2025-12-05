@@ -1,24 +1,55 @@
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import i18n from '../i18n';
 
 const SYMPTOMS = [
+  // Общее состояние
   'lethargy',
+  'appetite_loss',
+  'weight_loss',
+
+  // ЖКТ
   'vomiting',
   'diarrhea',
+  'constipation',
+
+  // Дыхание
   'cough',
-  'appetite_loss',
+  'breathing_difficulty',
+  'sneezing',
+
+  // Опорно-двигательный аппарат и боль
   'limping',
+  'pain_signs',
+
+  // Мочеиспускание
   'drinking_too_much',
+  'urinating_too_often',
   'blood_in_urine',
+
+  // Кожа, уши, глаза
+  'itching_skin',
+  'skin_lesions',
+  'ear_problems',
+  'eye_problems',
+
+  // Поведение и неврология
+  'behavior_change',
+  'anxiety_stress',
   'seizures',
+  'collapse_fainting',
+
+  // Свой вариант
   'custom',
 ];
 
@@ -53,10 +84,10 @@ export default function SymptomSelector({ onSubmit }: Props) {
     }
 
     try {
-      await AsyncStorage.setItem("selectedSymptoms", JSON.stringify(final));
-      console.log("🩺 Saved selectedSymptoms:", final);
+      await AsyncStorage.setItem('selectedSymptoms', JSON.stringify(final));
+      console.log('🩺 Saved selectedSymptoms:', final);
     } catch (e) {
-      console.error("❌ Не удалось сохранить selectedSymptoms:", e);
+      console.error('❌ Не удалось сохранить selectedSymptoms:', e);
     }
 
     onSubmit(final);
@@ -65,52 +96,87 @@ export default function SymptomSelector({ onSubmit }: Props) {
   const isConfirmDisabled = selected.length === 0 && !customSymptom.trim();
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
       <Text style={styles.title}>{i18n.t('symptomSelector.title')}</Text>
       <Text style={styles.hint}>{i18n.t('symptomSelector.hint')}</Text>
 
-      <View style={styles.tagsContainer}>
-        {SYMPTOMS.map((key) => {
-          const isSelected = selected.includes(key) || (key === 'custom' && showCustomInput);
-          return (
-            <TouchableOpacity
-              key={key}
-              style={[styles.tag, isSelected && styles.tagSelected]}
-              onPress={() => toggleSymptom(key)}
-            >
-              <Text style={[styles.tagText, isSelected && styles.tagTextSelected]}>
-                {i18n.t(`symptoms.${key}`)}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.tagsContainer}>
+          {SYMPTOMS.map(key => {
+            const isSelected =
+              selected.includes(key) ||
+              (key === 'custom' && showCustomInput);
 
-      {showCustomInput && (
-        <TextInput
-          value={customSymptom}
-          onChangeText={setCustomSymptom}
-          placeholder="..."
-          placeholderTextColor="#888"
-          style={styles.customInput}
-        />
-      )}
+            return (
+              <TouchableOpacity
+                key={key}
+                style={[styles.tag, isSelected && styles.tagSelected]}
+                onPress={() => toggleSymptom(key)}
+              >
+                <Text
+                  style={[styles.tagText, isSelected && styles.tagTextSelected]}
+                >
+                  {i18n.t(`symptoms.${key}`)}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+
+        {showCustomInput && (
+          <TextInput
+            value={customSymptom}
+            onChangeText={setCustomSymptom}
+            placeholder="..."
+            placeholderTextColor="#888"
+            style={styles.customInput}
+          />
+        )}
+      </ScrollView>
 
       <TouchableOpacity
         style={[styles.button, isConfirmDisabled && { opacity: 0.5 }]}
         onPress={handleConfirm}
         disabled={isConfirmDisabled}
       >
-        <Text style={styles.buttonText}>{i18n.t('symptomSelector.confirm')}</Text>
+        <Text style={styles.buttonText}>
+          {i18n.t('symptomSelector.confirm')}
+        </Text>
       </TouchableOpacity>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: '#fff' },
-  title: { fontSize: 18, fontWeight: '600', marginBottom: 8, textAlign: 'center' },
-  hint: { fontSize: 14, color: '#666', textAlign: 'center', marginBottom: 12 },
+  title: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  hint: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 12,
+  },
+
+  scroll: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 16,
+    alignItems: 'center',
+  },
+
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -145,6 +211,7 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 15,
     marginBottom: 16,
+    alignSelf: 'stretch',
   },
   button: {
     backgroundColor: '#42A5F5',

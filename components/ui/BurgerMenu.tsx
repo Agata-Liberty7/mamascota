@@ -9,13 +9,12 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
-import { Alert } from "react-native";
 
 import i18n from "../../i18n";
-import eventBus from "../../utils/eventBus";
-import { handleExitAction } from "../../utils/chatWithGPT"; // ✅ заменили showExitConfirmation
+import { handleExitAction } from "../../utils/chatWithGPT";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -29,157 +28,173 @@ export default function BurgerMenu({ visible, onClose }: Props) {
 
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [animalProfile, setAnimalProfile] = useState(false);
-  const [hasChatSession, setHasChatSession] = useState(false);
+  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [hasSummary, setHasSummary] = useState(false);
 
   useEffect(() => {
-    const checkAccess = async () => {
-      console.log("🔥 checkAccess called");
-      const terms = await AsyncStorage.getItem("termsAccepted");
+    const loadFlags = async () => {
+      // читаем оба варианта ключа — старый и новый
+      const legacyTerms = await AsyncStorage.getItem("termsAccepted");
+      const acceptedTerms = await AsyncStorage.getItem("acceptedTerms");
       const profile = await AsyncStorage.getItem("animalProfile");
-      const chatSession = await AsyncStorage.getItem("lastChatSessionExists");
-      console.log("✅ ChatSession from storage:", chatSession);
+      const cid = await AsyncStorage.getItem("conversationId");
+      const summaryFlag = await AsyncStorage.getItem("lastChatSessionExists");
 
-      setTermsAccepted(terms === "true");
+      // согласие с условиями: если хотя бы один флаг true
+      const isAccepted =
+        legacyTerms === "true" || acceptedTerms === "true";
+
+      // наличие хотя бы одной сохранённой сессии
+      const hasAnySummary =
+        !!summaryFlag && summaryFlag !== "0" && summaryFlag !== "false";
+
+      setTermsAccepted(isAccepted);
       setAnimalProfile(!!profile);
-      setHasChatSession(chatSession === "true");
+      setConversationId(cid || null);
+      setHasSummary(hasAnySummary);
     };
 
-    const handleChatStart = () => {
-      setHasChatSession(true);
-    };
-
-    const handleChatEnd = () => {
-      setHasChatSession(false);
-      AsyncStorage.removeItem("lastChatSessionExists");
-      console.log("🔕 Chat session ended — меню отключено");
-    };
-
-    if (visible) checkAccess();
-
-    // Подписка на сигналы
-    eventBus.on("chatSessionStarted", handleChatStart);
-    eventBus.on("chatSessionEnded", handleChatEnd);
-
-    return () => {
-      eventBus.off("chatSessionStarted", handleChatStart);
-      eventBus.off("chatSessionEnded", handleChatEnd);
-    };
+    if (visible) {
+      loadFlags();
+    }
   }, [visible]);
 
-      const [conversationId, setConversationId] = useState<string | null>(null);
+  // 🔥 Переход в чат — всегда проверяем, что есть conversationId
+  const enterChat = async () => {
+    const cid = await AsyncStorage.getItem("conversationId");
 
-    useEffect(() => {
-      const fetchConversationId = async () => {
-        const storedId = await AsyncStorage.getItem("conversationId");
-        setConversationId(storedId);
-      };
-      fetchConversationId();
-    }, []);
+    if (!cid) {
+      Alert.alert(
+        String(i18n.t("no_active_chat_title")),
+        String(i18n.t("no_active_chat_message"))
+      );
+      return;
+    }
 
+    // сообщаем ChatScreen, что нужно восстановиться
+    await AsyncStorage.setItem("restoreFromSummary", "1");
+
+    onClose();
+    setTimeout(() => router.replace("/chat"), 120);
+  };
 
   const menuItems = [
     {
       label: String(i18n.t("menu.about")),
       icon: "info",
-      route: "/about",
       enabled: true,
+      action: () => {
+        onClose();
+        setTimeout(() => router.replace("/about"), 120);
+      },
     },
     {
       label: String(i18n.t("menu.settings")),
       icon: "settings",
-      route: "/settings",
-      enabled: termsAccepted,
+      // язык и базовые настройки — всегда доступны
+      enabled: true,
+      action: () => {
+        onClose();
+        setTimeout(() => router.replace("/settings"), 120);
+      },
     },
     {
       label: String(i18n.t("menu.animal_selection")),
       icon: "pets",
-      route: "/animal-selection",
+      // выбор животного доступен только после согласия с условиями
       enabled: termsAccepted,
+      action: () => {
+        onClose();
+        setTimeout(() => router.replace("/animal-selection"), 120);
+      },
     },
     {
       label: String(i18n.t("menu.chat")),
       icon: "chat",
-      route: "/chat",
-      onPress: () => {
-        if (!conversationId) {
-          Alert.alert(i18n.t("no_active_chat_title"), i18n.t("no_active_chat_message"));
-          return;
-        }
-        onClose();
-        setTimeout(() => router.replace("/chat"), 200);
-      },
-      enabled: !!conversationId, // активен, только если есть conversationId
+      enabled: !!conversationId,
+      action: enterChat,
     },
-
     {
       label: String(i18n.t("menu.summary")),
       icon: "list",
-      route: "/summary",
-      onPress: () => {
+      enabled: true,   // ← вместо hasSummary
+      action: () => {
         onClose();
-        setTimeout(() => router.replace("/summary"), 200);
+        setTimeout(() => router.replace("/summary"), 120);
       },
-      enabled: true, // 🔥 теперь всегда активен
     },
 
   ];
 
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
       <View style={styles.overlay}>
-        <Animatable.View animation="fadeInUp" duration={300} style={styles.menuContainer}>
-          {menuItems.map((item) => {
-            const { label, icon, route, enabled } = item;
+        <Animatable.View
+          animation="fadeInUp"
+          duration={300}
+          style={styles.menuContainer}
+        >
+          {menuItems.map((item, index) => {
+            const { label, icon, enabled, action } = item;
 
-            let isEnabled = enabled;
-            if (route === "/chat") {
-              isEnabled = hasChatSession;
-            }
-
-            if (isEnabled) {
+            if (enabled) {
               return (
                 <TouchableOpacity
-                  key={route}
+                  key={index}
                   style={styles.menuItem}
-                  onPress={() => {
-                    onClose();
-                    setTimeout(() => {
-                      router.replace(route as any);
-                    }, 100);
-                  }}
+                  onPress={action}
                 >
-                  <MaterialIcons name={icon as any} size={22} color="#666" style={styles.icon} />
+                  <MaterialIcons
+                    name={icon as any}
+                    size={22}
+                    color="#666"
+                    style={styles.icon}
+                  />
                   <Text style={styles.menuText}>{label}</Text>
                 </TouchableOpacity>
               );
-            } else {
-              return (
-                <View key={route} style={styles.menuItem}>
-                  <MaterialIcons name={icon as any} size={22} color="#bbb" style={styles.icon} />
-                  <Text style={styles.menuTextDisabled}>{label}</Text>
-                </View>
-              );
             }
+
+            return (
+              <View key={index} style={styles.menuItem}>
+                <MaterialIcons
+                  name={icon as any}
+                  size={22}
+                  color="#bbb"
+                  style={styles.icon}
+                />
+                <Text style={styles.menuTextDisabled}>{label}</Text>
+              </View>
+            );
           })}
 
-          {/* Выйти */}
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={async () => {
-              onClose();
-              setTimeout(async () => {
-                // 🐾 читаем актуальные данные питомца
-                const petRaw = await AsyncStorage.getItem("pet");
-                const pet = petRaw ? JSON.parse(petRaw) : null;
-                const petName = pet?.name || "Без имени";
+        {/* В начало */}
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={async () => {
+            onClose();
+            setTimeout(async () => {
+              const petRaw = await AsyncStorage.getItem("pet");
+              const pet = petRaw ? JSON.parse(petRaw) : null;
+              const petName = pet?.name || "Без имени";
 
-                await handleExitAction(petName); // теперь имя передаётся корректно
-                router.replace("/");
-              }, 150);
-            }}
-          >
+              await handleExitAction(petName);
+              // навигацию внутри уже решает сам handleExitAction
+            }, 150);
+          }}
+        >
 
-            <MaterialIcons name="logout" size={22} color="#999" style={styles.icon} />
+            <MaterialIcons
+              name="logout"
+              size={22}
+              color="#999"
+              style={styles.icon}
+            />
             <Text style={styles.menuText}>{i18n.t("exit_button")}</Text>
           </TouchableOpacity>
 

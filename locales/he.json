@@ -4,10 +4,10 @@
   "ok_button": "אישור",
 
   "exit_title": "האם ברצונך לצאת?",
-  "exit_message": "ניתן לשמור את ההפעלה להמשך או למחוק את כל הנתונים.",
+  "exit_message": "ניתן לשמור את ההפעלה כדי להמשיך מאוחר יותר",
   "exit_save": "שמור הפעלה",
-  "exit_delete": "מחק הפעלה",
-  "exit_button": "יציאה",
+  "exit_delete": "לפרוש ולהתחיל מחדש",
+  "exit_button": "מסך בית",
 
   "terms_title": "תנאים והגבלות",
   "terms_paragraph1": "אני רוצה שתדע משהו חשוב.",
@@ -35,6 +35,7 @@
   "animal_reptile": "זוחל",
   "animal_fish": "דג",
   "animal_exotic": "אקזוטי",
+  "coming_soon": "בְּקָרוּב",
 
   "animal_question": "על איזה בעל חיים תרצה לשאול?",
   "not_in_list": "לא מופיע ברשימה?",
@@ -63,7 +64,7 @@
   "continue_session": "המשך הפעלה",
 
   "menu": {
-    "animal_selection": "להתחלה",
+    "animal_selection": "החיות שלי",
     "change_language": "שנה שפה",
       "lang_en": "אַנגְלִית",
       "lang_es": "סְפָרַדִית",
@@ -83,7 +84,8 @@
     "p2": "מבוססת על אלגוריתמים וטרינריים ולוגיקת התנהגות, מותאמת לרמת המשתמש הביתי.",
     "p3": "אנחנו לא נותנים אבחנות. אנחנו עוזרים לשאול את השאלות הנכונות ולפנות לעזרה בזמן.",
     "signature": "נוצר באהבה לחיות ובתשומת לב לאנשים.",
-    "follow": "עקבו אחרי הפרויקט באינסטגרם"
+    "follow": "עקבו אחרי הפרויקט באינסטגרם",
+    "show_onboarding_again": "עוד…"
   },
 
   "symptomSelector": {
@@ -93,16 +95,29 @@
   },
 
   "symptoms": {
-    "lethargy": "עייפות",
-    "vomiting": "הקאה",
+    "lethargy": "עייפות חזקה",
+    "vomiting": "הקאות",
     "diarrhea": "שלשול",
+    "constipation": "עצירות",
     "cough": "שיעול",
-    "appetite_loss": "אובדן תיאבון",
-    "limping": "צלעה",
-    "drinking_too_much": "שתייה מרובה",
+    "breathing_difficulty": "קוצר נשימה",
+    "sneezing": "התעטשויות / נזלת",
+    "appetite_loss": "חוסר תיאבון",
+    "weight_loss": "ירידה במשקל",
+    "limping": "צולע",
+    "pain_signs": "נראה שכואב לו",
+    "drinking_too_much": "שותה הרבה",
+    "urinating_too_often": "מטיל שתן לעיתים קרובות",
     "blood_in_urine": "דם בשתן",
+    "itching_skin": "גרד חזק",
+    "skin_lesions": "בעיות עור",
+    "ear_problems": "בעיות אוזניים",
+    "eye_problems": "בעיות עיניים",
+    "behavior_change": "שינוי בהתנהגות",
+    "anxiety_stress": "חרדה / סטרס",
     "seizures": "פרכוסים",
-    "custom": "סימפטום אחר"
+    "collapse_fainting": "קריסה / עילפון",
+    "custom": "אחר"
   },
   "chat": {
     "pet_default": "החיה",
@@ -111,17 +126,22 @@
     "placeholder": "הקלד את ההודעה שלך...",
     "invite": "אתה יכול לעזור לי להבין מה זה יכול להיות?"
   },
-  "onboarding_1_title": "ברוכים הבאים!",
-  "onboarding_1_subtitle": "Mamascota עוזרת לכם לשים לב למה שחשוב ולא לשכוח את העיקר. פשוט וקל.",
-  "onboarding_2_title": "אתם מתבוננים — אנחנו נכוון",
-  "onboarding_2_subtitle": "לא חייבים לדעת הכול. פשוט תארו מה ראיתם, ונעזור להבין מה משמעותי.",
-  "onboarding_3_title": "בלי אבחנות, אבל עם תובנות",
-  "onboarding_3_subtitle": "האפליקציה לא מאבחנת, אבל כן עוזרת להבין מה קורה ומתי צריך לפנות לווטרינר.",
-  "onboarding_4_title": "כל חיה היא עולם בפני עצמה",
-  "onboarding_4_subtitle": "גיל, סוג, אופי — הכול נלקח בחשבון. אנחנו מתאימים את עצמנו אליכם.",
+  "onboarding_1_title": "Mamascota — העוזר שלך",
+  "onboarding_1_subtitle": "האפליקציה עוזרת לך לא לפספס סימפטומים חשובים ולהתכונן בשקט לביקור אצל הווטרינר.",
+  "onboarding_2_title": "אתם מתבוננים — אני עושה סדר",
+  "onboarding_2_subtitle": "אתם בוחרים את חיית המחמד ואת הסימפטומים, ואני הופכת את התצפיות שלכם לשפה ברורה — בלי אבחנות ובלי מונחים מפחידים.",
+  "onboarding_3_title": "היסטוריה תמיד בהישג יד",
+  "onboarding_3_subtitle": "כל התייעצות נשמרת במסך סיכום, כך שתוכלו לחזור לשיחה ולהמשיך בדיוק מאיפה שעצרתם.",
+  "onboarding_4_title": "דף תזכורת למרפאה",
+  "onboarding_4_subtitle": "מהשיחה אפשר ליצור דו״ח PDF מסודר של האנמנזה ולקחת אותו למרפאה, כדי שהווטרינר יראה מיד את התמונה המלאה.",
   "onboarding_skip": "דלג",
   "onboarding_next": "הבא",
   "onboarding_start": "התחלה",
+
+  "summary": {
+    "empty_title": "ההתייעצויות שלך יופיעו כאן",
+    "empty_subtitle": "התחל צ'אט חדש ושמור אותו כשתסיים - הוא יופיע ברשימה זו"
+  },
   
   "settings": {
     "remind_in_6h": "להזכיר שוב בעוד 6 שעות",

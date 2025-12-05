@@ -16,7 +16,6 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
 import SymptomSelector from "../components/SymptomSelector";
 import i18n from "../i18n";
 import type { Pet } from "../types/pet";
@@ -30,47 +29,14 @@ type ChatMessage = {
 
 export default function ChatScreen() {
   const { pet: petParam } = useLocalSearchParams<{ pet?: string }>();
+
   const [pet, setPet] = useState<Pet | null>(null);
   const [chat, setChat] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showSelector, setShowSelector] = useState(true);
-  
-  // ♻️ Проверяем флаг восстановления — если пришли из Summary, пропускаем SymptomSelector
-  useEffect(() => {
-    let isMounted = true;
 
-    (async () => {
-      const restoreFlag = await AsyncStorage.getItem("restoreFromSummary");
-      if (!isMounted) return;
-
-      if (restoreFlag === "1") {
-        console.log("♻️ Режим восстановления: пропускаем SymptomSelector");
-
-        const lastConversationId = await AsyncStorage.getItem("conversationId");
-        if (lastConversationId) {
-          try {
-            const savedChat = await AsyncStorage.getItem(`chatHistory:${lastConversationId}`);
-            if (savedChat) {
-              const parsed = JSON.parse(savedChat);
-              if (Array.isArray(parsed) && parsed.length > 0) {
-                setChat(parsed);
-                setShowSelector(false);
-              }
-            }
-          } catch (err) {
-            console.warn("⚠️ Ошибка при восстановлении истории:", err);
-          }
-        }
-
-        await AsyncStorage.removeItem("restoreFromSummary");
-      }
-    })();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  // 🔥 ВАЖНО: по умолчанию не показываем селектор
+  const [showSelector, setShowSelector] = useState<boolean>(false);
 
   const [inputHeight, setInputHeight] = useState(56);
   const flatListRef = useRef<FlatList>(null);
@@ -78,23 +44,83 @@ export default function ChatScreen() {
   const insets = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
 
-  // 🐾 Загрузка питомца
+  // ======================================================
+  // 🟦 ШАГ 1 — Проверяем, есть ли сохранённая сессия
+  // ======================================================
+  useEffect(() => {
+  (async () => {
+    const id = await AsyncStorage.getItem("conversationId");
+    if (id) {
+      console.log("🔄 Есть активная сессия — пропускаем SymptomSelector");
+      const saved = await AsyncStorage.getItem(`chatHistory:${id}`);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setChat(parsed);
+          setShowSelector(false);
+        }
+      }
+    }
+  })();
+}, []);
+  
+  useEffect(() => {
+    (async () => {
+      const id = await AsyncStorage.getItem("conversationId");
+      if (!id) {
+        // если нет сессии — показываем селектор
+        setShowSelector(true);
+        return;
+      }
+
+      const saved = await AsyncStorage.getItem(`chatHistory:${id}`);
+      if (saved) {
+        // если есть сохранённая история и id — ВОССТАНАВЛИВАЕМ ЧАТ
+        setChat(JSON.parse(saved));
+        setShowSelector(false);
+      } else {
+        // если истории нет — начинаем новый диалог
+        setShowSelector(true);
+      }
+    })();
+  }, []);
+
+  // ======================================================
+  // 🟦 ШАГ 2 — Восстановление из Summary
+  // ======================================================
+  useEffect(() => {
+    (async () => {
+      const flag = await AsyncStorage.getItem("restoreFromSummary");
+      if (flag === "1") {
+        const id = await AsyncStorage.getItem("conversationId");
+        if (id) {
+          const saved = await AsyncStorage.getItem(`chatHistory:${id}`);
+          if (saved) {
+            setChat(JSON.parse(saved));
+            setShowSelector(false);
+          }
+        }
+        await AsyncStorage.removeItem("restoreFromSummary");
+      }
+    })();
+  }, []);
+
+  // ======================================================
+  // 🟦 Загрузка активного питомца
+  // ======================================================
   useEffect(() => {
     async function loadPet() {
       try {
         if (petParam) {
           const parsed = JSON.parse(petParam) as Pet;
           setPet(parsed);
-          console.log("🐾 Питомец из параметров:", parsed);
         } else {
           const activeId = await getActivePetId();
           const allPets = await getPets();
+
           if (activeId && allPets.length > 0) {
             const found = allPets.find((p) => p.id === activeId) || null;
             setPet(found);
-            console.log("📦 Питомец из AsyncStorage:", found);
-          } else {
-            console.warn("⚠️ Питомец не найден: нет активного профиля");
           }
         }
       } catch (err) {
@@ -104,15 +130,15 @@ export default function ChatScreen() {
     loadPet();
   }, [petParam]);
 
-  // 🧩 Обработка выбора симптомов
+  // ======================================================
+  // 🟦 Обработка выбора симптомов — старт нового диалога
+  // ======================================================
   const handleSymptomSubmit = async (selected: string[], customSymptom?: string) => {
     setShowSelector(false);
-    setChat([]); // очищаем чат
+    setChat([]);
 
     try {
       setLoading(true);
-      const translatedSymptoms = selected.map((k) => i18n.t(`symptoms.${k}`));
-      if (customSymptom) translatedSymptoms.push(customSymptom.trim());
 
       const allSymptoms = [...selected];
       if (customSymptom) allSymptoms.push(customSymptom.trim());
@@ -129,35 +155,35 @@ export default function ChatScreen() {
           : String(result);
 
       setChat([{ role: "assistant", content: replyText }]);
-
     } catch (error) {
-      console.error("Ошибка при запуске reasoning:", error);
+      console.error("Ошибка reasoning:", error);
     } finally {
       setLoading(false);
     }
   };
-  
-  // 💬 Отправка пользовательского сообщения (GPT включается здесь)
+
+  // ======================================================
+  // 🟦 Отправка сообщения пользователем
+  // ======================================================
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    const newMessage: ChatMessage = { role: "user", content: input.trim() };
-    const updatedChat = [...chat, newMessage];
-    setChat(updatedChat);
+    const userMessage: ChatMessage = { role: "user", content: input.trim() };
+    setChat((prev) => [...prev, userMessage]);
+    const messageToSend = input.trim();
     setInput("");
-
-    setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 50);
 
     try {
       setLoading(true);
+
       const result = await chatWithGPT({
-        message: input.trim(),
+        message: messageToSend,
         pet: pet || undefined,
       });
 
       const assistantText =
         typeof result === "object"
-          ? result.reply || result.error || "⚠️ Нет ответа от агента"
+          ? result.reply || result.error || "⚠️ Нет ответа"
           : String(result);
 
       const assistantMessage: ChatMessage = {
@@ -165,14 +191,17 @@ export default function ChatScreen() {
         content: assistantText,
       };
 
-      setChat([...updatedChat, assistantMessage]);
-    } catch (error) {
-      console.error("Ошибка при отправке сообщения:", error);
+      setChat((prev) => [...prev, assistantMessage]);
+    } catch (err) {
+      console.error("Ошибка отправки:", err);
     } finally {
       setLoading(false);
     }
   };
 
+  // ======================================================
+  // 🟦 UI
+  // ======================================================
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }} edges={["bottom", "left", "right"]}>
       <KeyboardAvoidingView
@@ -202,10 +231,9 @@ export default function ChatScreen() {
                 styles.messagesContainer,
                 { paddingBottom: inputHeight + insets.bottom + 12 },
               ]}
-              keyboardShouldPersistTaps="handled"
-              keyboardDismissMode="on-drag"
-              onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
-              onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
+              onContentSizeChange={() =>
+                flatListRef.current?.scrollToEnd({ animated: true })
+              }
             />
 
             <View
@@ -279,3 +307,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+

@@ -4,10 +4,10 @@
   "ok_button": "OK",
 
   "exit_title": "Do you want to exit?",
-  "exit_message": "You can save your session to continue later or delete all data.",
+  "exit_message": "You can save your session to continue later.",
   "exit_save": "Save session",
-  "exit_delete": "Delete session",
-  "exit_button": "Exit",
+  "exit_delete": "Exit and start again",
+  "exit_button": "I’ll be back",
 
   "terms_title": "Terms and Conditions",
   "terms_paragraph1": "I want you to know something important.",
@@ -35,6 +35,8 @@
   "animal_reptile": "Reptile",
   "animal_fish": "Fish",
   "animal_exotic": "Exotic",
+  "coming_soon": "Soon",
+
 
   "animal_question": "What animal would you like to ask about?",
   "not_in_list": "Not in the list?",
@@ -63,7 +65,7 @@
   "continue_session": "Continue session",
 
   "menu": {
-    "animal_selection": "To start",
+    "animal_selection": "My pets",
     "change_language": "Change language",
     "lang_en": "English",
     "lang_es": "Spanish",
@@ -83,7 +85,8 @@
     "p2": "It's based on veterinary decision trees and behavioral logic, adapted for everyday users.",
     "p3": "We don’t give diagnoses. We help you ask the right questions and seek help in time.",
     "signature": "Created with love for animals and attention to humans.",
-    "follow": "Follow the project on Instagram"
+    "follow": "Follow the project on Instagram",
+    "show_onboarding_again": "More…"
   },
 
   "symptomSelector": {
@@ -96,13 +99,26 @@
     "lethargy": "Lethargy",
     "vomiting": "Vomiting",
     "diarrhea": "Diarrhea",
+    "constipation": "Constipation",
     "cough": "Cough",
+    "breathing_difficulty": "Shortness of breath",
+    "sneezing": "Sneezing / runny nose",
     "appetite_loss": "Loss of appetite",
+    "weight_loss": "Weight loss",
     "limping": "Limping",
-    "drinking_too_much": "Drinking too much",
+    "pain_signs": "Seems in pain",
+    "drinking_too_much": "Drinking a lot",
+    "urinating_too_often": "Urinates very often",
     "blood_in_urine": "Blood in urine",
+    "itching_skin": "Itching / scratching",
+    "skin_lesions": "Skin problems",
+    "ear_problems": "Ear problems",
+    "eye_problems": "Eye problems",
+    "behavior_change": "Behavior changed",
+    "anxiety_stress": "Anxiety / stress",
     "seizures": "Seizures",
-    "custom": "Other symptom"
+    "collapse_fainting": "Collapse / fainting",
+    "custom": "Other"
   },
   "chat": {
     "pet_default": "The pet",
@@ -111,17 +127,22 @@
     "placeholder": "Type your message...",
     "invite": "Can you help me understand what this could mean?"
   },
-  "onboarding_1_title": "Welcome!",
-  "onboarding_1_subtitle": "Mamascota helps you notice what's important and not forget what matters. It's easy",
-  "onboarding_2_title": "You observe — I support",
-  "onboarding_2_subtitle": "You don't have to know everything. Just share what you see, and I'll highlight what matters",
-  "onboarding_3_title": "No diagnoses, just clarity",
-  "onboarding_3_subtitle": "This app doesn't diagnose but helps you understand what's happening and when it's time to visit a vet",
-  "onboarding_4_title": "Every animal’s a world of its own",
-  "onboarding_4_subtitle": "Age, species, personality — everything counts. I adapt to your reality",
+  "onboarding_1_title": "Mamascota — your assistant",
+  "onboarding_1_subtitle": "The app helps you notice important symptoms and calmly prepare for a visit to the vet.",
+  "onboarding_2_title": "You observe — I structure",
+  "onboarding_2_subtitle": "You choose your pet and the symptoms, and I turn your observations into clear language — without diagnoses or scary terms.",
+  "onboarding_3_title": "Your history in one place",
+  "onboarding_3_subtitle": "Each consultation is saved in the “Summary” section, so you can return to the chat and continue from where you left off.",
+  "onboarding_4_title": "A cheat sheet for the clinic",
+  "onboarding_4_subtitle": "You can turn the dialogue into a neat PDF summary of your pet’s history and take it to the clinic, so the vet immediately sees the full picture.",
   "onboarding_skip": "Skip",
   "onboarding_next": "Next",
   "onboarding_start": "Start",
+
+  "summary": {
+    "empty_title": "Your consultations will appear here",
+    "empty_subtitle": "Start a new chat and save it when you finish – it will show up in this list."
+  },
   
   "settings": {
     "remind_in_6h": "Remind again in 6 hours",
