@@ -64,8 +64,15 @@ app.post("/agent", async (req, res) => {
     // 🌐 LANG OVERRIDE — принудительная смена языка агента в текущей сессии
     const langOverride = userLang || "en";
 
+    console.log("🌐 /agent call:", {
+      userLang,
+      lang,
+      langOverride,
+      conversationIdRaw: req.body?.conversationId,
+    });
 
     const conversationId = req.body.conversationId || Date.now().toString();
+
 
     if (!conversationMemory[conversationId]) {
       conversationMemory[conversationId] = [];
