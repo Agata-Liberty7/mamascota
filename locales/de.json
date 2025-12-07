@@ -44,6 +44,10 @@
   "species_placeholder": "Art / Rasse",
   "age_placeholder": "Alter",
   "name_placeholder": "Name",
+  "breedWarning": {
+    "title": "Die Rasse ist wichtig",
+    "message": "Damit kann der Assistent rassespezifische Veranlagungen besser berücksichtigen. Ohne diese Angabe bleiben die Antworten allgemeiner."
+  },
 
   "continue_without_data_title": "Ohne Angaben fortfahren?",
   "continue_without_data_message": "Diese Informationen helfen mir, Ihnen ein besseres Erlebnis zu bieten.",
@@ -164,6 +168,7 @@
       "name_label": "Name *",
       "species_label": "Art *",
       "breed_label": "Rasse",
+      "breed_hint": "Die Angabe der Rasse hilft, die Beratung für Ihr Tier besser anzupassen.",
       "age_label": "Alter (Jahre)"
     },
     "clear": "Löschen",

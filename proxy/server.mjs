@@ -5,6 +5,8 @@
 // ES module utils
 import path from "path";
 import { fileURLToPath } from "url";
+import fs from "fs/promises";
+
 
 // Node
 import os from "os";
@@ -17,6 +19,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, ".env") });
+// 📄 Путь к системному промпту Mamascota Familiar
+const PROMPT_PATH = path.join(__dirname, "profiles", "mamascota-familiar.md");
+
+// 🧠 Глобальная переменная для текста промпта
+let SYSTEM_PROMPT = "";
+
 
 // Mamascota logic
 import { processMessage } from "./mamascota-agent.mjs";
@@ -38,10 +46,15 @@ app.use(express.json({ limit: "2mb" }));
     console.log("🧠 Тест: пробую загрузить YAML при старте прокси...");
     const kb = await loadKnowledgeBase();
     console.log("✅ YAML загружен, алгоритмов:", kb?.length || 0);
+
+    console.log("📄 Тест: пробую загрузить системный промпт Mamascota Familiar...");
+    SYSTEM_PROMPT = await fs.readFile(PROMPT_PATH, "utf8");
+    console.log("✅ Промпт загружен, длина:", SYSTEM_PROMPT.length);
   } catch (err) {
-    console.error("❌ Ошибка загрузки YAML:", err);
+    console.error("❌ Ошибка инициализации (YAML/Prompt):", err);
   }
 })();
+
 
 // ===============================
 //  💬 ПАМЯТЬ ДИАЛОГОВ

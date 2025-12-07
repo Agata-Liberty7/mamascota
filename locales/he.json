@@ -44,6 +44,10 @@
   "species_placeholder": "מין / גזע",
   "age_placeholder": "גיל",
   "name_placeholder": "שם",
+  "breedWarning": {
+    "title": "לגזע יש משמעות",
+    "message": "כשמציינים גזע, העוזר יכול להתחשב בנטיות גזעיות בצורה טובה יותר. ללא ציון הגזע, התשובות יהיו כלליות יותר."
+  },
 
   "continue_without_data_title": "להמשיך בלי למלא את הפרטים?",
   "continue_without_data_messaבge": "המידע הזה עוזר לי להעניק לך חוויה טובה יותר.",
@@ -164,6 +168,7 @@
       "name_label": "שם *",
       "species_label": "מין/סוג *",
       "breed_label": "גזע",
+      "breed_hint": "ציון הגזע עוזר להתאים את ההכוונה בצורה מדויקת יותר עבור החיה שלך.",
       "age_label": "גיל (בשנים)"
     },
     "clear": "נקה",

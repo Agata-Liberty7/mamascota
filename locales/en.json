@@ -45,7 +45,10 @@
   "species_placeholder": "Species / breed",
   "age_placeholder": "Age",
   "name_placeholder": "Name",
-
+  "breedWarning": {
+    "title": "Breed Matters",
+    "message": "With it, the assistant can better account for breed-specific predispositions. Without it, the answers will be more general."
+  },
   "continue_without_data_title": "Do you want to continue without filling in the data?",
   "continue_without_data_message": "This information helps me offer you a better experience.",
 
@@ -165,6 +168,7 @@
       "name_label": "Name *",
       "species_label": "Species *",
       "breed_label": "Breed",
+      "breed_hint": "Specifying the breed helps us better tailor the guidance for your animal",
       "age_label": "Age (years)"
     },
     "clear": "Clear",

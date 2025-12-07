@@ -46,6 +46,10 @@
   "species_placeholder": "Especie / raza",
   "age_placeholder": "Edad",
   "name_placeholder": "Nombre",
+  "breedWarning": {
+    "title": "La raza importa",
+    "message": "Con ella, el asistente puede tener en cuenta predisposiciones específicas de la raza. Sin ella, las respuestas serán más generales."
+  },
 
   "continue_without_data_title": "¿Deseas continuar sin completar los datos?",
   "continue_without_data_message": "Esta información me ayuda a ofrecerte una mejor experiencia.",
@@ -169,6 +173,7 @@
       "name_label": "Nombre *",
       "species_label": "Especie *",
       "breed_label": "Raza",
+      "breed_hint": "Indicar la raza ayuda a adaptar mejor la orientación para tu animal",
       "age_label": "Edad (años)"
     },
     "clear": "Borrar",

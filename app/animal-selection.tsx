@@ -109,48 +109,65 @@ export default function AnimalSelection() {
 
   const handleContinue = async () => {
     const validSpecies: Species[] = [
-      'cat', 'dog', 'rabbit', 'ferret', 'bird', 'rodent', 'reptile', 'fish', 'exotic',
+      "cat",
+      "dog",
+      "rabbit",
+      "ferret",
+      "bird",
+      "rodent",
+      "reptile",
+      "fish",
+      "exotic",
     ];
-    const trimmedSpecies = (species || '').trim().toLowerCase() as Species;
+    const trimmedSpecies = (species || "").trim().toLowerCase() as Species;
     const normalizedSpecies: Species = validSpecies.includes(trimmedSpecies)
       ? trimmedSpecies
-      : 'exotic';
+      : "exotic";
 
+    // 🔴 1) Жёсткая проверка имени — как было
     if (!name.trim()) {
       Alert.alert(
         i18n.t("continue_without_data_title"),
         i18n.t("continue_without_data_message"),
         [
           {
-            // 🔵 «Назад» — просто закрывает алерт, остаёмся в форме
             text: i18n.t("alert-back"),
             style: "cancel",
             onPress: () => {
-              // ничего не делаем, остаёмся в модалке PetForm
+              // остаёмся в модалке PetForm
             },
           },
           {
-            // 🔴 «Продолжить» — выходим из формы, возвращаемся к выбору животного
             text: i18n.t("continue"),
             style: "destructive",
             onPress: () => {
               setModalVisible(false);
-              // НИКУДА не переходим, остаёмся на экране animal-selection
+              // остаёмся на экране animal-selection
             },
           },
         ]
       );
-      return;
+      return; // ⬅️ единственное блокирующее условие
     }
 
+    // 🟡 2) МЯГКОЕ предупреждение, если порода не указана — БЕЗ return
+    if (!breed.trim()) {
+      Alert.alert(
+        i18n.t("breedWarning.title"),
+        i18n.t("breedWarning.message")
+        // можно добавить одну кнопку "OK" по умолчанию, Alert сам её подставит,
+        // если массив кнопок не передавать
+      );
+    }
 
     const candidate: Partial<Pet> = {
       id: editingPetId || undefined,
       name: name.trim(),
       species: normalizedSpecies,
       ageYears: age ? parseFloat(age) : undefined,
-      breed: breed.trim() || undefined,
-      sex: sex === 'male' || sex === 'female' ? sex : undefined,
+      // 🐾 если порода не указана — сохраняем "__other"
+      breed: breed.trim() || "__other",
+      sex: sex === "male" || sex === "female" ? sex : undefined,
       neutered: !!neutered,
     };
 
@@ -160,16 +177,16 @@ export default function AnimalSelection() {
     // ✅ Сразу записываем активного питомца для всех модулей
     await setCurrentPetId(saved.id);
 
-
     resetFields();
     setModalVisible(false);
 
     // 🔄 Передаём данные в чат
     router.push({
-      pathname: '/chat',
+      pathname: "/chat",
       params: { pet: JSON.stringify(saved) },
     });
   };
+
 
 
   const screenWidth = Dimensions.get('window').width;

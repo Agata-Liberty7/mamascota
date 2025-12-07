@@ -31,6 +31,7 @@ export default function PetForm({
   onSexChange,
   onNeuteredChange,
   onChange,
+  breedError, // 🔸 НОВЫЙ проп
 }: any) {
   const effectiveSpecies =
     species && typeof species === "string" && species.trim() !== ""
@@ -142,7 +143,11 @@ export default function PetForm({
         }}
         onClose={() => setBreedModal(false)}
       />
-
+      {!breed ? (
+        <Text style={styles.breedHint}>
+          {i18n.t("settings.pets.breed_hint")}
+        </Text>
+      ) : null}
 
       {/* Пол */}
       <Text style={styles.subLabel}>{i18n.t("sex")}</Text>
@@ -280,5 +285,20 @@ const styles = StyleSheet.create({
   },
   speciesTagSelected: { backgroundColor: "#d0d0d0", borderColor: "#999" },
   speciesTagText: { fontSize: 14, color: "#000" },
-  row: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  errorText: {
+    fontSize: 12,
+    marginBottom: 8,
+  },
+  breedHint: {
+    fontSize: 12,
+    marginBottom: 8,
+    // сюда потом можно подставить мягкий цвет подсказки из темы, напр. textLight
+    color: theme.colors.textLight,
+  },
 });
+
