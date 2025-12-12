@@ -26,7 +26,7 @@ async function testAgentSDK() {
 
     // 4️⃣ Минимальный запрос через Responses API (SDK-вызов)
     const response = await client.responses.create({
-      model: "gpt-4o-mini",
+      model: "gpt-5-mini",
       input: "Привет! Это тест подключения к Agent SDK.",
     });
 

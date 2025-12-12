@@ -187,9 +187,8 @@ export async function processMessage(
     // 🤖 GPT ответ
     // ----------------------------------------------------------
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-5-mini",
       messages,
-      temperature: 0.5,
     });
 
     const reply =
