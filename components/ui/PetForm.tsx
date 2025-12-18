@@ -1,5 +1,4 @@
-//components/ui/PetForm.tsx — версия с BreedModal
-
+// components/ui/PetForm.tsx — версия с BreedModal
 import React, { useState } from "react";
 import {
   Platform,
@@ -15,7 +14,6 @@ import { theme } from "../../src/theme";
 import type { Species } from "../../types/pet";
 import { getLocalizedSpeciesLabel } from "../../utils/getLocalizedSpeciesLabel";
 import BreedModal from "../BreedModal";
-import { BREEDS_BY_SPECIES } from "../../utils/breeds";
 
 export default function PetForm({
   species,
@@ -31,7 +29,7 @@ export default function PetForm({
   onSexChange,
   onNeuteredChange,
   onChange,
-  breedError, // 🔸 НОВЫЙ проп
+  breedError, // пока не используем, оставляю
 }: any) {
   const effectiveSpecies =
     species && typeof species === "string" && species.trim() !== ""
@@ -40,16 +38,19 @@ export default function PetForm({
 
   const [breedModal, setBreedModal] = useState(false);
 
+  const lang = (i18n.locale || "").split("-")[0];
+  const isRTL = lang === "he";
+
   return (
     <>
       {/* Вид животного */}
       <View style={{ marginBottom: 16 }}>
-        <Text style={styles.subLabel}>
+        <Text style={[styles.subLabel, isRTL && styles.subLabelRTL]}>
           {i18n.t("settings.pets.species_label")}
         </Text>
 
         {onSpeciesChange || onChange ? (
-          <View style={styles.tagCloud}>
+          <View style={[styles.tagCloud, isRTL && styles.tagCloudRTL]}>
             {[
               "dog",
               "cat",
@@ -79,7 +80,7 @@ export default function PetForm({
             ))}
           </View>
         ) : (
-          <Text style={styles.speciesValue}>
+          <Text style={[styles.speciesValue, isRTL && styles.speciesValueRTL]}>
             {effectiveSpecies
               ? getLocalizedSpeciesLabel(effectiveSpecies, sex)
               : i18n.t("species_placeholder")}
@@ -96,10 +97,10 @@ export default function PetForm({
           onNameChange(v);
           onChange?.("name", v);
         }}
-        style={styles.input}
+        style={[styles.input, isRTL && styles.inputRTL]}
       />
 
-      {/* Возраст */}
+      {/* Возраст (цифры лучше оставить LTR, но выровнять вправо) */}
       <TextInput
         placeholder={i18n.t("age_placeholder")}
         placeholderTextColor={theme.colors.textLight}
@@ -109,7 +110,7 @@ export default function PetForm({
           onChange?.("age", v);
         }}
         keyboardType="numeric"
-        style={styles.input}
+        style={[styles.input, isRTL && styles.inputAgeRTL]}
       />
 
       {/* Порода */}
@@ -120,7 +121,8 @@ export default function PetForm({
         <Text
           style={[
             styles.breedSelectorText,
-            !breed && styles.breedSelectorPlaceholderText, // ← если плейсхолдер
+            isRTL && styles.breedSelectorTextRTL,
+            !breed && styles.breedSelectorPlaceholderText,
           ]}
         >
           {breed
@@ -129,7 +131,6 @@ export default function PetForm({
               : breed
             : i18n.t("settings.pets.set_default")}
         </Text>
-
       </TouchableOpacity>
 
       <BreedModal
@@ -139,19 +140,23 @@ export default function PetForm({
         onSelect={(value) => {
           onBreedChange(value);
           onChange?.("breed", value);
-          setBreedModal(false); // ← добавлено
+          setBreedModal(false);
         }}
         onClose={() => setBreedModal(false)}
       />
+
       {!breed ? (
-        <Text style={styles.breedHint}>
+        <Text style={[styles.breedHint, isRTL && styles.breedHintRTL]}>
           {i18n.t("settings.pets.breed_hint")}
         </Text>
       ) : null}
 
       {/* Пол */}
-      <Text style={styles.subLabel}>{i18n.t("sex")}</Text>
-      <View style={styles.segmentRow}>
+      <Text style={[styles.subLabel, isRTL && styles.subLabelRTL]}>
+        {i18n.t("sex")}
+      </Text>
+
+      <View style={[styles.segmentRow, isRTL && styles.segmentRowRTL]}>
         <TouchableOpacity
           onPress={() => {
             onSexChange("male");
@@ -184,8 +189,11 @@ export default function PetForm({
       </View>
 
       {/* Стерилизация */}
-      <View style={[styles.row, { marginTop: 8 }]}>
-        <Text style={styles.subLabel}>{i18n.t("neutered_spayed")}</Text>
+      <View style={[styles.row, isRTL && styles.rowRTL, { marginTop: 8 }]}>
+        <Text style={[styles.subLabel, isRTL && styles.subLabelRTL]}>
+          {i18n.t("neutered_spayed")}
+        </Text>
+
         <Switch
           value={neutered}
           onValueChange={(val) => {
@@ -216,13 +224,32 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     fontSize: 16,
     color: theme.colors.textPrimary,
+    textAlign: "left",
+    writingDirection: "ltr",
   },
+  inputRTL: {
+    textAlign: "right",
+    writingDirection: "rtl",
+  },
+  // возраст: выравниваем вправо, но direction оставляем ltr (цифры/точки/запятые)
+  inputAgeRTL: {
+    textAlign: "right",
+    writingDirection: "ltr",
+  },
+
   subLabel: {
     fontSize: 14,
     color: theme.colors.textPrimary,
     marginTop: 4,
     marginBottom: 6,
+    textAlign: "left",
+    writingDirection: "ltr",
   },
+  subLabelRTL: {
+    textAlign: "right",
+    writingDirection: "rtl",
+  },
+
   breedSelector: {
     borderWidth: 1,
     borderColor: theme.colors.border,
@@ -234,12 +261,37 @@ const styles = StyleSheet.create({
   breedSelectorText: {
     fontSize: 16,
     color: theme.colors.textPrimary,
+    textAlign: "left",
+    writingDirection: "ltr",
   },
+  breedSelectorTextRTL: {
+    textAlign: "right",
+    writingDirection: "rtl",
+  },
+  breedSelectorPlaceholderText: {
+    color: theme.colors.textLight,
+  },
+
+  breedHint: {
+    fontSize: 12,
+    marginBottom: 8,
+    color: theme.colors.textLight,
+    textAlign: "left",
+    writingDirection: "ltr",
+  },
+  breedHintRTL: {
+    textAlign: "right",
+    writingDirection: "rtl",
+  },
+
   segmentRow: {
     flexDirection: "row",
     gap: 8,
     marginBottom: 8,
     flexWrap: "wrap",
+  },
+  segmentRowRTL: {
+    flexDirection: "row-reverse",
   },
   segment: {
     paddingVertical: 6,
@@ -258,6 +310,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: theme.colors.textPrimary,
   },
+
   speciesValue: {
     fontSize: 15,
     fontWeight: "600",
@@ -268,8 +321,21 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: theme.colors.border,
+    textAlign: "left",
+    writingDirection: "ltr",
   },
-  tagCloud: { flexDirection: "row", flexWrap: "wrap" },
+  speciesValueRTL: {
+    textAlign: "right",
+    writingDirection: "rtl",
+  },
+
+  tagCloud: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  tagCloudRTL: {
+    flexDirection: "row-reverse",
+  },
   speciesTag: {
     paddingVertical: 4,
     paddingHorizontal: 10,
@@ -280,25 +346,26 @@ const styles = StyleSheet.create({
     marginRight: 8,
     marginBottom: 8,
   },
-  breedSelectorPlaceholderText: {
-    color: theme.colors.textLight,
+  speciesTagSelected: {
+    backgroundColor: "#d0d0d0",
+    borderColor: "#999",
   },
-  speciesTagSelected: { backgroundColor: "#d0d0d0", borderColor: "#999" },
-  speciesTagText: { fontSize: 14, color: "#000" },
+  speciesTagText: {
+    fontSize: 14,
+    color: "#000",
+  },
+
   row: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
+  rowRTL: {
+    flexDirection: "row-reverse",
+  },
+
   errorText: {
     fontSize: 12,
     marginBottom: 8,
   },
-  breedHint: {
-    fontSize: 12,
-    marginBottom: 8,
-    // сюда потом можно подставить мягкий цвет подсказки из темы, напр. textLight
-    color: theme.colors.textLight,
-  },
 });
-

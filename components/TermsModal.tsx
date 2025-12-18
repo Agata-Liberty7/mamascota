@@ -22,6 +22,9 @@ export default function TermsModal({
   onAccept,
   onDecline,
 }: TermsModalProps) {
+  const lang = (i18n.locale || "").split("-")[0];
+  const isRTL = lang === "he";
+
   return (
     <Modal
       visible={visible}
@@ -32,47 +35,42 @@ export default function TermsModal({
       <View style={styles.overlay}>
         <View style={styles.container}>
           <ScrollView contentContainerStyle={styles.scrollContent}>
-            <Text style={styles.title}>{i18n.t("terms_title")}</Text>
-            
-            {/* 🐹 иллюстрация над заголовком */}
+            {/* 🐹 иллюстрация НАД заголовком */}
             <Image
               source={require("../assets/images/Mamascota_5_1.png")}
               style={styles.termsImage}
               resizeMode="contain"
             />
 
+            <Text style={styles.title}>{i18n.t("terms_title")}</Text>
 
-
-            <Text style={styles.paragraph}>
+            <Text style={[styles.paragraph, isRTL && styles.paragraphRTL]}>
               {i18n.t("terms_paragraph1")}
             </Text>
-            <Text style={styles.paragraph}>
+
+            <Text style={[styles.paragraph, isRTL && styles.paragraphRTL]}>
               {i18n.t("terms_paragraph2")}
             </Text>
-            <Text style={styles.paragraph}>
+
+            <Text style={[styles.paragraph, isRTL && styles.paragraphRTL]}>
               {i18n.t("terms_paragraph3")}
             </Text>
-            <Text style={styles.paragraph}>
+
+            <Text style={[styles.paragraph, isRTL && styles.paragraphRTL]}>
               {i18n.t("privacy_paragraph1")}
             </Text>
-            <Text style={styles.paragraph}>
+
+            <Text style={[styles.paragraph, isRTL && styles.paragraphRTL]}>
               {i18n.t("privacy_paragraph2")}
             </Text>
 
             <View style={styles.buttonsContainer}>
               <TouchableOpacity style={styles.acceptButton} onPress={onAccept}>
-                <Text style={styles.acceptText}>
-                  {i18n.t("terms_accept")}
-                </Text>
+                <Text style={styles.acceptText}>{i18n.t("terms_accept")}</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.declineButton}
-                onPress={onDecline}
-              >
-                <Text style={styles.declineText}>
-                  {i18n.t("terms_decline")}
-                </Text>
+              <TouchableOpacity style={styles.declineButton} onPress={onDecline}>
+                <Text style={styles.declineText}>{i18n.t("terms_decline")}</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
@@ -118,6 +116,11 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     marginBottom: 10,
     textAlign: "left",
+    writingDirection: "ltr",
+  },
+  paragraphRTL: {
+    textAlign: "right",
+    writingDirection: "rtl",
   },
   buttonsContainer: {
     marginTop: 20,

@@ -37,6 +37,9 @@ const THINKING_HINT_KEYS = [
 
 export default function ChatScreen() {
   const { pet: petParam } = useLocalSearchParams<{ pet?: string }>();
+  const lang = (i18n.locale || "").split("-")[0];
+  const isRTL = lang === "he";
+
 
   const [pet, setPet] = useState<Pet | null>(null);
   const [chat, setChat] = useState<ChatMessage[]>([]);
@@ -250,11 +253,16 @@ export default function ChatScreen() {
                   style={[
                     styles.message,
                     item.role === "user" ? styles.userMsg : styles.assistantMsg,
+                    isRTL ? styles.messageRTL : undefined,
                   ]}
                 >
-                  <Text style={styles.msgText}>{item.content}</Text>
+                  <Text style={[styles.msgText, isRTL ? styles.msgTextRTL : undefined]}>
+                    {item.content}
+                  </Text>
                 </View>
+
               )}
+
               contentContainerStyle={[
                 styles.messagesContainer,
                 { paddingBottom: inputHeight + insets.bottom + 12 },
@@ -265,9 +273,14 @@ export default function ChatScreen() {
             />
             {loading && (
               <View style={[styles.message, styles.assistantMsg, styles.waitingBubble]}>
-                <View style={styles.waitingRow}>
+                <View style={[styles.waitingRow, isRTL && styles.waitingRowRTL]}>
                   <ActivityIndicator />
-                  {!!thinkingHint && <Text style={styles.waitingText}>{thinkingHint}</Text>}
+                  {!!thinkingHint && (
+                    <Text style={[styles.waitingText, isRTL && styles.waitingTextRTL]}>
+                      {thinkingHint}
+                    </Text>
+                  )}
+
                 </View>
               </View>
             )}
@@ -276,13 +289,14 @@ export default function ChatScreen() {
               onLayout={(e) => setInputHeight(e.nativeEvent.layout.height)}
             >
               <TextInput
-                style={styles.input}
+                style={[styles.input, isRTL && styles.inputRTL]}
                 value={input}
                 onChangeText={setInput}
                 placeholder={i18n.t("chat.placeholder")}
                 placeholderTextColor="#888"
                 multiline
               />
+
               <TouchableOpacity
                 style={[styles.sendButton, loading && { opacity: 0.5 }]}
                 onPress={handleSend}
@@ -357,6 +371,29 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     marginLeft: 8,
   },
+  msgTextRTL: {
+    textAlign: "right",
+    writingDirection: "rtl",
+  },
+  inputRTL: {
+    textAlign: "right",
+    writingDirection: "rtl",
+  },
+  waitingRowRTL: {
+    flexDirection: "row-reverse",
+  },
+  waitingTextRTL: {
+    textAlign: "right",
+    marginLeft: 0,
+    marginRight: 8,
+    writingDirection: "rtl",
+  },
+  messageRTL: {
+    writingDirection: "rtl",
+    alignItems: "flex-end",
+  },
+
+
 
 
 });
