@@ -1,4 +1,9 @@
 import { loadKnowledgeBase } from "./knowledgeBase-loader.mjs";
+import {
+  DOG_BREED_ALIASES,
+  CAT_BREED_ALIASES,
+} from "../../utils/breeds.ts";
+
 
 // Унифицированная нормализация питомца
 function normalizePet(p) {
@@ -11,6 +16,15 @@ function normalizePet(p) {
     ageYears: p?.ageYears || null,
     neutered: !!p?.neutered,
   };
+}
+// ---------------------------
+// 🔤 Нормализация строк
+// ---------------------------
+function norm(s = "") {
+  return String(s)
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, " ");
 }
 
 // 🧠 Кэш базы знаний (загружается один раз за сессию)
@@ -117,16 +131,49 @@ export async function buildAgentContext(
         ? "gato"
         : "";
 
-    const breedLower = (petData.breed || "").toLowerCase();
+    // -----------------------------------
+    // 🧬 Породные риски (с алиасами)
+    // -----------------------------------
 
-    // 🔹 Породные риски для этого питомца (вид + порода)
+    const speciesKey =
+      especie === "perro" ? "dog" :
+      especie === "gato" ? "cat" :
+      null;
+
+    const uiBreed = petData.breed || "";
+
+    // выбираем карту алиасов по виду
+    const aliasMap =
+      speciesKey === "dog"
+        ? DOG_BREED_ALIASES
+        : speciesKey === "cat"
+        ? CAT_BREED_ALIASES
+        : {};
+
+    const candidates = [
+      uiBreed,
+      ...(aliasMap[uiBreed] || []),
+    ].map(norm);
+
     const breedRisksForPet = Array.isArray(breedRisks)
       ? breedRisks.filter((br) => {
-          const esp = (br.especie || "").toLowerCase(); // 'perro' / 'gato'
-          const raza = (br.raza || "").toLowerCase();
-          return esp === especie && !!breedLower && raza === breedLower;
+          const esp = norm(br.especie); // perro / gato
+          const raza = norm(br.raza);   // из YAML
+
+          if (!speciesKey) return false;
+          if (esp !== especie) return false;
+          if (candidates.length === 0) return false;
+
+          return candidates.includes(raza);
         })
       : [];
+        console.log(
+          "🐾 Breed matching:",
+          petData.breed,
+          "→",
+          breedRisksForPet.map((r) => r.raza)
+        );
+
 
     // 🔹 Клинические детали по виду (perro / gato / perro_gato)
     const clinicalDetailsForSpecies = Array.isArray(clinicalDetails)

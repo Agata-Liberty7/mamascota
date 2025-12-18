@@ -5,27 +5,46 @@
 // ---------------------------
 export const CAT_BREEDS = [
   "Abyssinian",
-  "Bengal",
-  "British Shorthair",
-  "Scottish Fold",
-  "Maine Coon",
-  "Sphynx",
-  "Ragdoll",
-  "Siamese",
-  "Burmese",
-  "Devon Rex",
-  "Cornish Rex",
-  "Norwegian Forest",
-  "Persian",
-  "Exotic Shorthair",
-  "Siberian",
-  "Russian Blue",
-  "Turkish Angora",
-  "Oriental",
   "American Curl",
+  "American Shorthair",
+  "American Wirehair",
+  "Bengal",
+  "Birman",
+  "Bombay",
+  "British Shorthair",
+  "Burmese",
+  //"Chartreux",
+  //"Cornish Rex",
+  //"Devon Rex",
+  "Egyptian Mau",
   "European Shorthair",
-  "Savannah",
-  "Metis",        // ← добавлено
+  //"Exotic Shorthair",
+  //"Havana Brown",
+  "Himalayan",
+  "Japanese Bobtail",
+  //"Korat",
+  //"LaPerm",
+  "Maine Coon",
+  //"Manx",
+  "Munchkin",
+  // "Nebelung",
+  "Norwegian Forest Cat",
+  //"Ocicat",
+  "Oriental Shorthair",
+  "Persian",
+  "Ragdoll",
+  "Russian Blue",
+  "Scottish Fold",
+  "Siamese",
+  "Siberian",
+  "Singapura",
+  //"Snowshoe",
+  //"Somali",
+  "Sphynx",
+  //"Tonkinese",
+  "Turkish Angora",
+  "Turkish Van",
+  "Metis",      // ← добавлено
 ];
 
 // ---------------------------
@@ -62,7 +81,10 @@ export const DOG_BREEDS = [
   "Cairn Terrier",
   "Bernese Mountain Dog",
   "Samoyed",
-  "Crossbreed",   // ← корректный термин вместо Cruzado
+  "Greyhound",
+  "Podenco",
+  "American Pit Bull Terrier",
+  "Crossbreed"   // ← корректный термин вместо Cruzado
 ];
 
 // ---------------------------
@@ -71,4 +93,29 @@ export const DOG_BREEDS = [
 export const BREEDS_BY_SPECIES: Record<string, string[]> = {
   cat: CAT_BREEDS,
   dog: DOG_BREEDS,
+};
+
+// ---------------------------
+// 🔁 Breed aliases (UI → YAML)
+// ---------------------------
+
+export const DOG_BREED_ALIASES: Record<string, string[]> = {
+  "German Shepherd": ["German Shepherd Dog"],
+  "Doberman": ["Doberman Pinscher"],
+  "Akita Inu": ["Akita"],
+  "Staffordshire Terrier": [
+    "American Staffordshire Terrier",
+    "Staffordshire Bull Terrier",
+  ],
+  "Poodle": [
+    "Poodle (Standard)",
+    "Poodle (Miniature)",
+    "Poodle (Toy)",
+  ],
+  "Bulldog": ["English Bulldog"],
+};
+
+export const CAT_BREED_ALIASES: Record<string, string[]> = {
+  "Norwegian Forest": ["Norwegian Forest Cat"],
+  "Oriental": ["Oriental Shorthair"],
 };
