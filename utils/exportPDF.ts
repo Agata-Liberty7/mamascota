@@ -5,6 +5,23 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import i18n from "../i18n";
 import { chatWithGPT } from "./chatWithGPT";
 
+
+
+function normalizePdfText(input: any): string {
+  if (input === null || input === undefined) return "";
+  let s = String(input);
+
+  // 1) нормализация юникода
+  try { s = s.normalize("NFC"); } catch {}
+
+  // 2) замена “похожих” латинских символов на кириллицу (минимальный набор под твой кейс)
+  s = s
+    .replace(/\u0138/g, "к") // ĸ -> к
+    .replace(/\u0137/g, "К"); // Ķ -> К (на всякий)
+
+  return s;
+}
+
 //
 // -----------------------------------------------------
 // HTML-SAFE
@@ -101,35 +118,37 @@ async function buildDecisionTree(conversationId: string, locale: string) {
     : "";
 
   const request = `
-Проанализируй ветеринарную консультацию ниже и верни СТРОГО JSON без пояснений с такой структурой:
+  Проанализируй ветеринарную консультацию ниже и верни СТРОГО JSON без пояснений:
 
-{
-  "anamnesis": {
-    "observations": "Кратко и по делу, что владелец наблюдает (симптомы, длительность, динамика, контекст). Без диагнозов.",
-    "clarifications": "Уточняющие вопросы и ответы владельца, которые помогают прояснить картину. Без диагнозов."
-  },
-  "reasoning": {
-    "excluded": "Какие варианты по признакам выглядят менее вероятными или уже исключены (без названий болезней, только описательно).",
-    "directions": "Важные направления, на которые стоит обратить внимание (например, боль, ЖКТ, поведение, возможное инородное тело и т.п.), без заболеваний.",
-    "actions": "Что владелец может сделать с этой информацией: продолжать наблюдение, на что обращать внимание, когда стоит идти в клинику и зачем. Без списков анализов и протоколов."
+  {
+    "anamnesis_short": ["..."],
+    "focus_for_vet": ["..."],
+    "next_steps": {
+      "observe_at_home": ["..."],
+      "urgent_now": ["..."],
+      "plan_visit": ["..."]
+    }
   }
-}
 
-Требования:
-- Пиши строго на языке пользователя: ${locale}.
-- Не добавляй ничего ДО или ПОСЛЕ JSON.
-- Не используй названия заболеваний и диагнозов.
-- Не перечисляй конкретные анализы, исследования или протоколы.
-- ОБЯЗАТЕЛЬНО анализируй ВСЮ консультацию целиком, включая ПОСЛЕДНИЕ сообщения владельца и ассистента.
-- Если в конце сессии появляются новые факты (смена корма, стресс, новые симптомы, изменение поведения), они ОБЯЗАТЕЛЬНО должны быть учтены и в "anamnesis", и в "reasoning".
-- "observations" должны отражать всё, что владелец рассказал за сессию, а не только первый запрос.
-- "clarifications" должны включать важные уточнения, появившиеся ПОЗЖЕ в диалоге.
-- "reasoning" обязан опираться на полный диалог, а не только на первые сообщения.
-- Если информации мало, заполни, чем можешь, но не выдумывай факты, которых нет в диалоге.
+  Требования:
+  - Язык строго: ${locale}.
+  - Ничего ДО или ПОСЛЕ JSON.
+  - 3–6 пунктов максимум в "anamnesis_short".
+  - 3–5 пунктов максимум в "focus_for_vet".
+  - В "next_steps":
+    - observe_at_home: 1–3 коротких пункта
+    - urgent_now: 3–6 чётких признаков
+    - plan_visit: 1–2 пункта (зачем очно), без протоколов
+  - Не использовать слова: "диагноз", "патология", "эндокринный", "метаболический".
+  - Не писать "менее вероятно", "исключено" и подобное.
+  - Не перечислять конкретные анализы, исследования, протоколы.
+  - Не выдумывать факты: только из диалога.
+  - Учитывай ВСЮ сессию целиком, включая последние сообщения.
 
-=== СЕССИЯ ===
-${combined}
-`;
+  === СЕССИЯ ===
+  ${combined}
+  `;
+
 
   const res = await chatWithGPT({
     message: request,
@@ -140,32 +159,50 @@ ${combined}
 
   const replyText = res?.reply || "";
 
-  let anamnesis = "";
-  let reasoning = "";
+  let anamnesisShort = "";
+  let focusForVet = "";
+  let nextObserve = "";
+  let nextUrgent = "";
+  let nextPlan = "";
 
   try {
     const parsed = JSON.parse(replyText);
 
-    const a = parsed?.anamnesis || {};
-    const r = parsed?.reasoning || {};
+    const a = Array.isArray(parsed?.anamnesis_short) ? parsed.anamnesis_short : [];
+    const f = Array.isArray(parsed?.focus_for_vet) ? parsed.focus_for_vet : [];
+    const ns = parsed?.next_steps || {};
 
-    const obs = typeof a.observations === "string" ? a.observations.trim() : "";
-    const clar = typeof a.clarifications === "string" ? a.clarifications.trim() : "";
+    const o = Array.isArray(ns?.observe_at_home) ? ns.observe_at_home : [];
+    const u = Array.isArray(ns?.urgent_now) ? ns.urgent_now : [];
+    const p = Array.isArray(ns?.plan_visit) ? ns.plan_visit : [];
 
-    const excl = typeof r.excluded === "string" ? r.excluded.trim() : "";
-    const dirs = typeof r.directions === "string" ? r.directions.trim() : "";
-    const acts = typeof r.actions === "string" ? r.actions.trim() : "";
+    // Форматируем в читабельные буллеты
+    const bullets = (arr: any[]) =>
+      arr
+        .map((x) => (typeof x === "string" ? x.trim() : ""))
+        .filter(Boolean)
+        .map((s) => `• ${s}`)
+        .join("\n");
 
-    anamnesis = [obs, clar].filter(Boolean).join("\n\n");
-    reasoning = [excl, dirs, acts].filter(Boolean).join("\n\n");
+    anamnesisShort = bullets(a);
+    focusForVet = bullets(f);
+    nextObserve = bullets(o);
+    nextUrgent = bullets(u);
+    nextPlan = bullets(p);
   } catch (err) {
-    console.warn("⚠️ Не удалось распарсить JSON decisionTree, используем весь текст как reasoning:", err);
-    // если вдруг JSON не распарсился — всё кладём в reasoning
-    anamnesis = "";
-    reasoning = replyText;
+    console.warn("⚠️ Не удалось распарсить JSON summary, fallback:", err);
   }
 
-  return { anamnesis, reasoning };
+  return {
+    anamnesisShort,
+    focusForVet,
+    nextSteps: {
+      observe_at_home: nextObserve,
+      urgent_now: nextUrgent,
+      plan_visit: nextPlan,
+    },
+  };
+
 }
 
 
@@ -223,7 +260,7 @@ export async function exportSummaryPDF(sessionId: string) {
     //
     // 3) Анамнез и клиническое обоснование из кастома
     //
-    const { anamnesis, reasoning } = await buildDecisionTree(sessionId, locale);
+    const { anamnesisShort, focusForVet, nextSteps } = await buildDecisionTree(sessionId, locale);
 
     //
     // 4) симптоматика
@@ -269,9 +306,26 @@ export async function exportSummaryPDF(sessionId: string) {
       defaultValue: "Anamnesis (owner’s report)",
     });
 
-    const decisionTreeTitle = i18n.t("pdf.decision_tree_title", {
-      defaultValue: "Clinical reasoning (decision tree)",
+    const focusTitle = i18n.t("pdf.focus_title", {
+      defaultValue: "What the vet should check",
     });
+
+    const nextStepsTitle = i18n.t("pdf.next_steps_title", {
+      defaultValue: "What to do next",
+    });
+
+    const observeTitle = i18n.t("pdf.observe_title", {
+      defaultValue: "What to observe at home",
+    });
+
+    const urgentTitle = i18n.t("pdf.urgent_title", {
+      defaultValue: "Go to the clinic urgently if",
+    });
+
+    const planTitle = i18n.t("pdf.plan_title", {
+      defaultValue: "Planned visit",
+    });
+
 
 
     //
@@ -282,7 +336,7 @@ export async function exportSummaryPDF(sessionId: string) {
 <html lang="${locale}" dir="${isHebrew ? "rtl" : "ltr"}">
 <head>
 <meta charset="UTF-8"/>
-<title>${escapeHtml(title)}</title>
+<title>${escapeHtml(normalizePdfText(title))}</title>
 
 <style>
 body {
@@ -296,6 +350,7 @@ body {
 
 h1 { font-size: 20px; margin-bottom: 16px; }
 h2 { font-size: 16px; margin-top: 20px; margin-bottom: 8px; }
+h3 { font-size: 14px; margin-top: 14px; margin-bottom: 6px; }
 
 .row { margin-bottom: 4px; }
 .label { font-weight: 600; }
@@ -310,48 +365,61 @@ h2 { font-size: 16px; margin-top: 20px; margin-bottom: 8px; }
 
 <body>
 
-<h1>${escapeHtml(title)}</h1>
+<h1>${escapeHtml(normalizePdfText(title))}</h1>
 
-<h2>${escapeHtml(animalDataTitle)}</h2>
-<div class="row"><span class="label">${escapeHtml(nameLabel)}:</span> ${escapeHtml(petName)}</div>
+<h2>${escapeHtml(normalizePdfText(animalDataTitle))}</h2>
+<div class="row"><span class="label">${escapeHtml(normalizePdfText(nameLabel))}:</span> ${escapeHtml(normalizePdfText(petName))}</div>
 
 ${
   species
-    ? `<div class="row"><span class="label">${escapeHtml(
+    ? `<div class="row"><span class="label">${escapeHtml(normalizePdfText(
         speciesLabel
-      )}:</span> ${escapeHtml(species)}</div>`
+      ))}:</span> ${escapeHtml(normalizePdfText(species))}</div>`
     : ""
 }
 ${
   pet?.breed
-    ? `<div class="row"><span class="label">${escapeHtml(
+    ? `<div class="row"><span class="label">${escapeHtml(normalizePdfText(
         breedLabel
-      )}:</span> ${escapeHtml(String(pet.breed))}</div>`
+      ))}:</span> ${escapeHtml(normalizePdfText(String(pet.breed)))}</div>`
     : ""
 }
 ${
   pet?.ageYears != null
-    ? `<div class="row"><span class="label">${escapeHtml(
+    ? `<div class="row"><span class="label">${escapeHtml(normalizePdfText(
         ageLabel
-      )}:</span> ${escapeHtml(String(pet.ageYears))}</div>`
+      ))}:</span> ${escapeHtml(normalizePdfText(String(pet.ageYears)))}</div>`
     : ""
 }
 
-<h2>${escapeHtml(dateLabel)}</h2>
+<h2>${escapeHtml(normalizePdfText(dateLabel))}</h2>
 <div>${new Date(summary.date).toLocaleString(locale)}</div>
 
-<h2>${escapeHtml(symptomsTitle)}</h2>
-<div>${escapeHtml(localizedSymptoms.join(", ") || "—")}</div>
+<h2>${escapeHtml(normalizePdfText(symptomsTitle))}</h2>
+<div>${escapeHtml(normalizePdfText(localizedSymptoms.join(", ") || "—"))}</div>
 
 <div class="divider"></div>
 
-<h2>${escapeHtml(ownerNotesTitle)}</h2>
-<div class="mono">${escapeHtml(anamnesis || ownerNotesFallback || "—")}</div>
+<h2>${escapeHtml(normalizePdfText(ownerNotesTitle))}</h2>
+<div class="mono">${escapeHtml(normalizePdfText(anamnesisShort || ownerNotesFallback || "—"))}</div>
 
 <div class="divider"></div>
 
-<h2>${escapeHtml(decisionTreeTitle)}</h2>
-<div class="mono">${escapeHtml(reasoning || "—")}</div>
+<h2>${escapeHtml(normalizePdfText(focusTitle))}</h2>
+<div class="mono">${escapeHtml(normalizePdfText(focusForVet || "—"))}</div>
+
+<div class="divider"></div>
+
+<h2>${escapeHtml(normalizePdfText(nextStepsTitle))}</h2>
+
+<h3>${escapeHtml(normalizePdfText(observeTitle))}</h3>
+<div class="mono">${escapeHtml(normalizePdfText(nextSteps?.observe_at_home || "—"))}</div>
+
+<h3>${escapeHtml(normalizePdfText(urgentTitle))}</h3>
+<div class="mono">${escapeHtml(normalizePdfText(nextSteps?.urgent_now || "—"))}</div>
+
+<h3>${escapeHtml(normalizePdfText(planTitle))}</h3>
+<div class="mono">${escapeHtml(normalizePdfText(nextSteps?.plan_visit || "—"))}</div>
 
 
 </body>
