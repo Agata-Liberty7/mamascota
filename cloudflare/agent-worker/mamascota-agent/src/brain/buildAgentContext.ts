@@ -8,10 +8,11 @@ function normalizePet(p: any) {
   return {
     id: p?.id || null,
     name: p?.name || "Sin nombre",
-    species: p?.species || "No especificada",
+    species: p?.species || "No especificada",  // 'dog' | 'cat' | ...
+    speciesLabel: p?.speciesLabel || null,     // 🆕 готовое слово: Пёс / Собака / Кот / Кошка...
     breed: p?.breed || null,
     sex: p?.sex || "No indicado",
-    ageYears: p?.ageYears || null, // как в proxy buildAgentContext.mjs (через ||)
+    ageYears: p?.ageYears ?? null,
     neutered: !!p?.neutered,
   };
 }
@@ -19,29 +20,6 @@ function normalizePet(p: any) {
 function norm(s = "") {
   return String(s).toLowerCase().trim().replace(/\s+/g, " ");
 }
-function getSpeciesI18nKey(species: any, sex: any): string | null {
-  const sp = typeof species === "string" ? species.trim().toLowerCase() : "";
-  const sx = sex === "male" || sex === "female" ? sex : null;
-
-  if (!sp) return null;
-
-  // dog/cat имеют разветвление по полу (как у тебя в локалях)
-  if (sp === "dog") {
-    if (sx === "male") return "animal_dog_male";
-    if (sx === "female") return "animal_dog_female";
-    return "animal_dog";
-  }
-  if (sp === "cat") {
-    if (sx === "male") return "animal_cat_male";
-    if (sx === "female") return "animal_cat_female";
-    return "animal_cat";
-  }
-
-  // остальные виды — прямые ключи animal_{species}
-  // (должны совпадать с тем, что у тебя уже есть: rabbit, ferret, bird, rodent, reptile, fish, exotic)
-  return `animal_${sp}`;
-}
-
 
 export async function buildAgentContext(
   pet: any = {},
@@ -53,12 +31,6 @@ export async function buildAgentContext(
     const lang = userLang || pet?.lang || "en";
 
     const petData = normalizePet(pet);
-    const speciesI18nKey = getSpeciesI18nKey(petData.species, petData.sex);
-
-    const sexKey =
-      petData.sex === "male" || petData.sex === "female"
-        ? petData.sex
-        : "unknown";
 
     // Данные уже предзагружены в JSON
     const knowledgeBase = KNOWLEDGE_BASE || { algorithms: [], clinicalDetails: [], breedRisks: [] };
@@ -129,49 +101,37 @@ export async function buildAgentContext(
       ? `Síntomas reportados: ${symptomKeys.join(", ")}.`
       : "No se han indicado síntomas específicos.";
 
-    const context = `
-🧩 Contexto clínico del paciente:
-Nombre: ${petData.name || "Desconocido"}
-EspecieKey: ${petData.species || "-"}
-SpeciesI18nKey: ${speciesI18nKey || "-"}
-SexoKey: ${petData.sex === "male" || petData.sex === "female" ? petData.sex : "unknown"}
-Raza: ${petData.breed || "No especificada"}
-Edad: ${petData.ageYears || "Sin datos"} años
-Esterilizado: ${petData.neutered ? "Sí" : "No"}
+    const especieText =
+      petData.speciesLabel ||      // 🆕 Пёс / Собака / Кот / Кошка...
+      petData.species ||           // fallback
+      "No especificada";
 
-🌐 Idioma del usuario: ${langText}
-${symptomText}
-    `.trim();
+    const context = `
+    🧩 Contexto clínico del paciente:
+    Nombre: ${petData.name || "Desconocido"}
+    Especie: ${especieText}
+    Raza: ${petData.breed || "No especificada"}
+    Sexo: ${petData.sex || "No indicado"}
+    Edad: ${petData.ageYears || "Sin datos"} años
+    Esterilizado: ${petData.neutered ? "Sí" : "No"}
+
+    🌐 Idioma del usuario: ${langText}
+    ${symptomText}
+        `.trim();
+
 
   return JSON.stringify({
-    pet: {
-      // ⬅️ всё, что было раньше
-      ...petData,
-
-      // 🧷 ключ локали вида (строго из карточки)
-      speciesI18nKey,
-
-      // 🔑 нормализованный пол для правил промпта
-      sexKey,
-    },
-
+    pet: petData,
     userLang: lang,
     symptomKeys,
     nivelUsuario: nivelFilter,
-
-    // Алгоритмы
     algorithms: finalAlgorithms,
-
-    // Клинические данные
     clinical_details_for_species: clinicalDetailsForSpecies,
     breed_risks_for_pet: breedRisksForPet,
-
-    // Для обратной совместимости
     knowledgeBase: filteredAlgorithms,
-
-    // Текстовая сводка (служебная)
     context,
   });
+
 
   } catch (error: any) {
     return JSON.stringify({

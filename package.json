@@ -7,7 +7,9 @@
     "type": "module",
     "start:clear": "npx expo start --tunnel --clear",
     "start:proxy": "cd proxy && npm run proxy:start",
-    "dev": "concurrently -n PROXY,EXPO -c magenta,cyan \"npm run start:proxy\" \"npm run start:clear\""
+    "dev": "concurrently -n PROXY,EXPO -c magenta,cyan \"npm run start:proxy\" \"npm run start:clear\"",
+    "deploy:worker": "cd cloudflare/agent-worker/mamascota-agent && npx wrangler deploy"
+
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",

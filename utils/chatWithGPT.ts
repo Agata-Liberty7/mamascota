@@ -2,6 +2,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { showExitConfirmation } from "./showExitConfirmation";
+import { getLocalizedSpeciesLabel } from "./getLocalizedSpeciesLabel";
+
 
 // Тип ответа, который ожидает чат и другие вызовы
 export type ChatResult = { ok: boolean; reply?: string; error?: string };
@@ -13,6 +15,7 @@ const AGENT_URL =
     ? `${process.env.EXPO_PUBLIC_API_URL}/agent`
     : "");
 
+  
 /**
  * Каноничный метод получения активного питомца.
  * Использует только новую модель: pets:list + pets:activeId.
@@ -56,7 +59,19 @@ export async function chatWithGPT(params: {
   }
 
   // 🐾 если pet не пришёл — берём из единой модели
-  const ensuredPet = pet ?? (await getUnifiedActivePet());
+  // 🐾 если pet не пришёл — берём из единой модели
+const ensuredPet = pet ?? (await getUnifiedActivePet());
+
+// 🐾 добавляем готовую локализованную подпись вида
+const petWithLabel = ensuredPet
+  ? {
+      ...ensuredPet,
+      speciesLabel: getLocalizedSpeciesLabel(
+        ensuredPet.species,
+        ensuredPet.sex
+      ),
+    }
+  : undefined;
 
   // Явно переданный conversationId (например summary-…)
   const explicitConversationId = conversationId ?? null;
@@ -91,13 +106,15 @@ export async function chatWithGPT(params: {
     const conversationHistory = isSummaryConversation
       ? []
       : await getConversationHistoryTail(effectiveConversationId, 20);
+
+
     
     const body = {
       message: message ?? "",
-      pet: ensuredPet ?? undefined,
+      pet: petWithLabel ?? undefined,
       symptomKeys: symptomKeys ?? undefined,
       userLang: effectiveLang,
-      conversationId: effectiveConversationId,
+      conversationId: ensuredConversationId,
       conversationHistory,
     };
 
@@ -113,7 +130,8 @@ export async function chatWithGPT(params: {
       "🧠 conversationHistory tail:",
       Array.isArray(body.conversationHistory) ? body.conversationHistory.length : 0
     );
-
+    console.log("[CHAT] AGENT_URL =", AGENT_URL);
+    console.log("[CHAT] payload.pet =", body?.pet);
 
     const res = await fetch(AGENT_URL, {
       method: "POST",
