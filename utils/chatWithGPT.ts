@@ -105,7 +105,7 @@ const petWithLabel = ensuredPet
     // 🧠 Хвост истории (20 сообщений) — только для обычного диалога, НЕ для summary
     const conversationHistory = isSummaryConversation
       ? []
-      : await getConversationHistoryTail(effectiveConversationId, 20);
+      : await getConversationHistoryTail(effectiveConversationId, 80);
 
 
     
@@ -245,7 +245,7 @@ function safeLogPet(pet: any) {
 // --------------------------------------------------
 async function getConversationHistoryTail(
   conversationId?: string,
-  limit = 20
+  limit = 80
 ): Promise<Array<{ role: "user" | "assistant" | "system"; content: string }>> {
   if (!conversationId) return [];
 
