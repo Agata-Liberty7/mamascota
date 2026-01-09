@@ -139,15 +139,17 @@
       "hint4": "Un momento, por favor…"
     }
   },
-  "onboarding_1_title": "Mamascota es tu asistente",
-  "onboarding_1_subtitle": "La app te ayuda a no pasar por alto síntomas importantes y a prepararte con calma para la visita al veterinario.",
-  "onboarding_2_title": "Tú observas — yo organizo",
-  "onboarding_2_subtitle": "Tú eliges a tu mascota y los síntomas, y yo convierto tus observaciones en un lenguaje claro, sin diagnósticos ni términos que asusten.",
-  "onboarding_3_title": "El historial siempre a mano",
-  "onboarding_3_subtitle": "Cada consulta se guarda en la sección «Resumen», para que puedas volver al diálogo y continuar desde donde lo dejaste.",
-  "onboarding_4_title": "Chuleta para la clínica",
-  "onboarding_4_subtitle": "Puedes convertir la conversación en un informe PDF ordenado con el anamnesis y llevarlo a la clínica para que el veterinario vea enseguida el cuadro completo.",
-  "onboarding_skip": "Saltar",
+   "onboarding_1_title": "Mamascota — tu asistente",
+  "onboarding_1_subtitle": "La aplicación te ayuda a no pasar por alto síntomas importantes y a prepararte con calma para la visita al veterinario.",
+
+  "onboarding_2_title": "Cómo nos comunicaremos",
+  "onboarding_2_subtitle": "Escribe con tus propias palabras, sin términos médicos.\nPuedes añadir detalles y otros síntomas.\nSi una pregunta no está clara, dímelo.\nPuedes hacer una pausa y continuar más tarde.",
+
+  "onboarding_3_title": "Tú observas — \nyo estructuro",
+  "onboarding_3_subtitle": "Tú eliges la mascota y los síntomas, y yo te ayudo a organizar tus observaciones de forma clara, sin diagnósticos ni términos alarmantes.",
+
+  "onboarding_4_title": "Guía para la clínica",
+  "onboarding_4_subtitle": "A partir del diálogo, puedes crear un informe PDF claro del historial para llevarlo a la clínica y que el veterinario vea rápidamente el panorama completo.",
   "onboarding_next": "Siguiente",
   "onboarding_start": "Empezar",
 

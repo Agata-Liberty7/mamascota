@@ -137,14 +137,16 @@
     }
   },
   "onboarding_1_title": "Mamascota — il tuo assistente",
-  "onboarding_1_subtitle": "L’app ti aiuta a non perdere i sintomi importanti e a prepararti con calma alla visita dal veterinario.",
-  "onboarding_2_title": "Tu osservi — io metto in ordine",
-  "onboarding_2_subtitle": "Scegli il tuo animale e i sintomi, e io trasformo le tue osservazioni in un linguaggio chiaro — senza diagnosi né termini spaventosi.",
-  "onboarding_3_title": "Cronologia sempre a portata di mano",
-  "onboarding_3_subtitle": "Ogni consulto viene salvato nella sezione «Riepilogo», così puoi tornare alla conversazione e riprendere da dove ti eri fermato.",
+  "onboarding_1_subtitle": "L’app ti aiuta a non perdere sintomi importanti e a prepararti con calma alla visita dal veterinario.",
+
+  "onboarding_2_title": "Come comunicheremo",
+  "onboarding_2_subtitle": "Scrivi con parole tue, senza termini medici.\nPuoi aggiungere dettagli e altri sintomi.\nSe una domanda non è chiara, dillo.\nPuoi fare una pausa e continuare più tardi.",
+
+  "onboarding_3_title": "Tu osservi — \nio organizzo",
+  "onboarding_3_subtitle": "Scegli l’animale e i sintomi, e io ti aiuto a organizzare le tue osservazioni in modo chiaro, senza diagnosi o termini allarmanti.",
+
   "onboarding_4_title": "Promemoria per la clinica",
-  "onboarding_4_subtitle": "Dalla conversazione puoi creare un report PDF ordinato dell’anamnesi da portare in clinica, in modo che il veterinario veda subito il quadro completo.",
-  "onboarding_skip": "Salta",
+  "onboarding_4_subtitle": "Dal dialogo puoi creare un chiaro report PDF dell’anamnesi da portare in clinica, così il veterinario può vedere subito il quadro completo.",
   "onboarding_next": "Avanti",
   "onboarding_start": "Avvia",
 

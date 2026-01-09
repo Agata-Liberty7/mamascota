@@ -136,15 +136,17 @@
       "hint4": "Encore un instant…"
     }
   },
-  "onboarding_1_title": "Mamascota — votre assistant",
-  "onboarding_1_subtitle": "L’application vous aide à ne pas manquer les symptômes importants et à vous préparer sereinement à la visite chez le vétérinaire.",
-  "onboarding_2_title": "Vous observez — j’organise",
-  "onboarding_2_subtitle": "Vous choisissez l’animal et les symptômes, et je transforme vos observations en langage clair — sans diagnostic ni termes effrayants.",
-  "onboarding_3_title": "L’historique toujours à portée de main",
-  "onboarding_3_subtitle": "Chaque consultation est enregistrée dans la section « Résumé » : vous pouvez revenir à la conversation et la reprendre là où vous l’avez laissée.",
-  "onboarding_4_title": "Anti-sèche pour la clinique",
-  "onboarding_4_subtitle": "Vous pouvez transformer le dialogue en un compte-rendu PDF soigné de l’anamnèse et l’emmener à la clinique pour que le vétérinaire voie immédiatement l’ensemble de la situation.",
-  "onboarding_skip": "Passer",
+   "onboarding_1_title": "Mamascota — votre assistant",
+  "onboarding_1_subtitle": "L’application vous aide à ne pas manquer des symptômes importants et à vous préparer sereinement à une visite chez le vétérinaire.",
+
+  "onboarding_2_title": "Comment nous allons communiquer",
+  "onboarding_2_subtitle": "Écrivez avec vos propres mots, sans termes médicaux.\nVous pouvez ajouter des détails et d’autres symptômes.\nSi une question n’est pas claire, dites-le.\nVous pouvez faire une pause et reprendre plus tard.",
+
+  "onboarding_3_title": "Vous observez — \nje structure",
+  "onboarding_3_subtitle": "Vous choisissez l’animal et les symptômes, et je vous aide à organiser vos observations avec des mots clairs, sans diagnostic ni termes inquiétants.",
+
+  "onboarding_4_title": "Mémo pour la clinique",
+  "onboarding_4_subtitle": "À partir du dialogue, vous pouvez créer un rapport PDF clair de l’anamnèse à apporter à la clinique, afin que le vétérinaire voie rapidement l’ensemble de la situation.",
   "onboarding_next": "Suivant",
   "onboarding_start": "Commencer",
 
