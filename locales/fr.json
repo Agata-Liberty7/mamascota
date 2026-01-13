@@ -7,7 +7,7 @@
   "exit_message": "Vous pouvez enregistrer votre session pour continuer plus tard.",
   "exit_save": "Enregistrer la session",
   "exit_delete": "Abandonnez et recommencez.",
-  "exit_button": "Accueil",
+  "exit_button": "Quitter",
 
   "terms_title": "Conditions générales",
   "terms_paragraph1": "Je veux vous dire quelque chose d’important.",
@@ -83,12 +83,12 @@
   },
 
   "about": {
-    "tagline": "Comment fonctionne Mamascota",
-    "p1": "Cette application aide les propriétaires d’animaux à observer les symptômes et le comportement — sans remplacer les soins vétérinaires.",
-    "p2": "Elle est basée sur des arbres décisionnels vétérinaires et une logique comportementale, adaptés au quotidien.",
-    "p3": "Nous ne donnons pas de diagnostics. Nous vous aidons à poser les bonnes questions et à demander de l’aide à temps.",
-    "signature": "Créé avec amour pour les animaux et attention pour les humains.",
-    "follow": "Suivez le projet sur Instagram",
+    "tagline": "Mamascota",
+    "p1": "Aide à comprendre ce qui se passe avec votre animal, sans remplacer l’aide professionnelle.",
+    "p2": "Basé sur des algorithmes vétérinaires et des scénarios comportementaux.",
+    "p3": "Ne pose pas de diagnostics. Aide à poser les bonnes questions et à demander de l’aide à temps.",
+    "signature": "Créé avec amour pour les animaux et attention pour les personnes.",
+    "follow": "Suivre le projet sur Instagram",
     "show_onboarding_again": "Plus…"
   },
 
@@ -136,17 +136,18 @@
       "hint4": "Encore un instant…"
     }
   },
-   "onboarding_1_title": "Mamascota — votre assistant",
-  "onboarding_1_subtitle": "L’application vous aide à ne pas manquer des symptômes importants et à vous préparer sereinement à une visite chez le vétérinaire.",
+  "onboarding_1_title": "Mamascota est là",
+  "onboarding_1_subtitle": "Je vous aide à remarquer des signes importants et à vous préparer sereinement à une visite chez le vétérinaire.",
 
-  "onboarding_2_title": "Comment nous allons communiquer",
-  "onboarding_2_subtitle": "Écrivez avec vos propres mots, sans termes médicaux.\nVous pouvez ajouter des détails et d’autres symptômes.\nSi une question n’est pas claire, dites-le.\nVous pouvez faire une pause et reprendre plus tard.",
+  "onboarding_2_title": "Nous échangeons simplement",
+  "onboarding_2_subtitle": "Racontez avec vos propres mots.\nSi besoin, vous pouvez reprendre plus tard.",
 
-  "onboarding_3_title": "Vous observez — \nje structure",
-  "onboarding_3_subtitle": "Vous choisissez l’animal et les symptômes, et je vous aide à organiser vos observations avec des mots clairs, sans diagnostic ni termes inquiétants.",
+  "onboarding_3_title": "Vous observez — \nje vous aide",
+  "onboarding_3_subtitle": "Vous me dites ce que vous avez remarqué, et je vous aide à mettre en évidence l’essentiel et à organiser vos observations.",
 
   "onboarding_4_title": "Mémo pour la clinique",
   "onboarding_4_subtitle": "À partir du dialogue, vous pouvez créer un rapport PDF clair de l’anamnèse à apporter à la clinique, afin que le vétérinaire voie rapidement l’ensemble de la situation.",
+  "onboarding_skip": "Sauter",
   "onboarding_next": "Suivant",
   "onboarding_start": "Commencer",
 

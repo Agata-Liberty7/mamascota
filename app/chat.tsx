@@ -1,8 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 // @ts-ignore
 import { useHeaderHeight } from "@react-navigation/elements";
-import { useLocalSearchParams } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import { useLocalSearchParams, useNavigation } from "expo-router";
+
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -18,9 +19,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import SymptomSelector from "../components/SymptomSelector";
 import i18n from "../i18n";
+import { exportSummaryPDF } from "../utils/exportPDF";
 import type { Pet } from "../types/pet";
 import { chatWithGPT } from "../utils/chatWithGPT";
 import { getActivePetId, getPets } from "../utils/pets";
+
+import MenuButton from "../components/ui/MenuButton";
+import LocalizedExitButton from "../components/ui/LocalizedExitButton";
+
 
 type ChatMessage = {
   role: "user" | "assistant" | "system";
@@ -36,6 +42,7 @@ const THINKING_HINT_KEYS = [
 
 
 export default function ChatScreen() {
+  const navigation = useNavigation();
   const { pet: petParam } = useLocalSearchParams<{ pet?: string }>();
   const lang = (i18n.locale || "").split("-")[0];
   const isRTL = lang === "he";
@@ -46,6 +53,9 @@ export default function ChatScreen() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [thinkingHint, setThinkingHint] = useState<string | null>(null);
+  const [showPdfCta, setShowPdfCta] = useState(false);
+  const [pdfConversationId, setPdfConversationId] = useState<string | null>(null);
+
 
 
   // 🔥 ВАЖНО: по умолчанию не показываем селектор
@@ -59,24 +69,7 @@ export default function ChatScreen() {
 
   // ======================================================
   // 🟦 ШАГ 1 — Проверяем, есть ли сохранённая сессия
-  // ======================================================
-  useEffect(() => {
-  (async () => {
-    const id = await AsyncStorage.getItem("conversationId");
-    if (id) {
-      console.log("🔄 Есть активная сессия — пропускаем SymptomSelector");
-      const saved = await AsyncStorage.getItem(`chatHistory:${id}`);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setChat(parsed);
-          setShowSelector(false);
-        }
-      }
-    }
-  })();
-}, []);
-  
+  // ====================================================== 
   useEffect(() => {
     (async () => {
       const id = await AsyncStorage.getItem("conversationId");
@@ -167,6 +160,9 @@ export default function ChatScreen() {
   const handleSymptomSubmit = async (selected: string[], customSymptom?: string) => {
     setShowSelector(false);
     setChat([]);
+    setShowPdfCta(false);
+    setPdfConversationId(null);
+
 
     try {
       setLoading(true);
@@ -186,6 +182,11 @@ export default function ChatScreen() {
           : String(result);
 
       setChat([{ role: "assistant", content: replyText }]);
+      if (typeof result === "object" && result?.sessionEnded) {
+        setShowPdfCta(true);
+        setPdfConversationId(result.conversationId ?? null);
+      }
+
     } catch (error) {
       console.error("Ошибка reasoning:", error);
     } finally {
@@ -193,42 +194,66 @@ export default function ChatScreen() {
     }
   };
 
-  // ======================================================
-  // 🟦 Отправка сообщения пользователем
-  // ======================================================
-  const handleSend = async () => {
-    if (!input.trim()) return;
+    // ======================================================
+    // 🟦 Отправка сообщения пользователем
+    // ======================================================
+    // 🟦 Отправка сообщения пользователем
+    // ======================================================
+    const handleSend = async () => {
+      if (!input.trim()) return;
 
-    const userMessage: ChatMessage = { role: "user", content: input.trim() };
-    setChat((prev) => [...prev, userMessage]);
-    const messageToSend = input.trim();
-    setInput("");
+      const messageToSend = input.trim();
+      const userMessage: ChatMessage = { role: "user", content: messageToSend };
 
-    try {
-      setLoading(true);
+      setChat((prev) => [...prev, userMessage]);
+      setInput("");
 
-      const result = await chatWithGPT({
-        message: messageToSend,
-        pet: pet || undefined,
+      try {
+        setLoading(true);
+
+        const result = await chatWithGPT({
+          message: messageToSend,
+          pet: pet || undefined,
+        });
+
+        const assistantText =
+          typeof result === "object"
+            ? result.reply || result.error || "⚠️ Нет ответа"
+            : String(result);
+
+        const assistantMessage: ChatMessage = {
+          role: "assistant",
+          content: assistantText,
+        };
+
+        setChat((prev) => [...prev, assistantMessage]);
+
+        // PDF CTA: показываем только если агент явно финализировал
+        if (typeof result === "object" && result?.sessionEnded) {
+          setShowPdfCta(true);
+          setPdfConversationId(result.conversationId ?? null);
+        } else {
+          setShowPdfCta(false);
+          setPdfConversationId(null);
+        }
+      } catch (err) {
+        console.error("Ошибка отправки:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // ======================================================
+    // 🟦 Header logic: Menu on selector, Exit in chat
+    // ======================================================
+    useLayoutEffect(() => {
+      navigation.setOptions({
+        headerBackVisible: false,
+        headerLeft: () => null,
+        headerRight: () => (showSelector ? <MenuButton /> : <LocalizedExitButton />),
       });
+    }, [navigation, showSelector]);
 
-      const assistantText =
-        typeof result === "object"
-          ? result.reply || result.error || "⚠️ Нет ответа"
-          : String(result);
-
-      const assistantMessage: ChatMessage = {
-        role: "assistant",
-        content: assistantText,
-      };
-
-      setChat((prev) => [...prev, assistantMessage]);
-    } catch (err) {
-      console.error("Ошибка отправки:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // ======================================================
   // 🟦 UI
@@ -284,6 +309,34 @@ export default function ChatScreen() {
                 </View>
               </View>
             )}
+            {showPdfCta && (
+              <View style={styles.pdfCta}>
+                <Text style={styles.pdfCtaTitle}>{i18n.t("chat.pdf_ready")}</Text>
+
+                <View style={styles.pdfCtaRow}>
+                  <TouchableOpacity
+                    style={styles.pdfBtn}
+                    onPress={async () => {
+                      const id = pdfConversationId ?? (await AsyncStorage.getItem("conversationId"));
+                      if (id) await exportSummaryPDF(id);
+                    }}
+                  >
+                    <Text style={styles.pdfBtnText}>{i18n.t("chat.open_pdf")}</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.pdfBtn}
+                    onPress={async () => {
+                      const id = pdfConversationId ?? (await AsyncStorage.getItem("conversationId"));
+                      if (id) await exportSummaryPDF(id);
+                    }}
+                  >
+                    <Text style={styles.pdfBtnText}>{i18n.t("chat.share_pdf")}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+
             <View
               style={styles.inputArea}
               onLayout={(e) => setInputHeight(e.nativeEvent.layout.height)}
@@ -392,9 +445,72 @@ const styles = StyleSheet.create({
     writingDirection: "rtl",
     alignItems: "flex-end",
   },
-
-
-
+  pdfCta: {
+    marginHorizontal: 12,
+    marginBottom: 8,
+    padding: 12,
+    borderRadius: 12,
+    backgroundColor: "#F6F6F6",
+    borderWidth: 1,
+    borderColor: "#E5E5E5",
+  },
+  pdfCtaText: {
+    fontSize: 14,
+    color: "#333",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  pdfCtaButtons: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  pdfBtnPrimary: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 16,
+    backgroundColor: "#42A5F5",
+    marginRight: 8,
+  },
+  pdfBtnPrimaryText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  pdfBtnSecondary: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "#42A5F5",
+  },
+  pdfBtnSecondaryText: {
+    color: "#42A5F5",
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  pdfCtaTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#222",
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  pdfCtaRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  pdfBtn: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 16,
+    backgroundColor: "#42A5F5",
+    marginHorizontal: 6,
+  },
+  pdfBtnText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "600",
+  },                     
 
 });
 

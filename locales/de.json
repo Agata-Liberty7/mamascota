@@ -7,7 +7,7 @@
   "exit_message": "Sie können Ihre Sitzung speichern, um später fortzufahren.",
   "exit_save": "Sitzung speichern",
   "exit_delete": "Beenden und neu starten",
-  "exit_button": "Startseite",
+  "exit_button": "Beenden",
 
   "terms_title": "Allgemeine Geschäftsbedingungen",
   "terms_paragraph1": "Ich möchte Ihnen etwas Wichtiges mitteilen.",
@@ -83,12 +83,12 @@
   },
 
   "about": {
-    "tagline": "Wie Mamascota funktioniert",
-    "p1": "Diese App hilft Tierhaltern, Symptome und Verhalten zu beobachten – ohne tierärztliche Betreuung zu ersetzen.",
-    "p2": "Sie basiert auf tierärztlichen Entscheidungsbäumen und Verhaltenslogik, angepasst für den Alltag.",
-    "p3": "Wir stellen keine Diagnosen. Wir helfen Ihnen, die richtigen Fragen zu stellen und rechtzeitig Hilfe zu suchen.",
-    "signature": "Mit Liebe zu Tieren und Aufmerksamkeit für Menschen erstellt.",
-    "follow": "Folgen Sie dem Projekt auf Instagram",
+    "tagline": "Mamascota",
+    "p1": "Hilft zu verstehen, was mit Ihrem Tier passiert, ohne professionelle Hilfe zu ersetzen.",
+    "p2": "Basiert auf veterinärmedizinischen Algorithmen und Verhaltensmodellen.",
+    "p3": "Stellt keine Diagnosen. Hilft, die richtigen Fragen zu stellen und rechtzeitig Hilfe zu suchen.",
+    "signature": "Mit Liebe zu Tieren und Aufmerksamkeit für Menschen entwickelt.",
+    "follow": "Projekt auf Instagram verfolgen",
     "show_onboarding_again": "Mehr…"
   },
 
@@ -124,6 +124,9 @@
     "custom": "Anderes"
   },
   "chat": {
+    "pdf_ready": "Deine PDF-Zusammenfassung ist fertig",
+    "open_pdf": "PDF öffnen",
+    "share_pdf": "Teilen",
     "pet_default": "Das Tier",
     "symptom_intro": "zeigt die folgenden Symptome",
     "ask_confirmation": "Bitte bestätige, ob das stimmt, oder füge weitere Details hinzu",
@@ -137,17 +140,18 @@
     }
   },
   
-  "onboarding_1_title": "Mamascota — Ihr Assistent",
-  "onboarding_1_subtitle": "Die App hilft Ihnen, wichtige Symptome nicht zu übersehen und sich ruhig auf den Tierarztbesuch vorzubereiten.",
+  "onboarding_1_title": "Mamascota ist da",
+  "onboarding_1_subtitle": "Ich helfe dabei, wichtige Anzeichen zu bemerken und sich ruhig auf den Tierarztbesuch vorzubereiten.",
 
-  "onboarding_2_title": "Wie wir kommunizieren",
-  "onboarding_2_subtitle": "Schreiben Sie in Ihren eigenen Worten — ohne medizinische Fachbegriffe.\nSie können Details und weitere Symptome hinzufügen.\nWenn eine Frage unklar ist, sagen Sie es.\nSie können pausieren und später fortfahren.",
+  "onboarding_2_title": "Wir sprechen einfach",
+  "onboarding_2_subtitle": "Erzählen Sie in Ihren eigenen Worten.\nWenn nötig, können Sie später fortfahren.",
 
-  "onboarding_3_title": "Sie beobachten — \nich strukturiere",
-  "onboarding_3_subtitle": "Sie wählen das Tier und die Symptome aus, und ich helfe dabei, Ihre Beobachtungen verständlich zu ordnen — ohne Diagnosen oder beunruhigende Begriffe.",
+  "onboarding_3_title": "Sie beobachten — \nich helfe",
+  "onboarding_3_subtitle": "Sie erzählen, was Ihnen aufgefallen ist, und ich helfe, das Wesentliche herauszuarbeiten und zu ordnen.",
 
   "onboarding_4_title": "Spickzettel für die Praxis",
   "onboarding_4_subtitle": "Aus dem Gespräch können Sie einen übersichtlichen PDF-Bericht zur Krankengeschichte erstellen und ihn zur Praxis mitnehmen, damit der Tierarzt schnell den Gesamtüberblick erhält.",
+  "onboarding_skip": "Überspringen",
   "onboarding_next": "Weiter",
   "onboarding_start": "Start",
 

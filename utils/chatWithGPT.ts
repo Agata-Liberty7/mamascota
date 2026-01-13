@@ -6,7 +6,14 @@ import { getLocalizedSpeciesLabel } from "./getLocalizedSpeciesLabel";
 
 
 // Тип ответа, который ожидает чат и другие вызовы
-export type ChatResult = { ok: boolean; reply?: string; error?: string };
+export type ChatResult = {
+  ok: boolean;
+  reply?: string;
+  error?: string;
+  conversationId?: string;
+  sessionEnded?: boolean;
+};
+
 
 // Универсальный URL агента: сначала берём точный /agent, иначе — из API_URL
 const AGENT_URL =
@@ -102,7 +109,7 @@ const petWithLabel = ensuredPet
     }
 
 
-    // 🧠 Хвост истории (20 сообщений) — только для обычного диалога, НЕ для summary
+    // 🧠 Хвост истории (0 сообщений) — только для обычного диалога, НЕ для summary
     const conversationHistory = isSummaryConversation
       ? []
       : await getConversationHistoryTail(effectiveConversationId, 80);
@@ -216,7 +223,13 @@ const petWithLabel = ensuredPet
           );
         }
 
-        return { ok: true, reply: data.reply ?? "" };
+        return {
+          ok: true,
+          reply: data.reply ?? "",
+          conversationId: serverConversationId || effectiveConversationId || ensuredConversationId,
+          sessionEnded: !!data?.sessionEnded,
+        };
+
       }
 
       return { ok: false, error: "Неверный формат поля reply" };
@@ -357,6 +370,14 @@ export async function handleExitAction(
     } catch (e) {
       console.error("❌ Не удалось сохранить chatSummary:", e);
     }
+    try {
+      router.replace("/summary");
+      console.log("↩️ Переход в Summary после сохранения");
+    } catch (err) {
+      console.warn("⚠️ Не удалось перейти в Summary:", err);
+    }
+    return;
+
   }
 
   if (choice === "delete") {

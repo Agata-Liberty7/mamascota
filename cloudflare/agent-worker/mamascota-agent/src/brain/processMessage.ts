@@ -8,7 +8,9 @@ export type BrainResult = {
   reply?: string;
   error?: string;
   conversationId?: string;
+  sessionEnded?: boolean;
 };
+
 
 type BrainArgs = {
   env: any;
@@ -173,7 +175,8 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
       content:
         `${finalSystemPrompt}\n\n` +
         `[LANG_OVERRIDE]: ${effectiveLang}\n` +
-        `[Инструкция]: Отвечай кратко, ясно, строго по шагам и без диагнозов.`,
+        `[Инструкция]: Отвечай кратко, ясно, строго по шагам и без диагнозов.\n` +
+        `[Протокол]: Если ты считаешь диалог завершённым и дальше уместно сделать PDF-резюме, добавь в САМОМ КОНЦЕ ответа отдельной строкой маркер: [[SESSION_ENDED]].`,
     });
 
     // 2) Guard prompt (proxy wording)
@@ -220,7 +223,16 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
 
     const reply = await callOpenAIChat({ apiKey, model, messages });
 
-    return { ok: true, conversationId, reply };
+    const END_MARK = "[[SESSION_ENDED]]";
+    const sessionEnded = reply.includes(END_MARK);
+
+    const cleanedReply = sessionEnded
+      ? reply.replaceAll(END_MARK, "").trim()
+      : reply;
+
+    return { ok: true, conversationId, reply: cleanedReply, sessionEnded };
+
+
   } catch (e: any) {
     console.error("❌ processMessageBrain error:", e?.message || e);
     return {

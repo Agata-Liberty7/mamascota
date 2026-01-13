@@ -7,7 +7,7 @@
   "exit_message": "You can save your session to continue later.",
   "exit_save": "Save session",
   "exit_delete": "Exit and start again",
-  "exit_button": "I’ll be back",
+  "exit_button": "Exit",
 
   "terms_title": "Terms and Conditions",
   "terms_paragraph1": "I want you to know something important.",
@@ -83,13 +83,13 @@
   },
 
   "about": {
-    "tagline": "How Mamascota works",
-    "p1": "This app helps pet owners observe symptoms and behavior — without replacing veterinary care.",
-    "p2": "It's based on veterinary decision trees and behavioral logic, adapted for everyday users.",
-    "p3": "We don’t give diagnoses. We help you ask the right questions and seek help in time.",
-    "signature": "Created with love for animals and attention to humans.",
+    "tagline": "Mamascota",
+    "p1": "Helps you understand what is happening with your pet, without replacing professional care.",
+    "p2": "Based on veterinary algorithms and behavioral scenarios.",
+    "p3": "Does not provide diagnoses. Helps you ask the right questions and seek help in time.",
+    "signature": "Created with love for animals and care for people.",
     "follow": "Follow the project on Instagram",
-    "show_onboarding_again": "More…"
+    "show_onboarding_again": "More..."
   },
 
   "symptomSelector": {
@@ -124,6 +124,9 @@
     "custom": "Other"
   },
   "chat": {
+    "pdf_ready": "Your PDF summary is ready",
+    "open_pdf": "Open PDF",
+    "share_pdf": "Share",
     "pet_default": "The pet",
     "symptom_intro": "shows the following symptoms",
     "ask_confirmation": "Please confirm if this is correct or add more details",
@@ -137,17 +140,18 @@
     }
   },
 
-  "onboarding_1_title": "Mamascota — your assistant",
-  "onboarding_1_subtitle": "The app helps you notice important symptoms and calmly prepare for a veterinary visit.",
+  "onboarding_1_title": "Mamascota is here",
+  "onboarding_1_subtitle": "I help you notice important signs and calmly prepare for a visit to the veterinarian.",
 
-  "onboarding_2_title": "How we will communicate",
-  "onboarding_2_subtitle": "Write in your own words — no medical terms needed.\nYou can add details and other symptoms.\nIf a question is unclear, say so.\nYou can pause and continue later.",
+  "onboarding_2_title": "We communicate simply",
+  "onboarding_2_subtitle": "Tell me in your own words.\nIf you need to pause, you can continue later.",
 
-  "onboarding_3_title": "You observe — \nI structure",
-  "onboarding_3_subtitle": "You choose your pet and symptoms, and I help organize your observations in clear language — without diagnoses or frightening terms.",
+  "onboarding_3_title": "You observe — \nI help",
+  "onboarding_3_subtitle": "You tell me what you noticed, and I help highlight what matters and organize your observations.",
 
   "onboarding_4_title": "Clinic summary",
   "onboarding_4_subtitle": "From the dialogue, you can create a clear PDF summary of the medical history to take to the clinic, so the veterinarian can quickly see the full picture.",
+  "onboarding_skip": "Skip",
   "onboarding_next": "Next",
   "onboarding_start": "Start",
 

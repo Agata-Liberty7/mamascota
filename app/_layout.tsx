@@ -9,48 +9,57 @@ import MenuButton from "../components/ui/MenuButton";
 import { UiSettingsProvider } from "../src/context/UiSettings";
 import "../src/setup/textScalePatch";
 
-import { detectAndSetInitialLanguage } from "../utils/detectLanguage";  // ⬅️ ДОБАВИЛИ
+import { detectAndSetInitialLanguage } from "../utils/detectLanguage";
 
 export default function AppLayout() {
   const [appReady, setAppReady] = useState(false);
 
   useEffect(() => {
     const init = async () => {
-      await detectAndSetInitialLanguage();   // ⬅️ АВТООПРЕДЕЛЕНИЕ ЯЗЫКА
+      await detectAndSetInitialLanguage();
       setAppReady(true);
     };
-
     init();
   }, []);
 
-  if (!appReady) return null;  // ⬅️ НЕ РЕНДЕРИМ НИЧЕГО, ПОКА ЯЗЫК НЕ УСТАНОВЛЕН
+  if (!appReady) return null;
 
   return (
     <UiSettingsProvider>
       <SafeAreaProvider>
-        <>
-          <MenuButton />
-          <Stack
-            screenOptions={{
-              title: "",
-              headerBackTitle: "",
-              headerBackVisible: true,
-              headerBackButtonDisplayMode: "minimal",
+        <Stack
+          screenOptions={{
+            title: "",
+            headerBackTitle: "",
+            headerBackVisible: true,
+            headerBackButtonDisplayMode: "minimal",
+
+            // ✅ ДЕФОЛТНО: меню, а не выход
+            headerRight: () => <MenuButton />,
+
+            animation: "fade",
+            animationDuration: 200,
+          }}
+        >
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="animal-selection" />
+
+          {/* ✅ ЧАТ: только Выход, и убираем back-стрелку */}
+          <Stack.Screen
+            name="chat"
+            options={{
               headerRight: () => <LocalizedExitButton />,
-              animation: "fade",
-              animationDuration: 200,
+              headerBackVisible: false,
+              headerLeft: () => null,
             }}
-          >
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="animal-selection" />
-            <Stack.Screen name="chat" />
-            <Stack.Screen name="summary" />
-            <Stack.Screen name="settings" />
-            <Stack.Screen name="about" />
-            <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-            <Stack.Screen name="terms-screen" options={{ headerShown: false }} />
-          </Stack>
-        </>
+          />
+
+          <Stack.Screen name="summary" />
+          <Stack.Screen name="settings" />
+          <Stack.Screen name="about" />
+          <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+          <Stack.Screen name="terms-screen" options={{ headerShown: false }} />
+        </Stack>
       </SafeAreaProvider>
     </UiSettingsProvider>
   );

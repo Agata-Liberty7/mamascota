@@ -72,13 +72,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 24,
-    paddingTop: 32,        // регулируешь высоту "подъёма"
+    paddingTop: 20,        // регулируешь высоту "подъёма"
     // justifyContent: "center",  ❌ не нужно, иначе будет по центру
   },
   heroImage: {
     width: "100%",
-    height: 220,
-    marginBottom: 8,
+    aspectRatio: 2.2,
+    height: undefined,
+    marginBottom: 6,
   },
   title: {
     fontSize: 22,
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: "center",
     color: "#333",
-    marginBottom: 8,
+    marginBottom: 6,
   },
   secondaryButton: {
     marginTop: 12,
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
     color: "#555",
   },
   iconContainer: {
-    marginTop: 20,
+    marginTop: 12,
     alignSelf: "center",
     opacity: 0.9,
   },
