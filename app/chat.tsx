@@ -31,7 +31,9 @@ import LocalizedExitButton from "../components/ui/LocalizedExitButton";
 type ChatMessage = {
   role: "user" | "assistant" | "system";
   content: string;
+  ts?: number; // timestamp (ms)
 };
+
 
 const THINKING_HINT_KEYS = [
   "chat.waiting.hint1",
@@ -39,6 +41,23 @@ const THINKING_HINT_KEYS = [
   "chat.waiting.hint3",
   "chat.waiting.hint4",
 ];
+// --------------------
+// Timestamps + progress (UI-only)
+// --------------------
+const SHOW_TIMESTAMPS = true; // позже можно вынести в Settings
+const MAX_ASSISTANT_TURNS = 10; // “длина диалога” в шагах
+
+function formatChatTime(ts?: number) {
+  if (!ts) return "";
+  try {
+    return new Date(ts).toLocaleTimeString(i18n.locale || "en", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } catch {
+    return "";
+  }
+}
 
 
 export default function ChatScreen() {
@@ -82,7 +101,20 @@ export default function ChatScreen() {
       const saved = await AsyncStorage.getItem(`chatHistory:${id}`);
       if (saved) {
         // если есть сохранённая история и id — ВОССТАНАВЛИВАЕМ ЧАТ
-        setChat(JSON.parse(saved));
+        try {
+          const parsed = JSON.parse(saved);
+          const normalized = Array.isArray(parsed)
+            ? parsed.map((m: any) => ({
+                role: m?.role,
+                content: typeof m?.content === "string" ? m.content : "",
+                ts: typeof m?.ts === "number" ? m.ts : undefined,
+              }))
+            : [];
+          setChat(normalized);
+        } catch {
+          setChat([]);
+        }
+
         setShowSelector(false);
       } else {
         // если истории нет — начинаем новый диалог
@@ -102,7 +134,20 @@ export default function ChatScreen() {
         if (id) {
           const saved = await AsyncStorage.getItem(`chatHistory:${id}`);
           if (saved) {
-            setChat(JSON.parse(saved));
+            try {
+              const parsed = JSON.parse(saved);
+              const normalized = Array.isArray(parsed)
+                ? parsed.map((m: any) => ({
+                    role: m?.role,
+                    content: typeof m?.content === "string" ? m.content : "",
+                    ts: typeof m?.ts === "number" ? m.ts : undefined,
+                  }))
+                : [];
+              setChat(normalized);
+            } catch {
+              setChat([]);
+            }
+
             setShowSelector(false);
           }
         }
@@ -181,7 +226,8 @@ export default function ChatScreen() {
           ? result.reply || result.error || "⚠️ Ошибка при анализе"
           : String(result);
 
-      setChat([{ role: "assistant", content: replyText }]);
+      setChat([{ role: "assistant", content: replyText, ts: Date.now() }]);
+      // PDF CTA: показываем только если агент явно финализировал
       if (typeof result === "object" && result?.sessionEnded) {
         setShowPdfCta(true);
         setPdfConversationId(result.conversationId ?? null);
@@ -203,7 +249,12 @@ export default function ChatScreen() {
       if (!input.trim()) return;
 
       const messageToSend = input.trim();
-      const userMessage: ChatMessage = { role: "user", content: messageToSend };
+      const userMessage: ChatMessage = {
+        role: "user",
+        content: messageToSend,
+        ts: Date.now(),
+      };
+
 
       setChat((prev) => [...prev, userMessage]);
       setInput("");
@@ -224,7 +275,9 @@ export default function ChatScreen() {
         const assistantMessage: ChatMessage = {
           role: "assistant",
           content: assistantText,
+          ts: Date.now(),
         };
+
 
         setChat((prev) => [...prev, assistantMessage]);
 
@@ -269,6 +322,34 @@ export default function ChatScreen() {
           <SymptomSelector onSubmit={handleSymptomSubmit} />
         ) : (
           <>
+          {/* Progress / length indicator (UI-only) */}
+          {(() => {
+            const assistantTurns = chat.filter((m) => m.role === "assistant").length;
+            const remaining = Math.max(0, MAX_ASSISTANT_TURNS - assistantTurns);
+
+            if (assistantTurns === 0) return null;
+
+            return (
+              <View style={styles.progressWrap}>
+                <Text style={styles.progressText}>
+                  {i18n.t("chat.progress_steps", {
+                    defaultValue: "Step {{cur}} of {{max}}",
+                    cur: Math.min(assistantTurns, MAX_ASSISTANT_TURNS),
+                    max: MAX_ASSISTANT_TURNS,
+                  })}
+                </Text>
+
+                {remaining > 0 && remaining <= 3 && (
+                  <Text style={styles.progressSubtext}>
+                    {i18n.t("chat.progress_remaining_2_3", {
+                      defaultValue: "I’ll ask {{n}} more quick questions",
+                      n: remaining,
+                    })}
+                  </Text>
+                )}
+              </View>
+            );
+          })()}
             <FlatList
               ref={flatListRef}
               data={chat.filter((m) => m.role !== "system")}
@@ -284,10 +365,15 @@ export default function ChatScreen() {
                   <Text style={[styles.msgText, isRTL ? styles.msgTextRTL : undefined]}>
                     {item.content}
                   </Text>
+
+                  {SHOW_TIMESTAMPS && !!item.ts && (
+                    <Text style={[styles.msgTime, isRTL ? styles.msgTimeRTL : undefined]}>
+                      {formatChatTime(item.ts)}
+                    </Text>
+                  )}
                 </View>
-
               )}
-
+              
               contentContainerStyle={[
                 styles.messagesContainer,
                 { paddingBottom: inputHeight + insets.bottom + 12 },
@@ -510,7 +596,34 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 14,
     fontWeight: "600",
-  },                     
+  },   
+  progressWrap: {
+    paddingHorizontal: 12,
+    paddingTop: 6,
+    paddingBottom: 2,
+  },
+  progressText: {
+    fontSize: 12,
+    color: "#666",
+    textAlign: "center",
+  },
+  progressSubtext: {
+    fontSize: 12,
+    color: "#666",
+    textAlign: "center",
+    marginTop: 2,
+  },
+  msgTime: {
+    marginTop: 6,
+    fontSize: 11,
+    color: "#777",
+    alignSelf: "flex-end",
+  },
+  msgTimeRTL: {
+    alignSelf: "flex-start",
+    textAlign: "right",
+    writingDirection: "rtl",
+  },                  
 
 });
 
