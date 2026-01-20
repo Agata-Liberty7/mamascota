@@ -5,7 +5,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import i18n from "../i18n";
 import { chatWithGPT } from "./chatWithGPT";
 
-
+import { Platform } from "react-native";
+import * as FileSystem from "expo-file-system/legacy";
+import * as IntentLauncher from "expo-intent-launcher";
 
 function normalizePdfText(input: any): string {
   if (input === null || input === undefined) return "";
@@ -79,28 +81,48 @@ async function findPetByName(name: string | null) {
     return null;
   }
 }
+  // -----------------------------------------------------
+  // Cache helpers: decisionTree (summary) per session + locale
+  // -----------------------------------------------------
+  function getDecisionTreeCacheKey(sessionId: string, locale: string) {
+    return `pdfDecisionTree:${sessionId}:${locale}`;
+  }
 
-//
-// -----------------------------------------------------
-// Локализуем вид животного (species + sex → локали)
-// -----------------------------------------------------
-function localizeSpecies(species: string, sex: string): string {
-  const s = species?.toLowerCase() || "";
-  const sx = sex?.toLowerCase() || "";
+  async function getChatLengthForSession(sessionId: string): Promise<number> {
+    try {
+      const raw =
+        (await AsyncStorage.getItem(`chatHistory:${sessionId}`)) ??
+        (await AsyncStorage.getItem(`chat:history:${sessionId}`));
 
-  const fullKey = `animal_${s}_${sx}`;     // animal_cat_female
-  const baseKey = `animal_${s}`;           // animal_cat
+      if (!raw) return 0;
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed.length : 0;
+    } catch {
+      return 0;
+    }
+  }
 
-  const byFull = i18n.t(fullKey, { defaultValue: "" });
-  if (byFull && typeof byFull === "string" && byFull.trim() !== fullKey)
-    return byFull;
+  //
+  // -----------------------------------------------------
+  // Локализуем вид животного (species + sex → локали)
+  // -----------------------------------------------------
+  function localizeSpecies(species: string, sex: string): string {
+    const s = species?.toLowerCase() || "";
+    const sx = sex?.toLowerCase() || "";
 
-  const byBase = i18n.t(baseKey, { defaultValue: "" });
-  if (byBase && typeof byBase === "string" && byBase.trim() !== baseKey)
-    return byBase;
+    const fullKey = `animal_${s}_${sx}`;     // animal_cat_female
+    const baseKey = `animal_${s}`;           // animal_cat
 
-  return species; // fallback
-}
+    const byFull = i18n.t(fullKey, { defaultValue: "" });
+    if (byFull && typeof byFull === "string" && byFull.trim() !== fullKey)
+      return byFull;
+
+    const byBase = i18n.t(baseKey, { defaultValue: "" });
+    if (byBase && typeof byBase === "string" && byBase.trim() !== baseKey)
+      return byBase;
+
+    return species; // fallback
+  }
 
 //
 // -----------------------------------------------------
@@ -205,6 +227,59 @@ async function buildDecisionTree(conversationId: string, locale: string) {
 
 }
 
+// -----------------------------------------------------
+// Cached decisionTree (invalidate when chat grows)
+// -----------------------------------------------------
+async function getDecisionTreeCached(sessionId: string, locale: string) {
+  const cacheKey = getDecisionTreeCacheKey(sessionId, locale);
+
+  const chatLenNow = await getChatLengthForSession(sessionId);
+
+  // 1) try cache
+  try {
+    const cachedRaw = await AsyncStorage.getItem(cacheKey);
+    if (cachedRaw) {
+      const cached = JSON.parse(cachedRaw);
+
+      const cachedChatLen =
+        typeof cached?.chatLen === "number" ? cached.chatLen : null;
+
+      // Если диалог не вырос — используем кэш
+      if (cachedChatLen !== null && cachedChatLen === chatLenNow) {
+        return {
+          anamnesisShort: String(cached?.anamnesisShort ?? ""),
+          focusForVet: String(cached?.focusForVet ?? ""),
+          nextSteps: {
+            observe_at_home: String(cached?.nextSteps?.observe_at_home ?? ""),
+            urgent_now: String(cached?.nextSteps?.urgent_now ?? ""),
+            plan_visit: String(cached?.nextSteps?.plan_visit ?? ""),
+          },
+        };
+      }
+    }
+  } catch {
+    // ignore cache errors
+  }
+
+  // 2) compute fresh
+  const fresh = await buildDecisionTree(sessionId, locale);
+
+  // 3) store cache
+  try {
+    await AsyncStorage.setItem(
+      cacheKey,
+      JSON.stringify({
+        chatLen: chatLenNow,
+        createdAt: new Date().toISOString(),
+        ...fresh,
+      })
+    );
+  } catch {
+    // ignore cache save errors
+  }
+
+  return fresh;
+}
 
 //
 // -----------------------------------------------------
@@ -260,7 +335,7 @@ export async function exportSummaryPDF(sessionId: string) {
     //
     // 3) Анамнез и клиническое обоснование из кастома
     //
-    const { anamnesisShort, focusForVet, nextSteps } = await buildDecisionTree(sessionId, locale);
+    const { anamnesisShort, focusForVet, nextSteps } = await getDecisionTreeCached(sessionId, locale);
 
     //
     // 4) симптоматика
@@ -431,10 +506,30 @@ ${
     //
     const { uri } = await Print.printToFileAsync({ html });
 
-    await Sharing.shareAsync(uri, {
-      mimeType: "application/pdf",
-      dialogTitle: title,
-    });
+    if (Platform.OS === "android") {
+      // 1) Открыть PDF во viewer
+      const cUri = await FileSystem.getContentUriAsync(uri); // content:// :contentReference[oaicite:3]{index=3}
+
+      await IntentLauncher.startActivityAsync("android.intent.action.VIEW", {
+        data: cUri,
+        flags: 1,
+        type: "application/pdf",
+      }); // промис резолвится при возврате в приложение :contentReference[oaicite:4]{index=4}
+
+      // 2) После просмотра — системное меню (сохранить/переслать/печать…)
+      await Sharing.shareAsync(uri, {
+        mimeType: "application/pdf",
+        dialogTitle: title,
+      });
+    } else {
+      // iOS: сразу системное меню Share (самый стабильный путь в Expo)
+      await Sharing.shareAsync(uri, {
+        mimeType: "application/pdf",
+        dialogTitle: title,
+        UTI: "com.adobe.pdf",
+      });
+    }
+
   } catch (err: any) {
     console.error("❌ exportSummaryPDF error:", err);
     alert(i18n.t("privacy_paragraph2"));

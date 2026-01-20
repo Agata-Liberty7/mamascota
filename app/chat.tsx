@@ -1,4 +1,6 @@
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import LoadingPDF from "../components/ui/LoadingPDF";
+
 // @ts-ignore
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useLocalSearchParams, useNavigation } from "expo-router";
@@ -74,6 +76,8 @@ export default function ChatScreen() {
   const [thinkingHint, setThinkingHint] = useState<string | null>(null);
   const [showPdfCta, setShowPdfCta] = useState(false);
   const [pdfConversationId, setPdfConversationId] = useState<string | null>(null);
+  const [pdfGenerating, setPdfGenerating] = useState(false);
+
 
 
 
@@ -307,7 +311,110 @@ export default function ChatScreen() {
       });
     }, [navigation, showSelector]);
 
+  // ------------------------------------------------------
+  // PDF: save session silently + generate (UI-only, no navigation)
+  // ------------------------------------------------------
+  async function getUnifiedActivePetLocal(): Promise<any | null> {
+    try {
+      const [listRaw, activeId] = await Promise.all([
+        AsyncStorage.getItem("pets:list"),
+        AsyncStorage.getItem("pets:activeId"),
+      ]);
+      if (!listRaw || !activeId) return null;
+      const list = JSON.parse(listRaw);
+      if (!Array.isArray(list)) return null;
+      return list.find((p: any) => p?.id === activeId) ?? null;
+    } catch {
+      return null;
+    }
+  }
 
+  async function saveSessionSilently(conversationId: string) {
+    // 1) гарантируем, что история есть в AsyncStorage
+    const keyA = `chatHistory:${conversationId}`;
+    const keyB = `chat:history:${conversationId}`;
+
+    const existing =
+      (await AsyncStorage.getItem(keyA)) ?? (await AsyncStorage.getItem(keyB));
+
+    if (!existing) {
+      // если по какой-то причине история ещё не сохранилась — сохраним текущее состояние UI
+      const filtered = chat
+        .filter((m) => m && (m.role === "user" || m.role === "assistant"))
+        .map((m) => ({
+          role: m.role,
+          content: typeof m.content === "string" ? m.content : "",
+          ts: typeof (m as any).ts === "number" ? (m as any).ts : undefined,
+        }));
+
+      await AsyncStorage.setItem(keyA, JSON.stringify(filtered));
+      try {
+        await AsyncStorage.setItem(keyB, JSON.stringify(filtered));
+      } catch {}
+    }
+
+    // 2) symptomKeys — как в handleExitAction
+    const symptomsRaw =
+      (await AsyncStorage.getItem("selectedSymptoms")) ??
+      (await AsyncStorage.getItem("symptomKeys")) ??
+      (await AsyncStorage.getItem("symptoms"));
+
+    const symptomKeys: string[] = symptomsRaw ? JSON.parse(symptomsRaw) : [];
+
+    // 3) petName
+    const activePet = pet ?? (await getUnifiedActivePetLocal());
+    const petName = activePet?.name?.trim() || i18n.t("chat.pet_default", { defaultValue: "Pet" });
+
+    // 4) context — последняя реплика пользователя (если есть)
+    const lastUser = [...chat].reverse().find((m) => m?.role === "user" && String(m.content || "").trim());
+    const context = (lastUser?.content || "").slice(0, 120) || i18n.t("summary.no_description", { defaultValue: "No description" });
+
+    const record = {
+      id: conversationId,
+      date: new Date().toISOString(),
+      petName,
+      context,
+      symptomKeys,
+    };
+
+    // 5) upsert в chatSummary
+    const stored = (await AsyncStorage.getItem("chatSummary")) || "[]";
+    const parsed = JSON.parse(stored);
+    const list = Array.isArray(parsed) ? parsed : [];
+    const filtered = list.filter((rec: any) => rec?.id !== conversationId);
+    filtered.unshift(record);
+
+    await AsyncStorage.setItem("chatSummary", JSON.stringify(filtered));
+    await AsyncStorage.setItem("lastChatSessionExists", "1");
+  }
+
+  const handlePdfNow = async () => {
+    if (pdfGenerating) return;
+
+    try {
+      setPdfGenerating(true);
+
+      const id =
+        pdfConversationId ??
+        (await AsyncStorage.getItem("conversationId")) ??
+        null;
+
+      if (!id) {
+        alert(i18n.t("chat.pdf_no_session", { defaultValue: "No active session yet." }));
+        return;
+      }
+
+      // тихо сохранили → генерим pdf
+      await saveSessionSilently(id);
+      await exportSummaryPDF(id);
+    } catch (e) {
+      console.error("❌ PDF now error:", e);
+      alert(i18n.t("chat.pdf_error", { defaultValue: "Could not generate PDF." }));
+    } finally {
+      setPdfGenerating(false);
+    }
+  };
+    
   // ======================================================
   // 🟦 UI
   // ======================================================
@@ -318,6 +425,8 @@ export default function ChatScreen() {
         behavior="padding"
         keyboardVerticalOffset={headerHeight}
       >
+        <LoadingPDF visible={pdfGenerating} />
+
         {showSelector ? (
           <SymptomSelector onSubmit={handleSymptomSubmit} />
         ) : (
@@ -373,7 +482,7 @@ export default function ChatScreen() {
                   )}
                 </View>
               )}
-              
+
               contentContainerStyle={[
                 styles.messagesContainer,
                 { paddingBottom: inputHeight + insets.bottom + 12 },
@@ -423,31 +532,42 @@ export default function ChatScreen() {
               </View>
             )}
 
-            <View
-              style={styles.inputArea}
-              onLayout={(e) => setInputHeight(e.nativeEvent.layout.height)}
-            >
-              <TextInput
-                style={[styles.input, isRTL && styles.inputRTL]}
-                value={input}
-                onChangeText={setInput}
-                placeholder={i18n.t("chat.placeholder")}
-                placeholderTextColor="#888"
-                multiline
-              />
+        <View
+          style={styles.inputArea}
+          onLayout={(e) => setInputHeight(e.nativeEvent.layout.height)}
+        >
+          {/* PDF button (always available when chat has something) */}
+          <TouchableOpacity
+            style={[styles.pdfQuickBtn, (loading || pdfGenerating || chat.length === 0) && { opacity: 0.4 }]}
+            onPress={handlePdfNow}
+            disabled={loading || pdfGenerating || chat.length === 0}
+          >
+            <MaterialIcons name="picture-as-pdf" size={26} color="#E53935" />
+          </TouchableOpacity>
 
-              <TouchableOpacity
-                style={[styles.sendButton, loading && { opacity: 0.5 }]}
-                onPress={handleSend}
-                disabled={loading}
-              >
-                {loading ? (
-                  <ActivityIndicator color="#42A5F5" />
-                ) : (
-                  <Ionicons name="arrow-up-circle" size={32} color="#42A5F5" />
-                )}
-              </TouchableOpacity>
-            </View>
+
+          <TextInput
+            style={[styles.input, isRTL && styles.inputRTL]}
+            value={input}
+            onChangeText={setInput}
+            placeholder={i18n.t("chat.placeholder")}
+            placeholderTextColor="#888"
+            multiline
+          />
+
+          <TouchableOpacity
+            style={[styles.sendButton, loading && { opacity: 0.5 }]}
+            onPress={handleSend}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator color="#42A5F5" />
+            ) : (
+              <Ionicons name="arrow-up-circle" size={32} color="#42A5F5" />
+            )}
+          </TouchableOpacity>
+        </View>
+
           </>
         )}
       </KeyboardAvoidingView>
@@ -623,7 +743,15 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     textAlign: "right",
     writingDirection: "rtl",
-  },                  
-
+  }, 
+  pdfQuickBtn: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 8,
+  },
+                 
 });
 
