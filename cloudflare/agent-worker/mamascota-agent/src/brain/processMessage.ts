@@ -3,6 +3,7 @@
 import { SYSTEM_PROMPT } from "./systemPrompt";
 import { buildAgentContext } from "./buildAgentContext";
 
+
 export type BrainResult = {
   ok: boolean;
   reply?: string;
@@ -57,6 +58,91 @@ function normalizePet(p: any) {
     ageYears,
     neutered: !!p?.neutered,
   };
+}
+function normForCompare(s: string): string {
+  return String(s || "")
+    .toLowerCase()
+    .replace(/[\u2000-\u206F\u2E00-\u2E7F!"#$%&'()*+,\-.\/:;<=>?@[\\\]^_`{|}~]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function extractLastQuestion(text: string): string | null {
+  const t = String(text || "").trim();
+  if (!t) return null;
+
+  // берём последнюю "строку-вопрос" по знаку ?
+  const idx = t.lastIndexOf("?");
+  if (idx === -1) return null;
+
+  // вырежем "последнее предложение" до ?
+  const before = t.slice(0, idx + 1);
+  const parts = before.split(/\n+/).map((x) => x.trim()).filter(Boolean);
+
+  const lastLine = parts.length ? parts[parts.length - 1] : before.trim();
+  // если очень коротко ("?") — игнор
+  const q = lastLine.trim();
+  return q.length >= 6 ? q : null;
+}
+
+function getLastAssistantQuestion(history: Array<{ role: string; content: string }>): string | null {
+  for (let i = history.length - 1; i >= 0; i--) {
+    const m = history[i];
+    if (m?.role !== "assistant") continue;
+    const q = extractLastQuestion(m.content);
+    if (q) return q;
+  }
+  return null;
+}
+
+function removeDuplicateQuestionIfAny(reply: string, lastQ: string | null): string {
+  if (!lastQ) return reply;
+
+  const rq = extractLastQuestion(reply);
+  if (!rq) return reply;
+
+  const a = normForCompare(rq);
+  const b = normForCompare(lastQ);
+
+  // если вопрос почти тот же (включение в обе стороны)
+  const same = a && b && (a === b || a.includes(b) || b.includes(a));
+  if (!same) return reply;
+
+  // удаляем последний вопрос из ответа
+  // (только последнее вхождение, чтобы не поломать текст)
+  const cut = reply.lastIndexOf("?");
+  if (cut === -1) return reply;
+
+  let without = reply.slice(0, cut); // обрезаем вопрос вместе с '?'
+  // если перед '?' была строка — уберём её целиком
+  without = without.replace(/[\s\n]*[^\n]*$/g, (tail) => {
+    // tail — последний "кусок строки" до '?'
+    // возвращаем пусто, чтобы убрать вопрос
+    return "";
+  });
+
+  return without.trim();
+}
+
+function stripRuMetaDialogue(reply: string, effectiveLang: string): string {
+  // работаем только на русском
+  if (!String(effectiveLang || "").toLowerCase().startsWith("ru")) return reply;
+
+  // выкидываем типичные оправдания про процесс
+  // (максимально узко, чтобы не сносить обычные "сначала покормите")
+  return String(reply || "")
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter((line) => {
+      const x = line.toLowerCase();
+      const looksLikeMeta =
+        x.includes("я сначала") &&
+        (x.includes("собирал") || x.includes("уточнял") || x.includes("проверял")) &&
+        (x.includes("информац") || x.includes("симптом") || x.includes("данн"));
+      return !looksLikeMeta;
+    })
+    .join("\n")
+    .trim();
 }
 
 
@@ -175,8 +261,7 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
       content:
         `${finalSystemPrompt}\n\n` +
         `[LANG_OVERRIDE]: ${effectiveLang}\n` +
-        `[Инструкция]: Отвечай кратко, ясно, строго по шагам и без диагнозов.\n` +
-        `[Протокол]: Если ты считаешь диалог завершённым и дальше уместно сделать PDF-резюме, добавь в САМОМ КОНЦЕ ответа отдельной строкой маркер: [[SESSION_ENDED]].`,
+        `[CONVERSATION_ID]: ${conversationId}\n`,
     });
 
     // 2) Guard prompt (proxy wording)
@@ -221,16 +306,27 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
       }
     }
 
-    const reply = await callOpenAIChat({ apiKey, model, messages });
+  const reply = await callOpenAIChat({ apiKey, model, messages });
 
-    const END_MARK = "[[SESSION_ENDED]]";
-    const sessionEnded = reply.includes(END_MARK);
+  const END_MARK = "[SESSION_ENDED]";
+  const sessionEnded = reply.includes(END_MARK);
 
-    const cleanedReply = sessionEnded
-      ? reply.replaceAll(END_MARK, "").trim()
-      : reply;
+  let cleanedReply = sessionEnded
+    ? reply.replaceAll(END_MARK, "").trim()
+    : reply.trim();
 
-    return { ok: true, conversationId, reply: cleanedReply, sessionEnded };
+  // 1) убираем RU-метадиалог (типа "я сначала собирал...")
+  cleanedReply = stripRuMetaDialogue(cleanedReply, effectiveLang);
+
+  // 2) анти-повтор последнего вопроса ассистента
+  const lastQ = getLastAssistantQuestion(conversationHistory);
+  cleanedReply = removeDuplicateQuestionIfAny(cleanedReply, lastQ);
+
+  // 3) финальная подчистка пробелов
+  cleanedReply = cleanedReply.trim();
+
+  return { ok: true, conversationId, reply: cleanedReply, sessionEnded };
+
 
 
   } catch (e: any) {
