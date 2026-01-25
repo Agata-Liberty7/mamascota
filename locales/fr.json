@@ -124,6 +124,12 @@
     "custom": "Autre"
   },
   "chat": {
+    "phase": {
+      "intake": "Étape: Collecte d’informations",
+      "clarify": "Étape: Clarification des détails",
+      "summary": "Étape: Résumé",
+      "ended": "Étape: Terminé"
+    },
     "pet_default": "L’animal",
     "symptom_intro": "présente les symptômes suivants",
     "ask_confirmation": "Merci de confirmer si c’est exact ou d’ajouter des précisions",

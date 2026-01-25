@@ -124,6 +124,12 @@
     "custom": "אחר"
   },
   "chat": {
+    "phase": {
+      "intake": "שלב: איסוף מידע",
+      "clarify": "שלב: הבהרת פרטים",
+      "summary": "שלב: סיכום",
+      "ended": "שלב: הסתיים"
+    },
     "pdf_ready": "סיכום ה-PDF שלך מוכן",
     "open_pdf": "פתח PDF",
     "share_pdf": "שתף",

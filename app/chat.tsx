@@ -74,11 +74,9 @@ export default function ChatScreen() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [thinkingHint, setThinkingHint] = useState<string | null>(null);
-  const [showPdfCta, setShowPdfCta] = useState(false);
   const [pdfConversationId, setPdfConversationId] = useState<string | null>(null);
   const [pdfGenerating, setPdfGenerating] = useState(false);
-
-
+  const [phase, setPhase] = useState<"intake" | "clarify" | "summary" | "ended" | null>(null);
 
 
   // 🔥 ВАЖНО: по умолчанию не показываем селектор
@@ -209,11 +207,12 @@ export default function ChatScreen() {
   const handleSymptomSubmit = async (selected: string[], customSymptom?: string) => {
     setShowSelector(false);
     setChat([]);
-    setShowPdfCta(false);
     setPdfConversationId(null);
 
 
     try {
+      // ✅ сразу объясняем пользователю, почему старт может быть длинным
+      setPhase("intake");
       setLoading(true);
 
       const allSymptoms = [...selected];
@@ -233,9 +232,14 @@ export default function ChatScreen() {
       setChat([{ role: "assistant", content: replyText, ts: Date.now() }]);
       // PDF CTA: показываем только если агент явно финализировал
       if (typeof result === "object" && result?.sessionEnded) {
-        setShowPdfCta(true);
         setPdfConversationId(result.conversationId ?? null);
       }
+      if (typeof result === "object" && result?.phase) {
+        setPhase(result.phase);
+      } else {
+        setPhase(null);
+      }
+
 
     } catch (error) {
       console.error("Ошибка reasoning:", error);
@@ -243,9 +247,6 @@ export default function ChatScreen() {
       setLoading(false);
     }
   };
-
-    // ======================================================
-    // 🟦 Отправка сообщения пользователем
     // ======================================================
     // 🟦 Отправка сообщения пользователем
     // ======================================================
@@ -253,44 +254,54 @@ export default function ChatScreen() {
       if (!input.trim()) return;
 
       const messageToSend = input.trim();
+
       const userMessage: ChatMessage = {
         role: "user",
         content: messageToSend,
         ts: Date.now(),
       };
 
-
+      // 1) UI: сразу показываем сообщение пользователя
       setChat((prev) => [...prev, userMessage]);
       setInput("");
 
       try {
+        // 2) UI: начинаем ожидание
         setLoading(true);
 
+        // 3) Запрос к агенту
         const result = await chatWithGPT({
           message: messageToSend,
           pet: pet || undefined,
         });
 
+        // 4) Текст ответа
         const assistantText =
           typeof result === "object"
-            ? result.reply || result.error || "⚠️ Нет ответа"
+            ? (result.reply || result.error || i18n.t("chat.no_reply", { defaultValue: "⚠️ No reply" }))
             : String(result);
 
         const assistantMessage: ChatMessage = {
           role: "assistant",
-          content: assistantText,
+          content: String(assistantText),
           ts: Date.now(),
         };
 
 
+        // 5) UI: добавляем ответ ассистента
         setChat((prev) => [...prev, assistantMessage]);
 
-        // PDF CTA: показываем только если агент явно финализировал
+        // 6) Phase: обновляем только если пришло валидное значение
+        const p = typeof result === "object" ? (result as any)?.phase : null;
+        if (p === "intake" || p === "clarify" || p === "summary" || p === "ended") {
+          setPhase(p);
+        }
+        // ⚠️ НЕ сбрасываем phase в null, чтобы шапка не мигала
+
+        // 7) PDF: сохраняем conversationId только если сессия завершена
         if (typeof result === "object" && result?.sessionEnded) {
-          setShowPdfCta(true);
           setPdfConversationId(result.conversationId ?? null);
         } else {
-          setShowPdfCta(false);
           setPdfConversationId(null);
         }
       } catch (err) {
@@ -299,6 +310,7 @@ export default function ChatScreen() {
         setLoading(false);
       }
     };
+
 
     // ======================================================
     // 🟦 Header logic: Menu on selector, Exit in chat
@@ -431,34 +443,15 @@ export default function ChatScreen() {
           <SymptomSelector onSubmit={handleSymptomSubmit} />
         ) : (
           <>
-          {/* Progress / length indicator (UI-only) */}
-          {(() => {
-            const assistantTurns = chat.filter((m) => m.role === "assistant").length;
-            const remaining = Math.max(0, MAX_ASSISTANT_TURNS - assistantTurns);
-
-            if (assistantTurns === 0) return null;
-
-            return (
+            {(phase || loading) && (
               <View style={styles.progressWrap}>
                 <Text style={styles.progressText}>
-                  {i18n.t("chat.progress_steps", {
-                    defaultValue: "Step {{cur}} of {{max}}",
-                    cur: Math.min(assistantTurns, MAX_ASSISTANT_TURNS),
-                    max: MAX_ASSISTANT_TURNS,
-                  })}
+                  {i18n.t(`chat.phase.${phase ?? "intake"}`)}
                 </Text>
-
-                {remaining > 0 && remaining <= 3 && (
-                  <Text style={styles.progressSubtext}>
-                    {i18n.t("chat.progress_remaining_2_3", {
-                      defaultValue: "I’ll ask {{n}} more quick questions",
-                      n: remaining,
-                    })}
-                  </Text>
-                )}
               </View>
-            );
-          })()}
+            )}
+
+
             <FlatList
               ref={flatListRef}
               data={chat.filter((m) => m.role !== "system")}
@@ -501,33 +494,6 @@ export default function ChatScreen() {
                     </Text>
                   )}
 
-                </View>
-              </View>
-            )}
-            {showPdfCta && (
-              <View style={styles.pdfCta}>
-                <Text style={styles.pdfCtaTitle}>{i18n.t("chat.pdf_ready")}</Text>
-
-                <View style={styles.pdfCtaRow}>
-                  <TouchableOpacity
-                    style={styles.pdfBtn}
-                    onPress={async () => {
-                      const id = pdfConversationId ?? (await AsyncStorage.getItem("conversationId"));
-                      if (id) await exportSummaryPDF(id);
-                    }}
-                  >
-                    <Text style={styles.pdfBtnText}>{i18n.t("chat.open_pdf")}</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={styles.pdfBtn}
-                    onPress={async () => {
-                      const id = pdfConversationId ?? (await AsyncStorage.getItem("conversationId"));
-                      if (id) await exportSummaryPDF(id);
-                    }}
-                  >
-                    <Text style={styles.pdfBtnText}>{i18n.t("chat.share_pdf")}</Text>
-                  </TouchableOpacity>
                 </View>
               </View>
             )}

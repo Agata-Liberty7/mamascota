@@ -124,6 +124,12 @@
     "custom": "Anderes"
   },
   "chat": {
+    "phase": {
+      "intake": "Phase: Informationen sammeln",
+      "clarify": "Phase: Details klären",
+      "summary": "Phase: Zusammenfassen",
+      "ended": "Phase: Beendet"
+    },
     "pdf_ready": "Deine PDF-Zusammenfassung ist fertig",
     "open_pdf": "PDF öffnen",
     "share_pdf": "Teilen",

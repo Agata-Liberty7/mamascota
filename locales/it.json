@@ -124,6 +124,12 @@
     "custom": "Altro"
   },
   "chat": {
+    "phase": {
+      "intake": "Fase: Raccolta informazioni",
+      "clarify": "Fase: Chiarimento dettagli",
+      "summary": "Fase: Riepilogo",
+      "ended": "Fase: Terminato"
+    },
     "pdf_ready": "Il riepilogo PDF è pronto",
     "open_pdf": "Apri PDF",
     "share_pdf": "Condividi",

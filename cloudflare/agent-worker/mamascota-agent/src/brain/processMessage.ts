@@ -9,6 +9,7 @@ export type BrainResult = {
   error?: string;
   conversationId?: string;
   sessionEnded?: boolean;
+  phase?: "intake" | "clarify" | "summary" | "ended";
 };
 
 
@@ -57,6 +58,24 @@ function normalizePet(p: any) {
     ageYears,
     neutered: !!p?.neutered,
   };
+}
+function detectPhase(
+  cleanedReply: string,
+  sessionEnded: boolean,
+  isFirstRealMessage: boolean
+) {
+  if (sessionEnded) return "ended" as const;
+
+  // ✅ Жёстко: первый шаг всегда intake
+  if (isFirstRealMessage) return "intake" as const;
+
+  const text = (cleanedReply || "").trim();
+
+  // Любые вопросы после первого шага = clarify
+  if (/[?¿]/.test(text)) return "clarify" as const;
+
+  // Если нет вопросов — пусть будет intake (без угадываний "summary")
+  return "intake" as const;
 }
 
 
@@ -176,7 +195,7 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
         `${finalSystemPrompt}\n\n` +
         `[LANG_OVERRIDE]: ${effectiveLang}\n` +
         `[Инструкция]: Отвечай кратко, ясно, строго по шагам и без диагнозов.\n` +
-        `[Протокол]: Если ты считаешь диалог завершённым и дальше уместно сделать PDF-резюме, добавь в САМОМ КОНЦЕ ответа отдельной строкой маркер: [[SESSION_ENDED]].`,
+        `[Протокол]: Если ты считаешь диалог завершённым и дальше уместно сделать PDF-резюме, добавь в САМОМ КОНЦЕ ответа отдельной строкой маркер: [SESSION_ENDED].`,
     });
 
     // 2) Guard prompt (proxy wording)
@@ -223,14 +242,17 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
 
     const reply = await callOpenAIChat({ apiKey, model, messages });
 
-    const END_MARK = "[[SESSION_ENDED]]";
+    const END_MARK = "[SESSION_ENDED]";
     const sessionEnded = reply.includes(END_MARK);
 
     const cleanedReply = sessionEnded
       ? reply.replaceAll(END_MARK, "").trim()
       : reply;
 
-    return { ok: true, conversationId, reply: cleanedReply, sessionEnded };
+    const phase = detectPhase(cleanedReply, sessionEnded, isFirstRealMessage);
+
+    return { ok: true, conversationId, reply: cleanedReply, sessionEnded, phase };
+
 
 
   } catch (e: any) {

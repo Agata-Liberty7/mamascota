@@ -127,6 +127,12 @@
   },
 
   "chat": {
+    "phase": {
+      "intake": "Fase: Recopilando información",
+      "clarify": "Fase: Aclarando detalles",
+      "summary": "Fase: Resumiendo",
+      "ended": "Fase: Finalizado"
+    },
     "pdf_ready": "Tu resumen en PDF está listo",
     "open_pdf": "Abrir PDF",
     "share_pdf": "Compartir",

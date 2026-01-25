@@ -124,6 +124,12 @@
     "custom": "Other"
   },
   "chat": {
+    "phase": {
+      "intake": "Phase: Gathering information",
+      "clarify": "Phase: Clarifying details",
+      "summary": "Phase: Summarizing",
+      "ended": "Phase: Ended"
+    },
     "pdf_ready": "Your PDF summary is ready",
     "open_pdf": "Open PDF",
     "share_pdf": "Share",

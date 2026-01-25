@@ -12,7 +12,10 @@ export type ChatResult = {
   error?: string;
   conversationId?: string;
   sessionEnded?: boolean;
+  phase?: "intake" | "clarify" | "summary" | "ended";
 };
+
+
 
 
 // Универсальный URL агента: сначала берём точный /agent, иначе — из API_URL
@@ -223,12 +226,23 @@ const petWithLabel = ensuredPet
           );
         }
 
+        const phase =
+          data?.phase === "intake" ||
+          data?.phase === "clarify" ||
+          data?.phase === "summary" ||
+          data?.phase === "ended"
+            ? data.phase
+            : undefined;
+
         return {
           ok: true,
           reply: data.reply ?? "",
           conversationId: serverConversationId || effectiveConversationId || ensuredConversationId,
           sessionEnded: !!data?.sessionEnded,
+          phase,
         };
+
+
 
       }
 
