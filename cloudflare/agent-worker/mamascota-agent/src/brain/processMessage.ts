@@ -10,8 +10,16 @@ export type BrainResult = {
   conversationId?: string;
   sessionEnded?: boolean;
   phase?: "intake" | "clarify" | "summary" | "ended";
+  decisionTree?: {
+    anamnesis_short: string[];
+    focus_for_vet: string[];
+    next_steps: {
+      observe_at_home: string[];
+      urgent_now: string[];
+      plan_visit: string[];
+    };
+  } | null;
 };
-
 
 type BrainArgs = {
   env: any;
@@ -251,7 +259,136 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
 
     const phase = detectPhase(cleanedReply, sessionEnded, isFirstRealMessage);
 
-    return { ok: true, conversationId, reply: cleanedReply, sessionEnded, phase };
+    // ✅ decisionTree считаем ТОЛЬКО при завершении
+    let decisionTree: BrainResult["decisionTree"] = undefined;
+
+    if (sessionEnded) {
+      // восстановим сессию из того, что реально знаем:
+      // history + текущий user msg (если не был дублем) + assistant reply (cleaned)
+      const sessionMsgs: Array<{ role: string; content: string }> = [];
+
+      for (const m of conversationHistory) {
+        if (!m?.role || typeof m.content !== "string") continue;
+        if (m.role === "user" || m.role === "assistant") {
+          if (m.content.trim()) sessionMsgs.push({ role: m.role, content: m.content.trim() });
+        }
+      }
+
+      // текущий user message
+      if (message?.trim()) {
+        const hasDup = conversationHistory.some((m) => m?.content === message);
+        if (!hasDup) sessionMsgs.push({ role: "user", content: message.trim() });
+      }
+
+      // assistant reply
+      if (cleanedReply?.trim()) {
+        sessionMsgs.push({ role: "assistant", content: cleanedReply.trim() });
+      }
+
+      decisionTree = await buildDecisionTreeInWorker({
+        apiKey,
+        model,
+        locale: effectiveLang,
+        sessionMessages: sessionMsgs,
+      });
+    }
+
+    return {
+      ok: true,
+      conversationId,
+      reply: cleanedReply,
+      sessionEnded,
+      phase,
+      decisionTree: decisionTree ?? null,
+    };
+
+
+    // Build decision tree in parallel (non-blocking)
+    function buildDecisionTreeRequest(locale: string, combined: string) {
+      return `
+    Проанализируй ветеринарную консультацию ниже и верни СТРОГО JSON без пояснений:
+
+    {
+      "anamnesis_short": ["..."],
+      "focus_for_vet": ["..."],
+      "next_steps": {
+        "observe_at_home": ["..."],
+        "urgent_now": ["..."],
+        "plan_visit": ["..."]
+      }
+    }
+
+    Требования:
+    - Язык строго: ${locale}.
+    - Ничего ДО или ПОСЛЕ JSON.
+    - 3–6 пунктов максимум в "anamnesis_short".
+    - 3–5 пунктов максимум в "focus_for_vet".
+    - В "next_steps":
+      - observe_at_home: 1–3 коротких пункта
+      - urgent_now: 3–6 чётких признаков
+      - plan_visit: 1–2 пункта (зачем очно), без протоколов
+    - Не использовать слова: "диагноз", "патология", "эндокринный", "метаболический".
+    - Не писать "менее вероятно", "исключено" и подобное.
+    - Не перечислять конкретные анализы, исследования, протоколы.
+    - Не выдумывать факты: только из диалога.
+    - Учитывай ВСЮ сессию целиком, включая последние сообщения.
+
+    === СЕССИЯ ===
+    ${combined}
+    `.trim();
+    }
+
+    function safeArrayOfStrings(x: any): string[] {
+      return Array.isArray(x) ? x.map((v) => (typeof v === "string" ? v.trim() : "")).filter(Boolean) : [];
+    }
+
+    async function buildDecisionTreeInWorker(args: {
+      apiKey: string;
+      model: string;
+      locale: string;
+      sessionMessages: Array<{ role: string; content: string }>;
+    }): Promise<BrainResult["decisionTree"]> {
+      // Собираем "ROLE: content" как в PDF-генераторе
+      const combined = args.sessionMessages
+        .filter((m) => m && typeof m.content === "string" && m.content.trim().length > 0)
+        .map((m) => `${String(m.role).toUpperCase()}: ${String(m.content)}`)
+        .join("\n");
+
+      const request = buildDecisionTreeRequest(args.locale, combined);
+
+      const replyText = await callOpenAIChat({
+        apiKey: args.apiKey,
+        model: args.model,
+        messages: [
+          {
+            role: "system",
+            content:
+              "Верни строго валидный JSON. Никакого текста до или после JSON. Без тройных кавычек.",
+          },
+          { role: "user", content: request },
+        ],
+      });
+
+      try {
+        const parsed = JSON.parse(replyText);
+
+        const anamnesis_short = safeArrayOfStrings(parsed?.anamnesis_short);
+        const focus_for_vet = safeArrayOfStrings(parsed?.focus_for_vet);
+
+        const ns = parsed?.next_steps ?? {};
+        const observe_at_home = safeArrayOfStrings(ns?.observe_at_home);
+        const urgent_now = safeArrayOfStrings(ns?.urgent_now);
+        const plan_visit = safeArrayOfStrings(ns?.plan_visit);
+
+        return {
+          anamnesis_short,
+          focus_for_vet,
+          next_steps: { observe_at_home, urgent_now, plan_visit },
+        };
+      } catch {
+        return null;
+      }
+    }
 
 
 

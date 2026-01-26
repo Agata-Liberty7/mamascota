@@ -13,7 +13,9 @@ export type ChatResult = {
   conversationId?: string;
   sessionEnded?: boolean;
   phase?: "intake" | "clarify" | "summary" | "ended";
+  decisionTree?: any | null;
 };
+
 
 
 
@@ -234,16 +236,28 @@ const petWithLabel = ensuredPet
             ? data.phase
             : undefined;
 
+        // ✅ decisionTree payload (из воркера)
+        if (data?.decisionTree && serverConversationId && !isSummaryConversation) {
+          try {
+            const dtKey = `decisionTree:${serverConversationId}:${effectiveLang}`;
+            await AsyncStorage.setItem(dtKey, JSON.stringify({
+              createdAt: new Date().toISOString(),
+              decisionTree: data.decisionTree,
+            }));
+            console.log("💾 decisionTree сохранён:", dtKey);
+          } catch (e) {
+            console.warn("⚠️ Не удалось сохранить decisionTree:", e);
+          }
+        }
+
         return {
           ok: true,
           reply: data.reply ?? "",
           conversationId: serverConversationId || effectiveConversationId || ensuredConversationId,
           sessionEnded: !!data?.sessionEnded,
           phase,
+          decisionTree: data?.decisionTree ?? null,
         };
-
-
-
       }
 
       return { ok: false, error: "Неверный формат поля reply" };
