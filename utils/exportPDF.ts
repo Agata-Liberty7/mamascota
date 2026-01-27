@@ -288,10 +288,7 @@ async function getDecisionTreeCached(sessionId: string, locale: string) {
 export async function exportSummaryPDF(sessionId: string) {
   try {
     //
-    // 1) читаем Summary и историю
-    //
-    //
-    // 1) читаем Summary и историю
+    // 1) читаем Summary и историю чата
     //
     const chatRaw =
       (await AsyncStorage.getItem(`chatHistory:${sessionId}`)) ??

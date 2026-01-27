@@ -77,6 +77,8 @@ export default function ChatScreen() {
   const [pdfConversationId, setPdfConversationId] = useState<string | null>(null);
   const [pdfGenerating, setPdfGenerating] = useState(false);
   const [phase, setPhase] = useState<"intake" | "clarify" | "summary" | "ended" | null>(null);
+  const [isPdfReady, setIsPdfReady] = useState(false);
+
 
 
   // 🔥 ВАЖНО: по умолчанию не показываем селектор
@@ -118,6 +120,8 @@ export default function ChatScreen() {
         }
 
         setShowSelector(false);
+        await refreshPdfReadyState(id);
+
       } else {
         // если истории нет — начинаем новый диалог
         setShowSelector(true);
@@ -232,8 +236,14 @@ export default function ChatScreen() {
       setChat([{ role: "assistant", content: replyText, ts: Date.now() }]);
       // PDF CTA: показываем только если агент явно финализировал
       if (typeof result === "object" && result?.sessionEnded) {
-        setPdfConversationId(result.conversationId ?? null);
+        const cid = result.conversationId ?? null;
+        setPdfConversationId(cid);
+        await refreshPdfReadyState(cid);
+      } else {
+        setPdfConversationId(null);
+        setIsPdfReady(false);
       }
+
       if (typeof result === "object" && result?.phase) {
         setPhase(result.phase);
       } else {
@@ -300,10 +310,14 @@ export default function ChatScreen() {
 
         // 7) PDF: сохраняем conversationId только если сессия завершена
         if (typeof result === "object" && result?.sessionEnded) {
-          setPdfConversationId(result.conversationId ?? null);
+          const cid = result.conversationId ?? null;
+          setPdfConversationId(cid);
+          await refreshPdfReadyState(cid);
         } else {
           setPdfConversationId(null);
+          setIsPdfReady(false);
         }
+
       } catch (err) {
         console.error("Ошибка отправки:", err);
       } finally {
@@ -340,6 +354,22 @@ export default function ChatScreen() {
       return null;
     }
   }
+
+  async function refreshPdfReadyState(conversationId: string | null) {
+    try {
+      if (!conversationId) {
+        setIsPdfReady(false);
+        return;
+      }
+      const locale = i18n.locale || "en";
+      const dtKey = `decisionTree:${conversationId}:${locale}`;
+      const raw = await AsyncStorage.getItem(dtKey);
+      setIsPdfReady(!!raw);
+    } catch {
+      setIsPdfReady(false);
+    }
+  }
+
 
   async function saveSessionSilently(conversationId: string) {
     // 1) гарантируем, что история есть в AsyncStorage
@@ -401,6 +431,7 @@ export default function ChatScreen() {
   }
 
   const handlePdfNow = async () => {
+    if (!isPdfReady) return;
     if (pdfGenerating) return;
 
     try {
@@ -504,12 +535,20 @@ export default function ChatScreen() {
         >
           {/* PDF button (always available when chat has something) */}
           <TouchableOpacity
-            style={[styles.pdfQuickBtn, (loading || pdfGenerating || chat.length === 0) && { opacity: 0.4 }]}
+            style={[
+              styles.pdfQuickBtn,
+              (!isPdfReady || loading || pdfGenerating) && { opacity: 0.35 },
+            ]}
             onPress={handlePdfNow}
-            disabled={loading || pdfGenerating || chat.length === 0}
+            disabled={!isPdfReady || loading || pdfGenerating}
           >
-            <MaterialIcons name="picture-as-pdf" size={26} color="#E53935" />
+            <MaterialIcons
+              name="picture-as-pdf"
+              size={26}
+              color={isPdfReady ? "#E53935" : "#BDBDBD"}
+            />
           </TouchableOpacity>
+
 
 
           <TextInput
