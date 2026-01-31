@@ -67,6 +67,7 @@ function normalizePet(p: any) {
     neutered: !!p?.neutered,
   };
 }
+
 function detectPhase(
   cleanedReply: string,
   sessionEnded: boolean,
@@ -85,7 +86,6 @@ function detectPhase(
   // Если нет вопросов — пусть будет intake (без угадываний "summary")
   return "intake" as const;
 }
-
 
 async function callOpenAIChat(args: {
   apiKey: string;
@@ -128,16 +128,106 @@ async function callOpenAIChat(args: {
   return reply;
 }
 
+function safeArrayOfStrings(x: any): string[] {
+  return Array.isArray(x)
+    ? x.map((v) => (typeof v === "string" ? v.trim() : "")).filter(Boolean)
+    : [];
+}
+
+function buildDecisionTreeRequestV2(locale: string, combined: string) {
+  return `
+Проанализируй ветеринарный диалог ниже и верни СТРОГО JSON без пояснений:
+
+{
+  "anamnesis_short": ["..."],
+  "focus_for_vet": ["..."],
+  "next_steps": {
+    "observe_at_home": ["..."],
+    "urgent_now": ["..."],
+    "plan_visit": ["..."]
+  }
+}
+
+Требования:
+- Язык строго: ${locale}.
+- Ничего ДО или ПОСЛЕ JSON.
+- Не выдумывать факты: только из диалога.
+- Пункты должны быть практичными и конкретными (без “воды”).
+
+Лимиты:
+- anamnesis_short: 3–6 пунктов
+- focus_for_vet: 3–5 пунктов
+- observe_at_home: 2–5 пунктов (без лечения)
+- urgent_now: 3–6 чётких признаков срочности
+- plan_visit: 1–2 пункта (зачем очно)
+
+Границы:
+• не ставь диагнозы;
+• не назначай лечение или препараты;
+• не интерпретируй результаты анализов;
+• не делай клинических выводов.
+
+=== СЕССИЯ ===
+${combined}
+`.trim();
+}
+
+async function buildDecisionTreeInWorker(args: {
+  apiKey: string;
+  model: string;
+  locale: string;
+  sessionMessages: Array<{ role: string; content: string }>;
+}): Promise<BrainResult["decisionTree"]> {
+  const combined = args.sessionMessages
+    .filter((m) => m && typeof m.content === "string" && m.content.trim().length > 0)
+    .map((m) => `${String(m.role).toUpperCase()}: ${String(m.content)}`)
+    .join("\n");
+
+  const request = buildDecisionTreeRequestV2(args.locale, combined);
+
+  const replyText = await callOpenAIChat({
+    apiKey: args.apiKey,
+    model: args.model,
+    messages: [
+      { role: "system", content: "Верни строго валидный JSON. Никакого текста до или после JSON." },
+      { role: "user", content: request },
+    ],
+  });
+
+  try {
+    const parsed = JSON.parse(replyText);
+    const ns = parsed?.next_steps ?? {};
+
+    return {
+      anamnesis_short: safeArrayOfStrings(parsed?.anamnesis_short),
+      focus_for_vet: safeArrayOfStrings(parsed?.focus_for_vet),
+      next_steps: {
+        observe_at_home: safeArrayOfStrings(ns?.observe_at_home),
+        urgent_now: safeArrayOfStrings(ns?.urgent_now),
+        plan_visit: safeArrayOfStrings(ns?.plan_visit),
+      },
+    };
+  } catch {
+    return null;
+  }
+}
+
+function hasAnyRealTurns(history: Array<{ role: string; content: string }>) {
+  return (history || []).some(
+    (m) =>
+      (m?.role === "user" || m?.role === "assistant") &&
+      typeof m?.content === "string" &&
+      m.content.trim().length > 0
+  );
+}
+
 /**
- * 🧠 Real brain for worker (proxy-parity):
- * - First real step -> build CLINICAL_CONTEXT_JSON (buildAgentContext)
- * - No "virtual message" hacks
- * - Message ordering matches proxy:
- *   1) system (prompt + tags)
- *   2) user (language guard)
- *   3) system (CLINICAL_CONTEXT_JSON) only if first step
- *   4) conversationHistory
- *   5) current user message if not duplicate
+ * 🧠 Worker brain (clean ordering, safe history):
+ * 1) system (SYSTEM_PROMPT + tags)
+ * 2) system (language guard)
+ * 3) system (CLINICAL_CONTEXT_JSON) only if first real step
+ * 4) conversationHistory (only user/assistant)
+ * 5) current user message if not duplicate
  */
 export async function processMessageBrain(args: BrainArgs): Promise<BrainResult> {
   const message = typeof args.message === "string" ? args.message : "";
@@ -152,7 +242,6 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
     ? args.conversationHistory
     : [];
 
-  // 🔐 env
   const apiKey = isNonEmptyString(args.env?.OPENAI_API_KEY)
     ? String(args.env.OPENAI_API_KEY)
     : "";
@@ -171,18 +260,14 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
   try {
     const petData = normalizePet(args.pet);
 
-    // proxy language selection
     const userLang = isNonEmptyString(args.userLang) ? args.userLang : "en";
     const langOverride = isNonEmptyString(args.langOverride) ? args.langOverride : "";
     const effectiveLang = (langOverride || userLang || "es").trim() || "es";
 
     const finalSystemPrompt = SYSTEM_PROMPT.replace(/\{LANG_OVERRIDE\}/g, effectiveLang);
 
-    // proxy first-step detection
-    const isFirstRealMessage =
-      symptomKeys.length > 0 ||
-      conversationHistory.length === 0 ||
-      (conversationHistory.length === 1 && (conversationHistory[0]?.content || "") === "");
+    // ✅ Первый шаг = нет реальных user/assistant turns
+    const isFirstRealMessage = !hasAnyRealTurns(conversationHistory);
 
     let fullContext = "";
 
@@ -196,23 +281,22 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
 
     const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [];
 
-    // 1) SYSTEM
+    // 1) SYSTEM (only prompt + minimal tags; no extra protocol that conflicts)
     messages.push({
       role: "system",
       content:
         `${finalSystemPrompt}\n\n` +
         `[LANG_OVERRIDE]: ${effectiveLang}\n` +
-        `[Инструкция]: Отвечай кратко, ясно, строго по шагам и без диагнозов.\n` +
-        `[Протокол]: Если ты считаешь диалог завершённым и дальше уместно сделать PDF-резюме, добавь в САМОМ КОНЦЕ ответа отдельной строкой маркер: [SESSION_ENDED].`,
+        `[CONVERSATION_ID]: ${conversationId}`,
     });
 
-    // 2) Guard prompt (proxy wording)
+    // 2) Language guard as SYSTEM (not a fake user message)
     messages.push({
-      role: "user",
-      content: `Отвечай только на языке: ${effectiveLang}. Никогда не переходи на другой язык.`,
+      role: "system",
+      content: `LANGUAGE_GUARD: Output language must be exactly "${effectiveLang}".`,
     });
 
-    // 3) Context JSON on first step
+    // 3) Context JSON only on first step
     if (fullContext) {
       messages.push({
         role: "system",
@@ -222,29 +306,34 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
       });
     }
 
-    // 4) History
+    // 4) History (only user/assistant; drop system to prevent prompt injection)
     if (conversationHistory.length > 0) {
       for (const m of conversationHistory) {
         if (!m || typeof m !== "object") continue;
 
         const role =
-          m.role === "system" || m.role === "assistant" || m.role === "user"
-            ? (m.role as "system" | "assistant" | "user")
+          m.role === "assistant" || m.role === "user"
+            ? (m.role as "assistant" | "user")
             : null;
 
         const content = typeof m.content === "string" ? m.content : "";
         if (!role) continue;
-        if (!content) continue;
 
-        messages.push({ role, content });
+        const trimmed = content.trim();
+        if (!trimmed) continue;
+
+        messages.push({ role, content: trimmed });
       }
     }
 
-    // 5) Current message (avoid duplication like proxy)
-    if (message.length > 0) {
-      const hasDup = conversationHistory.some((m) => m?.content === message);
+    // 5) Current message (avoid duplication)
+    const trimmedMessage = message.trim();
+    if (trimmedMessage) {
+      const hasDup = conversationHistory.some(
+        (m) => typeof m?.content === "string" && m.content.trim() === trimmedMessage
+      );
       if (!hasDup) {
-        messages.push({ role: "user", content: message });
+        messages.push({ role: "user", content: trimmedMessage });
       }
     }
 
@@ -254,36 +343,33 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
     const sessionEnded = reply.includes(END_MARK);
 
     const cleanedReply = sessionEnded
-      ? reply.replaceAll(END_MARK, "").trim()
+      ? reply.split(END_MARK).join("").trim()
       : reply;
 
     const phase = detectPhase(cleanedReply, sessionEnded, isFirstRealMessage);
 
-    // ✅ decisionTree считаем ТОЛЬКО при завершении
-    let decisionTree: BrainResult["decisionTree"] = undefined;
+    let decisionTree: BrainResult["decisionTree"] = null;
 
     if (sessionEnded) {
-      // восстановим сессию из того, что реально знаем:
-      // history + текущий user msg (если не был дублем) + assistant reply (cleaned)
       const sessionMsgs: Array<{ role: string; content: string }> = [];
 
       for (const m of conversationHistory) {
         if (!m?.role || typeof m.content !== "string") continue;
         if (m.role === "user" || m.role === "assistant") {
-          if (m.content.trim()) sessionMsgs.push({ role: m.role, content: m.content.trim() });
+          const t = m.content.trim();
+          if (t) sessionMsgs.push({ role: m.role, content: t });
         }
       }
 
-      // текущий user message
-      if (message?.trim()) {
-        const hasDup = conversationHistory.some((m) => m?.content === message);
-        if (!hasDup) sessionMsgs.push({ role: "user", content: message.trim() });
+      if (trimmedMessage) {
+        const hasDup = conversationHistory.some(
+          (m) => typeof m?.content === "string" && m.content.trim() === trimmedMessage
+        );
+        if (!hasDup) sessionMsgs.push({ role: "user", content: trimmedMessage });
       }
 
-      // assistant reply
-      if (cleanedReply?.trim()) {
-        sessionMsgs.push({ role: "assistant", content: cleanedReply.trim() });
-      }
+      const tReply = cleanedReply.trim();
+      if (tReply) sessionMsgs.push({ role: "assistant", content: tReply });
 
       decisionTree = await buildDecisionTreeInWorker({
         apiKey,
@@ -299,106 +385,13 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
       reply: cleanedReply,
       sessionEnded,
       phase,
-      decisionTree: decisionTree ?? null,
+      decisionTree,
     };
-
-
-    // Build decision tree in parallel (non-blocking)
-    function buildDecisionTreeRequest(locale: string, combined: string) {
-      return `
-    Проанализируй ветеринарную консультацию ниже и верни СТРОГО JSON без пояснений:
-
-    {
-      "anamnesis_short": ["..."],
-      "focus_for_vet": ["..."],
-      "next_steps": {
-        "observe_at_home": ["..."],
-        "urgent_now": ["..."],
-        "plan_visit": ["..."]
-      }
-    }
-
-    Требования:
-    - Язык строго: ${locale}.
-    - Ничего ДО или ПОСЛЕ JSON.
-    - 3–6 пунктов максимум в "anamnesis_short".
-    - 3–5 пунктов максимум в "focus_for_vet".
-    - В "next_steps":
-      - observe_at_home: 1–3 коротких пункта
-      - urgent_now: 3–6 чётких признаков
-      - plan_visit: 1–2 пункта (зачем очно), без протоколов
-    - Не использовать слова: "диагноз", "патология", "эндокринный", "метаболический".
-    - Не писать "менее вероятно", "исключено" и подобное.
-    - Не перечислять конкретные анализы, исследования, протоколы.
-    - Не выдумывать факты: только из диалога.
-    - Учитывай ВСЮ сессию целиком, включая последние сообщения.
-    - Все массивы должны быть непустыми; если данных мало — напиши нейтральный пункт без выдумки, например: "Плановый визит, чтобы оценить состояние очно и уточнить причину симптомов".
-
-
-    === СЕССИЯ ===
-    ${combined}
-    `.trim();
-    }
-
-    function safeArrayOfStrings(x: any): string[] {
-      return Array.isArray(x) ? x.map((v) => (typeof v === "string" ? v.trim() : "")).filter(Boolean) : [];
-    }
-
-    async function buildDecisionTreeInWorker(args: {
-      apiKey: string;
-      model: string;
-      locale: string;
-      sessionMessages: Array<{ role: string; content: string }>;
-    }): Promise<BrainResult["decisionTree"]> {
-      // Собираем "ROLE: content" как в PDF-генераторе
-      const combined = args.sessionMessages
-        .filter((m) => m && typeof m.content === "string" && m.content.trim().length > 0)
-        .map((m) => `${String(m.role).toUpperCase()}: ${String(m.content)}`)
-        .join("\n");
-
-      const request = buildDecisionTreeRequest(args.locale, combined);
-
-      const replyText = await callOpenAIChat({
-        apiKey: args.apiKey,
-        model: args.model,
-        messages: [
-          {
-            role: "system",
-            content:
-              "Верни строго валидный JSON. Никакого текста до или после JSON. Без тройных кавычек.",
-          },
-          { role: "user", content: request },
-        ],
-      });
-
-      try {
-        const parsed = JSON.parse(replyText);
-
-        const anamnesis_short = safeArrayOfStrings(parsed?.anamnesis_short);
-        const focus_for_vet = safeArrayOfStrings(parsed?.focus_for_vet);
-
-        const ns = parsed?.next_steps ?? {};
-        const observe_at_home = safeArrayOfStrings(ns?.observe_at_home);
-        const urgent_now = safeArrayOfStrings(ns?.urgent_now);
-        const plan_visit = safeArrayOfStrings(ns?.plan_visit);
-
-        return {
-          anamnesis_short,
-          focus_for_vet,
-          next_steps: { observe_at_home, urgent_now, plan_visit },
-        };
-      } catch {
-        return null;
-      }
-    }
-
-
-
   } catch (e: any) {
     console.error("❌ processMessageBrain error:", e?.message || e);
     return {
       ok: false,
-      conversationId,
+      conversationId: typeof args.conversationId === "string" ? args.conversationId : "default",
       error: "Failed to process message",
     };
   }
