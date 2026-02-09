@@ -9,16 +9,16 @@
   "exit_delete": "Beenden und neu starten",
   "exit_button": "Beenden",
 
-  "terms_title": "Allgemeine Geschäftsbedingungen",
-  "terms_paragraph1": "Ich möchte Ihnen etwas Wichtiges mitteilen.",
-  "terms_paragraph2": "Ich bin Ihr Assistent und ersetze keine professionelle tierärztliche Betreuung. Meine Hinweise dienen nur zur Information, um Ihnen zu helfen, Ihren Gefährten besser zu verstehen.",
-  "terms_paragraph3": "Verschlechtert sich sein Zustand, konsultieren Sie immer einen Tierarzt.",
+  "terms_title": "Nutzungsbedingungen",
+  "terms_paragraph1": "Bevor wir weitermachen, möchte ich dir eine wichtige Sache sagen.",
+  "terms_paragraph2": "Ich bin an deiner Seite, um dir zu helfen, auf den Zustand deines Tieres achtsamer zu achten, ersetze jedoch keine professionelle tierärztliche Behandlung.\nIch stelle keine Diagnosen und verschreibe keine Behandlungen.",
+  "terms_paragraph3": "Wenn du eine Verschlechterung bemerkst oder etwas dir Sorgen bereitet, ist es wichtig, so bald wie möglich eine Tierärztin oder einen Tierarzt aufzusuchen.",
   "terms_accept": "Ich akzeptiere die Bedingungen",
-  "terms_decline": "Ich akzeptiere nicht",
+  "terms_decline": "Ich lehne ab",
 
-  "privacy_policy": "Datenschutzerklärung",
-  "privacy_paragraph1": "Durch die Nutzung bestätigen Sie, dass Sie diese Grenzen verstehen und zustimmen, dass ich Ihre Daten nur zur besseren Unterstützung verwende.",
-  "privacy_paragraph2": "Wenn Sie einverstanden sind, machen wir gemeinsam weiter.",
+  "privacy_title": "Datenschutz",
+  "privacy_paragraph1": "Damit ich dich gut begleiten kann, ist es wichtig, deine Situation und den Zustand deines Tieres zu verstehen.",
+  "privacy_paragraph2": "Ich nutze deine Daten nur für diesen Dialog\nund gebe sie nicht weiter.",
   "privacy_accept": "Akzeptieren",
   "privacy_decline": "Ablehnen",
 
@@ -59,9 +59,9 @@
   "save": "Speichern", 
   "delete": "Löschen",
 
-  "start_subtitle": "Tierpflege-Assistent",
-  "start_description": "Ich helfe Ihnen zu verstehen, was Ihr Tier fühlt",
-  "start_button": "Start",
+  "start_subtitle": "Eine fürsorgliche Begleiterin für dein Tier",
+  "start_description": "Fürsorge beginnt\nmit Aufmerksamkeit",
+  "start_button": "Starten",
   "continue_title": "Fortfahren?",
   "continue_message": "Sie können Ihre vorherige Sitzung fortsetzen oder eine neue beginnen.",
   "start_new": "Neu starten",
@@ -83,11 +83,11 @@
   },
 
   "about": {
-    "tagline": "Mamascota",
-    "p1": "Hilft zu verstehen, was mit Ihrem Tier passiert, ohne professionelle Hilfe zu ersetzen.",
-    "p2": "Basiert auf veterinärmedizinischen Algorithmen und Verhaltensmodellen.",
-    "p3": "Stellt keine Diagnosen. Hilft, die richtigen Fragen zu stellen und rechtzeitig Hilfe zu suchen.",
-    "signature": "Mit Liebe zu Tieren und Aufmerksamkeit für Menschen entwickelt.",
+    "tagline": "Über die App",
+    "p1": "Mamascota hilft, den Zustand Ihres Tieres besser zu verstehen.",
+    "p2": "Sie hilft, wichtige Anzeichen zu erkennen und sich auf den Tierarztbesuch vorzubereiten.",
+    "p3": "Mamascota stellt keine Diagnosen und ersetzt keine tierärztliche Behandlung.",
+    "signature": "Mit Fürsorge für Tiere und Respekt für Menschen entwickelt.",
     "follow": "Projekt auf Instagram verfolgen",
     "show_onboarding_again": "Mehr…"
   },
@@ -124,6 +124,7 @@
     "custom": "Anderes"
   },
   "chat": {
+    "summary_hint": "Sie können die Zusammenfassung mit dem roten Symbol unten links speichern oder die Sitzung beenden und speichern.",
     "phase": {
       "intake": "Phase: Informationen sammeln",
       "clarify": "Phase: Details klären",

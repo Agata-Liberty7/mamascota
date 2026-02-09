@@ -9,16 +9,16 @@
   "exit_delete": "Abandonnez et recommencez.",
   "exit_button": "Quitter",
 
-  "terms_title": "Conditions générales",
-  "terms_paragraph1": "Je veux vous dire quelque chose d’important.",
-  "terms_paragraph2": "Je suis votre assistant et je ne remplace pas les soins vétérinaires professionnels. Mes conseils sont uniquement informatifs, pour vous aider à mieux comprendre votre compagnon.",
-  "terms_paragraph3": "Si son état s’aggrave, consultez toujours un vétérinaire.",
+  "terms_title": "Conditions d’utilisation",
+  "terms_paragraph1": "Avant de continuer, je voudrais vous dire une chose importante.",
+  "terms_paragraph2": "Je suis là pour vous aider à être plus attentif à l’état de votre animal, mais je ne remplace pas les soins vétérinaires professionnels.\nJe n’établis pas de diagnostic et je ne prescris pas de traitement.",
+  "terms_paragraph3": "Si vous remarquez une dégradation de l’état de votre animal ou quelque chose d’inquiétant, il est important de consulter un vétérinaire dès que possible.",
   "terms_accept": "J’accepte les conditions",
-  "terms_decline": "Je n’accepte pas",
+  "terms_decline": "Je refuse",
 
-  "privacy_policy": "Politique de confidentialité",
-  "privacy_paragraph1": "En m’utilisant, vous confirmez que vous comprenez ces limites et acceptez que j’utilise vos données uniquement pour mieux vous accompagner.",
-  "privacy_paragraph2": "Si vous êtes d’accord, continuons ensemble.",
+  "privacy_title": "Confidentialité",
+  "privacy_paragraph1": "Pour pouvoir vous accompagner, j’ai besoin de comprendre votre situation et l’état de votre animal.",
+  "privacy_paragraph2": "J’utilise vos données uniquement pour ce dialogue\net ne les transmets pas à des tiers.",
   "privacy_accept": "Accepter",
   "privacy_decline": "Refuser",
 
@@ -59,8 +59,8 @@
   "save": "Enregistrer", 
   "delete": "Supprimer",
 
-  "start_subtitle": "Assistant de soins pour animaux",
-  "start_description": "Je vous aide à comprendre ce que ressent votre animal",
+  "start_subtitle": "Une présence attentionnée pour votre animal",
+  "start_description": "Le soin commence\npar l’attention",
   "start_button": "Commencer",
   "continue_title": "Continuer ?",
   "continue_message": "Vous pouvez reprendre votre session précédente ou en commencer une nouvelle.",
@@ -83,11 +83,11 @@
   },
 
   "about": {
-    "tagline": "Mamascota",
-    "p1": "Aide à comprendre ce qui se passe avec votre animal, sans remplacer l’aide professionnelle.",
-    "p2": "Basé sur des algorithmes vétérinaires et des scénarios comportementaux.",
-    "p3": "Ne pose pas de diagnostics. Aide à poser les bonnes questions et à demander de l’aide à temps.",
-    "signature": "Créé avec amour pour les animaux et attention pour les personnes.",
+    "tagline": "À propos",
+    "p1": "Mamascota aide à mieux comprendre l’état de votre animal.",
+    "p2": "Elle aide à repérer les signes importants et à se préparer à une visite vétérinaire.",
+    "p3": "Mamascota ne pose pas de diagnostics et ne remplace pas un vétérinaire.",
+    "signature": "Créé avec soin pour les animaux et respect pour les personnes.",
     "follow": "Suivre le projet sur Instagram",
     "show_onboarding_again": "Plus…"
   },
@@ -124,6 +124,7 @@
     "custom": "Autre"
   },
   "chat": {
+    "summary_hint": "Vous pouvez enregistrer le résumé en utilisant l’icône rouge en bas à gauche, ou en quittant et enregistrant la session.",
     "phase": {
       "intake": "Étape: Collecte d’informations",
       "clarify": "Étape: Clarification des détails",

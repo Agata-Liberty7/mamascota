@@ -9,16 +9,16 @@
   "exit_delete": "Salir y empezar de nuevo",
   "exit_button": "Salir",
 
-  "terms_title": "Términos y condiciones",
-  "terms_paragraph1": "Quiero que sepas algo importante.",
-  "terms_paragraph2": "Soy tu asistente y no reemplazo la atención veterinaria profesional. Mi orientación es solo informativa, para ayudarte a comprender mejor a tu compañero.",
-  "terms_paragraph3": "Si ves que su estado empeora, acude siempre a un veterinario.",
+  "terms_title": "Términos de uso",
+  "terms_paragraph1": "Antes de continuar, quiero contarte algo importante.",
+  "terms_paragraph2": "Estoy aquí para ayudarte a estar más atento al estado de tu mascota, pero no sustituyo la atención veterinaria profesional.\nNo hago diagnósticos ni indico tratamientos.",
+  "terms_paragraph3": "Si notas un empeoramiento del estado de tu mascota o algo te genera preocupación, es importante acudir al veterinario lo antes posible.",
   "terms_accept": "Acepto los términos",
   "terms_decline": "No acepto",
 
-  "privacy_policy": "Política de privacidad",
-  "privacy_paragraph1": "Al usarme, confirmas que comprendes estos límites y aceptas que puedo usar tus datos solo para apoyarte mejor.",
-  "privacy_paragraph2": "Si estás de acuerdo, sigamos juntos.",
+  "privacy_title": "Política de privacidad",
+  "privacy_paragraph1": "Para poder estar realmente a tu lado y ayudarte, necesito comprender tu situación y el estado de tu mascota.",
+  "privacy_paragraph2": "Uso tus datos solo para este diálogo\ny no los comparto con terceros.",
   "privacy_accept": "Aceptar",
   "privacy_decline": "Rechazar",
 
@@ -61,9 +61,9 @@
   "save": "Guardar", 
   "delete": "Eliminar",
 
-  "start_subtitle": "Cuidadora de bienestar animal",
-  "start_description": "Te ayudo a entender lo que siente",
-  "start_button": "Iniciar",
+  "start_subtitle": "Una niñera atenta para tu mascota",
+  "start_description": "El cuidado empieza\ncon la atención",
+  "start_button": "Empezar",
   "continue_title": "¿Continuar?",
   "continue_message": "Puedes retomar tu sesión anterior o empezar una nueva.",
   "start_new": "Empezar nueva",
@@ -85,11 +85,11 @@
   },
 
   "about": {
-    "tagline": "Mamascota",
-    "p1": "Ayuda a entender qué está ocurriendo con tu mascota, sin sustituir la atención profesional.",
-    "p2": "Se basa en algoritmos veterinarios y escenarios de comportamiento.",
-    "p3": "No da diagnósticos. Ayuda a formular las preguntas adecuadas y a buscar ayuda a tiempo.",
-    "signature": "Creado con amor por los animales y atención a las personas.",
+    "tagline": "Acerca de",
+    "p1": "Mamascota te ayuda a comprender mejor el estado de tu mascota.",
+    "p2": "Te ayuda a detectar señales importantes y a prepararte para la visita al veterinario.",
+    "p3": "Mamascota no realiza diagnósticos ni sustituye la atención veterinaria profesional.",
+    "signature": "Creado con cuidado por los animales y respeto por las personas.", 
     "follow": "Seguir el proyecto en Instagram",
     "show_onboarding_again": "Más…"
   },
@@ -127,6 +127,7 @@
   },
 
   "chat": {
+    "summary_hint": "Puedes guardar el resumen usando el ícono rojo en la esquina inferior izquierda, o saliendo y guardando la sesión.",
     "phase": {
       "intake": "Fase: Recopilando información",
       "clarify": "Fase: Aclarando detalles",

@@ -9,16 +9,16 @@
   "exit_delete": "Exit and start again",
   "exit_button": "Exit",
 
-  "terms_title": "Terms and Conditions",
-  "terms_paragraph1": "I want you to know something important.",
-  "terms_paragraph2": "I am your assistant and I do not replace professional veterinary care. My guidance is for information only, to help you better understand your companion.",
-  "terms_paragraph3": "If their condition worsens, always consult a veterinarian.",
+  "terms_title": "Terms of Use",
+  "terms_paragraph1": "Before we continue, I want to share one important thing.",
+  "terms_paragraph2": "I am here to help you be more attentive to your pet’s condition, but I do not replace professional veterinary care.\nI do not make diagnoses or prescribe treatment.",
+  "terms_paragraph3": "If you notice your pet’s condition getting worse or something causes concern, it’s important to contact a veterinarian as soon as possible.",
   "terms_accept": "I accept the terms",
   "terms_decline": "I do not accept",
 
-  "privacy_policy": "Privacy Policy",
-  "privacy_paragraph1": "By using me, you confirm that you understand these limits and agree that I may use your data only to better support you.",
-  "privacy_paragraph2": "If you agree, let's continue together.",
+  "privacy_title": "Privacy Policy",
+  "privacy_paragraph1": "To be truly present and helpful, I need to understand your situation and your pet’s condition.",
+  "privacy_paragraph2": "I use your data only for this conversation\nand do not share it with third parties.",
   "privacy_accept": "Accept",
   "privacy_decline": "Decline",
 
@@ -59,9 +59,9 @@
   "save": "Save", 
   "delete": "Delete",
 
-  "start_subtitle": "Animal care assistant",
-  "start_description": "I help you understand what they feel",
-  "start_button": "Start",
+  "start_subtitle": "A caring nanny for your pet",
+  "start_description": "Care begins\nwith attention",
+  "start_button": "Get started",
   "continue_title": "Continue?",
   "continue_message": "You can resume your previous session or start a new one.",
   "start_new": "Start new",
@@ -83,11 +83,11 @@
   },
 
   "about": {
-    "tagline": "Mamascota",
-    "p1": "Helps you understand what is happening with your pet, without replacing professional care.",
-    "p2": "Based on veterinary algorithms and behavioral scenarios.",
-    "p3": "Does not provide diagnoses. Helps you ask the right questions and seek help in time.",
-    "signature": "Created with love for animals and care for people.",
+    "tagline": "About",
+    "p1": "Mamascota helps you better understand your pet’s condition.",
+    "p2": "It helps you notice important signs and prepare for a veterinary visit.",
+    "p3": "Mamascota does not provide diagnoses or replace professional veterinary care.",
+    "signature": "Created with care for animals and respect for people.",
     "follow": "Follow the project on Instagram",
     "show_onboarding_again": "More..."
   },
@@ -124,6 +124,7 @@
     "custom": "Other"
   },
   "chat": {
+    "summary_hint": "You can save the summary using the red icon at the bottom left, or by exiting and saving the session.",
     "phase": {
       "intake": "Phase: Gathering information",
       "clarify": "Phase: Clarifying details",

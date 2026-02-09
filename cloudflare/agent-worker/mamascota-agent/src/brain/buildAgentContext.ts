@@ -38,6 +38,10 @@ export async function buildAgentContext(
     const algorithms = Array.isArray(knowledgeBase.algorithms) ? knowledgeBase.algorithms : [];
     const clinicalDetails = Array.isArray(knowledgeBase.clinicalDetails) ? knowledgeBase.clinicalDetails : [];
     const breedRisks = Array.isArray(knowledgeBase.breedRisks) ? knowledgeBase.breedRisks : [];
+    const petDimensions = Array.isArray((knowledgeBase as any).petDimensions)
+      ? (knowledgeBase as any).petDimensions
+      : [];
+
 
     const filteredAlgorithms = Array.isArray(algorithms)
       ? algorithms.filter((alg: any) => {
@@ -66,10 +70,15 @@ export async function buildAgentContext(
     const speciesKey = especie === "perro" ? "dog" : especie === "gato" ? "cat" : null;
 
     const uiBreed = petData.breed || "";
+    const uiBreedNorm = norm(uiBreed);
+
     const aliasMap =
       speciesKey === "dog" ? DOG_BREED_ALIASES : speciesKey === "cat" ? CAT_BREED_ALIASES : {};
 
-    const candidates = [uiBreed, ...(aliasMap[uiBreed] || [])].map(norm);
+    const rawAliases = (aliasMap as any)[uiBreed] || [];
+    const normAliases = (aliasMap as any)[uiBreedNorm] || [];
+
+    const candidates = [uiBreedNorm, ...rawAliases.map(norm), ...normAliases.map(norm)].filter(Boolean);
 
     const breedRisksForPet = Array.isArray(breedRisks)
       ? breedRisks.filter((br: any) => {
@@ -81,6 +90,17 @@ export async function buildAgentContext(
           return candidates.includes(raza);
         })
       : [];
+    const petDimensionsForPet = Array.isArray(petDimensions)
+      ? petDimensions.filter((pd: any) => {
+          const esp = norm(pd?.especie);
+          const raza = norm(pd?.raza);
+          if (!speciesKey) return false;
+          if (esp !== especie) return false;
+          if (candidates.length === 0) return false;
+          return candidates.includes(raza);
+        })
+      : [];
+
 
     const clinicalDetailsForSpecies = Array.isArray(clinicalDetails)
       ? clinicalDetails.filter((cd: any) => {
@@ -119,6 +139,13 @@ export async function buildAgentContext(
     ${symptomText}
         `.trim();
 
+    // DEBUG (временно)
+    console.log("[KB] algorithms:", finalAlgorithms.length, "filtered:", filteredAlgorithms.length);
+    console.log("[KB] clinicalDetails:", clinicalDetailsForSpecies.length, "especie:", especie);
+    console.log("[KB] breedRisks:", breedRisksForPet.length, "breed:", petData.breed, "candidates:", candidates.slice(0, 6));
+    console.log("[KB] petDimensions:", petDimensionsForPet.length, "breed:", petData.breed);
+    if (breedRisksForPet[0]) console.log("[KB] breedRisks sample:", { raza: breedRisksForPet[0]?.raza, fuente: breedRisksForPet[0]?.fuente });
+    if (petDimensionsForPet[0]) console.log("[KB] petDimensions sample:", { raza: petDimensionsForPet[0]?.raza, peso: petDimensionsForPet[0]?.peso || petDimensionsForPet[0]?.pesoKg });
 
   return JSON.stringify({
     pet: petData,
@@ -128,6 +155,7 @@ export async function buildAgentContext(
     algorithms: finalAlgorithms,
     clinical_details_for_species: clinicalDetailsForSpecies,
     breed_risks_for_pet: breedRisksForPet,
+    pet_dimensions_for_pet: petDimensionsForPet,
     knowledgeBase: filteredAlgorithms,
     context,
   });

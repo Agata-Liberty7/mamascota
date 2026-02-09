@@ -16,17 +16,12 @@ export type ChatResult = {
   decisionTree?: any | null;
 };
 
-
-
-
-
 // Универсальный URL агента: сначала берём точный /agent, иначе — из API_URL
 const AGENT_URL =
   process.env.EXPO_PUBLIC_PROXY_URL ||
   (process.env.EXPO_PUBLIC_API_URL
     ? `${process.env.EXPO_PUBLIC_API_URL}/agent`
     : "");
-
   
 /**
  * Каноничный метод получения активного питомца.

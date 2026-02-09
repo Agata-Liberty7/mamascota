@@ -36,6 +36,21 @@ function isNonEmptyString(v: any): v is string {
   return typeof v === "string" && v.trim().length > 0;
 }
 
+function pickModel(env: any): string {
+  const clean = (v: any) => String(v ?? "").trim().replace(/\s+/g, "");
+  const override = clean(env?.MAMASCOTA_MODEL_OVERRIDE);
+  const base = clean(env?.OPENAI_MODEL);
+
+  const chosen = override || base || "gpt-5-mini";
+
+  console.log("[MODEL] OPENAI_MODEL=", JSON.stringify(env?.OPENAI_MODEL));
+  console.log("[MODEL] MAMASCOTA_MODEL_OVERRIDE=", JSON.stringify(env?.MAMASCOTA_MODEL_OVERRIDE));
+  console.log("[MODEL] chosen=", chosen);
+
+  return chosen;
+}
+
+
 function normalizeSymptomKeys(symptomKeys: any): string[] {
   if (!Array.isArray(symptomKeys)) return [];
   return symptomKeys.filter((x) => typeof x === "string" && x.trim().length > 0);
@@ -237,7 +252,7 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
     typeof args.conversationId === "string" && args.conversationId.trim()
       ? args.conversationId.trim()
       : "default";
-
+    
   const conversationHistory = Array.isArray(args.conversationHistory)
     ? args.conversationHistory
     : [];
@@ -245,9 +260,7 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
   const apiKey = isNonEmptyString(args.env?.OPENAI_API_KEY)
     ? String(args.env.OPENAI_API_KEY)
     : "";
-  const model = isNonEmptyString(args.env?.OPENAI_MODEL)
-    ? String(args.env.OPENAI_MODEL)
-    : "gpt-5-mini";
+  const model = pickModel(args.env);
 
   if (!apiKey) {
     return {
@@ -281,20 +294,19 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
 
     const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [];
 
-    // 1) SYSTEM (only prompt + minimal tags; no extra protocol that conflicts)
+    // 1) SYSTEM: основной промпт + компактный runtime-guard (в одном сообщении)
     messages.push({
       role: "system",
       content:
+        `PROMPT_VERSION=2026-02-09-a\n` +
         `${finalSystemPrompt}\n\n` +
-        `[LANG_OVERRIDE]: ${effectiveLang}\n` +
-        `[CONVERSATION_ID]: ${conversationId}`,
+        `RUNTIME_GUARD:\n` +
+        `- Output language must be exactly "${effectiveLang}".\n` +
+        `- Follow the SYSTEM PROMPT rules strictly (one question per message; no checklists).\n` +
+        `- If red flags appear: stop asking questions and switch to urgent action.\n`,
     });
 
-    // 2) Language guard as SYSTEM (not a fake user message)
-    messages.push({
-      role: "system",
-      content: `LANGUAGE_GUARD: Output language must be exactly "${effectiveLang}".`,
-    });
+
 
     // 3) Context JSON only on first step
     if (fullContext) {
@@ -328,6 +340,7 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
 
     // 5) Current message (avoid duplication)
     const trimmedMessage = message.trim();
+
     if (trimmedMessage) {
       const hasDup = conversationHistory.some(
         (m) => typeof m?.content === "string" && m.content.trim() === trimmedMessage
@@ -335,7 +348,18 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
       if (!hasDup) {
         messages.push({ role: "user", content: trimmedMessage });
       }
+    } else if (isFirstRealMessage) {
+      // ✅ Старт после выбора симптомов: даём модели “точку опоры”
+      // (коротко, без технички, на языке диалога)
+      const startCue =
+        effectiveLang === "ru"
+          ? "Я выбрал(а) симптомы в приложении. Начни разговор по правилам первого сообщения и задай один вопрос про сроки/динамику."
+          : effectiveLang === "es"
+            ? "He seleccionado síntomas en la app. Empieza según las reglas del primer mensaje y haz una sola pregunta sobre el tiempo/evolución."
+            : "I selected symptoms in the app. Start per the first-message rules and ask one question about timeline/changes.";
+      messages.push({ role: "user", content: startCue });
     }
+    
 
     const reply = await callOpenAIChat({ apiKey, model, messages });
 

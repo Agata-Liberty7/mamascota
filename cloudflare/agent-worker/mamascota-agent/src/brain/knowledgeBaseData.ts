@@ -6,4 +6,5 @@ export const KNOWLEDGE_BASE = kb as {
   algorithms: any[];
   clinicalDetails: any[];
   breedRisks: any[];
+  petDimensions?: any[];
 };

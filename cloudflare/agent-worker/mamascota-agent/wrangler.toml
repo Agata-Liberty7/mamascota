@@ -4,3 +4,4 @@ compatibility_date = "2024-12-01"
 
 [vars]
 OPENAI_MODEL = "gpt-5-mini"
+# MAMASCOTA_MODEL_OVERRIDE = "gpt-4o"

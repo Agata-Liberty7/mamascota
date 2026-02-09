@@ -60,6 +60,20 @@ function formatChatTime(ts?: number) {
     return "";
   }
 }
+function splitAssistantReplyIntoBubbles(reply: string): string[] {
+  const DELIM = "[[CHUNK]]";
+
+  if (typeof reply !== "string") return [];
+  const raw = reply.trim();
+  if (!raw) return [];
+
+  if (!raw.includes(DELIM)) return [raw];
+
+  return raw
+    .split(DELIM)
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
 
 
 export default function ChatScreen() {
@@ -233,7 +247,17 @@ export default function ChatScreen() {
           ? result.reply || result.error || "⚠️ Ошибка при анализе"
           : String(result);
 
-      setChat([{ role: "assistant", content: replyText, ts: Date.now() }]);
+      const parts = splitAssistantReplyIntoBubbles(replyText);
+      const now = Date.now();
+
+      setChat(
+        parts.map((content, idx) => ({
+          role: "assistant",
+          content,
+          ts: now + idx, // микро-сдвиг, чтобы порядок был стабильным
+        }))
+      );
+
       // PDF CTA: показываем только если агент явно финализировал
       if (typeof result === "object" && result?.sessionEnded) {
         const cid = result.conversationId ?? null;
@@ -291,15 +315,18 @@ export default function ChatScreen() {
             ? (result.reply || result.error || i18n.t("chat.no_reply", { defaultValue: "⚠️ No reply" }))
             : String(result);
 
-        const assistantMessage: ChatMessage = {
-          role: "assistant",
-          content: String(assistantText),
-          ts: Date.now(),
-        };
+        const parts = splitAssistantReplyIntoBubbles(String(assistantText));
+        const now = Date.now();
 
+        setChat((prev) => [
+          ...prev,
+          ...parts.map((content, idx) => ({
+            role: "assistant" as const,
+            content,
+            ts: now + idx,
+          })),
+        ]);
 
-        // 5) UI: добавляем ответ ассистента
-        setChat((prev) => [...prev, assistantMessage]);
 
         // 6) Phase: обновляем только если пришло валидное значение
         const p = typeof result === "object" ? (result as any)?.phase : null;
@@ -527,7 +554,17 @@ export default function ChatScreen() {
 
                 </View>
               </View>
-            )}
+        )}
+        {phase === "ended" && (
+          <View style={styles.summaryHint}>
+            <Text style={styles.summaryHintText}>
+              {i18n.t("chat.summary_hint", {
+                defaultValue:
+                  "You can save the summary using the red icon at the bottom left, or by exiting and saving the session.",
+              })}
+            </Text>
+          </View>
+        )}
 
         <View
           style={styles.inputArea}
@@ -656,6 +693,23 @@ const styles = StyleSheet.create({
     writingDirection: "rtl",
     alignItems: "flex-end",
   },
+  summaryHint: {
+    marginHorizontal: 12,
+    marginTop: 6,
+    marginBottom: 6,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    backgroundColor: "#F6F6F6",
+    borderWidth: 1,
+    borderColor: "#E5E5E5",
+  },
+  summaryHintText: {
+    fontSize: 13,
+    color: "#333",
+    textAlign: "center",
+  },
+
   pdfCta: {
     marginHorizontal: 12,
     marginBottom: 8,

@@ -94,6 +94,16 @@ export default {
     console.log("conversationId (from app):", body?.conversationId);
     console.log("conversationId (effective):", conversationId);
     console.log("conversationHistory tail:", conversationHistory.length);
+    // 🔧 DEBUG: быстрый health-check (временно)
+    if (message === "ping") {
+      return json({
+        ok: true,
+        pong: true,
+        conversationId,
+        hasApiKey: !!env.OPENAI_API_KEY,
+        model: (env as any).MAMASCOTA_MODEL_OVERRIDE || env.OPENAI_MODEL || null,
+      });
+    }
 
     // ВАЖНО: message:"" — нормальный старт (после выбора симптомов)
     const result = await processMessageBrain({

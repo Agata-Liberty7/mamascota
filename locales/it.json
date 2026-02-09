@@ -9,16 +9,16 @@
   "exit_delete": "Esci e ricomincia",
   "exit_button": "Esci",
 
-  "terms_title": "Termini e condizioni",
-  "terms_paragraph1": "Voglio dirti qualcosa di importante.",
-  "terms_paragraph2": "Sono il tuo assistente e non sostituisco le cure veterinarie professionali. Le mie indicazioni sono solo a scopo informativo, per aiutarti a comprendere meglio il tuo compagno.",
-  "terms_paragraph3": "Se le sue condizioni peggiorano, consulta sempre un veterinario.",
-  "terms_accept": "Accetto i termini",
+  "terms_title": "Condizioni d’uso",
+  "terms_paragraph1": "Prima di continuare, voglio dirti una cosa importante.",
+  "terms_paragraph2": "Sono qui per aiutarti a prestare più attenzione alle condizioni del tuo animale, ma non sostituisco l’assistenza veterinaria professionale.\nNon formulo diagnosi né prescrivo trattamenti.",
+  "terms_paragraph3": "Se noti un peggioramento delle condizioni o qualcosa ti preoccupa, è importante rivolgersi a un veterinario il prima possibile.",
+  "terms_accept": "Accetto le condizioni",
   "terms_decline": "Non accetto",
 
-  "privacy_policy": "Informativa sulla privacy",
-  "privacy_paragraph1": "Usandomi, confermi di comprendere questi limiti e accetti che possa utilizzare i tuoi dati solo per supportarti al meglio.",
-  "privacy_paragraph2": "Se sei d’accordo, continuiamo insieme.",
+  "privacy_title": "Privacy",
+  "privacy_paragraph1": "Per poterti accompagnare, ho bisogno di comprendere la tua situazione e le condizioni del tuo animale.",
+  "privacy_paragraph2": "Uso i tuoi dati solo per questo dialogo\ne non li condivido.",
   "privacy_accept": "Accetta",
   "privacy_decline": "Rifiuta",
 
@@ -59,9 +59,9 @@
   "save": "Salva", 
   "delete": "Elimina",
 
-  "start_subtitle": "Assistente per la cura degli animali",
-  "start_description": "Ti aiuto a capire cosa sente",
-  "start_button": "Avvia",
+  "start_subtitle": "Una presenza premurosa per il tuo animale",
+  "start_description": "La cura inizia\ncon l’attenzione",
+  "start_button": "Inizia",
   "continue_title": "Continuare?",
   "continue_message": "Puoi riprendere la sessione precedente o iniziarne una nuova.",
   "start_new": "Nuova sessione",
@@ -83,11 +83,11 @@
   },
 
   "about": {
-    "tagline": "Mamascota",
-    "p1": "Aiuta a capire cosa sta succedendo al tuo animale, senza sostituire l’assistenza professionale.",
-    "p2": "Si basa su algoritmi veterinari e scenari comportamentali.",
-    "p3": "Non fornisce diagnosi. Aiuta a fare le domande giuste e a cercare aiuto in tempo.",
-    "signature": "Creato con amore per gli animali e attenzione alle persone.",
+    "tagline": "Informazioni",
+    "p1": "Mamascota aiuta a comprendere meglio lo stato del tuo animale.",
+    "p2": "Aiuta a notare segnali importanti e a prepararsi alla visita dal veterinario.",
+    "p3": "Mamascota non fornisce diagnosi e non sostituisce l’assistenza veterinaria professionale.",
+    "signature": "Creato con attenzione per gli animali e rispetto per le persone.",
     "follow": "Segui il progetto su Instagram",
     "show_onboarding_again": "Altro…"
   },
@@ -124,6 +124,7 @@
     "custom": "Altro"
   },
   "chat": {
+    "summary_hint": "Puoi salvare il riepilogo usando l’icona rossa in basso a sinistra, oppure uscendo e salvando la sessione.",
     "phase": {
       "intake": "Fase: Raccolta informazioni",
       "clarify": "Fase: Chiarimento dettagli",
