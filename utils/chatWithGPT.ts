@@ -4,7 +4,6 @@ import { router } from "expo-router";
 import { showExitConfirmation } from "./showExitConfirmation";
 import { getLocalizedSpeciesLabel } from "./getLocalizedSpeciesLabel";
 
-
 // Тип ответа, который ожидает чат и другие вызовы
 export type ChatResult = {
   ok: boolean;
@@ -19,10 +18,11 @@ export type ChatResult = {
 // Универсальный URL агента: сначала берём точный /agent, иначе — из API_URL
 const AGENT_URL =
   process.env.EXPO_PUBLIC_PROXY_URL ||
-  (process.env.EXPO_PUBLIC_API_URL
-    ? `${process.env.EXPO_PUBLIC_API_URL}`
-    : "");
-  
+  (process.env.EXPO_PUBLIC_API_URL ? `${process.env.EXPO_PUBLIC_API_URL}` : "");
+
+// ✅ Optional fallback endpoint (2nd provider / non-Cloudflare)
+const FALLBACK_AGENT_URL = process.env.EXPO_PUBLIC_FALLBACK_PROXY_URL || "";
+
 /**
  * Каноничный метод получения активного питомца.
  * Использует только новую модель: pets:list + pets:activeId.
@@ -66,19 +66,15 @@ export async function chatWithGPT(params: {
   }
 
   // 🐾 если pet не пришёл — берём из единой модели
-  // 🐾 если pet не пришёл — берём из единой модели
-const ensuredPet = pet ?? (await getUnifiedActivePet());
+  const ensuredPet = pet ?? (await getUnifiedActivePet());
 
-// 🐾 добавляем готовую локализованную подпись вида
-const petWithLabel = ensuredPet
-  ? {
-      ...ensuredPet,
-      speciesLabel: getLocalizedSpeciesLabel(
-        ensuredPet.species,
-        ensuredPet.sex
-      ),
-    }
-  : undefined;
+  // 🐾 добавляем готовую локализованную подпись вида
+  const petWithLabel = ensuredPet
+    ? {
+        ...ensuredPet,
+        speciesLabel: getLocalizedSpeciesLabel(ensuredPet.species, ensuredPet.sex),
+      }
+    : undefined;
 
   // Явно переданный conversationId (например summary-…)
   const explicitConversationId = conversationId ?? null;
@@ -99,23 +95,19 @@ const petWithLabel = ensuredPet
       explicitConversationId || existingId || undefined;
 
     // ✅ гарантируем id для обычного чата
-    const ensuredConversationId =
-      isSummaryConversation
-        ? effectiveConversationId
-        : (effectiveConversationId ?? `conv-${Date.now()}`);
+    const ensuredConversationId = isSummaryConversation
+      ? effectiveConversationId
+      : effectiveConversationId ?? `conv-${Date.now()}`;
 
     if (!isSummaryConversation && !effectiveConversationId) {
       await setConversationId(ensuredConversationId!);
     }
 
-
-    // 🧠 Хвост истории (0 сообщений) — только для обычного диалога, НЕ для summary
+    // 🧠 Хвост истории — только для обычного диалога, НЕ для summary
     const conversationHistory = isSummaryConversation
       ? []
-      : await getConversationHistoryTail(effectiveConversationId, 80);
+      : await getConversationHistoryTail(ensuredConversationId, 80);
 
-
-    
     const body = {
       message: message ?? "",
       pet: petWithLabel ?? undefined,
@@ -140,11 +132,20 @@ const petWithLabel = ensuredPet
     console.log("[CHAT] AGENT_URL =", AGENT_URL);
     console.log("[CHAT] payload.pet =", body?.pet);
 
-    const res = await fetch(AGENT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
+    // ✅ Choose endpoint: primary → fallback (if primary is unreachable)
+    let workingUrl = AGENT_URL;
+
+    const primaryOk = await probeHealth(AGENT_URL);
+    if (!primaryOk && FALLBACK_AGENT_URL) {
+      console.warn("⚠️ Primary endpoint недоступен, пробуем fallback...");
+      const fallbackOk = await probeHealth(FALLBACK_AGENT_URL);
+      if (fallbackOk) workingUrl = FALLBACK_AGENT_URL;
+    }
+
+    console.log("[CHAT] workingUrl =", workingUrl);
+
+    // ✅ POST with retry + (optional) fallback
+    const res = await postAgentWithFailover(workingUrl, FALLBACK_AGENT_URL, body);
 
     let data: any = null;
     try {
@@ -156,26 +157,21 @@ const petWithLabel = ensuredPet
 
     // Итоговый id диалога, который вернулся с сервера
     const serverConversationId =
-      (typeof data?.conversationId === "string" &&
-        data.conversationId.trim()) ||
+      (typeof data?.conversationId === "string" && data.conversationId.trim()) ||
       undefined;
 
-    // Для обычного (НЕ summary) диалога:
-    // 1) обновляем conversationId в AsyncStorage
-    // 2) сохраняем историю чата
     if (res.ok && data?.ok) {
       if (typeof data.reply === "string") {
-        const targetConversationId =
-          serverConversationId || effectiveConversationId;
+        // ✅ сохраняем строго по ensuredConversationId, чтобы не терять историю
+        const targetConversationId = serverConversationId || ensuredConversationId;
 
         if (targetConversationId && !isSummaryConversation) {
           await setConversationId(targetConversationId);
 
           try {
             const prev =
-              (await AsyncStorage.getItem(
-                `chatHistory:${targetConversationId}`
-              )) || "[]";
+              (await AsyncStorage.getItem(`chatHistory:${targetConversationId}`)) ||
+              "[]";
             const chatHistory = JSON.parse(prev);
 
             const userMsg = message?.trim()
@@ -201,10 +197,7 @@ const petWithLabel = ensuredPet
                 JSON.stringify(updated)
               );
             } catch (err) {
-              console.warn(
-                "⚠️ Не удалось сохранить историю в chat:history:",
-                err
-              );
+              console.warn("⚠️ Не удалось сохранить историю в chat:history:", err);
             }
 
             console.log(
@@ -218,9 +211,7 @@ const petWithLabel = ensuredPet
             console.warn("⚠️ Не удалось сохранить историю чата:", err);
           }
         } else if (isSummaryConversation) {
-          console.log(
-            "ℹ️ Summary-конверсация, историю и conversationId не трогаем."
-          );
+          console.log("ℹ️ Summary-конверсация, историю и conversationId не трогаем.");
         }
 
         const phase =
@@ -231,14 +222,17 @@ const petWithLabel = ensuredPet
             ? data.phase
             : undefined;
 
-        // ✅ decisionTree payload (из воркера)
+        // ✅ decisionTree payload (из воркера) — сохраняем только для обычного чата
         if (data?.decisionTree && serverConversationId && !isSummaryConversation) {
           try {
             const dtKey = `decisionTree:${serverConversationId}:${effectiveLang}`;
-            await AsyncStorage.setItem(dtKey, JSON.stringify({
-              createdAt: new Date().toISOString(),
-              decisionTree: data.decisionTree,
-            }));
+            await AsyncStorage.setItem(
+              dtKey,
+              JSON.stringify({
+                createdAt: new Date().toISOString(),
+                decisionTree: data.decisionTree,
+              })
+            );
             console.log("💾 decisionTree сохранён:", dtKey);
           } catch (e) {
             console.warn("⚠️ Не удалось сохранить decisionTree:", e);
@@ -248,7 +242,7 @@ const petWithLabel = ensuredPet
         return {
           ok: true,
           reply: data.reply ?? "",
-          conversationId: serverConversationId || effectiveConversationId || ensuredConversationId,
+          conversationId: serverConversationId || ensuredConversationId,
           sessionEnded: !!data?.sessionEnded,
           phase,
           decisionTree: data?.decisionTree ?? null,
@@ -264,9 +258,19 @@ const petWithLabel = ensuredPet
         : `Ошибка агента (HTTP ${res.status})`;
     console.error("❌ Ошибка при обращении к агенту:", errMsg);
     return { ok: false, error: errMsg };
-  } catch (err) {
-    console.error("❌ Сбой при вызове агента:", err);
-    return { ok: false, error: "Ошибка соединения с агентом" };
+  } catch (err: any) {
+    const msg = String(err?.message || err || "");
+    const isAbort =
+      msg.includes("AbortError") || msg.includes("aborted") || msg.includes("Aborted");
+
+    console.error("❌ Сбой при вызове агента:", msg);
+
+    return {
+      ok: false,
+      error: isAbort
+        ? "Агент не успел ответить вовремя (таймаут соединения). Попробуйте ещё раз."
+        : "Ошибка соединения с агентом",
+    };
   }
 }
 
@@ -345,9 +349,7 @@ export async function handleExitAction(
   const id = await getConversationId();
 
   if (!id) {
-    console.log(
-      "ℹ️ Нет активной сессии — выходим на главный экран без подтверждения."
-    );
+    console.log("ℹ️ Нет активной сессии — выходим на главный экран без подтверждения.");
 
     try {
       router.replace("/");
@@ -393,6 +395,7 @@ export async function handleExitAction(
     } catch (e) {
       console.error("❌ Не удалось сохранить chatSummary:", e);
     }
+
     try {
       router.replace("/summary");
       console.log("↩️ Переход в Summary после сохранения");
@@ -400,7 +403,6 @@ export async function handleExitAction(
       console.warn("⚠️ Не удалось перейти в Summary:", err);
     }
     return;
-
   }
 
   if (choice === "delete") {
@@ -409,9 +411,7 @@ export async function handleExitAction(
   }
 
   if (choice === "cancel") {
-    console.log(
-      "🚫 Действие отменено пользователем, остаёмся на текущем экране."
-    );
+    console.log("🚫 Действие отменено пользователем, остаёмся на текущем экране.");
     return;
   }
 
@@ -429,4 +429,86 @@ export async function handleExitAction(
 export async function restoreSession(id: string): Promise<void> {
   await setConversationId(id);
   console.log("♻️ Восстановлена сессия с ID:", id);
+}
+
+// --------------------------------------------------
+// 🌐 Network helpers: timeout + health URL
+// --------------------------------------------------
+function toHealthUrl(agentUrl: string): string {
+  if (/\/agent\/?$/.test(agentUrl)) {
+    return agentUrl.replace(/\/agent\/?$/, "/health");
+  }
+  return agentUrl.replace(/\/$/, "") + "/health";
+}
+
+async function fetchWithTimeout(
+  url: string,
+  options: RequestInit,
+  timeoutMs = 8000
+): Promise<Response> {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(id);
+  }
+}
+
+async function probeHealth(url: string): Promise<boolean> {
+  try {
+    const healthUrl = toHealthUrl(url);
+    const r = await fetchWithTimeout(healthUrl, { method: "GET" }, 4000);
+    return r.ok;
+  } catch {
+    return false;
+  }
+}
+
+async function postAgentWithFailover(
+  primaryUrl: string,
+  fallbackUrl: string,
+  body: any
+): Promise<Response> {
+  const doPost = async (url: string, timeoutMs: number) => {
+    const t0 = Date.now();
+    const res = await fetchWithTimeout(
+      url,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      },
+      timeoutMs
+    );
+    console.log(`⏱️ POST /agent took ${Date.now() - t0} ms (timeout ${timeoutMs})`);
+    return res;
+  };
+
+  // 1) первая попытка — 20с
+  try {
+    return await doPost(primaryUrl, 45000);
+  } catch (e) {
+    console.warn("⚠️ POST failed (primary #1):", String(e));
+  }
+
+  // 2) retry — 45с
+  try {
+    return await doPost(primaryUrl, 60000);
+  } catch (e) {
+    console.warn("⚠️ POST failed (primary #2):", String(e));
+  }
+
+  // 3) fallback — 45с
+  if (fallbackUrl && fallbackUrl !== primaryUrl) {
+    try {
+      console.warn("🛟 Switching to fallback for POST...");
+      return await doPost(fallbackUrl, 60000);
+    } catch (e) {
+      console.warn("⚠️ POST failed (fallback):", String(e));
+    }
+  }
+
+  throw new Error("POST /agent failed");
 }

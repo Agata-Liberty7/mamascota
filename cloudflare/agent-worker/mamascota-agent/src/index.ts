@@ -27,7 +27,7 @@ function json(data: any, status = 200) {
       "Content-Type": "application/json; charset=utf-8",
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Headers": "Content-Type",
-      "Access-Control-Allow-Methods": "POST,OPTIONS",
+      "Access-Control-Allow-Methods": "GET,HEAD,POST,OPTIONS",
     },
   });
 }
@@ -60,12 +60,45 @@ export default {
     if (req.method === "OPTIONS") return json({ ok: true }, 204);
 
     const url = new URL(req.url);
+    
+    // ✅ Health endpoint (GET/HEAD)
+    if (url.pathname === "/health") {
+      if (req.method !== "GET" && req.method !== "HEAD") {
+        return json({ ok: false, error: "Method not allowed" }, 405);
+      }
+
+      const cf = (req as any).cf || {};
+
+      return json(
+        {
+          ok: true,
+          status: "up",
+          hasApiKey: !!env.OPENAI_API_KEY,
+          model: (env as any).MAMASCOTA_MODEL_OVERRIDE || env.OPENAI_MODEL || null,
+          now: new Date().toISOString(),
+
+          // 👇 критично для диагностики без VPN
+          cf: {
+            colo: cf.colo || null,
+            country: cf.country || null,
+            city: cf.city || null,
+            asn: cf.asn || null,
+            httpProtocol: cf.httpProtocol || null,
+          },
+        },
+        200
+      );
+    }
+
+
+    // ✅ Main agent endpoint
     if (url.pathname !== "/agent") {
       return json({ ok: false, error: "Not found" }, 404);
     }
     if (req.method !== "POST") {
       return json({ ok: false, error: "Method not allowed" }, 405);
     }
+
 
     let body: AgentRequestBody | null = null;
     try {
