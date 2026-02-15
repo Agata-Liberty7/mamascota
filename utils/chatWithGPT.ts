@@ -23,6 +23,15 @@ const AGENT_URL =
 // ✅ Optional fallback endpoint (2nd provider / non-Cloudflare)
 const FALLBACK_AGENT_URL = process.env.EXPO_PUBLIC_FALLBACK_PROXY_URL || "";
 
+// --------------------------------------------------
+// 🗄️ Endpoint cache (AsyncStorage)
+// --------------------------------------------------
+const AGENT_CACHE_KEY = "agent:workingUrl";
+const AGENT_CACHE_AT_KEY = "agent:workingUrlSavedAt";
+// TTL кэша — 6 часов
+const AGENT_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
+
+
 /**
  * Каноничный метод получения активного питомца.
  * Использует только новую модель: pets:list + pets:activeId.
@@ -132,20 +141,37 @@ export async function chatWithGPT(params: {
     console.log("[CHAT] AGENT_URL =", AGENT_URL);
     console.log("[CHAT] payload.pet =", body?.pet);
 
-    // ✅ Choose endpoint: primary → fallback (if primary is unreachable)
+    // --------------------------------------------------
+    // 🌐 Choose endpoint: cached → primary → fallback
+    // --------------------------------------------------
     let workingUrl = AGENT_URL;
 
-    const primaryOk = await probeHealth(AGENT_URL);
-    if (!primaryOk && FALLBACK_AGENT_URL) {
-      console.warn("⚠️ Primary endpoint недоступен, пробуем fallback...");
-      const fallbackOk = await probeHealth(FALLBACK_AGENT_URL);
-      if (fallbackOk) workingUrl = FALLBACK_AGENT_URL;
+    // 1) пробуем кэш
+    const cached = await readCachedWorkingUrl();
+    if (cached) {
+      workingUrl = cached;
+      console.log("[CHAT] workingUrl (cached) =", workingUrl);
+    } else {
+      // 2) проверяем primary
+      const primaryOk = await probeHealth(AGENT_URL);
+      if (primaryOk) {
+        workingUrl = AGENT_URL;
+      } else if (FALLBACK_AGENT_URL) {
+        console.warn("⚠️ Primary endpoint недоступен, пробуем fallback...");
+        const fallbackOk = await probeHealth(FALLBACK_AGENT_URL);
+        if (fallbackOk) workingUrl = FALLBACK_AGENT_URL;
+      }
+
+      console.log("[CHAT] workingUrl (probed) =", workingUrl);
+
+      await writeCachedWorkingUrl(workingUrl);
     }
 
-    console.log("[CHAT] workingUrl =", workingUrl);
 
     // ✅ POST with retry + (optional) fallback
     const res = await postAgentWithFailover(workingUrl, FALLBACK_AGENT_URL, body);
+    // если endpoint отвечает — обновим кэш
+    await writeCachedWorkingUrl(workingUrl);
 
     let data: any = null;
     try {
@@ -264,6 +290,10 @@ export async function chatWithGPT(params: {
       msg.includes("AbortError") || msg.includes("aborted") || msg.includes("Aborted");
 
     console.error("❌ Сбой при вызове агента:", msg);
+    try {
+      await AsyncStorage.removeItem(AGENT_CACHE_KEY);
+      await AsyncStorage.removeItem(AGENT_CACHE_AT_KEY);
+    } catch {}
 
     return {
       ok: false,
@@ -465,6 +495,39 @@ async function probeHealth(url: string): Promise<boolean> {
     return false;
   }
 }
+async function readCachedWorkingUrl(): Promise<string | null> {
+  try {
+    const [url, at] = await Promise.all([
+      AsyncStorage.getItem(AGENT_CACHE_KEY),
+      AsyncStorage.getItem(AGENT_CACHE_AT_KEY),
+    ]);
+
+    if (!url || !at) return null;
+
+    const savedAt = Number(at);
+    if (!Number.isFinite(savedAt)) return null;
+
+    const age = Date.now() - savedAt;
+    if (age > AGENT_CACHE_TTL_MS) return null;
+
+    return url;
+  } catch {
+    return null;
+  }
+}
+
+async function writeCachedWorkingUrl(url: string): Promise<void> {
+  if (!url) return;
+  try {
+    await Promise.all([
+      AsyncStorage.setItem(AGENT_CACHE_KEY, url),
+      AsyncStorage.setItem(AGENT_CACHE_AT_KEY, String(Date.now())),
+    ]);
+  } catch {
+    // кэш не критичен — молча игнорируем
+  }
+}
+
 
 async function postAgentWithFailover(
   primaryUrl: string,
