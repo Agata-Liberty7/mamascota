@@ -20,7 +20,7 @@ export type ChatResult = {
 const AGENT_URL =
   process.env.EXPO_PUBLIC_PROXY_URL ||
   (process.env.EXPO_PUBLIC_API_URL
-    ? `${process.env.EXPO_PUBLIC_API_URL}/agent`
+    ? `${process.env.EXPO_PUBLIC_API_URL}`
     : "");
   
 /**
