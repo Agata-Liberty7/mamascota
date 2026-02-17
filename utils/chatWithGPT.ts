@@ -21,7 +21,12 @@ const AGENT_URL =
   (process.env.EXPO_PUBLIC_API_URL ? `${process.env.EXPO_PUBLIC_API_URL}` : "");
 
 // ✅ Optional fallback endpoint (2nd provider / non-Cloudflare)
-const FALLBACK_AGENT_URL = process.env.EXPO_PUBLIC_FALLBACK_PROXY_URL || "";
+const FALLBACK_AGENT_URL: string | null =
+  process.env.EXPO_PUBLIC_FALLBACK_PROXY_URL?.trim() || null;
+
+const AGENT_WARM_AT_KEY = "agent:warmAt";
+const AGENT_WARM_TTL_MS = 10 * 60 * 1000; // 10 минут
+
 
 // --------------------------------------------------
 // 🗄️ Endpoint cache (AsyncStorage)
@@ -528,10 +533,73 @@ async function writeCachedWorkingUrl(url: string): Promise<void> {
   }
 }
 
+export async function warmUpAgentInBackground(): Promise<void> {
+  if (!AGENT_URL) return;
+
+  try {
+    const raw = await AsyncStorage.getItem(AGENT_WARM_AT_KEY);
+    const last = raw ? Number(raw) : 0;
+    const idleTooLong = !last || Date.now() - last > AGENT_WARM_TTL_MS;
+    if (!idleTooLong) return;
+
+    // 1) берём тот же workingUrl, что и чат: cached → primary → fallback
+    let warmUrl = (await readCachedWorkingUrl()) || AGENT_URL;
+
+    // если кэша нет — пробуем health
+    if (!warmUrl) warmUrl = AGENT_URL;
+
+    const primaryOk = await probeHealth(AGENT_URL);
+    if (primaryOk) {
+      warmUrl = AGENT_URL;
+    } else if (FALLBACK_AGENT_URL) {
+      const fallbackOk = await probeHealth(FALLBACK_AGENT_URL);
+      if (fallbackOk) warmUrl = FALLBACK_AGENT_URL;
+    }
+
+    // 2) сохраняем найденный workingUrl, чтобы следующий чат быстрее стартовал
+    await writeCachedWorkingUrl(warmUrl);
+
+    const healthUrl = toHealthUrl(warmUrl);
+
+    // 3) Греем /health (быстро)
+    void fetchWithTimeout(healthUrl, { method: "GET" }, 20000)
+      .then((r) => console.log("🔥 warm-up /health status:", r.status))
+      .catch((e) => console.warn("🔥 warm-up /health failed:", String(e)));
+
+    // 4) Греем именно /agent (лёгким POST), чтобы прогреть то, что реально отваливается
+    const warmBody = {
+      message: "",
+      userLang: (await AsyncStorage.getItem("selectedLanguage")) || "en",
+      conversationId: `warm-${Date.now()}`,
+      conversationHistory: [],
+      warmup: true,
+    };
+
+    void fetchWithTimeout(
+      warmUrl,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(warmBody),
+      },
+      20000
+    )
+      .then((r) => console.log("🔥 warm-up /agent status:", r.status))
+      .catch((e) => console.warn("🔥 warm-up /agent failed:", String(e)))
+      .finally(async () => {
+        // фиксируем warmAt ПОСЛЕ попытки, чтобы не “замораживать” прогрев на 10 минут, если он реально не случился
+        try {
+          await AsyncStorage.setItem(AGENT_WARM_AT_KEY, String(Date.now()));
+        } catch {}
+      });
+  } catch (e) {
+    console.warn("🔥 warm-up error:", String(e));
+  }
+}
 
 async function postAgentWithFailover(
   primaryUrl: string,
-  fallbackUrl: string,
+  fallbackUrl: string | null,
   body: any
 ): Promise<Response> {
   const doPost = async (url: string, timeoutMs: number) => {
@@ -549,21 +617,21 @@ async function postAgentWithFailover(
     return res;
   };
 
-  // 1) первая попытка — 20с
+  // 1) первая попытка — 45с  (обычно отвечает за 5–15с, но иногда может затянуться)
   try {
     return await doPost(primaryUrl, 45000);
   } catch (e) {
     console.warn("⚠️ POST failed (primary #1):", String(e));
   }
 
-  // 2) retry — 45с
+  // 2) retry — 60с (можем дать чуть больше времени, если первый раз не ответил)
   try {
     return await doPost(primaryUrl, 60000);
   } catch (e) {
     console.warn("⚠️ POST failed (primary #2):", String(e));
   }
 
-  // 3) fallback — 45с
+  // 3) fallback — 60с (если задан и отличается от primary)
   if (fallbackUrl && fallbackUrl !== primaryUrl) {
     try {
       console.warn("🛟 Switching to fallback for POST...");

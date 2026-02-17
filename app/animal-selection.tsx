@@ -25,6 +25,8 @@ import { theme } from '../src/theme';
 import type { Pet, Species } from '../types/pet';
 import { getPets, upsertPet } from '../utils/pets';
 import { setCurrentPetId } from '../src/data/pets';
+import { warmUpAgentInBackground } from "../utils/chatWithGPT";
+
 
 export default function AnimalSelection() {
   const router = useRouter();
@@ -47,6 +49,7 @@ export default function AnimalSelection() {
   const [showTermsModal, setShowTermsModal] = useState(false);
   // ✅ Разрешённые виды для MVP (только собака и кошка)
   const enabledSpecies = new Set<Species>(["dog", "cat"]);
+  const warmedOnceRef = React.useRef(false);
 
 
   const resetFields = () => {
@@ -61,12 +64,22 @@ export default function AnimalSelection() {
   };
 
   useEffect(() => {
+    if (warmedOnceRef.current) return;
+    warmedOnceRef.current = true;
+
+    // 🔥 прогрев — параллельно, без ожидания
+    warmUpAgentInBackground();
+  }, []);
+
+  useEffect(() => {
     const showBack =
-      normalizedFrom === 'chat' ||
-      normalizedFrom === 'summary' ||
-      normalizedFrom === 'tag-cloud';
+      normalizedFrom === "chat" ||
+      normalizedFrom === "summary" ||
+      normalizedFrom === "tag-cloud";
+
     navigation.setOptions({ headerBackVisible: showBack });
   }, [normalizedFrom, navigation]);
+
 
   const openMyPets = async () => {
     if (!petsOpen && myPets.length === 0) {
@@ -104,6 +117,8 @@ export default function AnimalSelection() {
       setSpecies(selected.id);
       setEditingPetId(null); // новая карточка
       setModalVisible(true);
+      warmUpAgentInBackground();
+
     }
   };
 

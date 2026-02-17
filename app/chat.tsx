@@ -92,8 +92,7 @@ export default function ChatScreen() {
   const [pdfGenerating, setPdfGenerating] = useState(false);
   const [phase, setPhase] = useState<"intake" | "clarify" | "summary" | "ended" | null>(null);
   const [isPdfReady, setIsPdfReady] = useState(false);
-
-
+  const [isDecisionTreeStale, setIsDecisionTreeStale] = useState(false);
 
   // 🔥 ВАЖНО: по умолчанию не показываем селектор
   const [showSelector, setShowSelector] = useState<boolean>(false);
@@ -122,13 +121,28 @@ export default function ChatScreen() {
         try {
           const parsed = JSON.parse(saved);
           const normalized = Array.isArray(parsed)
-            ? parsed.map((m: any) => ({
-                role: m?.role,
-                content: typeof m?.content === "string" ? m.content : "",
-                ts: typeof m?.ts === "number" ? m.ts : undefined,
-              }))
+            ? parsed.flatMap((m: any) => {
+                const role = m?.role;
+                const ts = typeof m?.ts === "number" ? m.ts : undefined;
+                const content = typeof m?.content === "string" ? m.content : "";
+
+                // ✅ если ассистент сохранился с [[CHUNK]] — разворачиваем в несколько пузырей
+                if (role === "assistant" && content.includes("[[CHUNK]]")) {
+                  const parts = splitAssistantReplyIntoBubbles(content);
+                  const base = ts ?? Date.now();
+                  return parts.map((p, idx) => ({
+                    role: "assistant" as const,
+                    content: p,
+                    ts: base + idx,
+                  }));
+                }
+
+                return [{ role, content, ts }];
+              })
             : [];
+
           setChat(normalized);
+
         } catch {
           setChat([]);
         }
@@ -335,15 +349,19 @@ export default function ChatScreen() {
         }
         // ⚠️ НЕ сбрасываем phase в null, чтобы шапка не мигала
 
-        // 7) PDF: сохраняем conversationId только если сессия завершена
+        // 7) PDF
         if (typeof result === "object" && result?.sessionEnded) {
           const cid = result.conversationId ?? null;
           setPdfConversationId(cid);
           await refreshPdfReadyState(cid);
         } else {
-          setPdfConversationId(null);
-          setIsPdfReady(false);
+          // ✅ НЕ сбрасываем уже готовый PDF после продолжения диалога
+          // Если decisionTree уже был — помечаем, что он может устареть
+          if (isPdfReady) {
+            setIsDecisionTreeStale(true);
+          }
         }
+
 
       } catch (err) {
         console.error("Ошибка отправки:", err);
