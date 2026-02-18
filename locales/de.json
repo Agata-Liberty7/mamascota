@@ -10,8 +10,8 @@
   "exit_button": "Beenden",
 
   "terms_title": "Nutzungsbedingungen",
-  "terms_paragraph1": "Bevor wir weitermachen, möchte ich dir eine wichtige Sache sagen.",
-  "terms_paragraph2": "Ich bin an deiner Seite, um dir zu helfen, auf den Zustand deines Tieres achtsamer zu achten, ersetze jedoch keine professionelle tierärztliche Behandlung.\nIch stelle keine Diagnosen und verschreibe keine Behandlungen.",
+  "terms_paragraph1": "Bevor wir fortfahren, möchte ich eine wichtige Sache klarstellen.",
+  "terms_paragraph2": "Ich bin eine digitale Assistenz zur Beobachtung des Zustands Ihres Haustiers und ersetze KEINE professionelle tierärztliche Betreuung.\nIch stelle KEINE Diagnosen und verschreibe KEINE Behandlung.",
   "terms_paragraph3": "Wenn du eine Verschlechterung bemerkst oder etwas dir Sorgen bereitet, ist es wichtig, so bald wie möglich eine Tierärztin oder einen Tierarzt aufzusuchen.",
   "terms_accept": "Ich akzeptiere die Bedingungen",
   "terms_decline": "Ich lehne ab",
@@ -59,8 +59,8 @@
   "save": "Speichern", 
   "delete": "Löschen",
 
-  "start_subtitle": "Eine fürsorgliche Begleiterin für dein Tier",
-  "start_description": "Fürsorge beginnt\nmit Aufmerksamkeit",
+  "start_subtitle": "Digitale Nanny für Ihr Haustier",
+  "start_description": "Aufmerksamkeit ist der erste Schritt\nzur Hilfe",
   "start_button": "Starten",
   "continue_title": "Fortfahren?",
   "continue_message": "Sie können Ihre vorherige Sitzung fortsetzen oder eine neue beginnen.",
@@ -84,8 +84,8 @@
 
   "about": {
     "tagline": "Über die App",
-    "p1": "Mamascota hilft, den Zustand Ihres Tieres besser zu verstehen.",
-    "p2": "Sie hilft, wichtige Anzeichen zu erkennen und sich auf den Tierarztbesuch vorzubereiten.",
+    "p1": "Mamascota hilft, Beobachtungen zum Zustand Ihres Haustiers zu strukturieren.",
+    "p2": "Sie hilft zu erkennen, welche Anzeichen wichtig sind und was als Nächstes zu tun ist.",
     "p3": "Mamascota stellt keine Diagnosen und ersetzt keine tierärztliche Behandlung.",
     "signature": "Mit Fürsorge für Tiere und Respekt für Menschen entwickelt.",
     "follow": "Projekt auf Instagram verfolgen",
@@ -147,11 +147,11 @@
     }
   },
   
-  "onboarding_1_title": "Mamascota ist da",
-  "onboarding_1_subtitle": "Ich helfe dabei, wichtige Anzeichen zu bemerken und sich ruhig auf den Tierarztbesuch vorzubereiten.",
+  "onboarding_1_title": "Mamascota ist für Sie da",
+  "onboarding_1_subtitle": "Ich helfe, wichtige Anzeichen zu erkennen und sich auf den Tierarztbesuch vorzubereiten.",
 
-  "onboarding_2_title": "Wir sprechen einfach",
-  "onboarding_2_subtitle": "Erzählen Sie in Ihren eigenen Worten.\nWenn nötig, können Sie später fortfahren.",
+  "onboarding_2_title": "Wir halten es einfach",
+  "onboarding_2_subtitle": "Beschreiben Sie es in Ihren eigenen Worten.\nWenn Sie pausieren möchten, können Sie später fortfahren.\nIch stelle Fragen Schritt für Schritt, damit nichts Wichtiges übersehen wird.",
 
   "onboarding_3_title": "Sie beobachten — \nich helfe",
   "onboarding_3_subtitle": "Sie erzählen, was Ihnen aufgefallen ist, und ich helfe, das Wesentliche herauszuarbeiten und zu ordnen.",

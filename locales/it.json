@@ -10,8 +10,8 @@
   "exit_button": "Esci",
 
   "terms_title": "Condizioni d’uso",
-  "terms_paragraph1": "Prima di continuare, voglio dirti una cosa importante.",
-  "terms_paragraph2": "Sono qui per aiutarti a prestare più attenzione alle condizioni del tuo animale, ma non sostituisco l’assistenza veterinaria professionale.\nNon formulo diagnosi né prescrivo trattamenti.",
+  "terms_paragraph1": "Prima di continuare, desidero chiarire un aspetto importante.",
+  "terms_paragraph2": "Sono un’assistente digitale per monitorare lo stato del tuo animale e NON sostituisco l’assistenza veterinaria professionale.\nNON fornisco diagnosi né prescrivo trattamenti.",
   "terms_paragraph3": "Se noti un peggioramento delle condizioni o qualcosa ti preoccupa, è importante rivolgersi a un veterinario il prima possibile.",
   "terms_accept": "Accetto le condizioni",
   "terms_decline": "Non accetto",
@@ -59,8 +59,8 @@
   "save": "Salva", 
   "delete": "Elimina",
 
-  "start_subtitle": "Una presenza premurosa per il tuo animale",
-  "start_description": "La cura inizia\ncon l’attenzione",
+  "start_subtitle": "Tata digitale per il tuo animale",
+  "start_description": "L’attenzione è il primo passo\nverso l’aiuto",
   "start_button": "Inizia",
   "continue_title": "Continuare?",
   "continue_message": "Puoi riprendere la sessione precedente o iniziarne una nuova.",
@@ -84,8 +84,8 @@
 
   "about": {
     "tagline": "Informazioni",
-    "p1": "Mamascota aiuta a comprendere meglio lo stato del tuo animale.",
-    "p2": "Aiuta a notare segnali importanti e a prepararsi alla visita dal veterinario.",
+    "p1": "Mamascota aiuta a strutturare le osservazioni sullo stato del tuo animale.",
+    "p2": "Aiuta a individuare quali segnali sono importanti e cosa fare dopo.",
     "p3": "Mamascota non fornisce diagnosi e non sostituisce l’assistenza veterinaria professionale.",
     "signature": "Creato con attenzione per gli animali e rispetto per le persone.",
     "follow": "Segui il progetto su Instagram",
@@ -146,11 +146,11 @@
       "hint4": "Ancora un momento…"
     }
   },
-  "onboarding_1_title": "Mamascota è qui",
-  "onboarding_1_subtitle": "Ti aiuto a notare segnali importanti e a prepararti con calma alla visita dal veterinario.",
+  "onboarding_1_title": "Mamascota è con te",
+  "onboarding_1_subtitle": "Ti aiuto a individuare i segnali importanti e a prepararti alla visita dal veterinario.",
 
   "onboarding_2_title": "Comunichiamo in modo semplice",
-  "onboarding_2_subtitle": "Racconta con parole tue.\nSe serve, puoi continuare più tardi.",
+  "onboarding_2_subtitle": "Racconta con le tue parole.\nSe devi interrompere, puoi continuare più tardi.\nFaccio domande passo dopo passo per non tralasciare nulla di importante.",
 
   "onboarding_3_title": "Tu osservi — \nio aiuto",
   "onboarding_3_subtitle": "Mi racconti ciò che hai notato, e io ti aiuto a mettere in evidenza l’essenziale e a organizzare le osservazioni.",

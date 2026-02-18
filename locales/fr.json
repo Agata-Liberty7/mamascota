@@ -10,8 +10,8 @@
   "exit_button": "Quitter",
 
   "terms_title": "Conditions d’utilisation",
-  "terms_paragraph1": "Avant de continuer, je voudrais vous dire une chose importante.",
-  "terms_paragraph2": "Je suis là pour vous aider à être plus attentif à l’état de votre animal, mais je ne remplace pas les soins vétérinaires professionnels.\nJe n’établis pas de diagnostic et je ne prescris pas de traitement.",
+  "terms_paragraph1": "Avant de continuer, je souhaite préciser un point important.",
+  "terms_paragraph2": "Je suis une assistante numérique pour observer l’état de votre animal et je NE remplace PAS les soins vétérinaires professionnels.\nJe NE pose PAS de diagnostic et NE prescris PAS de traitement.",
   "terms_paragraph3": "Si vous remarquez une dégradation de l’état de votre animal ou quelque chose d’inquiétant, il est important de consulter un vétérinaire dès que possible.",
   "terms_accept": "J’accepte les conditions",
   "terms_decline": "Je refuse",
@@ -59,8 +59,8 @@
   "save": "Enregistrer", 
   "delete": "Supprimer",
 
-  "start_subtitle": "Une présence attentionnée pour votre animal",
-  "start_description": "Le soin commence\npar l’attention",
+  "start_subtitle": "Nounou numérique pour votre animal",
+  "start_description": "L’attention est la première étape\nvers l’aide",
   "start_button": "Commencer",
   "continue_title": "Continuer ?",
   "continue_message": "Vous pouvez reprendre votre session précédente ou en commencer une nouvelle.",
@@ -84,8 +84,8 @@
 
   "about": {
     "tagline": "À propos",
-    "p1": "Mamascota aide à mieux comprendre l’état de votre animal.",
-    "p2": "Elle aide à repérer les signes importants et à se préparer à une visite vétérinaire.",
+    "p1": "Mamascota aide à structurer les observations sur l’état de votre animal.",
+    "p2": "Elle aide à identifier les signes importants et à savoir quoi faire ensuite.",
     "p3": "Mamascota ne pose pas de diagnostics et ne remplace pas un vétérinaire.",
     "signature": "Créé avec soin pour les animaux et respect pour les personnes.",
     "follow": "Suivre le projet sur Instagram",
@@ -144,10 +144,10 @@
     }
   },
   "onboarding_1_title": "Mamascota est là",
-  "onboarding_1_subtitle": "Je vous aide à remarquer des signes importants et à vous préparer sereinement à une visite chez le vétérinaire.",
+  "onboarding_1_subtitle": "Je vous aide à identifier les signes importants et à vous préparer à la visite chez le vétérinaire.",
 
-  "onboarding_2_title": "Nous échangeons simplement",
-  "onboarding_2_subtitle": "Racontez avec vos propres mots.\nSi besoin, vous pouvez reprendre plus tard.",
+  "onboarding_2_title": "Nous communiquons simplement",
+  "onboarding_2_subtitle": "Décrivez avec vos propres mots.\nSi vous devez interrompre, vous pouvez continuer plus tard.\nJe pose des questions étape par étape afin de ne rien manquer d’important.",
 
   "onboarding_3_title": "Vous observez — \nje vous aide",
   "onboarding_3_subtitle": "Vous me dites ce que vous avez remarqué, et je vous aide à mettre en évidence l’essentiel et à organiser vos observations.",

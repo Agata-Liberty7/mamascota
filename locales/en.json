@@ -10,9 +10,9 @@
   "exit_button": "Exit",
 
   "terms_title": "Terms of Use",
-  "terms_paragraph1": "Before we continue, I want to share one important thing.",
-  "terms_paragraph2": "I am here to help you be more attentive to your pet’s condition, but I do not replace professional veterinary care.\nI do not make diagnoses or prescribe treatment.",
-  "terms_paragraph3": "If you notice your pet’s condition getting worse or something causes concern, it’s important to contact a veterinarian as soon as possible.",
+  "terms_paragraph1": "Before we continue, I’d like to clarify one important thing.",
+  "terms_paragraph2": "I am a digital assistant for monitoring your pet’s condition and I do NOT replace professional veterinary care.\nI do NOT provide diagnoses or prescribe treatment.",
+  "terms_paragraph3": "If you notice any worsening of your pet’s condition or anything concerning, it is important to contact a veterinarian as soon as possible.",
   "terms_accept": "I accept the terms",
   "terms_decline": "I do not accept",
 
@@ -59,8 +59,8 @@
   "save": "Save", 
   "delete": "Delete",
 
-  "start_subtitle": "A caring nanny for your pet",
-  "start_description": "Care begins\nwith attention",
+ "start_subtitle": "Digital nanny for your pet",
+  "start_description": "Attention is the first step\ntoward help",
   "start_button": "Get started",
   "continue_title": "Continue?",
   "continue_message": "You can resume your previous session or start a new one.",
@@ -84,8 +84,8 @@
 
   "about": {
     "tagline": "About",
-    "p1": "Mamascota helps you better understand your pet’s condition.",
-    "p2": "It helps you notice important signs and prepare for a veterinary visit.",
+    "p1": "Mamascota helps structure observations about your pet’s condition.",
+    "p2": "It helps identify which signs are important and what to do next.",
     "p3": "Mamascota does not provide diagnoses or replace professional veterinary care.",
     "signature": "Created with care for animals and respect for people.",
     "follow": "Follow the project on Instagram",
@@ -148,10 +148,10 @@
   },
 
   "onboarding_1_title": "Mamascota is here",
-  "onboarding_1_subtitle": "I help you notice important signs and calmly prepare for a visit to the veterinarian.",
+  "onboarding_1_subtitle": "I help identify important signs and prepare for a veterinary visit.",
 
-  "onboarding_2_title": "We communicate simply",
-  "onboarding_2_subtitle": "Tell me in your own words.\nIf you need to pause, you can continue later.",
+  "onboarding_2_title": "We keep it simple",
+  "onboarding_2_subtitle": "Tell me in your own words.\nIf you need to pause, you can continue later.\nI ask questions step by step so nothing important is missed.",
 
   "onboarding_3_title": "You observe — \nI help",
   "onboarding_3_subtitle": "You tell me what you noticed, and I help highlight what matters and organize your observations.",
