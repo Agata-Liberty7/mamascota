@@ -302,6 +302,7 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
         `${finalSystemPrompt}\n\n` +
         `RUNTIME_GUARD:\n` +
         `- Output language must be exactly "${effectiveLang}".\n` +
+        `- Speak as Mamascota in first person (“я”), feminine gender. \n` +
         `- Follow the SYSTEM PROMPT rules strictly (one question per message; no checklists).\n` +
         `- If red flags appear: stop asking questions and switch to urgent action.\n`,
     });
@@ -353,7 +354,7 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
       // (коротко, без технички, на языке диалога)
       const startCue =
         effectiveLang === "ru"
-          ? "Я выбрал(а) симптомы в приложении. Начни разговор по правилам первого сообщения и задай один вопрос про сроки/динамику."
+          ? "В приложении уже выбраны симптомы. Начни разговор по правилам первого сообщения и задай один вопрос про сроки/динамику."
           : effectiveLang === "es"
             ? "He seleccionado síntomas en la app. Empieza según las reglas del primer mensaje y haz una sola pregunta sobre el tiempo/evolución."
             : "I selected symptoms in the app. Start per the first-message rules and ask one question about timeline/changes.";

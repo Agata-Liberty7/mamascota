@@ -224,13 +224,21 @@ export default function ChatScreen() {
       return;
     }
 
-    const timeoutId = setTimeout(() => {
-      const first = i18n.t("chat.waiting.hint1");
-      setThinkingHint(first);
-    }, 700);
+    const delays = [1000, 5000, 10000, 25000]; // hint4 появится только при долгом ожидании
+    const timers: any[] = [];
 
-    return () => clearTimeout(timeoutId);
-  }, [loading]);
+    THINKING_HINT_KEYS.forEach((key, idx) => {
+      const t = setTimeout(() => {
+        setThinkingHint(i18n.t(key));
+      }, delays[idx] ?? 25000);
+      timers.push(t);
+    });
+
+    return () => {
+      timers.forEach((t) => clearTimeout(t));
+    };
+  }, [loading, i18n.locale]);
+
 
 
   // ======================================================
