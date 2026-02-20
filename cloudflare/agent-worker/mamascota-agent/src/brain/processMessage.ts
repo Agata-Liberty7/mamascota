@@ -302,7 +302,7 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
         `${finalSystemPrompt}\n\n` +
         `RUNTIME_GUARD:\n` +
         `- Output language must be exactly "${effectiveLang}".\n` +
-        `- Speak as Mamascota in first person (“я”), feminine gender. \n` +
+        `- Speak as Mamascota en feminine gender. \n` +
         `- Follow the SYSTEM PROMPT rules strictly (one question per message; no checklists).\n` +
         `- If red flags appear: stop asking questions and switch to urgent action.\n`,
     });
