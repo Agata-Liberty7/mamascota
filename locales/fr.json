@@ -198,5 +198,18 @@
   "female": "Femelle",
   "not_set": "Non défini",
   "neutered_spayed": "Stérilisé(e)",
-  "animal_other": "Autre"
+  "animal_other": "Autre",
+
+  "pdf": {
+    "date_label": "Date et heure",
+    "owner_notes_title": "Anamnèse",
+    "focus_title": "Enfoque pour le vétérinaire",
+    "next_steps_title": "Prochaines étapes",
+    "observe_title": "Observation à la maison",
+    "urgent_title": "Urgent maintenant",
+    "plan_title": "Plan de visite",
+    "generating": "Création du PDF..."
+  }  
+
+
 }

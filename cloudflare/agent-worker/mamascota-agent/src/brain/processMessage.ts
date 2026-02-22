@@ -3,6 +3,13 @@
 import { SYSTEM_PROMPT } from "./systemPrompt";
 import { buildAgentContext } from "./buildAgentContext";
 
+/**
+ * Архитектура (Variant B):
+ * - Обычный чат НЕ считает decisionTree автоматически на финале (это тормозит и отваливается).
+ * - decisionTree считается ТОЛЬКО по спец-команде "__MAMASCOTA_DECISION_TREE__" (on-demand, по кнопке PDF).
+ * - Первый ответ делаем “лёгким”: не грузим тяжелый KB/YAML контекст.
+ */
+
 export type BrainResult = {
   ok: boolean;
   reply?: string;
@@ -32,28 +39,44 @@ type BrainArgs = {
   langOverride?: string;
 };
 
+// =====================
+// Helpers (pure)
+// =====================
+const END_MARK = "[SESSION_ENDED]";
+const DECISION_TREE_CMD = "__MAMASCOTA_DECISION_TREE__";
+
+const PROMPT_VERSION = "2026-02-21-perf-first-light";
+
+/**
+ * Light system prompt for the very first assistant message:
+ * - shorter => faster first token
+ * - no KB/YAML
+ * - still enforces: feminine voice, 1 question, no diagnosis/meds, urgent if red flags
+ */
+function buildFirstStepSystemPrompt(lang: string) {
+  return [
+    `PROMPT_VERSION=${PROMPT_VERSION}`,
+    `You are Mamascota (female voice). You help a pet owner prepare for a vet visit. You do NOT diagnose.`,
+    `Language must be exactly: "${lang}".`,
+    `Rules:`,
+    `- Ask EXACTLY ONE clear question per message.`,
+    `- No checklists and no long explanations.`,
+    `- No diagnoses, no medications, no treatment plans.`,
+    `- If urgent red flags are present, stop asking questions and tell the owner to seek urgent care now.`,
+    `First message goal: acknowledge symptoms were selected in the app, then ask ONE question about timeline/changes (when started, worsening/improving).`,
+  ].join("\n");
+}
+
 function isNonEmptyString(v: any): v is string {
   return typeof v === "string" && v.trim().length > 0;
 }
 
-function pickModel(env: any): string {
-  const clean = (v: any) => String(v ?? "").trim().replace(/\s+/g, "");
-  const override = clean(env?.MAMASCOTA_MODEL_OVERRIDE);
-  const base = clean(env?.OPENAI_MODEL);
-
-  const chosen = override || base || "gpt-5-mini";
-
-  console.log("[MODEL] OPENAI_MODEL=", JSON.stringify(env?.OPENAI_MODEL));
-  console.log("[MODEL] MAMASCOTA_MODEL_OVERRIDE=", JSON.stringify(env?.MAMASCOTA_MODEL_OVERRIDE));
-  console.log("[MODEL] chosen=", chosen);
-
-  return chosen;
-}
-
-
 function normalizeSymptomKeys(symptomKeys: any): string[] {
   if (!Array.isArray(symptomKeys)) return [];
-  return symptomKeys.filter((x) => typeof x === "string" && x.trim().length > 0);
+  return symptomKeys
+    .filter((x) => typeof x === "string")
+    .map((s) => s.trim())
+    .filter(Boolean);
 }
 
 // proxy-compatible normalizePet (matches mamascota-agent.mjs)
@@ -65,7 +88,7 @@ function normalizePet(p: any) {
     typeof p?.species === "string" && p.species.trim() ? p.species.trim() : null; // "dog" | "cat" | ...
 
   const sexRaw = typeof p?.sex === "string" ? p.sex.trim() : "";
-  const sex = sexRaw === "male" || sexRaw === "female" ? sexRaw : null; // "" => null
+  const sex = sexRaw === "male" || sexRaw === "female" ? sexRaw : null;
 
   const breedRaw = typeof p?.breed === "string" ? p.breed.trim() : "";
   const breed = breedRaw ? breedRaw : null; // "__other" сохраняем как есть
@@ -83,22 +106,34 @@ function normalizePet(p: any) {
   };
 }
 
-function detectPhase(
-  cleanedReply: string,
-  sessionEnded: boolean,
-  isFirstRealMessage: boolean
-) {
-  if (sessionEnded) return "ended" as const;
+function pickModel(env: any): string {
+  const clean = (v: any) => String(v ?? "").trim().replace(/\s+/g, "");
+  const override = clean(env?.MAMASCOTA_MODEL_OVERRIDE);
+  const base = clean(env?.OPENAI_MODEL);
+  const chosen = override || base || "gpt-5-mini";
 
-  // ✅ Жёстко: первый шаг всегда intake
+  console.log("[MODEL] OPENAI_MODEL=", JSON.stringify(env?.OPENAI_MODEL));
+  console.log("[MODEL] MAMASCOTA_MODEL_OVERRIDE=", JSON.stringify(env?.MAMASCOTA_MODEL_OVERRIDE));
+  console.log("[MODEL] chosen=", chosen);
+
+  return chosen;
+}
+
+function hasAnyRealTurns(history: Array<{ role: string; content: string }>) {
+  return (history || []).some(
+    (m) =>
+      (m?.role === "user" || m?.role === "assistant") &&
+      typeof m?.content === "string" &&
+      m.content.trim().length > 0
+  );
+}
+
+function detectPhase(cleanedReply: string, sessionEnded: boolean, isFirstRealMessage: boolean) {
+  if (sessionEnded) return "ended" as const;
   if (isFirstRealMessage) return "intake" as const;
 
   const text = (cleanedReply || "").trim();
-
-  // Любые вопросы после первого шага = clarify
   if (/[?¿]/.test(text)) return "clarify" as const;
-
-  // Если нет вопросов — пусть будет intake (без угадываний "summary")
   return "intake" as const;
 }
 
@@ -143,6 +178,9 @@ async function callOpenAIChat(args: {
   return reply;
 }
 
+// =====================
+// decisionTree (worker-side)
+// =====================
 function safeArrayOfStrings(x: any): string[] {
   return Array.isArray(x)
     ? x.map((v) => (typeof v === "string" ? v.trim() : "")).filter(Boolean)
@@ -227,32 +265,21 @@ async function buildDecisionTreeInWorker(args: {
   }
 }
 
-function hasAnyRealTurns(history: Array<{ role: string; content: string }>) {
-  return (history || []).some(
-    (m) =>
-      (m?.role === "user" || m?.role === "assistant") &&
-      typeof m?.content === "string" &&
-      m.content.trim().length > 0
-  );
-}
-
-/**
- * 🧠 Worker brain (clean ordering, safe history):
- * 1) system (SYSTEM_PROMPT + tags)
- * 2) system (language guard)
- * 3) system (CLINICAL_CONTEXT_JSON) only if first real step
- * 4) conversationHistory (only user/assistant)
- * 5) current user message if not duplicate
- */
+// =====================
+// Main
+// =====================
 export async function processMessageBrain(args: BrainArgs): Promise<BrainResult> {
+  // ---- normalize inputs (order matters)
   const message = typeof args.message === "string" ? args.message : "";
+  const trimmedMessage = message.trim();
+
   const symptomKeys = normalizeSymptomKeys(args.symptomKeys);
 
   const conversationId =
     typeof args.conversationId === "string" && args.conversationId.trim()
       ? args.conversationId.trim()
       : "default";
-    
+
   const conversationHistory = Array.isArray(args.conversationHistory)
     ? args.conversationHistory
     : [];
@@ -260,6 +287,7 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
   const apiKey = isNonEmptyString(args.env?.OPENAI_API_KEY)
     ? String(args.env.OPENAI_API_KEY)
     : "";
+
   const model = pickModel(args.env);
 
   if (!apiKey) {
@@ -270,46 +298,85 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
     };
   }
 
+  // ---- language (derive early: used both in chat + decisionTree)
+  const userLang = isNonEmptyString(args.userLang) ? args.userLang : "en";
+  const langOverride = isNonEmptyString(args.langOverride) ? args.langOverride : "";
+  const effectiveLang = (langOverride || userLang || "en").trim() || "en";
+
+  // ---- command switch: decisionTree on-demand
+  const isDecisionTreeRequest = trimmedMessage === DECISION_TREE_CMD;
+
   try {
     const petData = normalizePet(args.pet);
 
-    const userLang = isNonEmptyString(args.userLang) ? args.userLang : "en";
-    const langOverride = isNonEmptyString(args.langOverride) ? args.langOverride : "";
-    const effectiveLang = (langOverride || userLang || "es").trim() || "es";
+    // =========================================================
+    // 0) decisionTree request (fast path, no chat reply)
+    // =========================================================
+    if (isDecisionTreeRequest) {
+      const sessionMsgs: Array<{ role: string; content: string }> = [];
 
+      for (const m of conversationHistory) {
+        if (!m || typeof m !== "object") continue;
+        if (m.role !== "user" && m.role !== "assistant") continue;
+        if (typeof m.content !== "string") continue;
+        const t = m.content.trim();
+        if (t) sessionMsgs.push({ role: m.role, content: t });
+      }
+
+      const dt = await buildDecisionTreeInWorker({
+        apiKey,
+        model,
+        locale: effectiveLang,
+        sessionMessages: sessionMsgs,
+      });
+
+      return {
+        ok: true,
+        conversationId,
+        reply: "", // UI не должен показывать это как пузырь
+        sessionEnded: false,
+        phase: "summary",
+        decisionTree: dt,
+      };
+    }
+
+    // =========================================================
+    // 1) regular chat flow
+    // =========================================================
     const finalSystemPrompt = SYSTEM_PROMPT.replace(/\{LANG_OVERRIDE\}/g, effectiveLang);
 
-    // ✅ Первый шаг = нет реальных user/assistant turns
+    // Первый шаг = нет реальных user/assistant turns
     const isFirstRealMessage = !hasAnyRealTurns(conversationHistory);
 
+    // PERF: первый ответ делаем “лёгким” (без KB/YAML контекста)
     let fullContext = "";
-
-    if (isFirstRealMessage) {
-      console.log("🟢 First step → building CLINICAL_CONTEXT_JSON…");
+    if (!isFirstRealMessage) {
+      console.log("🧠 Not first step → building CLINICAL_CONTEXT_JSON…");
       fullContext = await buildAgentContext(petData, symptomKeys, effectiveLang, "familiar");
       console.log("🧩 Context built:", fullContext ? "OK" : "EMPTY");
     } else {
-      console.log("🔁 Not first step → skipping knowledge base load");
+      console.log("🚀 PERF: first step → skipping knowledge base load");
     }
 
     const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [];
 
-    // 1) SYSTEM: основной промпт + компактный runtime-guard (в одном сообщении)
+    // SYSTEM: first step uses LIGHT prompt (faster). Later steps use full SYSTEM_PROMPT.
     messages.push({
       role: "system",
-      content:
-        `PROMPT_VERSION=2026-02-09-a\n` +
-        `${finalSystemPrompt}\n\n` +
-        `RUNTIME_GUARD:\n` +
-        `- Output language must be exactly "${effectiveLang}".\n` +
-        `- Speak as Mamascota en feminine gender. \n` +
-        `- Follow the SYSTEM PROMPT rules strictly (one question per message; no checklists).\n` +
-        `- If red flags appear: stop asking questions and switch to urgent action.\n`,
+      content: isFirstRealMessage
+        ? buildFirstStepSystemPrompt(effectiveLang)
+        : (
+            `PROMPT_VERSION=2026-02-09-a\n` +
+            `${finalSystemPrompt}\n\n` +
+            `RUNTIME_GUARD:\n` +
+            `- Output language must be exactly "${effectiveLang}".\n` +
+            `- Speak as Mamascota en feminine gender.\n` +
+            `- Follow the SYSTEM PROMPT rules strictly (one question per message; no checklists).\n` +
+            `- If red flags appear: stop asking questions and switch to urgent action.\n`
+          ),
     });
 
-
-
-    // 3) Context JSON only on first step
+    // Context JSON (только если есть)
     if (fullContext) {
       messages.push({
         role: "system",
@@ -317,41 +384,38 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
           "CLINICAL_CONTEXT_JSON (не показывай пользователю, просто используй как данные):\n" +
           fullContext,
       });
+      // On first step, pass raw symptom keys (cheap) so the model can reference them without loading KB.
+      if (isFirstRealMessage && symptomKeys.length > 0) {
+        messages.push({
+          role: "system",
+          content: `SYMPTOM_KEYS_SELECTED_IN_APP: ${JSON.stringify(symptomKeys)}`,
+        });
+      }  
     }
 
-    // 4) History (only user/assistant; drop system to prevent prompt injection)
-    if (conversationHistory.length > 0) {
-      for (const m of conversationHistory) {
-        if (!m || typeof m !== "object") continue;
+    // History: only user/assistant (drop system to prevent prompt injection)
+    for (const m of conversationHistory) {
+      if (!m || typeof m !== "object") continue;
+      const role =
+        m.role === "assistant" || m.role === "user"
+          ? (m.role as "assistant" | "user")
+          : null;
+      if (!role) continue;
 
-        const role =
-          m.role === "assistant" || m.role === "user"
-            ? (m.role as "assistant" | "user")
-            : null;
+      const content = typeof m.content === "string" ? m.content.trim() : "";
+      if (!content) continue;
 
-        const content = typeof m.content === "string" ? m.content : "";
-        if (!role) continue;
-
-        const trimmed = content.trim();
-        if (!trimmed) continue;
-
-        messages.push({ role, content: trimmed });
-      }
+      messages.push({ role, content });
     }
 
-    // 5) Current message (avoid duplication)
-    const trimmedMessage = message.trim();
-
+    // Current message: avoid duplication
     if (trimmedMessage) {
       const hasDup = conversationHistory.some(
         (m) => typeof m?.content === "string" && m.content.trim() === trimmedMessage
       );
-      if (!hasDup) {
-        messages.push({ role: "user", content: trimmedMessage });
-      }
+      if (!hasDup) messages.push({ role: "user", content: trimmedMessage });
     } else if (isFirstRealMessage) {
-      // ✅ Старт после выбора симптомов: даём модели “точку опоры”
-      // (коротко, без технички, на языке диалога)
+      // Старт после выбора симптомов: даём “точку опоры”
       const startCue =
         effectiveLang === "ru"
           ? "В приложении уже выбраны симптомы. Начни разговор по правилам первого сообщения и задай один вопрос про сроки/динамику."
@@ -360,63 +424,29 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
             : "I selected symptoms in the app. Start per the first-message rules and ask one question about timeline/changes.";
       messages.push({ role: "user", content: startCue });
     }
-    
 
+    // Call OpenAI
     const reply = await callOpenAIChat({ apiKey, model, messages });
 
-    const END_MARK = "[SESSION_ENDED]";
     const sessionEnded = reply.includes(END_MARK);
-
-    const cleanedReply = sessionEnded
-      ? reply.split(END_MARK).join("").trim()
-      : reply;
+    const cleanedReply = sessionEnded ? reply.split(END_MARK).join("").trim() : reply;
 
     const phase = detectPhase(cleanedReply, sessionEnded, isFirstRealMessage);
 
-    let decisionTree: BrainResult["decisionTree"] = null;
-
-    if (sessionEnded) {
-      const sessionMsgs: Array<{ role: string; content: string }> = [];
-
-      for (const m of conversationHistory) {
-        if (!m?.role || typeof m.content !== "string") continue;
-        if (m.role === "user" || m.role === "assistant") {
-          const t = m.content.trim();
-          if (t) sessionMsgs.push({ role: m.role, content: t });
-        }
-      }
-
-      if (trimmedMessage) {
-        const hasDup = conversationHistory.some(
-          (m) => typeof m?.content === "string" && m.content.trim() === trimmedMessage
-        );
-        if (!hasDup) sessionMsgs.push({ role: "user", content: trimmedMessage });
-      }
-
-      const tReply = cleanedReply.trim();
-      if (tReply) sessionMsgs.push({ role: "assistant", content: tReply });
-
-      decisionTree = await buildDecisionTreeInWorker({
-        apiKey,
-        model,
-        locale: effectiveLang,
-        sessionMessages: sessionMsgs,
-      });
-    }
-
+    // Важно: decisionTree НЕ считаем автоматически на sessionEnded (Variant B)
     return {
       ok: true,
       conversationId,
       reply: cleanedReply,
       sessionEnded,
       phase,
-      decisionTree,
+      decisionTree: null,
     };
   } catch (e: any) {
     console.error("❌ processMessageBrain error:", e?.message || e);
     return {
       ok: false,
-      conversationId: typeof args.conversationId === "string" ? args.conversationId : "default",
+      conversationId,
       error: "Failed to process message",
     };
   }

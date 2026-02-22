@@ -202,5 +202,16 @@
   "female": "Female",
   "not_set": "Not set",
   "neutered_spayed": "Neutered / Spayed",
-  "animal_other": "Other"
+  "animal_other": "Other",
+
+  "pdf": {
+    "date_label": "Date and time",
+    "owner_notes_title": "Anamnesis",
+    "focus_title": "Focus for the vet",
+    "next_steps_title": "Next steps",
+    "observe_title": "Observation at home",
+    "urgent_title": "Immediate action",
+    "plan_title": "Plan for the vet visit",
+    "generating": "Generating PDF..." 
+  }
 }

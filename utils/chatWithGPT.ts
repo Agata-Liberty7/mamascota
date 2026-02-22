@@ -98,6 +98,10 @@ export async function chatWithGPT(params: {
     typeof explicitConversationId === "string" &&
     explicitConversationId.startsWith("summary-");
 
+  // Служебный запрос для PDF: worker должен видеть историю,
+  // но мы НЕ должны сохранять это как часть диалога
+  const isDecisionTreeRequest = message?.trim() === "__MAMASCOTA_DECISION_TREE__";
+
   try {
     const existingId = await AsyncStorage.getItem("conversationId");
     const storedLang = await AsyncStorage.getItem("selectedLanguage");
@@ -157,18 +161,11 @@ export async function chatWithGPT(params: {
       workingUrl = cached;
       console.log("[CHAT] workingUrl (cached) =", workingUrl);
     } else {
-      // 2) проверяем primary
-      const primaryOk = await probeHealth(AGENT_URL);
-      if (primaryOk) {
-        workingUrl = AGENT_URL;
-      } else if (FALLBACK_AGENT_URL) {
-        console.warn("⚠️ Primary endpoint недоступен, пробуем fallback...");
-        const fallbackOk = await probeHealth(FALLBACK_AGENT_URL);
-        if (fallbackOk) workingUrl = FALLBACK_AGENT_URL;
-      }
+      // PERF: без лишнего GET /health — сразу пробуем POST на primary,
+      // failover уже реализован в postAgentWithFailover
+      workingUrl = AGENT_URL;
 
-      console.log("[CHAT] workingUrl (probed) =", workingUrl);
-
+      // кэшируем primary как стартовую точку
       await writeCachedWorkingUrl(workingUrl);
     }
 
@@ -196,7 +193,7 @@ export async function chatWithGPT(params: {
         // ✅ сохраняем строго по ensuredConversationId, чтобы не терять историю
         const targetConversationId = serverConversationId || ensuredConversationId;
 
-        if (targetConversationId && !isSummaryConversation) {
+        if (targetConversationId && !isSummaryConversation && !isDecisionTreeRequest) {
           await setConversationId(targetConversationId);
 
           try {

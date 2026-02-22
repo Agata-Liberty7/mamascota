@@ -129,102 +129,34 @@ async function findPetByName(name: string | null) {
 // Формируем структурированный анамнез через кастом
 // -----------------------------------------------------
 async function buildDecisionTree(conversationId: string, locale: string) {
-  // 1) достаём историю чата
-  const raw = await AsyncStorage.getItem(`chatHistory:${conversationId}`);
-  const chat = raw ? JSON.parse(raw) : [];
-
-  const combined = Array.isArray(chat)
-    ? chat
-        .map((m: any) => `${m.role.toUpperCase()}: ${m.content}`)
-        .join("\n")
-    : "";
-
-  const request = `
-  Проанализируй ветеринарную консультацию ниже и верни СТРОГО JSON без пояснений:
-
-  {
-    "anamnesis_short": ["..."],
-    "focus_for_vet": ["..."],
-    "next_steps": {
-      "observe_at_home": ["..."],
-      "urgent_now": ["..."],
-      "plan_visit": ["..."]
-    }
-  }
-
-  Требования:
-  - Язык строго: ${locale}.
-  - Ничего ДО или ПОСЛЕ JSON.
-  - 3–6 пунктов максимум в "anamnesis_short".
-  - 3–5 пунктов максимум в "focus_for_vet".
-  - В "next_steps":
-    - observe_at_home: 1–3 коротких пункта
-    - urgent_now: 3–6 чётких признаков
-    - plan_visit: 1–2 пункта (зачем очно), без протоколов
-  - Не использовать слова: "диагноз", "патология", "эндокринный", "метаболический".
-  - Не писать "менее вероятно", "исключено" и подобное.
-  - Не перечислять конкретные анализы, исследования, протоколы.
-  - Не выдумывать факты: только из диалога.
-  - Учитывай ВСЮ сессию целиком, включая последние сообщения.
-
-  === СЕССИЯ ===
-  ${combined}
-  `;
-
-
   const res = await chatWithGPT({
-    message: request,
+    message: "__MAMASCOTA_DECISION_TREE__",
     userLang: locale,
-    // служебная беседа, не смешиваем с основным чатом
-    conversationId: `summary-${conversationId}`,
+    // важно: тот же conversationId, чтобы worker видел историю этой сессии
+    conversationId,
   });
 
-  const replyText = res?.reply || "";
+  const dt = (res as any)?.decisionTree;
+  const ns = dt?.next_steps ?? {};
 
-  let anamnesisShort = "";
-  let focusForVet = "";
-  let nextObserve = "";
-  let nextUrgent = "";
-  let nextPlan = "";
-
-  try {
-    const parsed = JSON.parse(replyText);
-
-    const a = Array.isArray(parsed?.anamnesis_short) ? parsed.anamnesis_short : [];
-    const f = Array.isArray(parsed?.focus_for_vet) ? parsed.focus_for_vet : [];
-    const ns = parsed?.next_steps || {};
-
-    const o = Array.isArray(ns?.observe_at_home) ? ns.observe_at_home : [];
-    const u = Array.isArray(ns?.urgent_now) ? ns.urgent_now : [];
-    const p = Array.isArray(ns?.plan_visit) ? ns.plan_visit : [];
-
-    // Форматируем в читабельные буллеты
-    const bullets = (arr: any[]) =>
-      arr
-        .map((x) => (typeof x === "string" ? x.trim() : ""))
-        .filter(Boolean)
-        .map((s) => `• ${s}`)
-        .join("\n");
-
-    anamnesisShort = bullets(a);
-    focusForVet = bullets(f);
-    nextObserve = bullets(o);
-    nextUrgent = bullets(u);
-    nextPlan = bullets(p);
-  } catch (err) {
-    console.warn("⚠️ Не удалось распарсить JSON summary, fallback:", err);
-  }
+  const bullets = (arr: any[]) =>
+    Array.isArray(arr)
+      ? arr
+          .map((x) => (typeof x === "string" ? x.trim() : ""))
+          .filter(Boolean)
+          .map((s) => `• ${s}`)
+          .join("\n")
+      : "";
 
   return {
-    anamnesisShort,
-    focusForVet,
+    anamnesisShort: bullets(dt?.anamnesis_short ?? []),
+    focusForVet: bullets(dt?.focus_for_vet ?? []),
     nextSteps: {
-      observe_at_home: nextObserve,
-      urgent_now: nextUrgent,
-      plan_visit: nextPlan,
+      observe_at_home: bullets(ns?.observe_at_home ?? []),
+      urgent_now: bullets(ns?.urgent_now ?? []),
+      plan_visit: bullets(ns?.plan_visit ?? []),
     },
   };
-
 }
 
 // -----------------------------------------------------
@@ -264,16 +196,20 @@ async function getDecisionTreeCached(sessionId: string, locale: string) {
   // 2) compute fresh
   const fresh = await buildDecisionTree(sessionId, locale);
 
-  // 3) store cache
+  // 3) store cache (dual keys for backward compatibility with ChatScreen)
   try {
-    await AsyncStorage.setItem(
-      cacheKey,
-      JSON.stringify({
-        chatLen: chatLenNow,
-        createdAt: new Date().toISOString(),
-        ...fresh,
-      })
-    );
+    const payload = JSON.stringify({
+      chatLen: chatLenNow,
+      createdAt: new Date().toISOString(),
+      ...fresh,
+    });
+
+    // new key (pdf scope)
+    await AsyncStorage.setItem(cacheKey, payload);
+
+    // old key (ChatScreen expects this to enable the PDF button)
+    const legacyKey = `decisionTree:${sessionId}:${locale}`;
+    await AsyncStorage.setItem(legacyKey, payload);
   } catch {
     // ignore cache save errors
   }
