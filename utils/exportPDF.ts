@@ -134,43 +134,41 @@ async function buildDecisionTree(conversationId: string, locale: string) {
   const chat = raw ? JSON.parse(raw) : [];
 
   const combined = Array.isArray(chat)
-    ? chat
-        .map((m: any) => `${m.role.toUpperCase()}: ${m.content}`)
-        .join("\n")
+    ? chat.map((m: any) => `${String(m?.role || "").toUpperCase()}: ${String(m?.content || "")}`).join("\n")
     : "";
 
+  // 2) запрос (старый надёжный способ: вернуть строго JSON в reply)
   const request = `
-  Проанализируй ветеринарную консультацию ниже и верни СТРОГО JSON без пояснений:
+Проанализируй ветеринарную консультацию ниже и верни СТРОГО JSON без пояснений:
 
-  {
-    "anamnesis_short": ["..."],
-    "focus_for_vet": ["..."],
-    "next_steps": {
-      "observe_at_home": ["..."],
-      "urgent_now": ["..."],
-      "plan_visit": ["..."]
-    }
+{
+  "anamnesis_short": ["..."],
+  "focus_for_vet": ["..."],
+  "next_steps": {
+    "observe_at_home": ["..."],
+    "urgent_now": ["..."],
+    "plan_visit": ["..."]
   }
+}
 
-  Требования:
-  - Язык строго: ${locale}.
-  - Ничего ДО или ПОСЛЕ JSON.
-  - 3–6 пунктов максимум в "anamnesis_short".
-  - 3–5 пунктов максимум в "focus_for_vet".
-  - В "next_steps":
-    - observe_at_home: 1–3 коротких пункта
-    - urgent_now: 3–6 чётких признаков
-    - plan_visit: 1–2 пункта (зачем очно), без протоколов
-  - Не использовать слова: "диагноз", "патология", "эндокринный", "метаболический".
-  - Не писать "менее вероятно", "исключено" и подобное.
-  - Не перечислять конкретные анализы, исследования, протоколы.
-  - Не выдумывать факты: только из диалога.
-  - Учитывай ВСЮ сессию целиком, включая последние сообщения.
+Требования:
+- Язык строго: ${locale}.
+- Ничего ДО или ПОСЛЕ JSON.
+- 3–6 пунктов максимум в "anamnesis_short".
+- 3–5 пунктов максимум в "focus_for_vet".
+- В "next_steps":
+  - observe_at_home: 1–3 коротких пункта
+  - urgent_now: 3–6 чётких признаков
+  - plan_visit: 1–2 пункта (зачем очно), без протоколов
+- Не использовать слова: "диагноз", "патология", "эндокринный", "метаболический".
+- Не писать "менее вероятно", "исключено" и подобное.
+- Не перечислять конкретные анализы, исследования, протоколы.
+- Не выдумывать факты: только из диалога.
+- Учитывай ВСЮ сессию целиком, включая последние сообщения.
 
-  === СЕССИЯ ===
-  ${combined}
-  `;
-
+=== СЕССИЯ ===
+${combined}
+`.trim();
 
   const res = await chatWithGPT({
     message: request,
@@ -179,52 +177,47 @@ async function buildDecisionTree(conversationId: string, locale: string) {
     conversationId: `summary-${conversationId}`,
   });
 
-  const replyText = res?.reply || "";
+  const replyText = (res as any)?.reply || "";
 
-  let anamnesisShort = "";
-  let focusForVet = "";
-  let nextObserve = "";
-  let nextUrgent = "";
-  let nextPlan = "";
+  // 3) Универсально достаём структуру:
+  //    - если воркер вернул decisionTree полем
+  //    - иначе парсим JSON из reply (старое поведение)
+  let dt: any = (res as any)?.decisionTree;
 
-  try {
-    const parsed = JSON.parse(replyText);
-
-    const a = Array.isArray(parsed?.anamnesis_short) ? parsed.anamnesis_short : [];
-    const f = Array.isArray(parsed?.focus_for_vet) ? parsed.focus_for_vet : [];
-    const ns = parsed?.next_steps || {};
-
-    const o = Array.isArray(ns?.observe_at_home) ? ns.observe_at_home : [];
-    const u = Array.isArray(ns?.urgent_now) ? ns.urgent_now : [];
-    const p = Array.isArray(ns?.plan_visit) ? ns.plan_visit : [];
-
-    // Форматируем в читабельные буллеты
-    const bullets = (arr: any[]) =>
-      arr
-        .map((x) => (typeof x === "string" ? x.trim() : ""))
-        .filter(Boolean)
-        .map((s) => `• ${s}`)
-        .join("\n");
-
-    anamnesisShort = bullets(a);
-    focusForVet = bullets(f);
-    nextObserve = bullets(o);
-    nextUrgent = bullets(u);
-    nextPlan = bullets(p);
-  } catch (err) {
-    console.warn("⚠️ Не удалось распарсить JSON summary, fallback:", err);
+  if (!dt && typeof replyText === "string") {
+    try {
+      const parsed = JSON.parse(replyText);
+      dt = parsed?.decisionTree ?? parsed;
+    } catch {
+      // ignore
+    }
   }
 
+  const bullets = (arr: any) =>
+    Array.isArray(arr)
+      ? arr
+          .map((x) => (typeof x === "string" ? x.trim() : ""))
+          .filter(Boolean)
+          .map((s) => `• ${s}`)
+          .join("\n")
+      : "";
+
+  if (!dt || typeof dt !== "object") {
+    // пусть выше сработает fallback ownerNotesFallback, а не пустые секции
+    throw new Error("DecisionTreeMissing");
+  }
+
+  const ns = dt?.next_steps ?? {};
+
   return {
-    anamnesisShort,
-    focusForVet,
+    anamnesisShort: bullets(dt?.anamnesis_short ?? []),
+    focusForVet: bullets(dt?.focus_for_vet ?? []),
     nextSteps: {
-      observe_at_home: nextObserve,
-      urgent_now: nextUrgent,
-      plan_visit: nextPlan,
+      observe_at_home: bullets(ns?.observe_at_home ?? []),
+      urgent_now: bullets(ns?.urgent_now ?? []),
+      plan_visit: bullets(ns?.plan_visit ?? []),
     },
   };
-
 }
 
 // -----------------------------------------------------
@@ -332,8 +325,18 @@ export async function exportSummaryPDF(sessionId: string) {
     //
     // 3) Анамнез и клиническое обоснование из кастома
     //
-    const { anamnesisShort, focusForVet, nextSteps } = await getDecisionTreeCached(sessionId, locale);
+    let anamnesisShort = "";
+    let focusForVet = "";
+    let nextSteps: any = {};
 
+    try {
+      const dt = await getDecisionTreeCached(sessionId, locale);
+      anamnesisShort = dt.anamnesisShort;
+      focusForVet = dt.focusForVet;
+      nextSteps = dt.nextSteps;
+    } catch (e) {
+      // decisionTree не обязателен — используем ownerNotesFallback ниже
+    }
     //
     // 4) симптоматика
     //
