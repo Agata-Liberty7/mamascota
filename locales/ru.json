@@ -211,14 +211,13 @@
   "animal_other": "Другое",
 
   "pdf": {
-    "date_label": "Дата",
-    "owner_notes_title": "Заметки владельца",
+    "date_label": "Дата и время",
+    "owner_notes_title": "Анамнез",
     "focus_title": "Фокус для ветеринара",
     "next_steps_title": "Следующие шаги",
     "observe_title": "Наблюдение дома",
     "urgent_title": "Срочно сейчас",
     "plan_title": "План визита",
-    "generating": "Генерирую PDF..."
+    "generating": "Создаю PDF..."
     }
-  
-  }
+}
