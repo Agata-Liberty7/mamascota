@@ -202,5 +202,16 @@
   "female": "נקבה",
   "not_set": "לא צוין",
   "neutered_spayed": "מסורס/מעוקרת",
-  "animal_other": "אחר"
+  "animal_other": "אחר",
+
+  "pdf": {
+    "date_label": "תאריך ושעה",
+    "owner_notes_title": "אנמנזה",
+    "focus_title": "מוקד עבור הווטרינר",
+    "next_steps_title": "השלבים הבאים",
+    "observe_title": "תצפית בבית",
+    "urgent_title": "דחוף עכשיו",
+    "plan_title": "תוכנית לביקור",
+    "generating": "יוצר PDF..." 
+  }
 }

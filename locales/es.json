@@ -205,5 +205,16 @@
   "female": "Hembra",
   "not_set": "Sin especificar",
   "neutered_spayed": "Esterilizado/a",
-  "animal_other": "Otro"
+  "animal_other": "Otro",
+
+  "pdf": {
+    "date_label": "Fecha y hora",
+    "owner_notes_title": "Anamnesis",
+    "focus_title": "Enfoque para el veterinario",
+    "next_steps_title": "Próximos pasos",
+    "observe_title": "Observación en casa",
+    "urgent_title": "Urgente ahora",
+    "plan_title": "Plan de visita",
+    "generating": "Creando PDF..."
+  }
 }

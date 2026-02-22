@@ -202,5 +202,16 @@
   "female": "Weiblich",
   "not_set": "Nicht festgelegt",
   "neutered_spayed": "Kastriert/Sterilisiert",
-  "animal_other": "Andere"
+  "animal_other": "Andere",
+
+  "pdf": {
+    "date_label": "Datum und Uhrzeit",
+    "owner_notes_title": "Anamnese",
+    "focus_title": "Fokus für den Tierarzt",
+    "next_steps_title": "Nächste Schritte",
+    "observe_title": "Beobachtung zu Hause",
+    "urgent_title": "Sofortiges Handeln",
+    "plan_title": "Plan des Tierarztbesuchs",
+    "generating": "PDF wird erstellt..."
+  }
 }

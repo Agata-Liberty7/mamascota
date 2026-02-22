@@ -208,5 +208,16 @@
   "female": "Самка",
   "not_set": "Не указано",
   "neutered_spayed": "Стерилизован/а",
-  "animal_other": "Другое"
+  "animal_other": "Другое",
+
+  "pdf": {
+    "date_label": "Дата и время",
+    "owner_notes_title": "Анамнез",
+    "focus_title": "Фокус для ветеринара",
+    "next_steps_title": "Следующие шаги",
+    "observe_title": "Наблюдение дома",
+    "urgent_title": "Срочно сейчас",
+    "plan_title": "План визита",
+    "generating": "Создаю PDF..."
+    }
 }
