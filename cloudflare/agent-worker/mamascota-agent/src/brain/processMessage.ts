@@ -60,6 +60,7 @@ function buildFirstStepSystemPrompt(lang: string) {
     `Language must be exactly: "${lang}".`,
     `Communication style: natural, human, conversational. Avoid repetitive templates or fixed phrases.`,
     `Do NOT start with formulaic expressions like "I see that..." or similar predictable constructions.`,
+    `Do NOT output chunk delimiters like "[CHUNK]" or "[[CHUNK]]".`,
     `Do NOT write filler acknowledgements like "Okay", "Got it", "Thanks", "Understood", "Приняла", "Хорошо, спасибо". Start directly with helpful content.`,
     `Rules:`,
     `- Ask for ONLY ONE thing from the user per message (one request). Do not chain requests with "and/also/in addition".`,
@@ -188,8 +189,10 @@ function detectMultipleRequests(replyText: string) {
 function sanitizeAssistantReply(replyText: string) {
   let t = String(replyText || "");
 
-  // Remove any chunk markers if they leak
+  // Remove both [[CHUNK]] and [CHUNK] (any case), plus common broken variants
+  t = t.replace(/\[\[CHUNK\]\]/gi, "");
   t = t.replace(/\[CHUNK\]/gi, "");
+  t = t.replace(/\[\s*\[\s*CHUNK\s*\]\s*\]/gi, "");
 
   // Remove lines that are ONLY "[" or "]"
   t = t.replace(/^\s*[\[\]]\s*$/gm, "");
@@ -459,6 +462,7 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
             `- Avoid repeating a question that was already asked in the last 6 turns.\n` +
             `- No checklists.\n` +
             `- Do NOT write filler acknowledgements like "Okay", "Got it", "Thanks", "Understood", "Приняла", "Хорошо, спасибо". Start directly with helpful content.\n` +
+            `- Do NOT output chunk delimiters like "[CHUNK]" or "[[CHUNK]]".\n` +
             `- If red flags appear: stop asking questions and switch to urgent action.\n` +
             (symptomCoverageGuard ? `\n${symptomCoverageGuard}\n` : "")
           ),
