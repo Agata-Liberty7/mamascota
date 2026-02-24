@@ -58,12 +58,19 @@ function buildFirstStepSystemPrompt(lang: string) {
     `PROMPT_VERSION=${PROMPT_VERSION}`,
     `You are Mamascota (female voice). You help a pet owner prepare for a vet visit. You do NOT diagnose.`,
     `Language must be exactly: "${lang}".`,
+    `Communication style: natural, human, conversational. Avoid repetitive templates or fixed phrases.`,
+    `Do NOT start with formulaic expressions like "I see that..." or similar predictable constructions.`,
     `Rules:`,
-    `- Ask EXACTLY ONE clear question per message.`,
-    `- No checklists and no long explanations.`,
+    `- Ask for ONLY ONE thing from the user per message (one request). Do not chain requests with "and/also/in addition".`,
+    `- If symptomKeys are provided in APP_CONTEXT_JSON, you MUST explicitly cover them across the first 1–2 assistant messages (do not ignore any selected symptom).`,
+    `- No checklists.`,
+    `- No long explanations.`,
     `- No diagnoses, no medications, no treatment plans.`,
     `- If urgent red flags are present, stop asking questions and tell the owner to seek urgent care now.`,
-    `First message goal: acknowledge symptoms were selected in the app, then ask ONE question about timeline/changes (when started, worsening/improving).`,
+    `First message goal:`,
+    `- If APP_CONTEXT_JSON contains pet data, you may briefly and naturally reference the pet (name, age, species, breed if relevant).`,
+    `- Then ask ONE question about timeline or changes.`,
+    `- Vary sentence structure. Avoid repeating the same opening pattern across conversations.`,
   ].join("\n");
 }
 
@@ -126,6 +133,62 @@ function hasAnyRealTurns(history: Array<{ role: string; content: string }>) {
       typeof m?.content === "string" &&
       m.content.trim().length > 0
   );
+}
+
+// =====================
+// Guard helpers (runtime)
+// =====================
+function countAssistantTurns(history: Array<{ role: string; content: string }>) {
+  return (history || []).filter(
+    (m) => m?.role === "assistant" && typeof m?.content === "string" && m.content.trim().length > 0
+  ).length;
+}
+
+function buildSymptomCoverageInstruction(symptomKeys: string[], assistantTurnsSoFar: number) {
+  if (!Array.isArray(symptomKeys) || symptomKeys.length === 0) return "";
+  // Требование: покрыть все выбранные симптомы в первые 1–2 хода ассистента.
+  // Самый надёжный хотфикс: в 0-м и 1-м ответе ассистент ОБЯЗАН упомянуть ВСЕ symptomKeys (кратко, без чеклиста),
+  // но запрос к пользователю всё равно должен быть ОДИН.
+  if (assistantTurnsSoFar > 1) return "";
+
+  const keys = symptomKeys.slice(0, 3); // по контракту до 3
+  return [
+    `SYMPTOM_KEYS_GUARD (high priority):`,
+    `- The user selected symptomKeys: ${keys.map((k) => `"${k}"`).join(", ")}.`,
+    `- In THIS reply you MUST explicitly acknowledge EACH selected symptomKey at least once (briefly, naturally, not as a checklist).`,
+    `- Still ask for ONLY ONE thing from the user in this message.`,
+  ].join("\n");
+}
+
+/**
+ * Detect "multiple requests" without counting '?'
+ * Heuristic: flags if there are 2+ separate "asks" patterns.
+ * We keep it conservative to avoid false positives.
+ */
+function detectMultipleRequests(replyText: string, lang: string) {
+  const t = String(replyText || "").trim().toLowerCase();
+  if (!t) return false;
+
+  // Common request markers (EN/ES/RU). Add minimal set, avoid overfitting.
+  const patterns: RegExp[] = [
+    /\b(please|could you|can you|tell me|share|describe)\b/gi, // EN
+    /\b(por favor|podr[ií]as|puedes|dime|cu[eé]ntame|describe)\b/gi, // ES
+    /\b(пожалуйста|можешь|могли бы|расскажи|опиши|скажи)\b/gi, // RU
+  ];
+
+  let hits = 0;
+  for (const re of patterns) {
+    re.lastIndex = 0;
+    const m = t.match(re);
+    if (m && m.length) hits += m.length;
+    if (hits >= 2) return true;
+  }
+
+  // Also flag if it clearly enumerates multiple questions imperatively without '?'.
+  // Example: "First..., Second..." / "1) ... 2) ..."
+  if (/(^|\n)\s*(1\)|2\)|-)\s+/i.test(replyText) && /(1\).*\n.*2\))/s.test(replyText)) return true;
+
+  return false;
 }
 
 function detectPhase(cleanedReply: string, sessionEnded: boolean, isFirstRealMessage: boolean) {
@@ -347,6 +410,8 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
 
     // Первый шаг = нет реальных user/assistant turns
     const isFirstRealMessage = !hasAnyRealTurns(conversationHistory);
+    const assistantTurnsSoFar = countAssistantTurns(conversationHistory);
+    const symptomCoverageGuard = buildSymptomCoverageInstruction(symptomKeys, assistantTurnsSoFar);
 
     // PERF: первый ответ делаем “лёгким” (без KB/YAML контекста)
     let fullContext = "";
@@ -370,13 +435,28 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
             `${finalSystemPrompt}\n\n` +
             `RUNTIME_GUARD:\n` +
             `- Output language must be exactly "${effectiveLang}".\n` +
-            `- Speak as Mamascota en feminine gender.\n` +
-            `- Follow the SYSTEM PROMPT rules strictly (one question per message; no checklists).\n` +
+            `- Speak as Mamascota in feminine gender.\n` +
+            `- Ask for ONLY ONE thing from the user per message (one request). Do not chain requests with "also/and/in addition".\n` +
+            `- You MUST not ignore any provided symptomKeys from APP_CONTEXT_JSON: if 2–3 symptoms are selected, explicitly cover each across the next 1–2 turns.\n` +
+            `- Avoid repeating a question that was already asked in the last 6 turns.\n` +
+            `- No checklists.\n` +
             `- If red flags appear: stop asking questions and switch to urgent action.\n`
           ),
     });
 
-    // Context JSON (только если есть)
+    // ✅ Always pass lightweight app context (even on first step)
+    messages.push({
+      role: "system",
+      content:
+        "APP_CONTEXT_JSON (use as structured data, do not show to user):\n" +
+        JSON.stringify({
+          pet: petData,
+          symptomKeys,
+          language: effectiveLang,
+        }),
+    });
+
+    // Heavy KB context only when built (non-first step)
     if (fullContext) {
       messages.push({
         role: "system",
@@ -384,13 +464,6 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
           "CLINICAL_CONTEXT_JSON (не показывай пользователю, просто используй как данные):\n" +
           fullContext,
       });
-      // On first step, pass raw symptom keys (cheap) so the model can reference them without loading KB.
-      if (isFirstRealMessage && symptomKeys.length > 0) {
-        messages.push({
-          role: "system",
-          content: `SYMPTOM_KEYS_SELECTED_IN_APP: ${JSON.stringify(symptomKeys)}`,
-        });
-      }  
     }
 
     // History: only user/assistant (drop system to prevent prompt injection)
@@ -415,18 +488,58 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
       );
       if (!hasDup) messages.push({ role: "user", content: trimmedMessage });
     } else if (isFirstRealMessage) {
-      // Старт после выбора симптомов: даём “точку опоры”
-      const startCue =
+      // Internal start trigger (not shown to the user in the app)
+      const startTrigger =
         effectiveLang === "ru"
-          ? "В приложении уже выбраны симптомы. Начни разговор по правилам первого сообщения и задай один вопрос про сроки/динамику."
+          ? "СТАРТ"
           : effectiveLang === "es"
-            ? "He seleccionado síntomas en la app. Empieza según las reglas del primer mensaje y haz una sola pregunta sobre el tiempo/evolución."
-            : "I selected symptoms in the app. Start per the first-message rules and ask one question about timeline/changes.";
-      messages.push({ role: "user", content: startCue });
+            ? "INICIO"
+            : "START";
+      messages.push({ role: "user", content: startTrigger });
     }
 
     // Call OpenAI
-    const reply = await callOpenAIChat({ apiKey, model, messages });
+    let reply = await callOpenAIChat({ apiKey, model, messages });
+
+    // ---- post-guard: if model violated "one request", do a single lightweight rewrite pass
+    // This is only triggered when we detect likely 2+ asks without using '?' counting.
+    const needsRepair = detectMultipleRequests(reply, effectiveLang);
+    if (needsRepair) {
+      console.log("🛠️ Guard repair: rewriting reply to enforce ONE request");
+      const repair = await callOpenAIChat({
+        apiKey,
+        model,
+        messages: [
+          {
+            role: "system",
+            content: [
+              `You are a strict editor.`,
+              `Rewrite the assistant message to comply with rules. Keep meaning, keep tone, keep language exactly "${effectiveLang}".`,
+              `Rules (must all hold):`,
+              `- Ask the user for ONLY ONE thing (single request).`,
+              `- Do NOT add new questions.`,
+              `- Do NOT add checklists or numbering.`,
+              `- Do NOT diagnose or prescribe.`,
+              `- If symptomKeys are mentioned below, keep them acknowledged in a natural way.`,
+              `Return ONLY the rewritten assistant message.`,
+            ].join("\n"),
+          },
+          {
+            role: "user",
+            content:
+              `Original message:\n` +
+              reply +
+              `\n\nSelected symptomKeys:\n` +
+              JSON.stringify(symptomKeys.slice(0, 3)) +
+              `\n`,
+          },
+        ],
+      });
+
+      if (typeof repair === "string" && repair.trim()) {
+        reply = repair.trim();
+      }
+    }
 
     const sessionEnded = reply.includes(END_MARK);
     const cleanedReply = sessionEnded ? reply.split(END_MARK).join("").trim() : reply;
