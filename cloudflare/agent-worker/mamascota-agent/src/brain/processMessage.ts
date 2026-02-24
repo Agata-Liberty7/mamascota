@@ -60,6 +60,7 @@ function buildFirstStepSystemPrompt(lang: string) {
     `Language must be exactly: "${lang}".`,
     `Communication style: natural, human, conversational. Avoid repetitive templates or fixed phrases.`,
     `Do NOT start with formulaic expressions like "I see that..." or similar predictable constructions.`,
+    `Do NOT write filler acknowledgements like "Okay", "Got it", "Thanks", "Understood", "Приняла", "Хорошо, спасибо". Start directly with helpful content.`,
     `Rules:`,
     `- Ask for ONLY ONE thing from the user per message (one request). Do not chain requests with "and/also/in addition".`,
     `- If symptomKeys are provided in APP_CONTEXT_JSON, you MUST explicitly cover them across the first 1–2 assistant messages (do not ignore any selected symptom).`,
@@ -165,30 +166,44 @@ function buildSymptomCoverageInstruction(symptomKeys: string[], assistantTurnsSo
  * Heuristic: flags if there are 2+ separate "asks" patterns.
  * We keep it conservative to avoid false positives.
  */
-function detectMultipleRequests(replyText: string, lang: string) {
-  const t = String(replyText || "").trim().toLowerCase();
-  if (!t) return false;
+function detectMultipleRequests(replyText: string) {
+  const text = String(replyText || "").trim();
+  if (!text) return false;
 
-  // Common request markers (EN/ES/RU). Add minimal set, avoid overfitting.
-  const patterns: RegExp[] = [
-    /\b(please|could you|can you|tell me|share|describe)\b/gi, // EN
-    /\b(por favor|podr[ií]as|puedes|dime|cu[eé]ntame|describe)\b/gi, // ES
-    /\b(пожалуйста|можешь|могли бы|расскажи|опиши|скажи)\b/gi, // RU
-  ];
+  // 1) 2+ question marks => very likely 2+ questions/asks
+  const qCount = (text.match(/[?¿]/g) || []).length;
+  if (qCount >= 2) return true;
 
-  let hits = 0;
-  for (const re of patterns) {
-    re.lastIndex = 0;
-    const m = t.match(re);
-    if (m && m.length) hits += m.length;
-    if (hits >= 2) return true;
-  }
+  // 2) Explicit numbering 1) ... 2) ...
+  if (/(^|\n)\s*1\)\s+/.test(text) && /(^|\n)\s*2\)\s+/.test(text)) return true;
 
-  // Also flag if it clearly enumerates multiple questions imperatively without '?'.
-  // Example: "First..., Second..." / "1) ... 2) ..."
-  if (/(^|\n)\s*(1\)|2\)|-)\s+/i.test(replyText) && /(1\).*\n.*2\))/s.test(replyText)) return true;
+  // 3) Two separate question-like lines
+  const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+  const questionLikeLines = lines.filter((l) => /[?¿]$/.test(l));
+  if (questionLikeLines.length >= 2) return true;
 
   return false;
+}
+
+function sanitizeAssistantReply(replyText: string) {
+  let t = String(replyText || "");
+
+  // Remove any chunk markers if they leak
+  t = t.replace(/\[CHUNK\]/gi, "");
+
+  // Remove lines that are ONLY "[" or "]"
+  t = t.replace(/^\s*[\[\]]\s*$/gm, "");
+
+  // Remove leading filler acknowledgements (best-effort, only at the very start)
+  t = t.replace(/^\s*(Приняла\.?\s*)/i, "");
+  t = t.replace(/^\s*(Поняла\.?\s*)/i, "");
+  t = t.replace(/^\s*(Хорошо,\s*спасибо\.?\s*)/i, "");
+  t = t.replace(/^\s*(Поняла|Приняла)\s*[—\-–:]\s*/i, "");
+
+  // Normalize excessive empty lines
+  t = t.replace(/\n{3,}/g, "\n\n").trim();
+
+  return t;
 }
 
 function detectPhase(cleanedReply: string, sessionEnded: boolean, isFirstRealMessage: boolean) {
@@ -429,7 +444,10 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
     messages.push({
       role: "system",
       content: isFirstRealMessage
-        ? buildFirstStepSystemPrompt(effectiveLang)
+        ? (
+            buildFirstStepSystemPrompt(effectiveLang) +
+            (symptomCoverageGuard ? `\n\n${symptomCoverageGuard}\n` : "")
+          )
         : (
             `PROMPT_VERSION=2026-02-09-a\n` +
             `${finalSystemPrompt}\n\n` +
@@ -440,7 +458,9 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
             `- You MUST not ignore any provided symptomKeys from APP_CONTEXT_JSON: if 2–3 symptoms are selected, explicitly cover each across the next 1–2 turns.\n` +
             `- Avoid repeating a question that was already asked in the last 6 turns.\n` +
             `- No checklists.\n` +
-            `- If red flags appear: stop asking questions and switch to urgent action.\n`
+            `- Do NOT write filler acknowledgements like "Okay", "Got it", "Thanks", "Understood", "Приняла", "Хорошо, спасибо". Start directly with helpful content.\n` +
+            `- If red flags appear: stop asking questions and switch to urgent action.\n` +
+            (symptomCoverageGuard ? `\n${symptomCoverageGuard}\n` : "")
           ),
     });
 
@@ -489,13 +509,7 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
       if (!hasDup) messages.push({ role: "user", content: trimmedMessage });
     } else if (isFirstRealMessage) {
       // Internal start trigger (not shown to the user in the app)
-      const startTrigger =
-        effectiveLang === "ru"
-          ? "СТАРТ"
-          : effectiveLang === "es"
-            ? "INICIO"
-            : "START";
-      messages.push({ role: "user", content: startTrigger });
+      messages.push({ role: "user", content: "__MAMASCOTA_START__" });
     }
 
     // Call OpenAI
@@ -503,7 +517,7 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
 
     // ---- post-guard: if model violated "one request", do a single lightweight rewrite pass
     // This is only triggered when we detect likely 2+ asks without using '?' counting.
-    const needsRepair = detectMultipleRequests(reply, effectiveLang);
+    const needsRepair = detectMultipleRequests(reply);
     if (needsRepair) {
       console.log("🛠️ Guard repair: rewriting reply to enforce ONE request");
       const repair = await callOpenAIChat({
@@ -542,7 +556,10 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
     }
 
     const sessionEnded = reply.includes(END_MARK);
-    const cleanedReply = sessionEnded ? reply.split(END_MARK).join("").trim() : reply;
+    let cleanedReply = sessionEnded ? reply.split(END_MARK).join("").trim() : reply;
+
+    // Final output cleanup (no stray chunk brackets)
+    cleanedReply = sanitizeAssistantReply(cleanedReply);
 
     const phase = detectPhase(cleanedReply, sessionEnded, isFirstRealMessage);
 
