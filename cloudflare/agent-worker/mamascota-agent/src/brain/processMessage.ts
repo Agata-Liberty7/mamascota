@@ -60,11 +60,12 @@ function buildFirstStepSystemPrompt(lang: string) {
     `Language must be exactly: "${lang}".`,
     `Communication style: natural, human, conversational. Avoid repetitive templates or fixed phrases.`,
     `Do NOT start with formulaic expressions like "I see that..." or similar predictable constructions.`,
-    `Do NOT output chunk delimiters like "[CHUNK]" or "[[CHUNK]]".`,
+    `Do NOT output chunk delimiters like "[CHUNK]".`,
     `Do NOT write filler acknowledgements like "Okay", "Got it", "Thanks", "Understood", "Приняла", "Хорошо, спасибо". Start directly with helpful content.`,
     `Rules:`,
     `- Ask for ONLY ONE thing from the user per message (one request). Do not chain requests with "and/also/in addition".`,
     `- If symptomKeys are provided in APP_CONTEXT_JSON, you MUST explicitly cover them across the first 1–2 assistant messages (do not ignore any selected symptom).`,
+    `- Symptom linkage & prioritization: by your 2nd–3rd assistant message, add ONE short paragraph (2–4 sentences) that: (1) explains how the selected symptoms may be connected, (2) names 1–2 primary symptoms to focus on first, and (3) briefly says why the 3rd may be secondary. Do this ONLY ONCE per conversation (if already done, do not repeat).`,
     `- No checklists.`,
     `- No long explanations.`,
     `- No diagnoses, no medications, no treatment plans.`,
@@ -189,10 +190,9 @@ function detectMultipleRequests(replyText: string) {
 function sanitizeAssistantReply(replyText: string) {
   let t = String(replyText || "");
 
-  // Remove both [[CHUNK]] and [CHUNK] (any case), plus common broken variants
-  t = t.replace(/\[\[CHUNK\]\]/gi, "");
-  t = t.replace(/\[CHUNK\]/gi, "");
+  // Remove the legacy/broken variant only. Keep canonical [CHUNK] for client bubble splitting.
   t = t.replace(/\[\s*\[\s*CHUNK\s*\]\s*\]/gi, "");
+  t = t.replace(/\[\[CHUNK\]\]/gi, "");
 
   // Remove lines that are ONLY "[" or "]"
   t = t.replace(/^\s*[\[\]]\s*$/gm, "");
@@ -459,6 +459,7 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
             `- Speak as Mamascota in feminine gender.\n` +
             `- Ask for ONLY ONE thing from the user per message (one request). Do not chain requests with "also/and/in addition".\n` +
             `- You MUST not ignore any provided symptomKeys from APP_CONTEXT_JSON: if 2–3 symptoms are selected, explicitly cover each across the next 1–2 turns.\n` +
+            `- Symptom linkage & prioritization: by your 2nd–3rd assistant message, add ONE short paragraph (2–4 sentences) that: (1) explains how the selected symptoms may be connected, (2) names 1–2 primary symptoms to focus on first, and (3) briefly says why the remaining symptom may be secondary. Do this ONLY ONCE per conversation (if already done, do not repeat).\n` +
             `- Avoid repeating a question that was already asked in the last 6 turns.\n` +
             `- No checklists.\n` +
             `- Do NOT write filler acknowledgements like "Okay", "Got it", "Thanks", "Understood", "Приняла", "Хорошо, спасибо". Start directly with helpful content.\n` +
