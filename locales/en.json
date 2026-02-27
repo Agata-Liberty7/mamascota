@@ -200,7 +200,7 @@
   "sex": "Sex",
   "male": "Male",
   "female": "Female",
-  "not_set": "Not set",
+  "not_set": "Not specified",
   "neutered_spayed": "Neutered / Spayed",
   "animal_other": "Other",
 
@@ -210,7 +210,7 @@
     "focus_title": "Focus for the vet",
     "next_steps_title": "Next steps",
     "observe_title": "Observation at home",
-    "urgent_title": "Immediate action",
+    "urgent_title": "Immediate action needed if...",
     "plan_title": "Plan for the vet visit",
     "generating": "Generating PDF..." 
   }

@@ -98,47 +98,52 @@ export default {
     if (req.method !== "POST") {
       return json({ ok: false, error: "Method not allowed" }, 405);
     }
-
-
     let body: AgentRequestBody | null = null;
+
     try {
       body = (await req.json()) as AgentRequestBody;
     } catch {
       return json({ ok: false, error: "Invalid JSON" }, 400);
     }
 
-    const message = typeof body?.message === "string" ? body.message : "";
+    const message =
+      typeof body?.message === "string" ? body.message : "";
+
     const pet = body?.pet;
 
     const symptomKeys = Array.isArray(body?.symptomKeys)
-      ? body!.symptomKeys!.filter((x) => typeof x === "string")
+      ? body.symptomKeys.filter((x) => typeof x === "string")
       : [];
 
-    const userLang = typeof body?.userLang === "string" ? body.userLang : "en";
+    const userLang =
+      typeof body?.userLang === "string" ? body.userLang : "en";
 
     const conversationId =
-      typeof body?.conversationId === "string" && body.conversationId.trim()
+      typeof body?.conversationId === "string" &&
+      body.conversationId.trim()
         ? body.conversationId.trim()
         : "default";
 
-    // ✅ NEW: история из приложения (если пришла)
-    const conversationHistory = normalizeHistory(body?.conversationHistory);
+    // история из приложения
+    const conversationHistory = normalizeHistory(
+      body?.conversationHistory
+    );
 
-    console.log("conversationId (from app):", body?.conversationId);
-    console.log("conversationId (effective):", conversationId);
-    console.log("conversationHistory tail:", conversationHistory.length);
-    // 🔧 DEBUG: быстрый health-check (временно)
+    // 🔧 быстрый health-check (можно оставить)
     if (message === "ping") {
       return json({
         ok: true,
         pong: true,
         conversationId,
         hasApiKey: !!env.OPENAI_API_KEY,
-        model: (env as any).MAMASCOTA_MODEL_OVERRIDE || env.OPENAI_MODEL || null,
+        model:
+          (env as any).MAMASCOTA_MODEL_OVERRIDE ||
+          env.OPENAI_MODEL ||
+          null,
       });
     }
 
-    // ВАЖНО: message:"" — нормальный старт (после выбора симптомов)
+    // message:"" — нормальный старт после выбора симптомов
     const result = await processMessageBrain({
       env,
       message,
@@ -146,11 +151,7 @@ export default {
       symptomKeys,
       userLang,
       conversationId,
-
-      // ✅ теперь не [] — а хвост из приложения
       conversationHistory,
-
-      // Язык фиксируем так же, как раньше
       langOverride: userLang,
     });
 

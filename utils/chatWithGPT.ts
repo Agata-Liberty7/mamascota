@@ -60,6 +60,29 @@ async function getUnifiedActivePet(): Promise<any | null> {
   }
 }
 
+async function getSelectedSymptomKeysFromStorage(): Promise<string[]> {
+  try {
+    const raw =
+      (await AsyncStorage.getItem("selectedSymptoms")) ??
+      (await AsyncStorage.getItem("symptomKeys")) ??
+      (await AsyncStorage.getItem("symptoms")) ??
+      null;
+
+    if (!raw) return [];
+
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+
+    return parsed
+      .filter((x) => typeof x === "string")
+      .map((s) => s.trim())
+      .filter(Boolean);
+  } catch (e) {
+    console.warn("⚠️ Ошибка чтения выбранных симптомов:", e);
+    return [];
+  }
+}
+
 // --------------------------------------------------
 // 📤 Вызов агента
 // --------------------------------------------------
@@ -69,6 +92,7 @@ export async function chatWithGPT(params: {
   symptomKeys?: string[];
   userLang?: string;
   conversationId?: string; // можно явно задать (например, summary-…)
+  conversationHistory?: Array<{ role: "user" | "assistant" | "system"; content: string }>; // ✅ NEW
 }): Promise<ChatResult> {
   const { message, pet, symptomKeys, userLang, conversationId } = params || {};
 
@@ -81,6 +105,12 @@ export async function chatWithGPT(params: {
 
   // 🐾 если pet не пришёл — берём из единой модели
   const ensuredPet = pet ?? (await getUnifiedActivePet());
+
+  // 🗝️ если symptomKeys не передали — берём из AsyncStorage (чтобы не терялись между сообщениями)
+  const ensuredSymptomKeys =
+    Array.isArray(symptomKeys) && symptomKeys.length > 0
+      ? symptomKeys
+      : await getSelectedSymptomKeysFromStorage();
 
   // 🐾 добавляем готовую локализованную подпись вида
   const petWithLabel = ensuredPet
@@ -122,14 +152,23 @@ export async function chatWithGPT(params: {
     }
 
     // 🧠 Хвост истории — только для обычного диалога, НЕ для summary
-    const conversationHistory = isSummaryConversation
-      ? []
-      : await getConversationHistoryTail(ensuredConversationId, 80);
+    // 🧠 History:
+    // 1) если историю передали явно (например, из chat.tsx ensureDecisionTreeCached) — используем её
+    // 2) если это decisionTree-команда — worker ДОЛЖЕН видеть историю даже для summary-…
+    // 3) обычный summary-диалог (не decisionTree) — как раньше: без истории
+    const conversationHistory =
+      Array.isArray(params?.conversationHistory) && params.conversationHistory.length > 0
+        ? params.conversationHistory
+        : isDecisionTreeRequest
+          ? await getConversationHistoryTail(ensuredConversationId, 80)
+          : isSummaryConversation
+            ? []
+            : await getConversationHistoryTail(ensuredConversationId, 80);
 
     const body = {
       message: message ?? "",
       pet: petWithLabel ?? undefined,
-      symptomKeys: symptomKeys ?? undefined,
+      symptomKeys: ensuredSymptomKeys.length > 0 ? ensuredSymptomKeys : undefined,
       userLang: effectiveLang,
       conversationId: ensuredConversationId,
       conversationHistory,
@@ -250,10 +289,16 @@ export async function chatWithGPT(params: {
             ? data.phase
             : undefined;
 
-        // ✅ decisionTree payload (из воркера) — сохраняем только для обычного чата
-        if (data?.decisionTree && serverConversationId && !isSummaryConversation) {
+        // ✅ decisionTree используется только для PDF:
+        // сохраняем ТОЛЬКО результат служебного вызова __MAMASCOTA_DECISION_TREE__
+        // (включая Summary), чтобы PDF не получался пустым.
+        if (isDecisionTreeRequest && data?.decisionTree) {
           try {
-            const dtKey = `decisionTree:${serverConversationId}:${effectiveLang}`;
+            const targetId = serverConversationId || ensuredConversationId;
+            if (!targetId) throw new Error("No conversationId for decisionTree cache");
+
+            const dtKey = `decisionTree:${targetId}:${effectiveLang}`;
+
             await AsyncStorage.setItem(
               dtKey,
               JSON.stringify({
@@ -261,6 +306,7 @@ export async function chatWithGPT(params: {
                 decisionTree: data.decisionTree,
               })
             );
+
             console.log("💾 decisionTree сохранён:", dtKey);
           } catch (e) {
             console.warn("⚠️ Не удалось сохранить decisionTree:", e);
@@ -476,7 +522,7 @@ function toHealthUrl(agentUrl: string): string {
 async function fetchWithTimeout(
   url: string,
   options: RequestInit,
-  timeoutMs = 8000
+  timeoutMs = 20000
 ): Promise<Response> {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeoutMs);
@@ -601,6 +647,7 @@ async function postAgentWithFailover(
 ): Promise<Response> {
   const doPost = async (url: string, timeoutMs: number) => {
     const t0 = Date.now();
+    console.log("⏳ doPost timeoutMs =", timeoutMs, "url =", url);
     const res = await fetchWithTimeout(
       url,
       {

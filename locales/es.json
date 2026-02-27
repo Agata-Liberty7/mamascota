@@ -203,7 +203,7 @@
   "sex": "Sexo",
   "male": "Macho",
   "female": "Hembra",
-  "not_set": "Sin especificar",
+  "not_set": "No especificado",
   "neutered_spayed": "Esterilizado/a",
   "animal_other": "Otro",
 
@@ -213,7 +213,7 @@
     "focus_title": "Enfoque para el veterinario",
     "next_steps_title": "Próximos pasos",
     "observe_title": "Observación en casa",
-    "urgent_title": "Urgente ahora",
+    "urgent_title": "Urgente ahora si...",
     "plan_title": "Plan de visita",
     "generating": "Creando PDF..."
   }

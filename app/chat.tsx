@@ -61,17 +61,24 @@ function formatChatTime(ts?: number) {
   }
 }
 function splitAssistantReplyIntoBubbles(reply: string): string[] {
-  const DELIM = "[[CHUNK]]";
-
   if (typeof reply !== "string") return [];
+
   const raw = reply.trim();
   if (!raw) return [];
 
-  if (!raw.includes(DELIM)) return [raw];
-
   return raw
-    .split(DELIM)
-    .map((s) => s.trim())
+    .split("[CHUNK]")
+    .map((s) =>
+      s
+        // удаляем остатки маркера если вдруг он продублировался
+        .replace(/\[CHUNK\]/gi, "")
+        // удаляем строки из одной скобки
+        .replace(/^\s*[\[\]]\s*$/gm, "")
+        // удаляем скобки если они “прилипли” к краю блока
+        .replace(/^\s*\[+\s*/g, "")
+        .replace(/\s*\]+\s*$/g, "")
+        .trim()
+    )
     .filter(Boolean);
 }
 
@@ -99,6 +106,8 @@ export default function ChatScreen() {
 
   const [inputHeight, setInputHeight] = useState(56);
   const flatListRef = useRef<FlatList>(null);
+  const waitingHintIdxRef = useRef(0);
+
 
   const insets = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
@@ -126,9 +135,10 @@ export default function ChatScreen() {
                 const ts = typeof m?.ts === "number" ? m.ts : undefined;
                 const content = typeof m?.content === "string" ? m.content : "";
 
-                // ✅ если ассистент сохранился с [[CHUNK]] — разворачиваем в несколько пузырей
-                if (role === "assistant" && content.includes("[[CHUNK]]")) {
-                  const parts = splitAssistantReplyIntoBubbles(content);
+              // ✅ если ответ можно разделить на части — разворачиваем в несколько пузырей
+              if (role === "assistant") {
+                const parts = splitAssistantReplyIntoBubbles(content);
+                if (parts.length > 1) {
                   const base = ts ?? Date.now();
                   return parts.map((p, idx) => ({
                     role: "assistant" as const,
@@ -136,6 +146,7 @@ export default function ChatScreen() {
                     ts: base + idx,
                   }));
                 }
+              }
 
                 return [{ role, content, ts }];
               })
@@ -170,19 +181,44 @@ export default function ChatScreen() {
           if (saved) {
             try {
               const parsed = JSON.parse(saved);
+
               const normalized = Array.isArray(parsed)
-                ? parsed.map((m: any) => ({
-                    role: m?.role,
-                    content: typeof m?.content === "string" ? m.content : "",
-                    ts: typeof m?.ts === "number" ? m.ts : undefined,
-                  }))
+                ? parsed.flatMap((m: any) => {
+                    const role = m?.role;
+                    const ts = typeof m?.ts === "number" ? m.ts : undefined;
+                    const content = typeof m?.content === "string" ? m.content : "";
+
+                    // ✅ если ассистент сохранился с [[CHUNK]] — разворачиваем в несколько пузырей
+                    if (role === "assistant" && content.includes("[[CHUNK]]")) {
+                      const parts = splitAssistantReplyIntoBubbles(content);
+                      const base = ts ?? Date.now();
+                      return parts.map((p, idx) => ({
+                        role: "assistant" as const,
+                        content: p,
+                        ts: base + idx,
+                      }));
+                    }
+
+                    return [
+                      {
+                        role,
+                        content,
+                        ts,
+                      },
+                    ];
+                  })
                 : [];
+
               setChat(normalized);
             } catch {
               setChat([]);
             }
 
             setShowSelector(false);
+
+            // ✅ чтобы PDF-кнопка корректно восстанавливалась после возврата из Summary
+            setPdfConversationId(id);
+            await refreshPdfReadyState(id);
           }
         }
         await AsyncStorage.removeItem("restoreFromSummary");
@@ -218,26 +254,47 @@ export default function ChatScreen() {
   // ======================================================
   // 🟦 UX: подсказки во время ожидания ответа (UI-слой)
   // ======================================================
-  useEffect(() => {
-    if (!loading) {
-      setThinkingHint(null);
-      return;
-    }
+  const WAITING_HINT_IDX_KEY = "ui:waitingHintIdx";
 
-    const delays = [1000, 5000, 10000, 25000]; // hint4 появится только при долгом ожидании
-    const timers: any[] = [];
+async function pickWaitingHintOnce(): Promise<string | null> {
+  try {
+    const raw = await AsyncStorage.getItem(WAITING_HINT_IDX_KEY);
+    const idx = Number(raw || "0");
+    const safeIdx = Number.isFinite(idx) ? idx : 0;
 
-    THINKING_HINT_KEYS.forEach((key, idx) => {
-      const t = setTimeout(() => {
-        setThinkingHint(i18n.t(key));
-      }, delays[idx] ?? 25000);
-      timers.push(t);
-    });
+    const key = THINKING_HINT_KEYS[safeIdx % THINKING_HINT_KEYS.length];
+    // следующий раз будет другой (но только на следующий запрос)
+    await AsyncStorage.setItem(WAITING_HINT_IDX_KEY, String(safeIdx + 1));
 
-    return () => {
-      timers.forEach((t) => clearTimeout(t));
-    };
-  }, [loading, i18n.locale]);
+    return i18n.t(key);
+  } catch {
+    return i18n.t(THINKING_HINT_KEYS[0]);
+  }
+}
+
+useEffect(() => {
+  if (!loading) {
+    setThinkingHint(null);
+    return;
+  }
+
+  let cancelled = false;
+
+  // чтобы не мигало при быстрых ответах
+  const t = setTimeout(() => {
+    if (cancelled) return;
+
+    const key = THINKING_HINT_KEYS[waitingHintIdxRef.current % THINKING_HINT_KEYS.length];
+    waitingHintIdxRef.current += 1;
+
+    setThinkingHint(i18n.t(key));
+  }, 600);
+
+  return () => {
+    cancelled = true;
+    clearTimeout(t);
+  };
+}, [loading, i18n.locale]);
 
 
 
@@ -422,7 +479,53 @@ export default function ChatScreen() {
       setIsPdfReady(false);
     }
   }
+  function buildConversationHistoryTail(max = 20) {
+  const trimmed = chat
+    .filter((m) => m && (m.role === "user" || m.role === "assistant"))
+    .map((m) => ({
+      role: m.role,
+      content: typeof m.content === "string" ? m.content : "",
+    }))
+    .filter((m) => m.content.trim().length > 0);
 
+  return trimmed.slice(-max);
+}
+
+async function ensureDecisionTreeCached(conversationId: string) {
+  const locale = i18n.locale || "en";
+  const dtKey = `decisionTree:${conversationId}:${locale}`;
+
+  // если есть кэш и он не помечен как stale — ничего не делаем
+  const raw = await AsyncStorage.getItem(dtKey);
+  if (raw && !isDecisionTreeStale) return;
+
+  const conversationHistory = buildConversationHistoryTail(20);
+
+  const dtRes = await chatWithGPT({
+    message: "__MAMASCOTA_DECISION_TREE__",
+    conversationId,
+    userLang: locale,
+    conversationHistory,
+    pet: pet || undefined,
+  });
+
+  if (!dtRes || typeof dtRes !== "object" || !dtRes.ok) {
+    throw new Error(
+      (dtRes && typeof dtRes === "object" && (dtRes as any).error) ||
+        "decisionTree request failed"
+    );
+  }
+
+  const decisionTree = (dtRes as any).decisionTree ?? null;
+
+  await AsyncStorage.setItem(
+    dtKey,
+    JSON.stringify({ createdAt: new Date().toISOString(), decisionTree })
+  );
+
+  setIsPdfReady(true);
+  setIsDecisionTreeStale(false);
+}
 
   async function saveSessionSilently(conversationId: string) {
     // 1) гарантируем, что история есть в AsyncStorage
@@ -484,7 +587,6 @@ export default function ChatScreen() {
   }
 
   const handlePdfNow = async () => {
-    if (!isPdfReady) return;
     if (pdfGenerating) return;
 
     try {
@@ -500,9 +602,15 @@ export default function ChatScreen() {
         return;
       }
 
-      // тихо сохранили → генерим pdf
+      // ✅ 1) гарантируем, что decisionTree есть (или пересчитаем, если stale/нет кэша)
+      await ensureDecisionTreeCached(id);
+
+      // ✅ 2) тихо сохранили → генерим pdf
       await saveSessionSilently(id);
       await exportSummaryPDF(id);
+
+      // на всякий: обновим флаг готовности
+      await refreshPdfReadyState(id);
     } catch (e) {
       console.error("❌ PDF now error:", e);
       alert(i18n.t("chat.pdf_error", { defaultValue: "Could not generate PDF." }));
@@ -510,6 +618,10 @@ export default function ChatScreen() {
       setPdfGenerating(false);
     }
   };
+  const isWaitingForSummary = loading && !pdfGenerating && (phase === "summary" || phase === "ended");
+  const waitingText = isWaitingForSummary
+    ? i18n.t("chat.waiting.summary")
+    : thinkingHint;
     
   // ======================================================
   // 🟦 UI
@@ -568,13 +680,13 @@ export default function ChatScreen() {
                 flatListRef.current?.scrollToEnd({ animated: true })
               }
             />
-            {loading && (
+            {loading && !pdfGenerating && (
               <View style={[styles.message, styles.assistantMsg, styles.waitingBubble]}>
                 <View style={[styles.waitingRow, isRTL && styles.waitingRowRTL]}>
                   <ActivityIndicator />
-                  {!!thinkingHint && (
+                  {!!waitingText && (
                     <Text style={[styles.waitingText, isRTL && styles.waitingTextRTL]}>
-                      {thinkingHint}
+                      {waitingText}
                     </Text>
                   )}
 
@@ -596,21 +708,27 @@ export default function ChatScreen() {
           style={styles.inputArea}
           onLayout={(e) => setInputHeight(e.nativeEvent.layout.height)}
         >
-          {/* PDF button (always available when chat has something) */}
+          {(() => {
+        const isPdfEnabled = !!pdfConversationId; // ✅ включаем по факту финализации
+        const isDisabled = !isPdfEnabled || loading || pdfGenerating;
+
+        return (
           <TouchableOpacity
             style={[
               styles.pdfQuickBtn,
-              (!isPdfReady || loading || pdfGenerating) && { opacity: 0.35 },
+              isDisabled && { opacity: 0.35 },
             ]}
             onPress={handlePdfNow}
-            disabled={!isPdfReady || loading || pdfGenerating}
+            disabled={isDisabled}
           >
             <MaterialIcons
               name="picture-as-pdf"
               size={26}
-              color={isPdfReady ? "#E53935" : "#BDBDBD"}
+              color={isPdfEnabled ? "#E53935" : "#BDBDBD"}
             />
           </TouchableOpacity>
+        );
+      })()}
 
 
 

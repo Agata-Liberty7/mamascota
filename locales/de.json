@@ -200,7 +200,7 @@
   "sex": "Geschlecht",
   "male": "Männlich",
   "female": "Weiblich",
-  "not_set": "Nicht festgelegt",
+  "not_set": "Nicht angegeben",
   "neutered_spayed": "Kastriert/Sterilisiert",
   "animal_other": "Andere",
 
@@ -210,7 +210,7 @@
     "focus_title": "Fokus für den Tierarzt",
     "next_steps_title": "Nächste Schritte",
     "observe_title": "Beobachtung zu Hause",
-    "urgent_title": "Sofortiges Handeln",
+    "urgent_title": "Sofortiges Handeln erforderlich, wenn...",
     "plan_title": "Plan des Tierarztbesuchs",
     "generating": "PDF wird erstellt..."
   }

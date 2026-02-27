@@ -129,7 +129,7 @@ export default function PetForm({
             ? breed === "__other"
               ? i18n.t("animal_other")
               : breed
-            : i18n.t("settings.pets.set_default")}
+            : i18n.t("settings.pets.breed_label")}
         </Text>
       </TouchableOpacity>
 
@@ -164,7 +164,7 @@ export default function PetForm({
           }}
           style={[styles.segment, sex === "male" && styles.segmentActive]}
         >
-          <Text style={styles.segmentText}>♂</Text>
+          <Text style={styles.segmentText}>{i18n.t("male")}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -174,7 +174,7 @@ export default function PetForm({
           }}
           style={[styles.segment, sex === "female" && styles.segmentActive]}
         >
-          <Text style={styles.segmentText}>♀</Text>
+          <Text style={styles.segmentText}>{i18n.t("female")}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -184,7 +184,7 @@ export default function PetForm({
           }}
           style={[styles.segment, sex === "" && styles.segmentActive]}
         >
-          <Text style={styles.segmentText}>⚪️</Text>
+          <Text style={styles.segmentText}>{i18n.t("not_set")}</Text>
         </TouchableOpacity>
       </View>
 
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.cardBg,
   },
   segmentText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     color: theme.colors.textPrimary,
   },
