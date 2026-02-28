@@ -357,50 +357,17 @@ export async function exportSummaryPDF(sessionId: string) {
     //
     const title = i18n.t("menu.summary", { defaultValue: "Summary" });
     const dateLabel = i18n.t("pdf.date_label", { defaultValue: "Date and time" });
-    const symptomsTitle = i18n.t("symptomSelector.title", {
-      defaultValue: "Symptoms",
-    });
-
-    const animalDataTitle = i18n.t("animal_data", {
-      defaultValue: "Animal data",
-    });
-    const nameLabel = i18n.t("settings.pets.name_label", {
-      defaultValue: "Name",
-    });
-    const speciesLabel = i18n.t("settings.pets.species_label", {
-      defaultValue: "Species",
-    });
-    const breedLabel = i18n.t("settings.pets.breed_label", {
-      defaultValue: "Breed",
-    });
-    const ageLabel = i18n.t("settings.pets.age_label", {
-      defaultValue: "Age",
-    });
-
-    const ownerNotesTitle = i18n.t("pdf.owner_notes_title", {
-      defaultValue: "Anamnesis (owner’s report)",
-    });
-
-    const focusTitle = i18n.t("pdf.focus_title", {
-      defaultValue: "What the vet should check",
-    });
-
-    const nextStepsTitle = i18n.t("pdf.next_steps_title", {
-      defaultValue: "What to do next",
-    });
-
-    const observeTitle = i18n.t("pdf.observe_title", {
-      defaultValue: "What to observe at home",
-    });
-
-    const urgentTitle = i18n.t("pdf.urgent_title", {
-      defaultValue: "Go to the clinic urgently if",
-    });
-
-    const planTitle = i18n.t("pdf.plan_title", {
-      defaultValue: "Planned visit",
-    });
-
+    const symptomsTitle = i18n.t("symptomSelector.title", { defaultValue: "Symptoms"});
+    const animalDataTitle = i18n.t("animal_data", { defaultValue: "Animal data"});
+    const nameLabel = i18n.t("settings.pets.name_label", { defaultValue: "Name"});
+    const speciesLabel = i18n.t("settings.pets.species_label", { defaultValue: "Species"});
+    const breedLabel = i18n.t("settings.pets.breed_label", { defaultValue: "Breed"});
+    const ageLabel = i18n.t("settings.pets.age_label", { defaultValue: "Age"});
+    const ownerNotesTitle = i18n.t("pdf.owner_notes_title", { defaultValue: "Anamnesis (owner’s report)"});
+    const nextStepsTitle = i18n.t("pdf.next_steps_title", { defaultValue: "What to do next"});
+    const observeTitle = i18n.t("pdf.observe_title", { defaultValue: "What to observe at home"});
+    const urgentTitle = i18n.t("pdf.urgent_title", { defaultValue: "Go to the clinic urgently if"});
+    const planTitle = i18n.t("pdf.plan_title", { defaultValue: "Planned visit"});
 
 
     //
@@ -477,11 +444,6 @@ ${
 
 <h2>${escapeHtml(normalizePdfText(ownerNotesTitle))}</h2>
 <div class="mono">${escapeHtml(normalizePdfText(anamnesisShort || ownerNotesFallback || "—"))}</div>
-
-<div class="divider"></div>
-
-<h2>${escapeHtml(normalizePdfText(focusTitle))}</h2>
-<div class="mono">${escapeHtml(normalizePdfText(focusForVet || "—"))}</div>
 
 <div class="divider"></div>
 
