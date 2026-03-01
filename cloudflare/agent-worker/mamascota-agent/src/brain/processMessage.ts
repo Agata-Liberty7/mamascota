@@ -16,10 +16,10 @@ export type BrainResult = {
   error?: string;
   conversationId?: string;
   sessionEnded?: boolean;
+  needsFinalize?: boolean;
   phase?: "intake" | "clarify" | "summary" | "ended";
   decisionTree?: {
     anamnesis_short: string[];
-    focus_for_vet: string[];
     next_steps: {
       observe_at_home: string[];
       urgent_now: string[];
@@ -44,6 +44,7 @@ type BrainArgs = {
 // =====================
 const END_MARK = "[SESSION_ENDED]";
 const DECISION_TREE_CMD = "__MAMASCOTA_DECISION_TREE__";
+const FINALIZE_CMD = "__MAMASCOTA_FINALIZE__";
 
 const PROMPT_VERSION = "2026-02-21-perf-first-light";
 
@@ -274,7 +275,6 @@ function buildDecisionTreeRequestV2(locale: string, combined: string) {
 
 {
   "anamnesis_short": ["..."],
-  "focus_for_vet": ["..."],
   "next_steps": {
     "observe_at_home": ["..."],
     "urgent_now": ["..."],
@@ -290,7 +290,6 @@ function buildDecisionTreeRequestV2(locale: string, combined: string) {
 
 Лимиты:
 - anamnesis_short: 3–6 пунктов
-- focus_for_vet: 3–5 пунктов
 - observe_at_home: 2–5 пунктов (без лечения)
 - urgent_now: 3–6 чётких признаков срочности
 - plan_visit: 1–2 пункта (зачем очно)
@@ -334,7 +333,6 @@ async function buildDecisionTreeInWorker(args: {
 
     return {
       anamnesis_short: safeArrayOfStrings(parsed?.anamnesis_short),
-      focus_for_vet: safeArrayOfStrings(parsed?.focus_for_vet),
       next_steps: {
         observe_at_home: safeArrayOfStrings(ns?.observe_at_home),
         urgent_now: safeArrayOfStrings(ns?.urgent_now),
@@ -386,6 +384,7 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
 
   // ---- command switch: decisionTree on-demand
   const isDecisionTreeRequest = trimmedMessage === DECISION_TREE_CMD;
+  const isFinalizeRequest = trimmedMessage === FINALIZE_CMD;
 
   try {
     const petData = normalizePet(args.pet);
@@ -516,7 +515,17 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
       // Internal start trigger (not shown to the user in the app)
       messages.push({ role: "user", content: "__MAMASCOTA_START__" });
     }
-
+    if (isFinalizeRequest) {
+      messages.push({
+        role: "system",
+        content: [
+          "FINALIZE_MODE:",
+          "- Produce the final summary now.",
+          "- Do NOT ask questions.",
+          `- End your message with ${END_MARK} exactly once.`,
+        ].join("\n"),
+      });
+    }
     // Call OpenAI
     let reply = await callOpenAIChat({ apiKey, model, messages });
 
@@ -566,14 +575,28 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
     // Final output cleanup (no stray chunk brackets)
     cleanedReply = sanitizeAssistantReply(cleanedReply);
 
+    // ✅ “поймали старт финализации”: модель поставила END_MARK,
+    // но финальный текст отдаём только по спец-команде FINALIZE_CMD
+    if (sessionEnded && !isFinalizeRequest) {
+      return {
+        ok: true,
+        conversationId,
+        reply: "",
+        sessionEnded: false,
+        needsFinalize: true,
+        phase: "summary",
+        decisionTree: null,
+      };
+    }
+
     const phase = detectPhase(cleanedReply, sessionEnded, isFirstRealMessage);
 
-    // Важно: decisionTree НЕ считаем автоматически на sessionEnded (Variant B)
     return {
       ok: true,
       conversationId,
       reply: cleanedReply,
       sessionEnded,
+      needsFinalize: false,
       phase,
       decisionTree: null,
     };

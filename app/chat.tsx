@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   FlatList,
   KeyboardAvoidingView,
+  Modal,
   StyleSheet,
   Text,
   TextInput,
@@ -97,6 +98,7 @@ export default function ChatScreen() {
   const [thinkingHint, setThinkingHint] = useState<string | null>(null);
   const [pdfConversationId, setPdfConversationId] = useState<string | null>(null);
   const [pdfGenerating, setPdfGenerating] = useState(false);
+  const [finalizing, setFinalizing] = useState(false);  
   const [phase, setPhase] = useState<"intake" | "clarify" | "summary" | "ended" | null>(null);
   const [isPdfReady, setIsPdfReady] = useState(false);
   const [isDecisionTreeStale, setIsDecisionTreeStale] = useState(false);
@@ -387,10 +389,43 @@ useEffect(() => {
         setLoading(true);
 
         // 3) Запрос к агенту
-        const result = await chatWithGPT({
+        let result = await chatWithGPT({
           message: messageToSend,
           pet: pet || undefined,
         });
+        // ✅ ACK: воркер поймал старт финализации — блокируем UI и делаем finalize вторым запросом
+        if (typeof result === "object" && (result as any)?.needsFinalize) {
+          setFinalizing(true);
+
+          const cid =
+            (result as any)?.conversationId ??
+            (await AsyncStorage.getItem("conversationId")) ??
+            null;
+
+          const finalized = await chatWithGPT({
+            message: "__MAMASCOTA_FINALIZE__",
+            pet: pet || undefined,
+            conversationId: cid ?? undefined,
+          });
+
+          setFinalizing(false);
+
+          // дальше работаем уже с finalized как с обычным result
+          // (подменяем result)
+          // @ts-ignore
+          result = finalized;
+        }
+        // ✅ Финал пришёл вторым запросом — сразу активируем PDF-кнопку
+        if (typeof result === "object" && result?.sessionEnded) {
+          const cid = result.conversationId ?? null;
+
+          if (cid) {
+            setPdfConversationId(cid);
+            setIsPdfReady(true); // мгновенно красим/активируем UX
+            setIsDecisionTreeStale(false);
+            await refreshPdfReadyState(cid);
+          }
+        }
 
         // 4) Текст ответа
         const assistantText =
@@ -665,6 +700,17 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
         keyboardVerticalOffset={headerHeight}
       >
         <LoadingPDF visible={pdfGenerating} />
+        
+        <Modal transparent animationType="fade" visible={finalizing}>
+          <View style={styles.overlay}>
+            <View style={styles.box}>
+              <ActivityIndicator size="large" color="#007AFF" />
+              <Text style={styles.text}>
+                {i18n.t("chat.waiting.summary")}
+              </Text>
+            </View>
+          </View>
+        </Modal>
 
         {showSelector ? (
           <SymptomSelector onSubmit={handleSymptomSubmit} />
@@ -724,7 +770,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
                 </View>
               </View>
         )}
-        {phase === "ended" && (
+        {phase === "ended" && !!pdfConversationId && isPdfReady && (
           <View style={styles.summaryHint}>
             <Text style={styles.summaryHintText}>
               {i18n.t("chat.summary_hint", {
@@ -741,7 +787,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
         >
           {(() => {
         const isPdfEnabled = !!pdfConversationId; // ✅ включаем по факту финализации
-        const isDisabled = !isPdfEnabled || loading || pdfGenerating;
+        const isDisabled = !isPdfEnabled || loading || pdfGenerating || finalizing;
 
         return (
           <TouchableOpacity
@@ -773,9 +819,9 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
           />
 
           <TouchableOpacity
-            style={[styles.sendButton, loading && { opacity: 0.5 }]}
+            style={[styles.sendButton, (loading || finalizing || pdfGenerating) && { opacity: 0.5 }]}
             onPress={handleSend}
-            disabled={loading}
+            disabled={loading || finalizing || pdfGenerating}
           >
             {loading ? (
               <ActivityIndicator color="#42A5F5" />
@@ -985,6 +1031,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginRight: 8,
+  },
+  overlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.35)",
+  },
+  box: {
+    backgroundColor: "#fff",
+    padding: 24,
+    borderRadius: 12,
+    alignItems: "center",
+    width: 240,
+  },
+  text: {
+    marginTop: 12,
+    fontSize: 16,
+    color: "#333",
+    textAlign: "center",
   },
                  
 });

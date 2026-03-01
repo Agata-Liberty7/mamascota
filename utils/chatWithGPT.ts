@@ -11,6 +11,7 @@ export type ChatResult = {
   error?: string;
   conversationId?: string;
   sessionEnded?: boolean;
+  needsFinalize?: boolean;
   phase?: "intake" | "clarify" | "summary" | "ended";
   decisionTree?: any | null;
 };
@@ -244,12 +245,19 @@ export async function chatWithGPT(params: {
             const userMsg = message?.trim()
               ? { role: "user", content: message.trim() }
               : null;
-            const assistantMsg = { role: "assistant", content: data.reply };
+
+            // ✅ ACK needsFinalize может приходить с пустым reply — его нельзя сохранять как сообщение ассистента
+            const needsFinalize = !!data?.needsFinalize;
+            const assistantText = typeof data.reply === "string" ? data.reply : "";
+            const assistantMsg =
+              !needsFinalize && assistantText.trim().length > 0
+                ? { role: "assistant", content: assistantText }
+                : null;
 
             const updated = [
               ...chatHistory,
               ...(userMsg ? [userMsg] : []),
-              assistantMsg,
+              ...(assistantMsg ? [assistantMsg] : []),
             ];
 
             await AsyncStorage.setItem(
@@ -289,16 +297,10 @@ export async function chatWithGPT(params: {
             ? data.phase
             : undefined;
 
-        // ✅ decisionTree используется только для PDF:
-        // сохраняем ТОЛЬКО результат служебного вызова __MAMASCOTA_DECISION_TREE__
-        // (включая Summary), чтобы PDF не получался пустым.
-        if (isDecisionTreeRequest && data?.decisionTree) {
+        // ✅ decisionTree payload (из воркера) — сохраняем только для обычного чата
+        if (data?.decisionTree && serverConversationId && !isSummaryConversation) {
           try {
-            const targetId = serverConversationId || ensuredConversationId;
-            if (!targetId) throw new Error("No conversationId for decisionTree cache");
-
-            const dtKey = `decisionTree:${targetId}:${effectiveLang}`;
-
+            const dtKey = `decisionTree:${serverConversationId}:${effectiveLang}`;
             await AsyncStorage.setItem(
               dtKey,
               JSON.stringify({
@@ -306,7 +308,6 @@ export async function chatWithGPT(params: {
                 decisionTree: data.decisionTree,
               })
             );
-
             console.log("💾 decisionTree сохранён:", dtKey);
           } catch (e) {
             console.warn("⚠️ Не удалось сохранить decisionTree:", e);
@@ -318,6 +319,7 @@ export async function chatWithGPT(params: {
           reply: data.reply ?? "",
           conversationId: serverConversationId || ensuredConversationId,
           sessionEnded: !!data?.sessionEnded,
+          needsFinalize: !!data?.needsFinalize,
           phase,
           decisionTree: data?.decisionTree ?? null,
         };
