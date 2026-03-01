@@ -129,12 +129,20 @@ async function findPetByName(name: string | null) {
 // Формируем структурированный анамнез через кастом
 // -----------------------------------------------------
 async function buildDecisionTree(conversationId: string, locale: string) {
-  // 1) достаём историю чата
-  const raw = await AsyncStorage.getItem(`chatHistory:${conversationId}`);
+  // 1) достаём историю чата (ВАЖНО: оба ключа)
+  const raw =
+    (await AsyncStorage.getItem(`chatHistory:${conversationId}`)) ??
+    (await AsyncStorage.getItem(`chat:history:${conversationId}`));
+  
   const chat = raw ? JSON.parse(raw) : [];
 
   const combined = Array.isArray(chat)
-    ? chat.map((m: any) => `${String(m?.role || "").toUpperCase()}: ${String(m?.content || "")}`).join("\n")
+    ? chat
+        .map(
+          (m: any) =>
+            `${String(m?.role || "").toUpperCase()}: ${String(m?.content || "")}`
+        )
+        .join("\n")
     : "";
 
   // 2) запрос (старый надёжный способ: вернуть строго JSON в reply)
