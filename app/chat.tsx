@@ -66,8 +66,8 @@ function splitAssistantReplyIntoBubbles(reply: string): string[] {
   const raw = reply.trim();
   if (!raw) return [];
 
-  return raw
-    .split("[CHUNK]")
+    return raw
+    .split(/\[\[CHUNK\]\]|\[CHUNK\]/g)
     .map((s) =>
       s
         // удаляем остатки маркера если вдруг он продублировался
@@ -107,6 +107,8 @@ export default function ChatScreen() {
   const [inputHeight, setInputHeight] = useState(56);
   const flatListRef = useRef<FlatList>(null);
   const waitingHintIdxRef = useRef(0);
+  const dtRefreshPromiseRef = useRef<Promise<void> | null>(null);
+
 
 
   const insets = useSafeAreaInsets();
@@ -188,15 +190,17 @@ export default function ChatScreen() {
                     const ts = typeof m?.ts === "number" ? m.ts : undefined;
                     const content = typeof m?.content === "string" ? m.content : "";
 
-                    // ✅ если ассистент сохранился с [[CHUNK]] — разворачиваем в несколько пузырей
-                    if (role === "assistant" && content.includes("[[CHUNK]]")) {
+                    // ✅ ассистент: разворачиваем всегда, если есть несколько частей (поддерживает [CHUNK] и [[CHUNK]])
+                    if (role === "assistant") {
                       const parts = splitAssistantReplyIntoBubbles(content);
-                      const base = ts ?? Date.now();
-                      return parts.map((p, idx) => ({
-                        role: "assistant" as const,
-                        content: p,
-                        ts: base + idx,
-                      }));
+                      if (parts.length > 1) {
+                        const base = ts ?? Date.now();
+                        return parts.map((p, idx) => ({
+                          role: "assistant" as const,
+                          content: p,
+                          ts: base + idx,
+                        }));
+                      }
                     }
 
                     return [
@@ -406,7 +410,6 @@ useEffect(() => {
           })),
         ]);
 
-
         // 6) Phase: обновляем только если пришло валидное значение
         const p = typeof result === "object" ? (result as any)?.phase : null;
         if (p === "intake" || p === "clarify" || p === "summary" || p === "ended") {
@@ -414,19 +417,28 @@ useEffect(() => {
         }
         // ⚠️ НЕ сбрасываем phase в null, чтобы шапка не мигала
 
+        const cidFromState =
+          pdfConversationId ??
+          (await AsyncStorage.getItem("conversationId")) ??
+          null;
+
         // 7) PDF
         if (typeof result === "object" && result?.sessionEnded) {
           const cid = result.conversationId ?? null;
           setPdfConversationId(cid);
           await refreshPdfReadyState(cid);
+
+          // (опционально позже) тут можно будет прегреть decisionTree/PDF
         } else {
-          // ✅ НЕ сбрасываем уже готовый PDF после продолжения диалога
-          // Если decisionTree уже был — помечаем, что он может устареть
           if (isPdfReady) {
             setIsDecisionTreeStale(true);
+            setIsPdfReady(false);
+          }
+
+          if (cidFromState) {
+            void refreshDecisionTreeIfStale(cidFromState);
           }
         }
-
 
       } catch (err) {
         console.error("Ошибка отправки:", err);
@@ -525,6 +537,25 @@ async function ensureDecisionTreeCached(conversationId: string) {
 
   setIsPdfReady(true);
   setIsDecisionTreeStale(false);
+}
+
+async function refreshDecisionTreeIfStale(conversationId: string) {
+  if (!isDecisionTreeStale) return;
+  if (dtRefreshPromiseRef.current) return;
+
+  dtRefreshPromiseRef.current = (async () => {
+    try {
+      await ensureDecisionTreeCached(conversationId);
+      await refreshPdfReadyState(conversationId);
+    } catch (e) {
+      // оставляем кнопку выключенной; пользователь сможет нажать позже (handlePdfNow покажет alert)
+      console.error("❌ decisionTree refresh error:", e);
+    } finally {
+      dtRefreshPromiseRef.current = null;
+    }
+  })();
+
+  return dtRefreshPromiseRef.current;
 }
 
   async function saveSessionSilently(conversationId: string) {

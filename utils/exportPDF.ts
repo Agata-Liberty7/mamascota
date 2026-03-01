@@ -101,7 +101,58 @@ async function findPetByName(name: string | null) {
       return 0;
     }
   }
+  // -----------------------------------------------------
+  // Read decisionTree cached by ChatScreen (worker-driven)
+  // Key format matches app/chat.tsx: decisionTree:${conversationId}:${locale}
+  // -----------------------------------------------------
+  async function getWorkerDecisionTreeFromChatCache(sessionId: string, locale: string) {
+    try {
+      const key = `decisionTree:${sessionId}:${locale}`;
+      const raw = await AsyncStorage.getItem(key);
+      if (!raw) return null;
 
+      const parsed = JSON.parse(raw);
+      const dt = parsed?.decisionTree;
+
+      const isNonEmptyObject =
+        dt &&
+        typeof dt === "object" &&
+        !Array.isArray(dt) &&
+        Object.keys(dt).length > 0;
+
+      return isNonEmptyObject ? dt : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function bulletsFromStringArray(arr: any): string {
+    return Array.isArray(arr)
+      ? arr
+          .map((x) => (typeof x === "string" ? x.trim() : ""))
+          .filter(Boolean)
+          .map((s) => `• ${s}`)
+          .join("\n")
+      : "";
+  }
+
+  function normalizeNextSteps(dt: any) {
+    // поддерживаем обе схемы: next_steps (snake) и nextSteps (camel)
+    return dt?.next_steps ?? dt?.nextSteps ?? {};
+  }
+
+  function mapDecisionTreeToPdfSections(dt: any) {
+    const ns = normalizeNextSteps(dt);
+
+    return {
+      anamnesisShort: bulletsFromStringArray(dt?.anamnesis_short ?? dt?.anamnesisShort ?? []),
+      nextSteps: {
+        observe_at_home: bulletsFromStringArray(ns?.observe_at_home ?? ns?.observeAtHome ?? []),
+        urgent_now: bulletsFromStringArray(ns?.urgent_now ?? ns?.urgentNow ?? []),
+        plan_visit: bulletsFromStringArray(ns?.plan_visit ?? ns?.planVisit ?? []),
+      },
+    };
+  }
   //
   // -----------------------------------------------------
   // Локализуем вид животного (species + sex → локали)
@@ -151,7 +202,6 @@ async function buildDecisionTree(conversationId: string, locale: string) {
 
 {
   "anamnesis_short": ["..."],
-  "focus_for_vet": ["..."],
   "next_steps": {
     "observe_at_home": ["..."],
     "urgent_now": ["..."],
@@ -163,7 +213,6 @@ async function buildDecisionTree(conversationId: string, locale: string) {
 - Язык строго: ${locale}.
 - Ничего ДО или ПОСЛЕ JSON.
 - 3–6 пунктов максимум в "anamnesis_short".
-- 3–5 пунктов максимум в "focus_for_vet".
 - В "next_steps":
   - observe_at_home: 1–3 коротких пункта
   - urgent_now: 3–6 чётких признаков
@@ -219,7 +268,6 @@ ${combined}
 
   return {
     anamnesisShort: bullets(dt?.anamnesis_short ?? []),
-    focusForVet: bullets(dt?.focus_for_vet ?? []),
     nextSteps: {
       observe_at_home: bullets(ns?.observe_at_home ?? []),
       urgent_now: bullets(ns?.urgent_now ?? []),
@@ -249,7 +297,6 @@ async function getDecisionTreeCached(sessionId: string, locale: string) {
       if (cachedChatLen !== null && cachedChatLen === chatLenNow) {
         return {
           anamnesisShort: String(cached?.anamnesisShort ?? ""),
-          focusForVet: String(cached?.focusForVet ?? ""),
           nextSteps: {
             observe_at_home: String(cached?.nextSteps?.observe_at_home ?? ""),
             urgent_now: String(cached?.nextSteps?.urgent_now ?? ""),
@@ -334,15 +381,22 @@ export async function exportSummaryPDF(sessionId: string) {
     // 3) Анамнез и клиническое обоснование из кастома
     //
     let anamnesisShort = "";
-    let focusForVet = "";
     let nextSteps: any = {};
 
     try {
-      const dt = await getDecisionTreeCached(sessionId, locale);
-      anamnesisShort = dt.anamnesisShort;
-      focusForVet = dt.focusForVet;
-      nextSteps = dt.nextSteps;
-    } catch (e) {
+      // 1) сначала пробуем worker-driven decisionTree из кэша чата
+      const workerDt = await getWorkerDecisionTreeFromChatCache(sessionId, locale);
+      if (workerDt) {
+        const mapped = mapDecisionTreeToPdfSections(workerDt);
+        anamnesisShort = mapped.anamnesisShort;
+        nextSteps = mapped.nextSteps;
+      } else {
+        // 2) fallback: старый локальный pipeline (оставляем как страховку)
+        const dt = await getDecisionTreeCached(sessionId, locale);
+        anamnesisShort = dt.anamnesisShort;
+        nextSteps = dt.nextSteps;
+      }
+    } catch {
       // decisionTree не обязателен — используем ownerNotesFallback ниже
     }
     //
