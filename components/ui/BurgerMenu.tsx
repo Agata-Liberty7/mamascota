@@ -30,7 +30,6 @@ export default function BurgerMenu({ visible, onClose }: Props) {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [animalProfile, setAnimalProfile] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
-  const [hasSummary, setHasSummary] = useState(false);
 
   useEffect(() => {
     const loadFlags = async () => {
@@ -39,20 +38,16 @@ export default function BurgerMenu({ visible, onClose }: Props) {
       const acceptedTerms = await AsyncStorage.getItem("acceptedTerms");
       const profile = await AsyncStorage.getItem("animalProfile");
       const cid = await AsyncStorage.getItem("conversationId");
-      const summaryFlag = await AsyncStorage.getItem("lastChatSessionExists");
 
       // согласие с условиями: если хотя бы один флаг true
       const isAccepted =
         legacyTerms === "true" || acceptedTerms === "true";
 
       // наличие хотя бы одной сохранённой сессии
-      const hasAnySummary =
-        !!summaryFlag && summaryFlag !== "0" && summaryFlag !== "false";
 
       setTermsAccepted(isAccepted);
       setAnimalProfile(!!profile);
       setConversationId(cid || null);
-      setHasSummary(hasAnySummary);
     };
 
     if (visible) {

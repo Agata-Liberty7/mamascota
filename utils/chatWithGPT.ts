@@ -470,8 +470,6 @@ export async function handleExitAction(
       await AsyncStorage.setItem("chatSummary", JSON.stringify(filtered));
       console.log("💾 Обновлена запись в Summary:", record);
 
-      await AsyncStorage.setItem("lastChatSessionExists", "1");
-      console.log("✅ lastChatSessionExists установлен в '1'");
     } catch (e) {
       console.error("❌ Не удалось сохранить chatSummary:", e);
     }

@@ -191,7 +191,7 @@ export default function SummaryScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        {t("menu.summary", "Consultation history")}
+        {t("menu.saved_sessions", "Consultation history")}
       </Text>
 
       {sessions.length === 0 ? (

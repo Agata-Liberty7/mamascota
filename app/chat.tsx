@@ -487,10 +487,9 @@ useEffect(() => {
 
           // (опционально позже) тут можно будет прегреть decisionTree/PDF
         } else {
-          if (isPdfReady) {
-            setIsDecisionTreeStale(true);
-            setIsPdfReady(false);
-          }
+          // любое новое сообщение пользователя делает decisionTree устаревшим
+          setIsDecisionTreeStale(true);
+          setIsPdfReady(false);
 
           if (cidFromState) {
             void refreshDecisionTreeIfStale(cidFromState);
@@ -672,7 +671,6 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
     filtered.unshift(record);
 
     await AsyncStorage.setItem("chatSummary", JSON.stringify(filtered));
-    await AsyncStorage.setItem("lastChatSessionExists", "1");
   }
 
   const handlePdfNow = async () => {

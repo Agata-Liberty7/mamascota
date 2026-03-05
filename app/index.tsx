@@ -14,7 +14,6 @@ import { theme } from '../src/theme';
 export default function StartScreen() {
   const router = useRouter();
 
-  const [sessionSaved, setSessionSaved] = useState<boolean>(false);
   const [onboardingSeen, setOnboardingSeen] = useState<boolean>(false);
   const [currentLanguage, setCurrentLanguage] = useState<string | null>(null);
   const [checking, setChecking] = useState(true);
@@ -32,10 +31,8 @@ export default function StartScreen() {
   useFocusEffect(
     useCallback(() => {
       const init = async () => {
-        const session = await AsyncStorage.getItem('sessionSaved');
         const onboarding = await AsyncStorage.getItem('seenOnboarding');
 
-        setSessionSaved(session === 'true');
         setOnboardingSeen(onboarding === 'true');
 
         setChecking(false);
@@ -74,6 +71,10 @@ export default function StartScreen() {
     if (decision === "resume") {
       // восстановление активной сессии = просто идём в чат
       await AsyncStorage.setItem("restoreFromSummary", "1");
+
+      // помечаем decisionTree устаревшим
+      await AsyncStorage.setItem("decisionTreeStale", "1");
+
       router.replace("/chat");
       return;
     }
