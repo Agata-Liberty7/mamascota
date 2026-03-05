@@ -2,12 +2,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useState, useEffect } from "react";
-import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import i18n from '../i18n';
-import { theme } from '../src/theme';
-import { restoreSession, clearConversationId } from "../utils/chatWithGPT";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { clearConversationId } from "../utils/chatWithGPT";
+import { handleActiveSessionDecision } from "../utils/handleActiveSessionDecision";
 import LanguageNotice from "../components/ui/LanguageNotice";
 import { detectAndSetInitialLanguage } from "../utils/detectLanguage";
+import i18n from '../i18n';
+import { theme } from '../src/theme';
 
 
 export default function StartScreen() {
@@ -68,48 +69,29 @@ export default function StartScreen() {
   };
 
   const handleStart = async () => {
-    const existingId = await AsyncStorage.getItem("conversationId");
+    const decision = await handleActiveSessionDecision();
 
-    if (existingId) {
-      // 🔁 Логика продолжения / новой сессии
-      Alert.alert(
-        i18n.t("continue_title"),
-        i18n.t("continue_message"),
-        [
-          {
-            text: i18n.t("start_new"),
-            style: "destructive",
-            onPress: async () => {
-              await clearConversationId();
-              console.log("🗑️ Старая сессия очищена, начинаем заново.");
-              await ensureEntryFlow();
-            },
-          },
-          {
-            text: i18n.t("continue_session"),
-            onPress: async () => {
-              await restoreSession(existingId);
-              console.log("♻️ Восстановлена сохранённая сессия:", existingId);
-
-              const summaryRaw = await AsyncStorage.getItem("chatSummary");
-              const summaryList = summaryRaw ? JSON.parse(summaryRaw) : [];
-
-              if (summaryList.length > 1) {
-                console.log("📜 Несколько сохранённых сессий → переход в Summary");
-                router.replace("/summary");
-              } else {
-                console.log("💬 Одна активная сессия → переход в чат");
-                router.replace("/chat");
-              }
-            },
-          },
-        ],
-        { cancelable: true }
-      );
-    } else {
-      // 🧠 Новый пользователь или все сессии очищены → идём по каноничному потоку
-      await ensureEntryFlow();
+    if (decision === "resume") {
+      // восстановление активной сессии = просто идём в чат
+      await AsyncStorage.setItem("restoreFromSummary", "1");
+      router.replace("/chat");
+      return;
     }
+
+    if (decision === "start_new") {
+      // мягко начинаем новую: сбрасываем только активный conversationId
+      await clearConversationId();
+      console.log("🗑️ Активная сессия сброшена, начинаем заново.");
+      await ensureEntryFlow();
+      return;
+    }
+
+    if (decision === "no_active") {
+      await ensureEntryFlow();
+      return;
+    }
+
+    // cancel — ничего не делаем
   };
 
   const styles = StyleSheet.create({

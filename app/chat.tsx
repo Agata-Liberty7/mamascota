@@ -9,6 +9,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  Keyboard,
   KeyboardAvoidingView,
   Modal,
   StyleSheet,
@@ -83,6 +84,14 @@ function splitAssistantReplyIntoBubbles(reply: string): string[] {
     .filter(Boolean);
 }
 
+function isInternalCommand(text: unknown): boolean {
+  if (typeof text !== "string") return false;
+  const t = text.trim();
+  return (
+    t === "__MAMASCOTA_FINALIZE__" ||
+    t === "__MAMASCOTA_DECISION_TREE__"
+  );
+}
 
 export default function ChatScreen() {
   const navigation = useNavigation();
@@ -108,6 +117,7 @@ export default function ChatScreen() {
 
   const [inputHeight, setInputHeight] = useState(56);
   const flatListRef = useRef<FlatList>(null);
+  const inputRef = useRef<TextInput>(null);
   const waitingHintIdxRef = useRef(0);
   const dtRefreshPromiseRef = useRef<Promise<void> | null>(null);
 
@@ -134,10 +144,13 @@ export default function ChatScreen() {
         try {
           const parsed = JSON.parse(saved);
           const normalized = Array.isArray(parsed)
-            ? parsed.flatMap((m: any) => {
-                const role = m?.role;
-                const ts = typeof m?.ts === "number" ? m.ts : undefined;
-                const content = typeof m?.content === "string" ? m.content : "";
+          ? parsed.flatMap((m: any) => {
+              const role = m?.role;
+              const ts = typeof m?.ts === "number" ? m.ts : undefined;
+              const content = typeof m?.content === "string" ? m.content : "";
+
+              // 🚫 никогда не показываем internal-команды
+              if (isInternalCommand(content)) return [];
 
               // ✅ если ответ можно разделить на части — разворачиваем в несколько пузырей
               if (role === "assistant") {
@@ -187,10 +200,13 @@ export default function ChatScreen() {
               const parsed = JSON.parse(saved);
 
               const normalized = Array.isArray(parsed)
-                ? parsed.flatMap((m: any) => {
-                    const role = m?.role;
-                    const ts = typeof m?.ts === "number" ? m.ts : undefined;
-                    const content = typeof m?.content === "string" ? m.content : "";
+              ? parsed.flatMap((m: any) => {
+                  const role = m?.role;
+                  const ts = typeof m?.ts === "number" ? m.ts : undefined;
+                  const content = typeof m?.content === "string" ? m.content : "";
+
+                  // 🚫 никогда не показываем internal-команды
+                  if (isInternalCommand(content)) return [];
 
                     // ✅ ассистент: разворачиваем всегда, если есть несколько частей (поддерживает [CHUNK] и [[CHUNK]])
                     if (role === "assistant") {
@@ -383,6 +399,8 @@ useEffect(() => {
       // 1) UI: сразу показываем сообщение пользователя
       setChat((prev) => [...prev, userMessage]);
       setInput("");
+      Keyboard.dismiss();
+      inputRef.current?.blur();
 
       try {
         // 2) UI: начинаем ожидание
@@ -395,6 +413,8 @@ useEffect(() => {
         });
         // ✅ ACK: воркер поймал старт финализации — блокируем UI и делаем finalize вторым запросом
         if (typeof result === "object" && (result as any)?.needsFinalize) {
+          Keyboard.dismiss();
+          inputRef.current?.blur();
           setFinalizing(true);
 
           const cid =
@@ -417,6 +437,8 @@ useEffect(() => {
         }
         // ✅ Финал пришёл вторым запросом — сразу активируем PDF-кнопку
         if (typeof result === "object" && result?.sessionEnded) {
+          Keyboard.dismiss();
+          inputRef.current?.blur();
           const cid = result.conversationId ?? null;
 
           if (cid) {
@@ -605,6 +627,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
       // если по какой-то причине история ещё не сохранилась — сохраним текущее состояние UI
       const filtered = chat
         .filter((m) => m && (m.role === "user" || m.role === "assistant"))
+        .filter((m) => !isInternalCommand(m.content))
         .map((m) => ({
           role: m.role,
           content: typeof m.content === "string" ? m.content : "",
@@ -770,7 +793,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
                 </View>
               </View>
         )}
-        {phase === "ended" && !!pdfConversationId && isPdfReady && (
+        {phase === "ended" && !!pdfConversationId && (
           <View style={styles.summaryHint}>
             <Text style={styles.summaryHintText}>
               {i18n.t("chat.summary_hint", {
@@ -810,6 +833,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
 
 
           <TextInput
+            ref={inputRef}
             style={[styles.input, isRTL && styles.inputRTL]}
             value={input}
             onChangeText={setInput}

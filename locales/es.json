@@ -70,14 +70,14 @@
   "continue_session": "Continuar sesión",
 
   "menu": {
-    "animal_selection": "Mis mascotas",
+    "start_consultation": "Iniciar consulta",
     "change_language": "Cambiar idioma",
     "lang_en": "Inglés",
     "lang_es": "Español",
     "lang_ru": "Ruso",
     "lang_he": "Hebreo",
     "chat": "Chat",
-    "summary": "Resumen",
+    "saved_sessions": "Sesiones guardadas",
     "settings": "Configuración",
     "about": "Acerca de",
     "open": "Menú",

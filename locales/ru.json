@@ -74,14 +74,14 @@
   "continue_session": "Продолжить сессию",
 
   "menu": {
-    "animal_selection": "Мои питомцы",
+    "start_consultation": "Начать консультацию",
     "change_language": "Смена языка",
       "lang_en": "Английский",
       "lang_es": "Испанский",
       "lang_ru": "Русский",
       "lang_he": "Иврит",
     "chat": "Чат",
-    "summary": "Резюме",
+    "saved_sessions": "Cохраненные сессии",
     "settings": "Настройки",
     "about": "О приложении",
     "open": "Меню",

@@ -1,5 +1,4 @@
-import { Alert, Platform } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 import i18n from "../i18n";
 
 export async function showExitConfirmation(): Promise<string> {
@@ -16,19 +15,7 @@ export async function showExitConfirmation(): Promise<string> {
         {
           text: i18n.t("exit_delete"),
           style: "destructive",
-          onPress: () => {
-            const lang = i18n.locale;
-            const delay = Platform.OS === "android" ? 100 : 0;
-            setTimeout(async () => {
-              try {
-                await AsyncStorage.removeItem("conversationId");
-                console.log("🗑️ Сессия удалена (через Alert)");
-              } catch (e) {
-                console.error("Ошибка при удалении:", e);
-              }
-              resolve("delete");
-            }, delay);
-          },
+          onPress: () => resolve("delete"),
         },
         {
           text: i18n.t("exit_save"),

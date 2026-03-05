@@ -68,14 +68,14 @@
   "continue_session": "המשך הפעלה",
 
   "menu": {
-    "animal_selection": "החיות שלי",
+    "start_consultation": "התחל ייעוץ",
     "change_language": "שנה שפה",
       "lang_en": "אַנגְלִית",
       "lang_es": "סְפָרַדִית",
       "lang_ru": "רוּסִי",
       "lang_he": "עִברִית",
     "chat": "צ'אט",
-    "summary": "סיכום",
+    "saved_sessions": "הפעלות שמורות",
     "settings": "הגדרות",
     "about": "אודות",
     "open": "תפריט",
@@ -200,7 +200,7 @@
   "sex": "מין",
   "male": "זכר",
   "female": "נקבה",
-  "not_set": "לא צוין",
+  "not_set": "לא  הוגדר",
   "neutered_spayed": "מסורס/מעוקרת",
   "animal_other": "אחר",
 

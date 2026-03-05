@@ -68,14 +68,14 @@
   "continue_session": "Sitzung fortsetzen",
 
   "menu": {
-    "animal_selection": "Meine Haustiere",
+    "start_consultation": "Beratung starten",
     "change_language": "Sprache ändern",
     "lang_en": "Englisch",
     "lang_es": "Spanisch",
     "lang_ru": "Russisch",
     "lang_he": "Hebräisch",
     "chat": "Chat",
-    "summary": "Zusammenfassung",
+    "saved_sessions": "Gespeicherte Sitzungen",
     "settings": "Einstellungen",
     "about": "Über",
     "open": "Menü",

@@ -14,7 +14,8 @@ import {
 import * as Animatable from "react-native-animatable";
 
 import i18n from "../../i18n";
-import { handleExitAction } from "../../utils/chatWithGPT";
+import { clearConversationId } from "../../utils/chatWithGPT";
+import { handleActiveSessionDecision } from "../../utils/handleActiveSessionDecision";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -99,13 +100,34 @@ export default function BurgerMenu({ visible, onClose }: Props) {
       },
     },
     {
-      label: String(i18n.t("menu.animal_selection")),
+      label: String(i18n.t("menu.start_consultation")),
       icon: "pets",
       // выбор животного доступен только после согласия с условиями
       enabled: termsAccepted,
-      action: () => {
-        onClose();
-        setTimeout(() => router.replace("/animal-selection"), 120);
+      action: async () => {
+        const decision = await handleActiveSessionDecision();
+
+        if (decision === "resume") {
+          await AsyncStorage.setItem("restoreFromSummary", "1");
+          onClose();
+          setTimeout(() => router.replace("/chat"), 120);
+          return;
+        }
+
+        if (decision === "start_new") {
+          await clearConversationId();
+          onClose();
+          setTimeout(() => router.replace("/animal-selection"), 120);
+          return;
+        }
+
+        if (decision === "no_active") {
+          onClose();
+          setTimeout(() => router.replace("/animal-selection"), 120);
+          return;
+        }
+
+        // cancel — ничего не делаем
       },
     },
     {
@@ -115,7 +137,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
       action: enterChat,
     },
     {
-      label: String(i18n.t("menu.summary")),
+      label: String(i18n.t("menu.saved_sessions")),
       icon: "list",
       enabled: true,   // ← вместо hasSummary
       action: () => {
@@ -176,16 +198,9 @@ export default function BurgerMenu({ visible, onClose }: Props) {
         {/* В начало */}
         <TouchableOpacity
           style={styles.menuItem}
-          onPress={async () => {
+          onPress={() => {
             onClose();
-            setTimeout(async () => {
-              const petRaw = await AsyncStorage.getItem("pet");
-              const pet = petRaw ? JSON.parse(petRaw) : null;
-              const petName = pet?.name || "Без имени";
-
-              await handleExitAction(petName);
-              // навигацию внутри уже решает сам handleExitAction
-            }, 150);
+            setTimeout(() => router.replace("/"), 120);
           }}
         >
 
