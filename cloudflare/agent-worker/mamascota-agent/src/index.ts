@@ -11,6 +11,7 @@ type ChatMsg = { role: "system" | "user" | "assistant"; content: string };
 
 type AgentRequestBody = {
   message?: string;
+  internalCommand?: string;
   pet?: any;
   symptomKeys?: string[];
   userLang?: string;
@@ -106,8 +107,11 @@ export default {
       return json({ ok: false, error: "Invalid JSON" }, 400);
     }
 
-    const message =
-      typeof body?.message === "string" ? body.message : "";
+    const message = typeof body?.message === "string" ? body.message : "";
+    const internalCommand =
+      typeof body?.internalCommand === "string" ? body.internalCommand.trim() : "";
+
+    const effectiveMessage = internalCommand || message;
 
     const pet = body?.pet;
 
@@ -125,7 +129,7 @@ export default {
         : "default";
 
     // история из приложения
-    const conversationHistory = normalizeHistory(
+    const conversationHistory = normalizeHistory( 
       body?.conversationHistory
     );
 
@@ -146,7 +150,7 @@ export default {
     // message:"" — нормальный старт после выбора симптомов
     const result = await processMessageBrain({
       env,
-      message,
+      message: effectiveMessage,
       pet,
       symptomKeys,
       userLang,

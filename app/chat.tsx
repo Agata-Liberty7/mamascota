@@ -491,9 +491,6 @@ useEffect(() => {
           setIsDecisionTreeStale(true);
           setIsPdfReady(false);
 
-          if (cidFromState) {
-            void refreshDecisionTreeIfStale(cidFromState);
-          }
         }
 
       } catch (err) {

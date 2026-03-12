@@ -126,18 +126,17 @@ export async function buildAgentContext(
       petData.species ||           // fallback
       "No especificada";
 
-    const context = `
-    🧩 Contexto clínico del paciente:
+        const context = `
+    Paciente:
     Nombre: ${petData.name || "Desconocido"}
     Especie: ${especieText}
     Raza: ${petData.breed || "No especificada"}
     Sexo: ${petData.sex || "No indicado"}
     Edad: ${petData.ageYears || "Sin datos"} años
     Esterilizado: ${petData.neutered ? "Sí" : "No"}
-
-    🌐 Idioma del usuario: ${langText}
+    Idioma: ${langText}
     ${symptomText}
-        `.trim();
+            `.trim();
 
     // DEBUG (временно)
     console.log("[KB] algorithms:", finalAlgorithms.length, "filtered:", filteredAlgorithms.length);
@@ -156,7 +155,6 @@ export async function buildAgentContext(
     clinical_details_for_species: clinicalDetailsForSpecies,
     breed_risks_for_pet: breedRisksForPet,
     pet_dimensions_for_pet: petDimensionsForPet,
-    knowledgeBase: filteredAlgorithms,
     context,
   });
 

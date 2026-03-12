@@ -89,13 +89,15 @@ async function getSelectedSymptomKeysFromStorage(): Promise<string[]> {
 // --------------------------------------------------
 export async function chatWithGPT(params: {
   message: string;
+  internalCommand?: "__MAMASCOTA_FINALIZE__" | "__MAMASCOTA_DECISION_TREE__";
   pet?: any;
   symptomKeys?: string[];
   userLang?: string;
   conversationId?: string; // можно явно задать (например, summary-…)
-  conversationHistory?: Array<{ role: "user" | "assistant" | "system"; content: string }>; // ✅ NEW
+  conversationHistory?: Array<{ role: "user" | "assistant" | "system"; content: string }>; 
+  // ✅ NEW
 }): Promise<ChatResult> {
-  const { message, pet, symptomKeys, userLang, conversationId } = params || {};
+  const { message, internalCommand, pet, symptomKeys, userLang, conversationId } = params || {};
 
   if (!AGENT_URL) {
     console.error(
@@ -129,9 +131,22 @@ export async function chatWithGPT(params: {
     typeof explicitConversationId === "string" &&
     explicitConversationId.startsWith("summary-");
 
+  // если пришла служебная команда — она имеет приоритет над message
+  const effectiveInternalCommand =
+    typeof internalCommand === "string" && internalCommand.trim()
+      ? internalCommand.trim()
+      : "";
+
+  // реальное сообщение для воркера
+  const effectiveMessage = effectiveInternalCommand || (message ?? "");
+
   // Служебный запрос для PDF: worker должен видеть историю,
   // но мы НЕ должны сохранять это как часть диалога
-  const isDecisionTreeRequest = message?.trim() === "__MAMASCOTA_DECISION_TREE__";
+  const isDecisionTreeRequest =
+    effectiveInternalCommand === "__MAMASCOTA_DECISION_TREE__";
+
+  const isFinalizeRequest =
+    effectiveInternalCommand === "__MAMASCOTA_FINALIZE__";
 
   try {
     const existingId = await AsyncStorage.getItem("conversationId");
@@ -167,9 +182,10 @@ export async function chatWithGPT(params: {
             : await getConversationHistoryTail(ensuredConversationId, 80);
 
     const body = {
-      message: message ?? "",
+      message: effectiveMessage,
+      internalCommand: effectiveInternalCommand || undefined,
       pet: petWithLabel ?? undefined,
-      symptomKeys: ensuredSymptomKeys.length > 0 ? ensuredSymptomKeys : undefined,
+      symptomKeys: ensuredSymptomKeys,
       userLang: effectiveLang,
       conversationId: ensuredConversationId,
       conversationHistory,
@@ -242,13 +258,20 @@ export async function chatWithGPT(params: {
               "[]";
             const chatHistory = JSON.parse(prev);
 
-            const userMsg = message?.trim()
-              ? { role: "user", content: message.trim() }
-              : null;
+            const userMsg =
+              !effectiveInternalCommand && effectiveMessage.trim()
+                ? { role: "user", content: effectiveMessage.trim() }
+                : null;
 
             // ✅ ACK needsFinalize может приходить с пустым reply — его нельзя сохранять как сообщение ассистента
             const needsFinalize = !!data?.needsFinalize;
-            const assistantText = typeof data.reply === "string" ? data.reply : "";
+            function sanitizeAssistantText(text: string) {
+              return text.replace(/\b[a-z]+_[a-z_]+\b/g, "").replace(/\s{2,}/g, " ").trim();
+            }
+
+            const assistantText =
+              typeof data.reply === "string" ? sanitizeAssistantText(data.reply) : "";
+              
             const assistantMsg =
               !needsFinalize && assistantText.trim().length > 0
                 ? { role: "assistant", content: assistantText }
