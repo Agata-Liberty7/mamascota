@@ -48,6 +48,57 @@ const FINALIZE_CMD = "__MAMASCOTA_FINALIZE__";
 
 const PROMPT_VERSION = "2026-02-21-perf-first-light";
 
+type CachedClinicalContext = {
+  signature: string;
+  value: string;
+  createdAt: number;
+};
+
+const CLINICAL_CONTEXT_CACHE = new Map<string, CachedClinicalContext>();
+const CLINICAL_CONTEXT_TTL_MS = 30 * 60 * 1000;
+
+function buildClinicalContextSignature(args: {
+  petData: any;
+  symptomKeys: string[];
+  effectiveLang: string;
+}) {
+  const pet = args.petData || {};
+  return JSON.stringify({
+    lang: args.effectiveLang,
+    symptomKeys: Array.isArray(args.symptomKeys) ? [...args.symptomKeys].sort() : [],
+    pet: {
+      species: pet.species ?? null,
+      breed: pet.breed ?? null,
+      sex: pet.sex ?? null,
+      ageYears: pet.ageYears ?? null,
+      neutered: !!pet.neutered,
+    },
+  });
+}
+
+function getCachedClinicalContext(conversationId: string, signature: string): string | null {
+  const cached = CLINICAL_CONTEXT_CACHE.get(conversationId);
+  if (!cached) return null;
+
+  const expired = Date.now() - cached.createdAt > CLINICAL_CONTEXT_TTL_MS;
+  if (expired) {
+    CLINICAL_CONTEXT_CACHE.delete(conversationId);
+    return null;
+  }
+
+  if (cached.signature !== signature) return null;
+  return cached.value || null;
+}
+
+function setCachedClinicalContext(conversationId: string, signature: string, value: string) {
+  if (!conversationId || !value) return;
+  CLINICAL_CONTEXT_CACHE.set(conversationId, {
+    signature,
+    value,
+    createdAt: Date.now(),
+  });
+}
+
 /**
  * Light system prompt for the very first assistant message:
  * - shorter => faster first token
@@ -450,9 +501,26 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
     // PERF: первый ответ делаем “лёгким” (без KB/YAML контекста)
     let fullContext = "";
     if (!isFirstRealMessage) {
-      console.log("🧠 Not first step → building CLINICAL_CONTEXT_JSON…");
-      fullContext = await buildAgentContext(petData, symptomKeys, effectiveLang, "familiar");
-      console.log("🧩 Context built:", fullContext ? "OK" : "EMPTY");
+      const contextSignature = buildClinicalContextSignature({
+        petData,
+        symptomKeys,
+        effectiveLang,
+      });
+
+      const cachedContext = getCachedClinicalContext(conversationId, contextSignature);
+
+      if (cachedContext) {
+        fullContext = cachedContext;
+        console.log("⚡ CLINICAL_CONTEXT_JSON cache hit");
+      } else {
+        console.log("🧠 Not first step → building CLINICAL_CONTEXT_JSON…");
+        fullContext = await buildAgentContext(petData, symptomKeys, effectiveLang, "familiar");
+        console.log("🧩 Context built:", fullContext ? "OK" : "EMPTY");
+
+        if (fullContext) {
+          setCachedClinicalContext(conversationId, contextSignature, fullContext);
+        }
+      }
     } else {
       console.log("🚀 PERF: first step → skipping knowledge base load");
     }
