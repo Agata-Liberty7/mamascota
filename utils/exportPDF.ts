@@ -378,23 +378,15 @@ export async function exportSummaryPDF(sessionId: string) {
     //
     // 3) АНамнез: дерево reasoning из кастома
     //
-    // 3) Анамнез и клиническое обоснование из кастома
-    //
     let anamnesisShort = "";
     let nextSteps: any = {};
 
     try {
-      // 1) сначала пробуем worker-driven decisionTree из кэша чата
       const workerDt = await getWorkerDecisionTreeFromChatCache(sessionId, locale);
       if (workerDt) {
         const mapped = mapDecisionTreeToPdfSections(workerDt);
         anamnesisShort = mapped.anamnesisShort;
         nextSteps = mapped.nextSteps;
-      } else {
-        // 2) fallback: старый локальный pipeline (оставляем как страховку)
-        const dt = await getDecisionTreeCached(sessionId, locale);
-        anamnesisShort = dt.anamnesisShort;
-        nextSteps = dt.nextSteps;
       }
     } catch {
       // decisionTree не обязателен — используем ownerNotesFallback ниже

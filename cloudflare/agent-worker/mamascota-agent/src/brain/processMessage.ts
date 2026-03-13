@@ -116,11 +116,12 @@ function buildFirstStepSystemPrompt(lang: string) {
     `Do NOT write filler acknowledgements like "Okay", "Got it", "Thanks", "Understood", "Приняла", "Хорошо, спасибо". Start directly with helpful content.`,
     `Rules:`,
     `- Ask for ONLY ONE thing from the user per message (one request). Do not chain requests with "and/also/in addition".`,
+    `- One question per message does NOT mean early closure: keep exploring clinically relevant directions step by step if important gaps remain.`,
     `- If symptomKeys are provided in APP_CONTEXT_JSON, you MUST explicitly cover them across the first 1–2 assistant messages (do not ignore any selected symptom).`,
     `- By your 2nd–3rd assistant message, you may add ONE very short explanation (1 sentence) of how the main symptoms may be connected. Do this ONLY ONCE per conversation, and only if it truly helps the next question.`,
     `- No checklists.`,
-    `- Keep sentences short.`,
-    `- No long explanations.`,
+    `- Keep wording simple and concise, but do not reduce clinical depth.`,
+    `- Do not add long explanations, but do continue collecting relevant facts if important gaps remain.`,
     `- No diagnoses, no medications, no treatment plans.`,
     `- If urgent red flags are present, stop asking questions and tell the owner to seek urgent care now.`,
     `First message goal:`,
@@ -346,6 +347,11 @@ Requirements:
 - Include important negatives when they affect triage or interpretation
   (for example: "no cough", "not at rest", "no vomiting").
 - Do not shorten the anamnesis just for brevity.
+- Do NOT include stable passport data of the pet inside "anamnesis_short"
+  if it is already shown in the separate animal data section.
+- Exclude name, species, breed, sex and age from "anamnesis_short"
+  unless one of them is directly clinically relevant to the current case
+  and changes triage or the interpretation of symptoms.
 
 Section rules:
 - "anamnesis_short":
@@ -353,7 +359,9 @@ Section rules:
   - usually 5-10 bullet points;
   - more than 10 is allowed if needed for completeness;
   - each bullet must contain one clear fact;
-  - do not merge several separate facts into one vague sentence.
+  - do not merge several separate facts into one vague sentence;
+  - do not repeat pet identity/profile facts already covered elsewhere
+    (name, species, breed, sex, age), unless they are clinically relevant.
 - "observe_at_home":
   - 2-5 practical points;
   - no medications, no treatment instructions.
@@ -546,7 +554,8 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
             `- By your 2nd–3rd assistant message, you may add ONE very short explanation (1 sentence) of how the main symptoms may be connected. Do this ONLY ONCE per conversation, and only if it helps the next question.\n` +
             `- Avoid repeating a question that was already asked in the last 6 turns.\n` +
             `- No checklists.\n` +
-            `- Prefer 2 short sentences total.\n` +
+            `- Prefer concise wording, but do NOT end early if clinically relevant gaps remain.\n` +
+            `- Before moving to summary, continue step-by-step through relevant symptom axes when they are indicated by the case (for example appetite, thirst, activity, stool/vomiting, recent changes, external triggers).\n` +
             `- Do NOT explain every question.\n` +
             `- Explain a question only if it changes the direction of reasoning and the transition would otherwise be unclear.\n` +
             `- Do NOT write filler acknowledgements like "Okay", "Got it", "Thanks", "Understood", "Приняла", "Хорошо, спасибо". Start directly with helpful content.\n` +
@@ -610,12 +619,29 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
           "FINALIZE_MODE:",
           "- Produce the final summary now.",
           "- Do NOT ask questions.",
+          "- Return 2 to 4 short standalone blocks.",
+          "- Insert [CHUNK] on its own line between every block.",
+          "- Do NOT merge all sections into one continuous paragraph.",
           `- End your message with ${END_MARK} exactly once.`,
         ].join("\n"),
       });
     }
     // Call OpenAI
     let reply = await callOpenAIChat({ apiKey, model, messages });
+
+    if (isFinalizeRequest && !/\[\[?CHUNK\]?\]/i.test(reply)) {
+      const paragraphParts = String(reply)
+        .replace(END_MARK, "")
+        .split(/\n\s*\n+/)
+        .map((s) => s.trim())
+        .filter(Boolean);
+
+      if (paragraphParts.length >= 2 && paragraphParts.length <= 4) {
+        reply =
+          paragraphParts.join("\n[CHUNK]\n") +
+          (reply.includes(END_MARK) ? `\n${END_MARK}` : "");
+      }
+    }
 
     // ---- post-guard: if model violated "one request", do a single lightweight rewrite pass
     // This is only triggered when we detect likely 2+ asks without using '?' counting.

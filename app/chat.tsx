@@ -69,16 +69,11 @@ function splitAssistantReplyIntoBubbles(reply: string): string[] {
   if (!raw) return [];
 
     return raw
-    .split(/\[\[CHUNK\]\]|\[CHUNK\]/g)
+    .split(/\s*\[\[?CHUNK\]?\]\s*|\s*\[CHUNK\]\s*/gi)
     .map((s) =>
       s
         // удаляем остатки маркера если вдруг он продублировался
-        .replace(/\[CHUNK\]/gi, "")
-        // удаляем строки из одной скобки
-        .replace(/^\s*[\[\]]\s*$/gm, "")
-        // удаляем скобки если они “прилипли” к краю блока
-        .replace(/^\s*\[+\s*/g, "")
-        .replace(/\s*\]+\s*$/g, "")
+        .replace(/\[\[?CHUNK\]?\]/gi, "")
         .trim()
     )
     .filter(Boolean);
