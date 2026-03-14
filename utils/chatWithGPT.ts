@@ -37,6 +37,10 @@ const AGENT_CACHE_AT_KEY = "agent:workingUrlSavedAt";
 // TTL кэша — 6 часов
 const AGENT_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 
+const CHAT_HISTORY_LIMIT_REGULAR = 28;
+const CHAT_HISTORY_LIMIT_DECISION_TREE = 80;
+const CHAT_HISTORY_LIMIT_FINALIZE = 48;
+
 
 /**
  * Каноничный метод получения активного питомца.
@@ -172,14 +176,22 @@ export async function chatWithGPT(params: {
     // 1) если историю передали явно (например, из chat.tsx ensureDecisionTreeCached) — используем её
     // 2) если это decisionTree-команда — worker ДОЛЖЕН видеть историю даже для summary-…
     // 3) обычный summary-диалог (не decisionTree) — как раньше: без истории
+    const conversationHistoryLimit =
+      isDecisionTreeRequest
+        ? CHAT_HISTORY_LIMIT_DECISION_TREE
+        : isFinalizeRequest
+          ? CHAT_HISTORY_LIMIT_FINALIZE
+          : CHAT_HISTORY_LIMIT_REGULAR;
+
     const conversationHistory =
       Array.isArray(params?.conversationHistory) && params.conversationHistory.length > 0
         ? params.conversationHistory
-        : isDecisionTreeRequest
-          ? await getConversationHistoryTail(ensuredConversationId, 80)
-          : isSummaryConversation
-            ? []
-            : await getConversationHistoryTail(ensuredConversationId, 80);
+        : isSummaryConversation && !isDecisionTreeRequest
+          ? []
+          : await getConversationHistoryTail(
+              ensuredConversationId,
+              conversationHistoryLimit
+            );
 
     const body = {
       message: effectiveMessage,

@@ -588,7 +588,12 @@ async function ensureDecisionTreeCached(conversationId: string) {
 }
 
 async function refreshDecisionTreeIfStale(conversationId: string) {
-  if (!isDecisionTreeStale) return;
+  const locale = i18n.locale || "en";
+  const dtKey = `decisionTree:${conversationId}:${locale}`;
+  const raw = await AsyncStorage.getItem(dtKey);
+
+  const needsRefresh = !raw || isDecisionTreeStale;
+  if (!needsRefresh) return;
   if (dtRefreshPromiseRef.current) return;
 
   dtRefreshPromiseRef.current = (async () => {
@@ -596,7 +601,6 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
       await ensureDecisionTreeCached(conversationId);
       await refreshPdfReadyState(conversationId);
     } catch (e) {
-      // оставляем кнопку выключенной; пользователь сможет нажать позже (handlePdfNow покажет alert)
       console.error("❌ decisionTree refresh error:", e);
     } finally {
       dtRefreshPromiseRef.current = null;
@@ -681,8 +685,8 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
         return;
       }
 
-      // ✅ 1) гарантируем, что decisionTree есть (или пересчитаем, если stale/нет кэша)
-      await ensureDecisionTreeCached(id);
+      // ✅ 1) обновляем decisionTree только если он реально stale или отсутствует
+      await refreshDecisionTreeIfStale(id);
 
       // ✅ 2) тихо сохранили → генерим pdf
       await saveSessionSilently(id);
