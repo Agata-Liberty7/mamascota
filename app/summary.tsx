@@ -8,10 +8,11 @@ import {
   StyleSheet,
   Alert,
   Image,
+  Modal,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import { restoreSession } from "../utils/chatWithGPT";
+import { chatWithGPT, restoreSession } from "../utils/chatWithGPT";
 import i18n from "../i18n";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ThemedText } from "../components/ThemedText";
@@ -31,9 +32,101 @@ type SummaryItem = {
 // перевод с fallback
 const t = (k: string, def: string) => i18n.t(k, { defaultValue: def });
 
+async function getPetByName(petName: string) {
+  try {
+    const petsRaw = await AsyncStorage.getItem("pets:list");
+    const pets = petsRaw ? JSON.parse(petsRaw) : [];
+    if (!Array.isArray(pets)) return null;
+    return pets.find((p: any) => p?.name === petName) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+async function buildConversationHistoryTail(conversationId: string, max = 20) {
+  try {
+    const raw =
+      (await AsyncStorage.getItem(`chatHistory:${conversationId}`)) ||
+      (await AsyncStorage.getItem(`chat:history:${conversationId}`)) ||
+      "[]";
+
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+
+    return parsed
+      .filter((m: any) => m && (m.role === "user" || m.role === "assistant"))
+      .map((m: any) => ({
+        role: m.role,
+        content: typeof m.content === "string" ? m.content : "",
+      }))
+      .filter((m: any) => m.content.trim().length > 0)
+      .slice(-max);
+  } catch {
+    return [];
+  }
+}
+
+async function ensureDecisionTreeCachedForSummary(
+  conversationId: string,
+  petName: string
+) {
+  const locale =
+    (await AsyncStorage.getItem("pdfLanguage")) ||
+    i18n.locale ||
+    "en";
+
+  const dtKey = `decisionTree:${conversationId}:${locale}`;
+  const raw = await AsyncStorage.getItem(dtKey);
+
+  if (raw) return;
+
+  const conversationHistory = await buildConversationHistoryTail(conversationId, 20);
+  const pet = await getPetByName(petName);
+
+  const dtRes = await chatWithGPT({
+    message: "__MAMASCOTA_DECISION_TREE__",
+    conversationId,
+    userLang: locale,
+    conversationHistory,
+    pet: pet || undefined,
+  });
+
+  if (!dtRes || typeof dtRes !== "object" || !dtRes.ok) {
+    throw new Error(
+      (dtRes && typeof dtRes === "object" && (dtRes as any).error) ||
+        "decisionTree request failed"
+    );
+  }
+
+  const decisionTree = (dtRes as any).decisionTree ?? null;
+
+  const currentHistory =
+    (await AsyncStorage.getItem(`chatHistory:${conversationId}`)) ||
+    (await AsyncStorage.getItem(`chat:history:${conversationId}`)) ||
+    "[]";
+
+  let messagesCount = 0;
+  try {
+    const parsedHistory = JSON.parse(currentHistory);
+    messagesCount = Array.isArray(parsedHistory) ? parsedHistory.length : 0;
+  } catch {}
+
+  await AsyncStorage.setItem(
+    dtKey,
+    JSON.stringify({
+      createdAt: new Date().toISOString(),
+      messagesCount,
+      decisionTree,
+    })
+  );
+}
+
 export default function SummaryScreen() {
   const [sessions, setSessions] = useState<SummaryItem[]>([]);
   const [pdfLoading, setPdfLoading] = useState(false);
+  const [pdfLangModalVisible, setPdfLangModalVisible] = useState(false);
+  const [pendingPdfItem, setPendingPdfItem] = useState<SummaryItem | null>(null);
+  const [currentPdfLang, setCurrentPdfLang] = useState<string>("en");
   const router = useRouter();
 
   // =========================
@@ -117,14 +210,15 @@ export default function SummaryScreen() {
   // =========================
   // PDF EXPORT
   // =========================
-  const handleExportPDF = async (id: string) => {
+  const handleExportPDF = async (id: string, petName: string) => {
     try {
-      setPdfLoading(true); // ← показать модалку
+      setPdfLoading(true);
+      await ensureDecisionTreeCachedForSummary(id, petName);
       await exportSummaryPDF(id);
     } catch (err) {
-      Alert.alert(t("menu.summary", "History"), "PDF export failed.");
+      console.error("PDF export error:", err);
     } finally {
-      setPdfLoading(false); // ← скрыть модалку
+      setPdfLoading(false);
     }
   };
 
@@ -167,7 +261,16 @@ export default function SummaryScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => handleExportPDF(item.id)}
+            onPress={async () => {
+              const savedPdfLang =
+                (await AsyncStorage.getItem("pdfLanguage")) ||
+                i18n.locale ||
+                "en";
+
+              setCurrentPdfLang(savedPdfLang);
+              setPendingPdfItem(item);
+              setPdfLangModalVisible(true);
+            }}
             style={styles.iconButton}
           >
             <MaterialIcons name="picture-as-pdf" size={26} color="#E53935" />
@@ -218,6 +321,60 @@ export default function SummaryScreen() {
         />
       )}
 
+
+      <Modal transparent animationType="fade" visible={pdfLangModalVisible}>
+        <View style={styles.overlay}>
+          <View style={styles.box}>
+            <Text style={styles.text}>
+              {i18n.t("pdf.language_title", { defaultValue: "Language of the PDF" })}
+            </Text>
+
+              <View style={styles.pdfLangRow}>
+                {["de", "en", "es", "fr", "he", "it", "ru"].map((langCode) => (
+                  <TouchableOpacity
+                    key={langCode}
+                    style={styles.pdfLangChip}
+                    onPress={async () => {
+                      await AsyncStorage.setItem("pdfLanguage", langCode);
+                      setCurrentPdfLang(langCode);
+                      setPdfLangModalVisible(false);
+
+                      setTimeout(async () => {
+                        if (pendingPdfItem) {
+                          await handleExportPDF(
+                            pendingPdfItem.id,
+                            pendingPdfItem.petName
+                          );
+                        }
+                      }, 600);
+                    }}
+                  >
+                    <Text
+                      style={[
+                        styles.pdfLangChipText,
+                        currentPdfLang === langCode && styles.pdfLangChipTextActive,
+                      ]}
+                    >
+                      {langCode.toUpperCase()}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+            <TouchableOpacity
+              style={styles.pdfLangCancel}
+              onPress={() => {
+                setPdfLangModalVisible(false);
+                setPendingPdfItem(null);
+              }}
+            >
+              <Text style={styles.pdfLangCancelText}>
+                {i18n.t("cancel", { defaultValue: "Cancel" })}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       {/* 🔥 МОДАЛКА ЗАГРУЗКИ PDF */}
       <LoadingPDF visible={pdfLoading} />
@@ -301,6 +458,55 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: "center",
     color: "#666",
+  },
+  overlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.35)",
+  },
+  box: {
+    backgroundColor: "#fff",
+    padding: 24,
+    borderRadius: 12,
+    alignItems: "center",
+    width: 240,
+  },
+  text: {
+    marginTop: 12,
+    fontSize: 16,
+    color: "#333",
+    textAlign: "center",
+  },
+  pdfLangRow: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 12,
+    marginBottom: 4,
+  },
+  pdfLangChip: {
+    paddingHorizontal: 4,
+    paddingVertical: 6,
+  },
+  pdfLangChipText: {
+    fontSize: 13,
+    color: "#555",
+    textAlign: "center",
+  },
+  pdfLangChipTextActive: {
+    color: "#42A5F5",
+    fontWeight: "600",
+  },
+  pdfLangCancel: {
+    marginTop: 10,
+    paddingTop: 6,
+  },
+  pdfLangCancelText: {
+    fontSize: 15,
+    color: "#666",
+    textAlign: "center",
   },
 
 });

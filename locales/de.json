@@ -214,6 +214,7 @@
     "observe_title": "Beobachtung zu Hause",
     "urgent_title": "Sofortiges Handeln erforderlich, wenn...",
     "plan_title": "Plan des Tierarztbesuchs",
-    "generating": "PDF wird erstellt..."
+    "generating": "PDF wird erstellt...",
+    "language_title": "PDF-Sprache wählen"
   }
 }

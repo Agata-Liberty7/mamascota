@@ -210,6 +210,7 @@
     "observe_title": "Observation à la maison",
     "urgent_title": "Urgent maintenant si...",
     "plan_title": "Plan de visite",
-    "generating": "Création du PDF..."
+    "generating": "Création du PDF...",
+    "language_title": "Choisissez la langue du PDF"
   }
 }

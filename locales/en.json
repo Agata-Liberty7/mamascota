@@ -214,6 +214,7 @@
     "observe_title": "Observation at home",
     "urgent_title": "Immediate action needed if...",
     "plan_title": "Plan for the vet visit",
-    "generating": "Generating PDF..." 
+    "generating": "Generating PDF...",
+    "language_title": "Choose PDF language"
   }
 }

@@ -214,6 +214,7 @@
     "observe_title": "תצפית בבית",
     "urgent_title": " דחוף עכשיו",
     "plan_title": "תוכנית לביקור",
-    "generating": "יוצר PDF..." 
+    "generating": "יוצר PDF...",
+    "language_title": "בחר שפת PDF"
   }
 }

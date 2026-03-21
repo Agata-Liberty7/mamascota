@@ -214,6 +214,7 @@
     "observe_title": "Osservazioni a casa",
     "urgent_title": "Urgente ora se...",
     "plan_title": "Piano della visita",
-    "generating": "Creazione del PDF..."
+    "generating": "Creazione del PDF...",
+    "language_title": "Scegli la lingua del PDF"
     }  
 }

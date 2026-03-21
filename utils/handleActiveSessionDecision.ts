@@ -44,7 +44,23 @@ async function hasNonEmptyHistory(conversationId: string): Promise<boolean> {
  * "Мягко": ничего не удаляет — только возвращает решение.
  */
 export async function handleActiveSessionDecision(): Promise<ActiveSessionDecision> {
-  const cid = await AsyncStorage.getItem("conversationId");
+  let cid = await AsyncStorage.getItem("conversationId");
+
+  if (!cid) {
+    try {
+      const summaryRaw = await AsyncStorage.getItem("chatSummary");
+      const parsed = summaryRaw ? JSON.parse(summaryRaw) : [];
+      const latest = Array.isArray(parsed) ? parsed[0] : null;
+      const fallbackId =
+        latest?.id || latest?.conversationId || null;
+
+      if (typeof fallbackId === "string" && fallbackId.trim()) {
+        cid = fallbackId.trim();
+        await AsyncStorage.setItem("conversationId", cid);
+      }
+    } catch {}
+  }
+
   if (!cid) return "no_active";
 
   const ok = await hasNonEmptyHistory(cid);

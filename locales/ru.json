@@ -221,6 +221,7 @@
     "observe_title": "Наблюдение дома",
     "urgent_title": "Срочно в клинику, если...",
     "plan_title": "План визита",
-    "generating": "Создаю PDF..."
+    "generating": "Создаю PDF...",
+    "language_title": "Выберите язык PDF"
     }
 }

@@ -124,12 +124,15 @@ export default function ChatScreen() {
   const [thinkingHint, setThinkingHint] = useState<string | null>(null);
   const [pdfConversationId, setPdfConversationId] = useState<string | null>(null);
   const [pdfGenerating, setPdfGenerating] = useState(false);
-  const [finalizing, setFinalizing] = useState(false);  
+  const [finalizing, setFinalizing] = useState(false);
+  const [pdfLangModalVisible, setPdfLangModalVisible] = useState(false);
+  const [currentPdfLang, setCurrentPdfLang] = useState<string>("en");  
+
   const [phase, setPhase] = useState<"intake" | "clarify" | "summary" | "ended" | null>(null);
   const [isPdfReady, setIsPdfReady] = useState(false);
   const [isDecisionTreeStale, setIsDecisionTreeStale] = useState(false);
   const [isPostSummaryUpdateMode, setIsPostSummaryUpdateMode] = useState(false);
-  const [pdfLangModalVisible, setPdfLangModalVisible] = useState(false);
+
 
   // 🔥 ВАЖНО: по умолчанию не показываем селектор
   const [showSelector, setShowSelector] = useState<boolean>(false);
@@ -809,6 +812,13 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
   const handlePdfNow = async () => {
     console.log("🟥 handlePdfNow pressed");
     if (pdfGenerating || loading || finalizing) return;
+
+    const savedPdfLang =
+      (await AsyncStorage.getItem("pdfLanguage")) ||
+      i18n.locale ||
+      "en";
+
+    setCurrentPdfLang(savedPdfLang);
     setPdfLangModalVisible(true);
   };
 
@@ -847,31 +857,39 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
                 {i18n.t("pdf.language_title", { defaultValue: "Language of the PDF" })}
               </Text>
 
+            <View style={styles.pdfLangRow}>
               {["de", "en", "es", "fr", "he", "it", "ru"].map((langCode) => (
                 <TouchableOpacity
                   key={langCode}
-                  style={styles.pdfLangOption}
+                  style={styles.pdfLangChip}
                   onPress={async () => {
                     await AsyncStorage.setItem("pdfLanguage", langCode);
+                    setCurrentPdfLang(langCode);
                     setPdfLangModalVisible(false);
 
-                    setTimeout(() => {
-                      void handlePdfNowActual();
+                    setTimeout(async () => {
+                      await handlePdfNowActual();
                     }, 600);
                   }}
                 >
-                  <Text style={styles.pdfLangOptionText}>
-                    {i18n.t(`language.${langCode}`, { defaultValue: langCode.toUpperCase() })}
+                  <Text
+                    style={[
+                      styles.pdfLangChipText,
+                      currentPdfLang === langCode && styles.pdfLangChipTextActive,
+                    ]}
+                  >
+                    {langCode.toUpperCase()}
                   </Text>
                 </TouchableOpacity>
               ))}
+            </View>
 
               <TouchableOpacity
                 style={styles.pdfLangCancel}
                 onPress={() => setPdfLangModalVisible(false)}
               >
                 <Text style={styles.pdfLangCancelText}>
-                  {i18n.t("common.cancel", { defaultValue: "Cancel" })}
+                  {i18n.t("cancel", { defaultValue: "Cancel" })}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -907,7 +925,6 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
                     {formatAssistantBubbleContent(item.content, {
                       uppercaseTitle:
                         item.role === "assistant" &&
-                        phase === "ended" &&
                         typeof item.content === "string" &&
                         item.content.includes("\n"),
                     })}
@@ -1224,15 +1241,26 @@ const styles = StyleSheet.create({
     color: "#333",
     textAlign: "center",
   },
-  pdfLangOption: {
+  pdfLangRow: {
     width: "100%",
-    paddingVertical: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
+    marginTop: 12,
+    marginBottom: 4,
   },
-  pdfLangOptionText: {
-    fontSize: 16,
-    color: "#333",
+  pdfLangChip: {
+    paddingHorizontal: 4,
+    paddingVertical: 6,
+  },
+  pdfLangChipText: {
+    fontSize: 13,
+    color: "#555",
     textAlign: "center",
+  },
+  pdfLangChipTextActive: {
+    color: "#42A5F5",
+    fontWeight: "600",
   },
   pdfLangCancel: {
     marginTop: 10,
