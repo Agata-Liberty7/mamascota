@@ -75,6 +75,7 @@
     "lang_ru": "Russian",
     "lang_he": "Hebrew",
     "chat": "Chat",
+    "summary": "Summary",
     "saved_sessions": "Saved sessions",
     "settings": "Settings",
     "about": "About",
@@ -205,6 +206,7 @@
   "animal_other": "Other",
 
   "pdf": {
+    "report_title": "Report for the clinic of",
     "date_label": "Date and time",
     "owner_notes_title": "Anamnesis",
     "focus_title": "Focus for the vet",

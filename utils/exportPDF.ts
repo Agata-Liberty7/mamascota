@@ -280,53 +280,22 @@ ${combined}
 // Cached decisionTree (invalidate when chat grows)
 // -----------------------------------------------------
 async function getDecisionTreeCached(sessionId: string, locale: string) {
-  const cacheKey = getDecisionTreeCacheKey(sessionId, locale);
-
-  const chatLenNow = await getChatLengthForSession(sessionId);
-
-  // 1) try cache
   try {
-    const cachedRaw = await AsyncStorage.getItem(cacheKey);
-    if (cachedRaw) {
-      const cached = JSON.parse(cachedRaw);
+    const workerDt = await getWorkerDecisionTreeFromChatCache(sessionId, locale);
 
-      const cachedChatLen =
-        typeof cached?.chatLen === "number" ? cached.chatLen : null;
-
-      // Если диалог не вырос — используем кэш
-      if (cachedChatLen !== null && cachedChatLen === chatLenNow) {
-        return {
-          anamnesisShort: String(cached?.anamnesisShort ?? ""),
-          nextSteps: {
-            observe_at_home: String(cached?.nextSteps?.observe_at_home ?? ""),
-            urgent_now: String(cached?.nextSteps?.urgent_now ?? ""),
-            plan_visit: String(cached?.nextSteps?.plan_visit ?? ""),
-          },
-        };
-      }
+    if (!workerDt) {
+      return null;
     }
+
+    const mapped = mapDecisionTreeToPdfSections(workerDt);
+
+    return {
+      anamnesisShort: mapped.anamnesisShort,
+      nextSteps: mapped.nextSteps,
+    };
   } catch {
-    // ignore cache errors
+    return null;
   }
-
-  // 2) compute fresh
-  const fresh = await buildDecisionTree(sessionId, locale);
-
-  // 3) store cache
-  try {
-    await AsyncStorage.setItem(
-      cacheKey,
-      JSON.stringify({
-        chatLen: chatLenNow,
-        createdAt: new Date().toISOString(),
-        ...fresh,
-      })
-    );
-  } catch {
-    // ignore cache save errors
-  }
-
-  return fresh;
 }
 
 //
@@ -363,7 +332,14 @@ export async function exportSummaryPDF(sessionId: string) {
     const ownerNotesFallback = buildOwnerNotesFromChatRaw(chatRaw);
 
 
-    const locale = i18n.locale || "en";
+    const locale =
+      (await AsyncStorage.getItem("pdfLanguage")) ||
+      i18n.locale ||
+      "en";
+
+    const previousLocale = i18n.locale;
+    i18n.locale = locale;
+
     const isHebrew = locale.startsWith("he");
 
     //
@@ -409,7 +385,7 @@ export async function exportSummaryPDF(sessionId: string) {
     //
     // 6) локали UI
     //
-    const title = i18n.t("menu.summary", { defaultValue: "Summary" });
+    const title = i18n.t("pdf.report_title", { defaultValue: "Consultation Summary" });
     const dateLabel = i18n.t("pdf.date_label", { defaultValue: "Date and time" });
     const symptomsTitle = i18n.t("symptomSelector.title", { defaultValue: "Symptoms"});
     const animalDataTitle = i18n.t("animal_data", { defaultValue: "Animal data"});
@@ -546,7 +522,15 @@ ${
       });
     }
 
+    i18n.locale = previousLocale;
+
   } catch (err: any) {
+    try {
+      const fallbackLocale =
+        (await AsyncStorage.getItem("selectedLanguage")) || "en";
+      i18n.locale = fallbackLocale;
+    } catch {}
+
     console.error("❌ exportSummaryPDF error:", err);
     alert(i18n.t("privacy_paragraph2"));
   }

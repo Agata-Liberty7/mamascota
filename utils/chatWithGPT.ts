@@ -12,6 +12,8 @@ export type ChatResult = {
   conversationId?: string;
   sessionEnded?: boolean;
   needsFinalize?: boolean;
+  recommendNewConsultation?: boolean;
+  newConsultationReason?: string;
   phase?: "intake" | "clarify" | "summary" | "ended";
   decisionTree?: any | null;
 };
@@ -37,7 +39,7 @@ const AGENT_CACHE_AT_KEY = "agent:workingUrlSavedAt";
 // TTL кэша — 6 часов
 const AGENT_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 
-const CHAT_HISTORY_LIMIT_REGULAR = 28;
+const CHAT_HISTORY_LIMIT_REGULAR = 48; // для обычного диалога — больше, чтобы модель видела контекст
 const CHAT_HISTORY_LIMIT_DECISION_TREE = 80;
 const CHAT_HISTORY_LIMIT_FINALIZE = 48;
 
@@ -98,10 +100,18 @@ export async function chatWithGPT(params: {
   symptomKeys?: string[];
   userLang?: string;
   conversationId?: string; // можно явно задать (например, summary-…)
-  conversationHistory?: Array<{ role: "user" | "assistant" | "system"; content: string }>; 
-  // ✅ NEW
+  conversationHistory?: Array<{ role: "user" | "assistant" | "system"; content: string }>;
+  postSummaryUpdateMode?: boolean;
 }): Promise<ChatResult> {
-  const { message, internalCommand, pet, symptomKeys, userLang, conversationId } = params || {};
+    const {
+    message,
+    internalCommand,
+    pet,
+    symptomKeys,
+    userLang,
+    conversationId,
+    postSummaryUpdateMode,
+  } = params || {};
 
   if (!AGENT_URL) {
     console.error(
@@ -183,7 +193,7 @@ export async function chatWithGPT(params: {
           ? CHAT_HISTORY_LIMIT_FINALIZE
           : CHAT_HISTORY_LIMIT_REGULAR;
 
-    const conversationHistory =
+    const baseConversationHistory =
       Array.isArray(params?.conversationHistory) && params.conversationHistory.length > 0
         ? params.conversationHistory
         : isSummaryConversation && !isDecisionTreeRequest
@@ -193,6 +203,17 @@ export async function chatWithGPT(params: {
               conversationHistoryLimit
             );
 
+    const postSummaryTail =
+      postSummaryUpdateMode
+        ? baseConversationHistory.slice(-40)
+        : baseConversationHistory;
+
+
+    const effectiveConversationHistory =
+      postSummaryUpdateMode
+        ? postSummaryTail
+        : baseConversationHistory;
+
     const body = {
       message: effectiveMessage,
       internalCommand: effectiveInternalCommand || undefined,
@@ -200,7 +221,8 @@ export async function chatWithGPT(params: {
       symptomKeys: ensuredSymptomKeys,
       userLang: effectiveLang,
       conversationId: ensuredConversationId,
-      conversationHistory,
+      conversationHistory: effectiveConversationHistory,
+      postSummaryUpdateMode: !!postSummaryUpdateMode,
     };
 
     // Отладка входных параметров
@@ -215,6 +237,9 @@ export async function chatWithGPT(params: {
       "🧠 conversationHistory tail:",
       Array.isArray(body.conversationHistory) ? body.conversationHistory.length : 0
     );
+    console.log("🧭 postSummaryUpdateMode:", !!postSummaryUpdateMode);
+    console.log("🧾 postSummaryContext:", postSummaryUpdateMode ? "yes" : "no");
+
     console.log("[CHAT] AGENT_URL =", AGENT_URL);
     console.log("[CHAT] payload.pet =", body?.pet);
 
@@ -336,14 +361,27 @@ export async function chatWithGPT(params: {
         if (data?.decisionTree && serverConversationId && !isSummaryConversation) {
           try {
             const dtKey = `decisionTree:${serverConversationId}:${effectiveLang}`;
+
+            const rawHistory =
+              (await AsyncStorage.getItem(`chatHistory:${serverConversationId}`)) ||
+              (await AsyncStorage.getItem(`chat:history:${serverConversationId}`)) ||
+              "[]";
+
+            let messagesCount = 0;
+            try {
+              const parsedHistory = JSON.parse(rawHistory);
+              messagesCount = Array.isArray(parsedHistory) ? parsedHistory.length : 0;
+            } catch {}
+
             await AsyncStorage.setItem(
               dtKey,
               JSON.stringify({
                 createdAt: new Date().toISOString(),
+                messagesCount,
                 decisionTree: data.decisionTree,
               })
             );
-            console.log("💾 decisionTree сохранён:", dtKey);
+            console.log("💾 decisionTree сохранён:", dtKey, "messagesCount:", messagesCount);
           } catch (e) {
             console.warn("⚠️ Не удалось сохранить decisionTree:", e);
           }
@@ -355,6 +393,11 @@ export async function chatWithGPT(params: {
           conversationId: serverConversationId || ensuredConversationId,
           sessionEnded: !!data?.sessionEnded,
           needsFinalize: !!data?.needsFinalize,
+          recommendNewConsultation: !!data?.recommendNewConsultation,
+          newConsultationReason:
+            typeof data?.newConsultationReason === "string"
+              ? data.newConsultationReason
+              : undefined,
           phase,
           decisionTree: data?.decisionTree ?? null,
         };
@@ -434,6 +477,83 @@ async function getConversationHistoryTail(
   } catch (e) {
     console.warn("⚠️ Не удалось прочитать историю для conversationHistory:", e);
     return [];
+  }
+}
+
+async function getChatSummaryContext(conversationId?: string): Promise<string> {
+  if (!conversationId) return "";
+
+  try {
+    const raw = (await AsyncStorage.getItem("chatSummary")) || "[]";
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return "";
+
+    const rec = parsed.find((item: any) => item?.id === conversationId);
+    if (!rec || typeof rec !== "object") return "";
+
+    const petName =
+      typeof rec.petName === "string" && rec.petName.trim()
+        ? rec.petName.trim()
+        : "";
+
+    const context =
+      typeof rec.context === "string" && rec.context.trim()
+        ? rec.context.trim()
+        : "";
+
+    const symptomKeys = Array.isArray(rec.symptomKeys)
+      ? rec.symptomKeys.filter((x: any) => typeof x === "string" && x.trim())
+      : [];
+
+    const parts = [
+      petName ? `Pet name: ${petName}.` : "",
+      context ? `Existing case summary: ${context}.` : "",
+      symptomKeys.length > 0
+        ? `Known symptom keys: ${symptomKeys.join(", ")}.`
+        : "",
+    ].filter(Boolean);
+
+    return parts.join(" ");
+  } catch (e) {
+    console.warn("⚠️ Не удалось прочитать chatSummary для post-summary mode:", e);
+    return "";
+  }
+}
+
+async function getDecisionTreeContext(
+  conversationId?: string,
+  locale?: string
+): Promise<string> {
+  if (!conversationId) return "";
+
+  try {
+    const key = `decisionTree:${conversationId}:${locale || "en"}`;
+    const raw = await AsyncStorage.getItem(key);
+    if (!raw) return "";
+
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") return "";
+
+    const main = parsed?.summary || parsed?.context || "";
+    const risks = parsed?.risks || [];
+    const recommendations = parsed?.recommendations || [];
+
+    const parts = [
+      typeof main === "string" && main.trim()
+        ? `Existing clinical summary: ${main.trim()}`
+        : "",
+      Array.isArray(risks) && risks.length > 0
+        ? `Known risks: ${risks.join(", ")}`
+        : "",
+      Array.isArray(recommendations) && recommendations.length > 0
+        ? `Recommendations already given: ${recommendations.join(", ")}`
+        : "",
+    ].filter(Boolean);
+
+    return parts.join(". ");
+  } catch (e) {
+    console.warn("⚠️ decisionTree read failed:", e);
+    return "";
   }
 }
 

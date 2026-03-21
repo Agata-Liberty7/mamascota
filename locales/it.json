@@ -75,6 +75,7 @@
     "lang_ru": "Russo",
     "lang_he": "Ebraico",
     "chat": "Chat",
+    "summary": "Riepilogo",
     "saved_sessions": "Sessioni salvate",
     "settings": "Impostazioni",
     "about": "Info",
@@ -205,6 +206,7 @@
   "animal_other": "Altro",
 
   "pdf": {
+    "report_title": "Rapporto sullo stato dell’animale",
     "date_label": "Data e ora",
     "owner_notes_title": "Anamnesi",
     "focus_title": "Focus per il veterinario",

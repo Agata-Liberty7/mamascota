@@ -75,6 +75,7 @@
       "lang_ru": "רוּסִי",
       "lang_he": "עִברִית",
     "chat": "צ'אט",
+    "summary": "סיכום",
     "saved_sessions": "הפעלות שמורות",
     "settings": "הגדרות",
     "about": "אודות",
@@ -205,6 +206,7 @@
   "animal_other": "אחר",
 
   "pdf": {
+    "report_title": "דו״ח למרפאה עבור",
     "date_label": "תאריך ושעה",
     "owner_notes_title": "אנמנזה",
     "focus_title": "מוקד עבור הווטרינר",

@@ -81,6 +81,7 @@
       "lang_ru": "Русский",
       "lang_he": "Иврит",
     "chat": "Чат",
+    "summary": "Резюме",
     "saved_sessions": "Cохраненные сессии",
     "settings": "Настройки",
     "about": "О приложении",
@@ -212,6 +213,7 @@
   "animal_other": "Другое",
 
   "pdf": {
+    "report_title": "Отчёт о состоянии питомца",
     "date_label": "Дата и время",
     "owner_notes_title": "Анамнез",
     "focus_title": "Фокус для ветеринара",

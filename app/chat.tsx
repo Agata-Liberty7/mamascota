@@ -49,7 +49,6 @@ const THINKING_HINT_KEYS = [
 // Timestamps + progress (UI-only)
 // --------------------
 const SHOW_TIMESTAMPS = true; // позже можно вынести в Settings
-const MAX_ASSISTANT_TURNS = 10; // “длина диалога” в шагах
 
 function formatChatTime(ts?: number) {
   if (!ts) return "";
@@ -88,6 +87,29 @@ function isInternalCommand(text: unknown): boolean {
   );
 }
 
+function formatAssistantBubbleContent(
+  content: string,
+  options?: { uppercaseTitle?: boolean }
+): string {
+  if (typeof content !== "string") return "";
+
+  if (!options?.uppercaseTitle) {
+    return content;
+  }
+
+  const normalized = content.replace(/\r\n/g, "\n");
+  const firstBreak = normalized.indexOf("\n");
+
+  if (firstBreak === -1) {
+    return normalized.toLocaleUpperCase(i18n.locale || "en");
+  }
+
+  const title = normalized.slice(0, firstBreak).trim();
+  const rest = normalized.slice(firstBreak + 1);
+
+  return `${title.toLocaleUpperCase(i18n.locale || "en")}\n${rest}`;
+}
+
 export default function ChatScreen() {
   const navigation = useNavigation();
   const { pet: petParam } = useLocalSearchParams<{ pet?: string }>();
@@ -106,6 +128,8 @@ export default function ChatScreen() {
   const [phase, setPhase] = useState<"intake" | "clarify" | "summary" | "ended" | null>(null);
   const [isPdfReady, setIsPdfReady] = useState(false);
   const [isDecisionTreeStale, setIsDecisionTreeStale] = useState(false);
+  const [isPostSummaryUpdateMode, setIsPostSummaryUpdateMode] = useState(false);
+  const [pdfLangModalVisible, setPdfLangModalVisible] = useState(false);
 
   // 🔥 ВАЖНО: по умолчанию не показываем селектор
   const [showSelector, setShowSelector] = useState<boolean>(false);
@@ -171,6 +195,7 @@ export default function ChatScreen() {
         }
 
         setShowSelector(false);
+        setIsPostSummaryUpdateMode(false);
         await refreshPdfReadyState(id);
 
       } else {
@@ -232,6 +257,7 @@ export default function ChatScreen() {
             }
 
             setShowSelector(false);
+            setIsPostSummaryUpdateMode(true);
 
             // ✅ чтобы PDF-кнопка корректно восстанавливалась после возврата из Summary
             setPdfConversationId(id);
@@ -273,22 +299,6 @@ export default function ChatScreen() {
   // ======================================================
   const WAITING_HINT_IDX_KEY = "ui:waitingHintIdx";
 
-async function pickWaitingHintOnce(): Promise<string | null> {
-  try {
-    const raw = await AsyncStorage.getItem(WAITING_HINT_IDX_KEY);
-    const idx = Number(raw || "0");
-    const safeIdx = Number.isFinite(idx) ? idx : 0;
-
-    const key = THINKING_HINT_KEYS[safeIdx % THINKING_HINT_KEYS.length];
-    // следующий раз будет другой (но только на следующий запрос)
-    await AsyncStorage.setItem(WAITING_HINT_IDX_KEY, String(safeIdx + 1));
-
-    return i18n.t(key);
-  } catch {
-    return i18n.t(THINKING_HINT_KEYS[0]);
-  }
-}
-
 useEffect(() => {
   if (!loading) {
     setThinkingHint(null);
@@ -322,6 +332,7 @@ useEffect(() => {
     setShowSelector(false);
     setChat([]);
     setPdfConversationId(null);
+    setIsPostSummaryUpdateMode(false);
 
 
     try {
@@ -397,6 +408,10 @@ useEffect(() => {
       Keyboard.dismiss();
       inputRef.current?.blur();
 
+      // ✅ пока только очищаем локальный индикатор готовности;
+      // decisionTree stale дальше выставляем осознанно по результату ответа
+      setIsPdfReady(false);
+
       try {
         // 2) UI: начинаем ожидание
         setLoading(true);
@@ -405,9 +420,14 @@ useEffect(() => {
         let result = await chatWithGPT({
           message: messageToSend,
           pet: pet || undefined,
+          postSummaryUpdateMode: isPostSummaryUpdateMode,
         });
-        // ✅ ACK: воркер поймал старт финализации — блокируем UI и делаем finalize вторым запросом
-        if (typeof result === "object" && (result as any)?.needsFinalize) {
+        // ✅ ACK: финализацию запускаем только если это не кейс с рекомендацией начать новую консультацию
+        if (
+          typeof result === "object" &&
+          (result as any)?.needsFinalize &&
+          !(result as any)?.recommendNewConsultation
+        ) {
           Keyboard.dismiss();
           inputRef.current?.blur();
           setFinalizing(true);
@@ -421,6 +441,7 @@ useEffect(() => {
             message: "__MAMASCOTA_FINALIZE__",
             pet: pet || undefined,
             conversationId: cid ?? undefined,
+            postSummaryUpdateMode: isPostSummaryUpdateMode,
           });
 
           setFinalizing(false);
@@ -429,19 +450,6 @@ useEffect(() => {
           // (подменяем result)
           // @ts-ignore
           result = finalized;
-        }
-        // ✅ Финал пришёл вторым запросом — сразу активируем PDF-кнопку
-        if (typeof result === "object" && result?.sessionEnded) {
-          Keyboard.dismiss();
-          inputRef.current?.blur();
-          const cid = result.conversationId ?? null;
-
-          if (cid) {
-            setPdfConversationId(cid);
-            setIsPdfReady(true); // мгновенно красим/активируем UX
-            setIsDecisionTreeStale(false);
-            await refreshPdfReadyState(cid);
-          }
         }
 
         // 4) Текст ответа
@@ -467,25 +475,21 @@ useEffect(() => {
         if (p === "intake" || p === "clarify" || p === "summary" || p === "ended") {
           setPhase(p);
         }
-        // ⚠️ НЕ сбрасываем phase в null, чтобы шапка не мигала
 
-        const cidFromState =
-          pdfConversationId ??
-          (await AsyncStorage.getItem("conversationId")) ??
-          null;
-
-        // 7) PDF
-        if (typeof result === "object" && result?.sessionEnded) {
+        // 7) PDF / update mode
+        if (typeof result === "object" && result?.recommendNewConsultation) {
+          // Это уже другой клинический путь:
+          // старый PDF не обновляем как продолжение текущего кейса.
+          await refreshPdfReadyState(pdfConversationId ?? result.conversationId ?? null);
+          setIsDecisionTreeStale(false);
+        } else if (typeof result === "object" && result?.sessionEnded) {
           const cid = result.conversationId ?? null;
           setPdfConversationId(cid);
           await refreshPdfReadyState(cid);
-
-          // (опционально позже) тут можно будет прегреть decisionTree/PDF
         } else {
-          // любое новое сообщение пользователя делает decisionTree устаревшим
+          // обычное продолжение текущего кейса: PDF можно обновлять отдельно по кнопке
           setIsDecisionTreeStale(true);
           setIsPdfReady(false);
-
         }
 
       } catch (err) {
@@ -552,7 +556,12 @@ useEffect(() => {
 }
 
 async function ensureDecisionTreeCached(conversationId: string) {
-  const locale = i18n.locale || "en";
+  const selectedPdfLang =
+    (await AsyncStorage.getItem("pdfLanguage")) ||
+    i18n.locale ||
+    "en";
+
+  const locale = selectedPdfLang;
   const dtKey = `decisionTree:${conversationId}:${locale}`;
 
   // если есть кэш и он не помечен как stale — ничего не делаем
@@ -578,9 +587,24 @@ async function ensureDecisionTreeCached(conversationId: string) {
 
   const decisionTree = (dtRes as any).decisionTree ?? null;
 
+  const currentHistory =
+    (await AsyncStorage.getItem(`chatHistory:${conversationId}`)) ||
+    (await AsyncStorage.getItem(`chat:history:${conversationId}`)) ||
+    "[]";
+
+  let messagesCount = 0;
+  try {
+    const parsedHistory = JSON.parse(currentHistory);
+    messagesCount = Array.isArray(parsedHistory) ? parsedHistory.length : 0;
+  } catch {}
+
   await AsyncStorage.setItem(
     dtKey,
-    JSON.stringify({ createdAt: new Date().toISOString(), decisionTree })
+    JSON.stringify({
+      createdAt: new Date().toISOString(),
+      messagesCount,
+      decisionTree,
+    })
   );
 
   setIsPdfReady(true);
@@ -592,7 +616,32 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
   const dtKey = `decisionTree:${conversationId}:${locale}`;
   const raw = await AsyncStorage.getItem(dtKey);
 
-  const needsRefresh = !raw || isDecisionTreeStale;
+  const currentHistoryRaw =
+    (await AsyncStorage.getItem(`chatHistory:${conversationId}`)) ||
+    (await AsyncStorage.getItem(`chat:history:${conversationId}`)) ||
+    "[]";
+
+  let currentMessagesCount = 0;
+  try {
+    const parsedHistory = JSON.parse(currentHistoryRaw);
+    currentMessagesCount = Array.isArray(parsedHistory) ? parsedHistory.length : 0;
+  } catch {}
+
+  let savedMessagesCount = -1;
+  if (raw) {
+    try {
+      const parsedDt = JSON.parse(raw);
+      savedMessagesCount =
+        typeof parsedDt?.messagesCount === "number" ? parsedDt.messagesCount : -1;
+    } catch {}
+  }
+
+  const hasNewMessages =
+    savedMessagesCount >= 0 && currentMessagesCount > savedMessagesCount;
+
+  const needsRefresh =
+    !raw || isDecisionTreeStale || hasNewMessages;
+
   if (!needsRefresh) return;
   if (dtRefreshPromiseRef.current) return;
 
@@ -610,7 +659,10 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
   return dtRefreshPromiseRef.current;
 }
 
-  async function saveSessionSilently(conversationId: string) {
+    async function saveSessionSilently(
+    conversationId: string,
+    forcedContext?: string
+  ) {
     // 1) гарантируем, что история есть в AsyncStorage
     const keyA = `chatHistory:${conversationId}`;
     const keyB = `chat:history:${conversationId}`;
@@ -648,8 +700,18 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
     const petName = activePet?.name?.trim() || i18n.t("chat.pet_default", { defaultValue: "Pet" });
 
     // 4) context — последняя реплика пользователя (если есть)
-    const lastUser = [...chat].reverse().find((m) => m?.role === "user" && String(m.content || "").trim());
-    const context = (lastUser?.content || "").slice(0, 120) || i18n.t("summary.no_description", { defaultValue: "No description" });
+    const lastUser = [...chat]
+      .reverse()
+      .find((m) => m?.role === "user" && String(m.content || "").trim());
+
+    const contextSource =
+      (typeof forcedContext === "string" && forcedContext.trim()) ||
+      lastUser?.content ||
+      "";
+
+    const context =
+      contextSource.slice(0, 120) ||
+      i18n.t("summary.no_description", { defaultValue: "No description" });
 
     const record = {
       id: conversationId,
@@ -669,10 +731,45 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
     await AsyncStorage.setItem("chatSummary", JSON.stringify(filtered));
   }
 
-  const handlePdfNow = async () => {
+    async function appendUserMessageToStoredHistory(
+    conversationId: string,
+    message: ChatMessage
+  ) {
+    const keyA = `chatHistory:${conversationId}`;
+    const keyB = `chat:history:${conversationId}`;
+
+    try {
+      const existingRaw =
+        (await AsyncStorage.getItem(keyA)) ??
+        (await AsyncStorage.getItem(keyB)) ??
+        "[]";
+
+      const parsed = JSON.parse(existingRaw);
+      const history = Array.isArray(parsed) ? parsed : [];
+
+      const updated = [
+        ...history,
+        {
+          role: "user",
+          content: typeof message.content === "string" ? message.content : "",
+          ts: typeof message.ts === "number" ? message.ts : Date.now(),
+        },
+      ];
+
+      await AsyncStorage.setItem(keyA, JSON.stringify(updated));
+      try {
+        await AsyncStorage.setItem(keyB, JSON.stringify(updated));
+      } catch {}
+    } catch (e) {
+      console.error("❌ appendUserMessageToStoredHistory error:", e);
+    }
+  }
+
+  const handlePdfNowActual = async () => {
     if (pdfGenerating) return;
 
     try {
+      console.log("📄 PDF step 1: start");
       setPdfGenerating(true);
 
       const id =
@@ -680,20 +777,27 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
         (await AsyncStorage.getItem("conversationId")) ??
         null;
 
+      console.log("📄 PDF step 2: conversationId =", id);
+
       if (!id) {
         alert(i18n.t("chat.pdf_no_session", { defaultValue: "No active session yet." }));
         return;
       }
 
-      // ✅ 1) обновляем decisionTree только если он реально stale или отсутствует
+      console.log("📄 PDF step 3: before refreshDecisionTreeIfStale");
       await refreshDecisionTreeIfStale(id);
+      console.log("📄 PDF step 4: after refreshDecisionTreeIfStale");
 
-      // ✅ 2) тихо сохранили → генерим pdf
+      console.log("📄 PDF step 5: before saveSessionSilently");
       await saveSessionSilently(id);
-      await exportSummaryPDF(id);
+      console.log("📄 PDF step 6: after saveSessionSilently");
 
-      // на всякий: обновим флаг готовности
+      console.log("📄 PDF step 7: before exportSummaryPDF");
+      await exportSummaryPDF(id);
+      console.log("📄 PDF step 8: after exportSummaryPDF");
+
       await refreshPdfReadyState(id);
+      console.log("📄 PDF step 9: done");
     } catch (e) {
       console.error("❌ PDF now error:", e);
       alert(i18n.t("chat.pdf_error", { defaultValue: "Could not generate PDF." }));
@@ -701,6 +805,13 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
       setPdfGenerating(false);
     }
   };
+
+  const handlePdfNow = async () => {
+    console.log("🟥 handlePdfNow pressed");
+    if (pdfGenerating || loading || finalizing) return;
+    setPdfLangModalVisible(true);
+  };
+
   const isWaitingForSummary = loading && !pdfGenerating && (phase === "summary" || phase === "ended");
   const waitingText = isWaitingForSummary
     ? i18n.t("chat.waiting.summary")
@@ -725,6 +836,44 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
               <Text style={styles.text}>
                 {i18n.t("chat.waiting.summary")}
               </Text>
+            </View>
+          </View>
+        </Modal>
+
+        <Modal transparent animationType="fade" visible={pdfLangModalVisible}>
+          <View style={styles.overlay}>
+            <View style={styles.box}>
+              <Text style={styles.text}>
+                {i18n.t("pdf.language_title", { defaultValue: "Language of the PDF" })}
+              </Text>
+
+              {["de", "en", "es", "fr", "he", "it", "ru"].map((langCode) => (
+                <TouchableOpacity
+                  key={langCode}
+                  style={styles.pdfLangOption}
+                  onPress={async () => {
+                    await AsyncStorage.setItem("pdfLanguage", langCode);
+                    setPdfLangModalVisible(false);
+
+                    setTimeout(() => {
+                      void handlePdfNowActual();
+                    }, 600);
+                  }}
+                >
+                  <Text style={styles.pdfLangOptionText}>
+                    {i18n.t(`language.${langCode}`, { defaultValue: langCode.toUpperCase() })}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+
+              <TouchableOpacity
+                style={styles.pdfLangCancel}
+                onPress={() => setPdfLangModalVisible(false)}
+              >
+                <Text style={styles.pdfLangCancelText}>
+                  {i18n.t("common.cancel", { defaultValue: "Cancel" })}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>
@@ -755,7 +904,13 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
                   ]}
                 >
                   <Text style={[styles.msgText, isRTL ? styles.msgTextRTL : undefined]}>
-                    {item.content}
+                    {formatAssistantBubbleContent(item.content, {
+                      uppercaseTitle:
+                        item.role === "assistant" &&
+                        phase === "ended" &&
+                        typeof item.content === "string" &&
+                        item.content.includes("\n"),
+                    })}
                   </Text>
 
                   {SHOW_TIMESTAMPS && !!item.ts && (
@@ -1067,6 +1222,25 @@ const styles = StyleSheet.create({
     marginTop: 12,
     fontSize: 16,
     color: "#333",
+    textAlign: "center",
+  },
+  pdfLangOption: {
+    width: "100%",
+    paddingVertical: 10,
+    alignItems: "center",
+  },
+  pdfLangOptionText: {
+    fontSize: 16,
+    color: "#333",
+    textAlign: "center",
+  },
+  pdfLangCancel: {
+    marginTop: 10,
+    paddingTop: 6,
+  },
+  pdfLangCancelText: {
+    fontSize: 15,
+    color: "#666",
     textAlign: "center",
   },
                  

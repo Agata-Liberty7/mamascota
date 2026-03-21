@@ -75,6 +75,7 @@
     "lang_ru": "Russisch",
     "lang_he": "Hebräisch",
     "chat": "Chat",
+    "summary": "Zusammenfassung",
     "saved_sessions": "Gespeicherte Sitzungen",
     "settings": "Einstellungen",
     "about": "Über",
@@ -205,6 +206,7 @@
   "animal_other": "Andere",
 
   "pdf": {
+    "report_title": "Bericht für die Praxis von",
     "date_label": "Datum und Uhrzeit",
     "owner_notes_title": "Anamnese",
     "focus_title": "Fokus für den Tierarzt",

@@ -75,6 +75,7 @@
     "lang_ru": "Russe",
     "lang_he": "Hébreu",
     "chat": "Chat",
+    "summary": "Résumé",
     "saved_sessions": "Sesions sauvegardées",
     "settings": "Paramètres",
     "about": "À propos",
@@ -201,6 +202,7 @@
   "animal_other": "Autre",
 
   "pdf": {
+    "report_title": "Rapport pour la clinique de",
     "date_label": "Date et heure",
     "owner_notes_title": "Anamnèse",
     "focus_title": "Enfoque pour le vétérinaire",

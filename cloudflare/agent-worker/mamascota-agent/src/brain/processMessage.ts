@@ -17,6 +17,8 @@ export type BrainResult = {
   conversationId?: string;
   sessionEnded?: boolean;
   needsFinalize?: boolean;
+  recommendNewConsultation?: boolean;
+  newConsultationReason?: string;
   phase?: "intake" | "clarify" | "summary" | "ended";
   decisionTree?: {
     anamnesis_short: string[];
@@ -37,6 +39,7 @@ type BrainArgs = {
   conversationId?: string;
   conversationHistory?: Array<{ role: string; content: string }>;
   langOverride?: string;
+  postSummaryUpdateMode?: boolean;
 };
 
 // =====================
@@ -142,6 +145,60 @@ function normalizeSymptomKeys(symptomKeys: any): string[] {
     .map((s) => s.trim())
     .filter(Boolean);
 }
+
+function detectSymptomClusters(text: string, symptomKeys: string[]) {
+  const hay = `${String(text || "").toLowerCase()} ${Array.isArray(symptomKeys) ? symptomKeys.join(" ").toLowerCase() : ""}`;
+
+  const hasAny = (patterns: string[]) => patterns.some((p) => hay.includes(p));
+
+  return {
+    gi: hasAny([
+      "diarrhea", "vomit", "vomiting", "stool", "appetite", "nausea", "weight_loss", "weight loss"
+    ]),
+    respiratory: hasAny([
+      "cough", "dyspnea", "shortness of breath", "breathing", "respiratory", "одыш", "каш"
+    ]),
+    musculoskeletal: hasAny([
+      "lameness", "limping", "limp", "paw", "leg", "хром"
+    ]),
+    urinary: hasAny([
+      "urination", "urine", "peeing", "drinking", "thirst", "моч", "пьет", "жаж"
+    ]),
+    neuro: hasAny([
+      "seizure", "ataxia", "collapse", "tremor", "невро", "судорог"
+    ]),
+  };
+}
+
+function shouldRecommendNewConsultation(args: {
+  postSummaryUpdateMode: boolean;
+  message: string;
+  symptomKeys: string[];
+}): { recommend: boolean; reason: string } {
+  if (!args.postSummaryUpdateMode) {
+    return { recommend: false, reason: "" };
+  }
+
+  const clusters = detectSymptomClusters(args.message, args.symptomKeys);
+
+  const activeClusters = [
+    clusters.gi ? "gi" : "",
+    clusters.respiratory ? "respiratory" : "",
+    clusters.musculoskeletal ? "musculoskeletal" : "",
+    clusters.urinary ? "urinary" : "",
+    clusters.neuro ? "neuro" : "",
+  ].filter(Boolean);
+
+  if (activeClusters.length >= 2) {
+    return {
+      recommend: true,
+      reason: `multiple_clusters:${activeClusters.join(",")}`,
+    };
+  }
+
+  return { recommend: false, reason: "" };
+}
+
 
 // proxy-compatible normalizePet (matches mamascota-agent.mjs)
 // normalizePet: сохраняем КЛЮЧИ из приложения, без текстовых заглушек
@@ -439,6 +496,15 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
     ? args.conversationHistory
     : [];
 
+  const postSummaryUpdateMode = !!args.postSummaryUpdateMode;
+
+  const newConsultationDecision = shouldRecommendNewConsultation({
+    postSummaryUpdateMode,
+    message: trimmedMessage,
+    symptomKeys,
+  });
+  
+
   const apiKey = isNonEmptyString(args.env?.OPENAI_API_KEY)
     ? String(args.env.OPENAI_API_KEY)
     : "";
@@ -549,7 +615,7 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
             `RUNTIME_GUARD:\n` +
             `- Output language must be exactly "${effectiveLang}".\n` +
             `- Speak as Mamascota in feminine gender.\n` +
-            `- Ask for ONLY ONE thing from the user per message (one request). Do not chain requests with "also/and/in addition".\n` +
+            `- Ask for ONLY ONE thing from the user per message (one request). Do not chain requests with "also/and/in addition", naturally, without meta-phrases. Do not announce that you are asking a question.\n` +
             `- You MUST not ignore any provided symptomKeys from APP_CONTEXT_JSON: if 2–3 symptoms are selected, explicitly cover each across the next 1–2 turns.\n` +
             `- By your 2nd–3rd assistant message, you may add ONE very short explanation (1 sentence) of how the main symptoms may be connected. Do this ONLY ONCE per conversation, and only if it helps the next question.\n` +
             `- Avoid repeating a question that was already asked in the last 6 turns.\n` +
@@ -561,6 +627,24 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
             `- Do NOT write filler acknowledgements like "Okay", "Got it", "Thanks", "Understood", "Приняла", "Хорошо, спасибо". Start directly with helpful content.\n` +
             `- Do NOT output chunk delimiters like "[CHUNK]" or "[[CHUNK]]".\n` +
             `- If red flags appear: stop asking questions and switch to urgent action.\n` +
+
+            (postSummaryUpdateMode
+              ? `\nPOST_SUMMARY_UPDATE_MODE:\n` +
+                `- This is NOT a new intake. The case was already assessed.\n` +
+                `- Do NOT restart the questionnaire from the beginning.\n` +
+                `- Ask at most ONE clarifying question, and only if strictly necessary.\n` +
+                `- If the new detail clearly fits the existing clinical path, integrate it and move toward an updated conclusion.\n` +
+                `- If no clarification is needed, provide a short update and STOP.\n` +
+                `- If a newly introduced symptom or concern does NOT belong to the current clinical path, do NOT try to force it into the existing case.\n` +
+                `- Do NOT ignore that symptom.\n` +
+                `- Do NOT start a new question flow about that symptom inside the current consultation.\n` +
+                `- Instead, briefly acknowledge it and clearly recommend starting a NEW consultation focused on that separate problem.\n` +
+                `- Explain this as a way to keep two different diagnostic paths clear and accurate.\n` +
+                `- Keep this recommendation short, warm, confident, and user-friendly.\n` +
+                `- After recommending a new consultation, STOP and do not ask another question in the current session.\n`
+              : ""
+            ) +
+
             (symptomCoverageGuard ? `\n${symptomCoverageGuard}\n` : "")
           ),
     });
@@ -698,6 +782,8 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
         reply: "",
         sessionEnded: false,
         needsFinalize: true,
+        recommendNewConsultation: newConsultationDecision.recommend,
+        newConsultationReason: newConsultationDecision.reason || undefined,
         phase: "summary",
         decisionTree: null,
       };
@@ -711,6 +797,8 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
       reply: cleanedReply,
       sessionEnded,
       needsFinalize: false,
+      recommendNewConsultation: newConsultationDecision.recommend,
+      newConsultationReason: newConsultationDecision.reason || undefined,
       phase,
       decisionTree: null,
     };
