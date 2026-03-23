@@ -211,6 +211,25 @@
     "urgent_title": "Urgent maintenant si...",
     "plan_title": "Plan de visite",
     "generating": "Création du PDF...",
-    "language_title": "Choisissez la langue du PDF"
-  }
+    "language_title": "Choisissez la langue du PDF",
+
+    "diary_title": "Journal des observations",
+    "diary_intro": "Enregistrez les observations quotidiennes et les changements de l’état de votre animal. Ces enregistrements aideront le vétérinaire à faire une évaluation plus précise de la situation.",
+    "diary_pet": "Animal",
+    "diary_species": "Espèce",
+    "diary_start_date": "Date de début",
+
+    "diary_date": "Date",
+    "diary_appetite": "Appétit",
+    "diary_water_intake": "Consommation d’eau",
+    "diary_activity": "Activité",
+    "diary_symptoms": "Symptômes",
+    "diary_notes": "Notes"
+  },
+
+  "csv": {
+    "download_title": "Tableau au format CSV",
+    "download_hint": "Ce fichier peut ne pas s’ouvrir avec les applications standard sur votre téléphone. Téléchargez-le pour l’ouvrir plus tard dans Excel, Numbers, Google Sheets ou OpenOffice sur un autre appareil.",
+    "download_button": "Télécharger"
+  } 
 }

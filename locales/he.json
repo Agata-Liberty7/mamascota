@@ -215,6 +215,24 @@
     "urgent_title": " דחוף עכשיו",
     "plan_title": "תוכנית לביקור",
     "generating": "יוצר PDF...",
-    "language_title": "בחר שפת PDF"
-  }
+    "language_title": "בחר שפת PDF",
+
+    "diary_title": "יומן תצפיות",
+    "diary_intro": "ומשתנים במצב של חיות המחמד שלך. רשומות אלו יעזרו לרופא הווטרינרי לערוך הערכה מדויקת יותר של המצב.",
+    "diary_pet": "חיית מחמד",
+    "diary_species": "מין/סוג",
+    "diary_start_date": "תאריך התחלה",
+    "diary_date": "תאריך",
+    "diary_appetite": "תיאבון",
+    "diary_water_intake": "צריכת מים",
+    "diary_activity": "פעילות",
+    "diary_symptoms": "סימפטומים",
+    "diary_notes": "הערות"
+  },
+
+  "csv": {
+    "download_title": "טבלה בפורמט CSV",
+    "download_hint": " ניתן להוריד את כל התצפיות שלך כקובץ CSV כדי לנתח אותן או לשתף עם הווטרינר שלך.",
+    "download_button": "הורד"
+  } 
 }

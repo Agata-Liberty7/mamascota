@@ -222,6 +222,25 @@
     "urgent_title": "Срочно в клинику, если...",
     "plan_title": "План визита",
     "generating": "Создаю PDF...",
-    "language_title": "Выберите язык PDF"
-    }
+    "language_title": "Выберите язык PDF",
+
+    "diary_title": "Дневник наблюдений",
+    "diary_intro": "Ежедневно фиксируйте симптомы и изменения в состоянии питомца. Эти записи помогут ветеринарному врачу точнее оценить ситуацию.",
+    "diary_pet": "Питомец",
+    "diary_species": "Вид",
+    "diary_start_date": "Дата начала",
+
+    "diary_date": "Дата",
+    "diary_appetite": "Аппетит",
+    "diary_water_intake": "Потребление воды",
+    "diary_activity": "Активность",
+    "diary_symptoms": "Симптомы",
+    "diary_notes": "Заметки"
+  },
+
+  "csv": {
+    "download_title": "Таблица в формате CSV",
+    "download_hint": "Этот файл может не открыться стандартными приложениями на телефоне. Скачайте его, чтобы позже открыть в Excel, Numbers, Google Sheets или OpenOffice на другом устройстве.",
+    "download_button": "Скачать"
+  }  
 }

@@ -218,6 +218,25 @@
     "urgent_title": "Urgente ahora si...",
     "plan_title": "Plan de visita",
     "generating": "Creando PDF...",
-    "language_title": "Elige el idioma del PDF"
-  }
+    "language_title": "Elige el idioma del PDF",
+
+    "diary_title": "Diario de observaciones",
+    "diary_intro": "Registra las observaciones diarias y los cambios en el estado de tu mascota. Estas notas ayudarán al veterinario a evaluar la situación de manera más precisa.",
+    "diary_pet": "Mascota",
+    "diary_species": "Especie",
+    "diary_start_date": "Fecha de inicio",
+
+    "diary_date": "Fecha",
+    "diary_appetite": "Apetito",
+    "diary_water_intake": "Consumo de agua",
+    "diary_activity": "Actividad",
+    "diary_symptoms": "Síntomas",
+    "diary_notes": "Notas"
+  },
+
+  "csv": {
+    "download_title": "Tabla en formato CSV",
+    "download_hint": "Este archivo puede no abrirse con las aplicaciones estándar en tu teléfono. Descárgalo para abrirlo más tarde en Excel, Numbers, Google Sheets o OpenOffice en otro dispositivo.",
+    "download_button": "Descargar"
+  } 
 }

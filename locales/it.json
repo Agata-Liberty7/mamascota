@@ -215,6 +215,24 @@
     "urgent_title": "Urgente ora se...",
     "plan_title": "Piano della visita",
     "generating": "Creazione del PDF...",
-    "language_title": "Scegli la lingua del PDF"
-    }  
+    "language_title": "Scegli la lingua del PDF",
+
+    "diary_title": "Diario delle osservazioni",
+    "diary_intro": "Registra ogni giorno i sintomi e i cambiamenti nello stato del tuo animale. Queste note aiuteranno il veterinario a valutare meglio la situazione.",
+    "diary_pet": "Animale",
+    "diary_species": "Specie",
+    "diary_start_date": "Data di inizio",
+    "diary_date": "Data",
+    "diary_appetite": "Appetito",
+    "diary_water_intake": "Assunzione d'acqua",
+    "diary_activity": "Attività",
+    "diary_symptoms": "Sintomi",
+    "diary_notes": "Note"
+  },
+
+  "csv": {
+    "download_title": "Tabella in formato CSV",
+    "download_hint": "Questo file CSV contiene i dati del diario delle osservazioni del tuo animale, che puoi aprire con Excel, Numbers, o Google Sheets.",
+    "download_button": "Scarica"
+  }  
 }

@@ -18,7 +18,11 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { ThemedText } from "../components/ThemedText";
 
 // PDF util
-import { exportSummaryPDF } from "../utils/exportPDF";
+import {
+  exportSummaryPDF,
+  exportObservationDiaryPDF,
+  exportObservationDiaryCSV,
+} from "../utils/exportPDF";
 // modal
 import LoadingPDF from "../components/ui/LoadingPDF";
 
@@ -125,7 +129,11 @@ export default function SummaryScreen() {
   const [sessions, setSessions] = useState<SummaryItem[]>([]);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [pdfLangModalVisible, setPdfLangModalVisible] = useState(false);
+  const [csvModalVisible, setCsvModalVisible] = useState(false);
   const [pendingPdfItem, setPendingPdfItem] = useState<SummaryItem | null>(null);
+  const [pendingPdfType, setPendingPdfType] = useState<"summary" | "diary" | null>(null);
+  const [pendingCsvItem, setPendingCsvItem] = useState<SummaryItem | null>(null);
+  const [shouldStartCsvExport, setShouldStartCsvExport] = useState(false);
   const [currentPdfLang, setCurrentPdfLang] = useState<string>("en");
   const router = useRouter();
 
@@ -222,6 +230,32 @@ export default function SummaryScreen() {
     }
   };
 
+  const handleExportObservationDiaryPDF = async (
+    petName: string,
+    sessionDate: string | number
+  ) => {
+    try {
+      setPdfLoading(true);
+      await exportObservationDiaryPDF(petName, sessionDate);
+    } catch (err) {
+      console.error("Observation Diary PDF export error:", err);
+    } finally {
+      setPdfLoading(false);
+    }
+  };
+
+  const handleExportObservationDiaryCSV = async (
+    petName: string,
+    sessionDate: string | number
+  ) => {
+    try {
+      await exportObservationDiaryCSV(petName, sessionDate);
+    } catch (err) {
+      console.error("Observation Diary CSV export error:", err);
+    }
+  };
+
+
   // =========================
   // LIST ITEM
   // =========================
@@ -255,7 +289,7 @@ export default function SummaryScreen() {
           >
             <MaterialIcons
               name="play-circle-outline"
-              size={26}
+              size={22}
               color="#007AFF"
             />
           </TouchableOpacity>
@@ -268,19 +302,47 @@ export default function SummaryScreen() {
                 "en";
 
               setCurrentPdfLang(savedPdfLang);
+              setPendingPdfType("summary");
               setPendingPdfItem(item);
               setPdfLangModalVisible(true);
             }}
             style={styles.iconButton}
           >
-            <MaterialIcons name="picture-as-pdf" size={26} color="#E53935" />
+            <MaterialIcons name="picture-as-pdf" size={22} color="#E53935" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={async () => {
+              const savedPdfLang =
+                (await AsyncStorage.getItem("pdfLanguage")) ||
+                i18n.locale ||
+                "en";
+
+              setCurrentPdfLang(savedPdfLang);
+              setPendingPdfType("diary");
+              setPendingPdfItem(item);
+              setPdfLangModalVisible(true);
+            }}
+            style={styles.iconButton}
+          >
+            <MaterialIcons name="table-chart" size={22} color="#42A5F5" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              setPendingCsvItem(item);
+              setCsvModalVisible(true);
+            }}
+            style={styles.iconButton}
+          >
+            <MaterialIcons name="insert-drive-file" size={22} color="#43A047" />
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => handleDelete(item.id)}
             style={styles.iconButton}
           >
-            <MaterialIcons name="delete-outline" size={26} color="#999" />
+            <MaterialIcons name="delete-outline" size={22} color="#999" />
           </TouchableOpacity>
         </View>
       </View>
@@ -340,12 +402,20 @@ export default function SummaryScreen() {
                       setPdfLangModalVisible(false);
 
                       setTimeout(async () => {
-                        if (pendingPdfItem) {
-                          await handleExportPDF(
-                            pendingPdfItem.id,
-                            pendingPdfItem.petName
+                        if (!pendingPdfItem) return;
+
+                        if (pendingPdfType === "diary") {
+                          await handleExportObservationDiaryPDF(
+                            pendingPdfItem.petName,
+                            pendingPdfItem.date
                           );
+                          return;
                         }
+
+                        await handleExportPDF(
+                          pendingPdfItem.id,
+                          pendingPdfItem.petName
+                        );
                       }, 600);
                     }}
                   >
@@ -366,6 +436,7 @@ export default function SummaryScreen() {
               onPress={() => {
                 setPdfLangModalVisible(false);
                 setPendingPdfItem(null);
+                setPendingPdfType(null);
               }}
             >
               <Text style={styles.pdfLangCancelText}>
@@ -375,6 +446,67 @@ export default function SummaryScreen() {
           </View>
         </View>
       </Modal>
+
+        <Modal
+          transparent
+          animationType="fade"
+          visible={csvModalVisible}
+          onDismiss={async () => {
+            if (!shouldStartCsvExport || !pendingCsvItem) return;
+
+            try {
+              await handleExportObservationDiaryCSV(
+                pendingCsvItem.petName,
+                pendingCsvItem.date
+              );
+            } finally {
+              setShouldStartCsvExport(false);
+              setPendingCsvItem(null);
+            }
+          }}
+        >
+          <View style={styles.overlay}>
+            <View style={styles.box}>
+              <Text style={styles.text}>
+                {i18n.t("csv.download_title", { defaultValue: "Download CSV" })}
+              </Text>
+
+              <Text style={styles.csvHint}>
+                {i18n.t("csv.download_hint", {
+                  defaultValue:
+                    "This file may not open with standard apps on your phone. Download it to open later in Excel, Google Sheets, or OpenOffice on another device.",
+                })}
+              </Text>
+
+                <TouchableOpacity
+                  style={styles.csvPrimaryButton}
+                  onPress={() => {
+                    if (!pendingCsvItem) return;
+
+                    setShouldStartCsvExport(true);
+                    setCsvModalVisible(false);
+                  }}
+                >
+                  <Text style={styles.csvPrimaryButtonText}>
+                    {i18n.t("csv.download_button", { defaultValue: "Download CSV" })}
+                  </Text>
+                </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.pdfLangCancel}
+                onPress={() => {
+                  setShouldStartCsvExport(false);
+                  setCsvModalVisible(false);
+                  setPendingCsvItem(null);
+                }}
+              >
+                <Text style={styles.pdfLangCancelText}>
+                  {i18n.t("cancel", { defaultValue: "Cancel" })}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
 
       {/* 🔥 МОДАЛКА ЗАГРУЗКИ PDF */}
       <LoadingPDF visible={pdfLoading} />
@@ -405,6 +537,9 @@ const styles = StyleSheet.create({
   },
   info: {
     flexDirection: "column",
+    flex: 1,
+    minWidth: 0,
+    paddingRight: 8,
   },
   petName: {
     fontWeight: "600",
@@ -424,10 +559,13 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    justifyContent: "flex-end",
+    flexShrink: 0,
+    gap: 2,
   },
   iconButton: {
-    padding: 6,
+    paddingHorizontal: 3,
+    paddingVertical: 4,
   },
   empty: {
     fontSize: 15,
@@ -506,6 +644,28 @@ const styles = StyleSheet.create({
   pdfLangCancelText: {
     fontSize: 15,
     color: "#666",
+    textAlign: "center",
+  },
+  csvHint: {
+    marginTop: 12,
+    fontSize: 14,
+    lineHeight: 20,
+    color: "#555",
+    textAlign: "center",
+  },
+
+  csvPrimaryButton: {
+    marginTop: 16,
+    backgroundColor: "#43A047",
+    borderRadius: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+  },
+
+  csvPrimaryButtonText: {
+    color: "#fff",
+    fontSize: 15,
+    fontWeight: "600",
     textAlign: "center",
   },
 

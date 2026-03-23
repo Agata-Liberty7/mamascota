@@ -8,6 +8,9 @@ import { chatWithGPT } from "./chatWithGPT";
 import { Platform } from "react-native";
 import * as FileSystem from "expo-file-system/legacy";
 import * as IntentLauncher from "expo-intent-launcher";
+import { generateObservationDiaryPdf } from "./generateObservationDiaryPdf";
+import { generateObservationDiaryCsv } from "./generateObservationDiaryCsv";
+
 
 function normalizePdfText(input: any): string {
   if (input === null || input === undefined) return "";
@@ -533,5 +536,130 @@ ${
 
     console.error("❌ exportSummaryPDF error:", err);
     alert(i18n.t("privacy_paragraph2"));
+  }
+
+}
+// -----------------------------------------------------
+// Observation Diary PDF (без воркера, без decisionTree)
+// -----------------------------------------------------
+export async function exportObservationDiaryPDF(
+  petName?: string,
+  sessionDate?: string | number
+) {
+  try {
+    const locale =
+      (await AsyncStorage.getItem("pdfLanguage")) ||
+      i18n.locale ||
+      "en";
+
+    const previousLocale = i18n.locale;
+    i18n.locale = locale;
+
+    const pet = petName ? await findPetByName(petName) : null;
+    const speciesLabel = pet
+      ? localizeSpecies(pet?.species || "", pet?.sex || "") || "—"
+      : "—";
+
+    const startDate = sessionDate
+      ? new Date(sessionDate).toLocaleDateString(locale)
+      : new Date().toLocaleDateString(locale);
+
+    const html = generateObservationDiaryPdf({
+      petName: petName || i18n.t("chat.pet_default", { defaultValue: "Pet" }),
+      speciesLabel,
+      startDate,
+    });
+
+    const title = i18n.t("pdf.diary_title", {
+      defaultValue: "Observation Diary",
+    });
+
+    const { uri } = await Print.printToFileAsync({ html });
+
+    if (Platform.OS === "android") {
+      const cUri = await FileSystem.getContentUriAsync(uri);
+
+      await IntentLauncher.startActivityAsync("android.intent.action.VIEW", {
+        data: cUri,
+        flags: 1,
+        type: "application/pdf",
+      });
+
+      await Sharing.shareAsync(uri, {
+        mimeType: "application/pdf",
+        dialogTitle: title,
+      });
+    } else {
+      await Sharing.shareAsync(uri, {
+        mimeType: "application/pdf",
+        dialogTitle: title,
+        UTI: "com.adobe.pdf",
+      });
+    }
+
+    i18n.locale = previousLocale;
+  } catch (err) {
+    console.error("❌ exportObservationDiaryPDF error:", err);
+    alert(i18n.t("privacy_paragraph2"));
+  }
+}
+// -----------------------------------------------------
+// Observation Diary CSV
+// -----------------------------------------------------
+export async function exportObservationDiaryCSV(
+  petName?: string,
+  sessionDate?: string | number
+) {
+  const previousLocale = i18n.locale;
+
+  try {
+    const locale =
+      (await AsyncStorage.getItem("pdfLanguage")) ||
+      i18n.locale ||
+      "en";
+
+    i18n.locale = locale;
+
+    const pet = petName ? await findPetByName(petName) : null;
+
+    const speciesLabel = pet
+      ? localizeSpecies(pet?.species || "", pet?.sex || "") || "—"
+      : "—";
+
+    const startDate = sessionDate
+      ? new Date(sessionDate).toLocaleDateString(locale)
+      : new Date().toLocaleDateString(locale);
+
+    const csv = generateObservationDiaryCsv({
+      petName,
+      speciesLabel,
+      startDate,
+    });
+
+    const fileUri =
+      FileSystem.documentDirectory +
+      `observation-diary-${Date.now()}.csv`;
+
+    await FileSystem.writeAsStringAsync(fileUri, csv, {
+      encoding: FileSystem.EncodingType.UTF8,
+    });
+
+    const canShare = await Sharing.isAvailableAsync();
+    if (!canShare) {
+      throw new Error("SharingUnavailable");
+    }
+
+    await Sharing.shareAsync(fileUri, {
+      mimeType: "text/csv",
+      dialogTitle: i18n.t("csv.download_title", {
+        defaultValue: "CSV file",
+      }),
+      UTI: "public.comma-separated-values-text",
+    });
+  } catch (err) {
+    console.error("❌ exportObservationDiaryCSV error:", err);
+    alert(i18n.t("privacy_paragraph2"));
+  } finally {
+    i18n.locale = previousLocale;
   }
 }

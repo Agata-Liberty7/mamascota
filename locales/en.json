@@ -215,6 +215,25 @@
     "urgent_title": "Immediate action needed if...",
     "plan_title": "Plan for the vet visit",
     "generating": "Generating PDF...",
-    "language_title": "Choose PDF language"
-  }
+    "language_title": "Choose PDF language",
+
+    "diary_title": "Observation diary",
+    "diary_intro": "Here you can keep a diary of your pet’s condition and symptoms. These records will help the veterinarian make a more accurate assessment of the situation.",
+    "diary_pet": "Pet",
+    "diary_species": "Species",
+    "diary_start_date": "Start Date",
+
+    "diary_date": "Date",
+    "diary_appetite": "Appetite",
+    "diary_water_intake": "Water Intake",
+    "diary_activity": "Activity",
+    "diary_symptoms": "Symptoms",
+    "diary_notes": "Notes"
+  },
+
+  "csv": {
+    "download_title": "Table in CSV format",
+    "download_hint": "This file may not open with standard applications on your phone. Download it to open later in Excel, Numbers, Google Sheets or OpenOffice on another device.",
+    "download_button": "Download"
+  } 
 }

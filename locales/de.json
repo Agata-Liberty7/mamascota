@@ -215,6 +215,25 @@
     "urgent_title": "Sofortiges Handeln erforderlich, wenn...",
     "plan_title": "Plan des Tierarztbesuchs",
     "generating": "PDF wird erstellt...",
-    "language_title": "PDF-Sprache wählen"
-  }
+    "language_title": "PDF-Sprache wählen",
+
+    "diary_title": "Beobachtungstagebuch",
+    "diary_intro": "Hier können Sie ein Tagebuch Ihres Haustiers führen und Symptome sowie Veränderungen in seinem Zustand dokumentieren. Diese Aufzeichnungen helfen dem Tierarzt, die Situation genauer einzuschätzen.",
+    "diary_pet": "Haustier",
+    "diary_species": "Art",
+    "diary_start_date": "Start Date",
+
+    "diary_date": "Date",
+    "diary_appetite": "Appetite",
+    "diary_water_intake": "Water Intake",
+    "diary_activity": "Activity",
+    "diary_symptoms": "Symptoms",
+    "diary_notes": "Notes"
+  },
+
+  "csv": {
+    "download_title": "Tabelle in CSV-Format",
+    "download_hint": "Diese Datei kann möglicherweise nicht mit den Standardanwendungen auf Ihrem Telefon geöffnet werden. Laden Sie sie herunter, um sie später in Excel, Numbers, Google Sheets oder OpenOffice auf einem anderen Gerät zu öffnen.",
+    "download_button": "Herunterladen"
+  } 
 }
