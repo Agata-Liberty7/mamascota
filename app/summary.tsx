@@ -79,10 +79,36 @@ async function ensureDecisionTreeCachedForSummary(
     i18n.locale ||
     "en";
 
-  const dtKey = `decisionTree:${conversationId}:${locale}`;
-  const raw = await AsyncStorage.getItem(dtKey);
+    const dtKey = `decisionTree:${conversationId}:${locale}`;
+    const raw = await AsyncStorage.getItem(dtKey);
 
-  if (raw) return;
+    if (raw) {
+      try {
+        const currentHistoryRaw =
+          (await AsyncStorage.getItem(`chatHistory:${conversationId}`)) ||
+          (await AsyncStorage.getItem(`chat:history:${conversationId}`)) ||
+          "[]";
+
+        let currentMessagesCount = 0;
+        try {
+          const parsedHistory = JSON.parse(currentHistoryRaw);
+          currentMessagesCount = Array.isArray(parsedHistory) ? parsedHistory.length : 0;
+        } catch {}
+
+        const parsedDt = JSON.parse(raw);
+        const savedMessagesCount =
+          typeof parsedDt?.messagesCount === "number" ? parsedDt.messagesCount : -1;
+
+        const hasNewMessages =
+          savedMessagesCount >= 0 && currentMessagesCount > savedMessagesCount;
+
+        if (!hasNewMessages) {
+          return;
+        }
+      } catch {
+        // если кэш битый или не удалось сравнить — пересобираем
+      }
+    }
 
   const conversationHistory = await buildConversationHistoryTail(conversationId, 20);
   const pet = await getPetByName(petName);
