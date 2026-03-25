@@ -231,22 +231,19 @@ export default function SettingsScreen() {
           )}
         </View>
 
-      {/* 🧹 Очистка */}
-      <View style={styles.clearCardWrapper}>
-        <TouchableOpacity
-          style={styles.clearButton}
-          onPress={handleFullReset}
-          activeOpacity={0.9}
-        >
-          <Text style={styles.clearButtonText}>
-            🧹 {i18n.t("settings.clear_data")}
-          </Text>
-          {/* Если есть локаль-хинт — покажет её, если нет — просто не добавляй этот Text */}
-          {/* <Text style={styles.clearButtonHint}>
-            {i18n.t("settings.clear_data_hint")}
-          </Text> */}
-        </TouchableOpacity>
-      </View>
+        {__DEV__ && (
+        <View style={styles.clearCardWrapper}>
+          <TouchableOpacity
+            style={styles.clearButton}
+            onPress={handleFullReset}
+            activeOpacity={0.9}
+          >
+            <Text style={styles.clearButtonText}>
+              🧹 {i18n.t("settings.clear_data")}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       </ScrollView>
 

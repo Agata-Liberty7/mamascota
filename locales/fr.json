@@ -36,6 +36,7 @@
   "animal_fish": "Poisson",
   "animal_exotic": "Exotique",
   "coming_soon": "Bientôt",
+  "coming_soon_message": "L’ajout d’autres types d’animaux sera disponible dans l’une des prochaines versions de l’application.",
 
   "animal_question": "De quel animal voulez-vous parler ?",
   "not_in_list": "Pas dans la liste ?",

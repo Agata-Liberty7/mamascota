@@ -9,6 +9,7 @@ import {
   Alert,
   Image,
   Modal,
+  Platform,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
@@ -163,6 +164,37 @@ export default function SummaryScreen() {
   const [currentPdfLang, setCurrentPdfLang] = useState<string>("en");
   const router = useRouter();
 
+  const showWebConfirm = async ({
+    title,
+    message,
+  }: {
+    title: string;
+    message: string;
+  }): Promise<void> => {
+    if (Platform.OS !== "web") return;
+
+    await new Promise<void>((resolve) => {
+      (window as any).__MAMASCOTA_CONFIRM_RESOLVE__ = resolve;
+
+      window.dispatchEvent(
+        new CustomEvent("mamascota:confirm", {
+          detail: {
+            title,
+            message,
+            buttons: [
+              {
+                key: "ok",
+                label: String(i18n.t("ok")),
+              },
+            ],
+          },
+        })
+      );
+    });
+  };
+
+
+
   // =========================
   // LOAD SUMMARY
   // =========================
@@ -185,6 +217,7 @@ export default function SummaryScreen() {
           .reverse();
 
         setSessions(normalized);
+
       } catch (err) {
         console.error("❌ Ошибка загрузки chatSummary:", err);
       }
@@ -213,10 +246,17 @@ export default function SummaryScreen() {
       await restoreSession(item.id);
       router.replace("/chat");
     } catch (err) {
-      Alert.alert(
-        t("menu.summary", "History"),
-        t("privacy_paragraph2", "If you agree, let's continue together.")
-      );
+      if (Platform.OS === "web") {
+        await showWebConfirm({
+          title: String(t("menu.summary", "History")),
+          message: String(t("privacy_paragraph2", "If you agree, let's continue together.")),
+        });
+      } else {
+        Alert.alert(
+          String(t("menu.summary", "History")),
+          String(t("privacy_paragraph2", "If you agree, let's continue together."))
+        );
+      }
     }
   };
 
@@ -234,10 +274,17 @@ export default function SummaryScreen() {
 
       setSessions(updated);
     } catch (err) {
-      Alert.alert(
-        t("menu.summary", "History"),
-        t("privacy_paragraph2", "If you agree, let's continue together.")
-      );
+      if (Platform.OS === "web") {
+        await showWebConfirm({
+          title: String(t("menu.summary", "History")),
+          message: String(t("privacy_paragraph2", "If you agree, let's continue together.")),
+        });
+      } else {
+        Alert.alert(
+          String(t("menu.summary", "History")),
+          String(t("privacy_paragraph2", "If you agree, let's continue together."))
+        );
+      }
     }
   };
 
@@ -322,6 +369,7 @@ export default function SummaryScreen() {
 
           <TouchableOpacity
             onPress={async () => {
+
               const savedPdfLang =
                 (await AsyncStorage.getItem("pdfLanguage")) ||
                 i18n.locale ||
@@ -333,7 +381,7 @@ export default function SummaryScreen() {
               setPdfLangModalVisible(true);
             }}
             style={styles.iconButton}
-          >
+            >
             <MaterialIcons name="picture-as-pdf" size={22} color="#E53935" />
           </TouchableOpacity>
 

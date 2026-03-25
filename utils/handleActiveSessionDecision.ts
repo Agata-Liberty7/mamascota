@@ -1,5 +1,5 @@
 // utils/handleActiveSessionDecision.ts
-import { Alert } from "react-native";
+import { Alert, Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import i18n from "../i18n";
 
@@ -66,27 +66,51 @@ export async function handleActiveSessionDecision(): Promise<ActiveSessionDecisi
   const ok = await hasNonEmptyHistory(cid);
   if (!ok) return "no_active";
 
-  return await new Promise<ActiveSessionDecision>((resolve) => {
-    Alert.alert(
-      String(i18n.t("continue_title")),
-      String(i18n.t("continue_message")),
-      [
-        {
-          text: String(i18n.t("continue_session")),
-          onPress: () => resolve("resume"),
-        },
-        {
-          text: String(i18n.t("start_new")),
-          style: "destructive",
-          onPress: () => resolve("start_new"),
-        },
-        {
-          text: String(i18n.t("cancel")),
-          style: "cancel",
-          onPress: () => resolve("cancel"),
-        },
-      ],
-      { cancelable: true }
-    );
-  });
+  // 🌐 Web → отдельный confirm (НЕ exit)
+  if (Platform.OS === "web") {
+    const choice = await new Promise<string>((resolve) => {
+      (window as any).__MAMASCOTA_CONFIRM_RESOLVE__ = resolve;
+
+      window.dispatchEvent(
+        new CustomEvent("mamascota:confirm", {
+          detail: {
+            title: String(i18n.t("continue_title")),
+            message: String(i18n.t("continue_message")),
+            buttons: [
+              { key: "resume", label: String(i18n.t("continue_session")) },
+              { key: "start_new", label: String(i18n.t("start_new")), destructive: true },
+              { key: "cancel", label: String(i18n.t("cancel")) },
+            ],
+          },
+        })
+      );
+    });
+
+    return choice as ActiveSessionDecision;
+  }
+
+// 📱 Mobile → остаётся Alert
+return await new Promise<ActiveSessionDecision>((resolve) => {
+  Alert.alert(
+    String(i18n.t("continue_title")),
+    String(i18n.t("continue_message")),
+    [
+      {
+        text: String(i18n.t("continue_session")),
+        onPress: () => resolve("resume"),
+      },
+      {
+        text: String(i18n.t("start_new")),
+        style: "destructive",
+        onPress: () => resolve("start_new"),
+      },
+      {
+        text: String(i18n.t("cancel")),
+        style: "cancel",
+        onPress: () => resolve("cancel"),
+      },
+    ],
+    { cancelable: true }
+  );
+});
 }

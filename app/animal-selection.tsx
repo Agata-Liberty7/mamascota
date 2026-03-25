@@ -122,6 +122,36 @@ export default function AnimalSelection() {
     }
   };
 
+    const showWebConfirm = async ({
+      title,
+      message,
+      buttons,
+    }: {
+      title: string;
+      message: string;
+      buttons: Array<{
+        key: string;
+        label: string;
+        destructive?: boolean;
+      }>;
+    }): Promise<string> => {
+      if (Platform.OS !== "web") return "cancel";
+
+      return await new Promise<string>((resolve) => {
+        (window as any).__MAMASCOTA_CONFIRM_RESOLVE__ = resolve;
+
+        window.dispatchEvent(
+          new CustomEvent("mamascota:confirm", {
+            detail: {
+              title,
+              message,
+              buttons,
+            },
+          })
+        );
+      });
+    };
+
   const handleContinue = async () => {
     const validSpecies: Species[] = [
       "cat",
@@ -141,19 +171,43 @@ export default function AnimalSelection() {
 
     // 🔴 1) Жёсткая проверка имени — как было
     if (!name.trim()) {
+      if (Platform.OS === "web") {
+        const choice = await showWebConfirm({
+          title: String(i18n.t("continue_without_data_title")),
+          message: String(i18n.t("continue_without_data_message")),
+          buttons: [
+            {
+              key: "back",
+              label: String(i18n.t("alert-back")),
+            },
+            {
+              key: "continue",
+              label: String(i18n.t("continue")),
+              destructive: true,
+            },
+          ],
+        });
+
+        if (choice === "continue") {
+          setModalVisible(false);
+        }
+
+        return;
+      }
+
       Alert.alert(
-        i18n.t("continue_without_data_title"),
-        i18n.t("continue_without_data_message"),
+        String(i18n.t("continue_without_data_title")),
+        String(i18n.t("continue_without_data_message")),
         [
           {
-            text: i18n.t("alert-back"),
+            text: String(i18n.t("alert-back")),
             style: "cancel",
             onPress: () => {
               // остаёмся в модалке PetForm
             },
           },
           {
-            text: i18n.t("continue"),
+            text: String(i18n.t("continue")),
             style: "destructive",
             onPress: () => {
               setModalVisible(false);
@@ -167,12 +221,23 @@ export default function AnimalSelection() {
 
     // 🟡 2) МЯГКОЕ предупреждение, если порода не указана — БЕЗ return
     if (!breed.trim()) {
-      Alert.alert(
-        i18n.t("breedWarning.title"),
-        i18n.t("breedWarning.message")
-        // можно добавить одну кнопку "OK" по умолчанию, Alert сам её подставит,
-        // если массив кнопок не передавать
-      );
+      if (Platform.OS === "web") {
+        await showWebConfirm({
+          title: String(i18n.t("breedWarning.title")),
+          message: String(i18n.t("breedWarning.message")),
+          buttons: [
+            {
+              key: "ok",
+              label: String(i18n.t("ok_button")),
+            },
+          ],
+        });
+      } else {
+        Alert.alert(
+          String(i18n.t("breedWarning.title")),
+          String(i18n.t("breedWarning.message"))
+        );
+      }
     }
 
     const candidate: Partial<Pet> = {
@@ -221,10 +286,24 @@ export default function AnimalSelection() {
           <View style={styles.footerContainer}>
             <Text style={styles.footerText}>{i18n.t('not_in_list')}</Text>
             <TouchableOpacity
-              onPress={() => {
+              onPress={async () => {
+                if (Platform.OS === "web") {
+                  await showWebConfirm({
+                    title: String(i18n.t("add_other")),
+                    message: String(i18n.t("coming_soon_message")),
+                    buttons: [
+                      {
+                        key: "ok",
+                        label: String(i18n.t("ok_button")),
+                      },
+                    ],
+                  });
+                  return;
+                }
+
                 Alert.alert(
-                  String(i18n.t('coming_soon')),   // заголовок: "Скоро"
-                  String(i18n.t('not_in_list'))    // текст: "Если вашего питомца нет в списке…"
+                  String(i18n.t("coming_soon")),
+                  String(i18n.t("not_in_list"))
                 );
               }}
               style={styles.footerButton}
@@ -261,9 +340,12 @@ export default function AnimalSelection() {
         }}
 
       />
-      <Modal visible={modalVisible} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
-          <KeyboardAvoidingView style={styles.modalContent} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      {modalVisible && Platform.OS === "web" ? (
+        <View style={styles.webModalOverlay}>
+          <KeyboardAvoidingView
+            style={styles.modalContent}
+            behavior="height"
+          >
             <ScrollView contentContainerStyle={styles.scrollContent}>
               <Text style={styles.modalTitle}>{i18n.t('animal_data')}</Text>
 
@@ -285,21 +367,17 @@ export default function AnimalSelection() {
                           setName(p.name ?? '');
                           setAge(p.ageYears ? String(p.ageYears) : '');
 
-                          // 🐾 НОВОЕ — подтягиваем породу
                           if (p.breed) {
-                            // если в карточке есть сохранённая порода — используем её
                             setBreed(p.breed);
                           } else {
-                            // если вдруг порода не сохранена — сбрасываем в "__other"
                             setBreed("__other");
                           }
 
                           if (p.sex) setSex(p.sex as any);
                           if (p.neutered != null) setNeutered(!!p.neutered);
-                          setEditingPetId(p.id ?? null); // редактируем существующего
+                          setEditingPetId(p.id ?? null);
                           setPetsOpen(false);
                         }}
-
                       >
                         <Text style={styles.petName}>{p.name || '—'}</Text>
                       </TouchableOpacity>
@@ -328,7 +406,75 @@ export default function AnimalSelection() {
             </ScrollView>
           </KeyboardAvoidingView>
         </View>
-      </Modal>
+      ) : (
+        <Modal visible={modalVisible} transparent animationType="slide">
+          <View style={styles.modalOverlay}>
+            <KeyboardAvoidingView
+              style={styles.modalContent}
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
+              <ScrollView contentContainerStyle={styles.scrollContent}>
+                <Text style={styles.modalTitle}>{i18n.t('animal_data')}</Text>
+
+                <TouchableOpacity onPress={openMyPets} style={styles.pickerButton}>
+                  <Text style={styles.pickerButtonText}>{i18n.t('settings.pets.title')}</Text>
+                </TouchableOpacity>
+
+                {petsOpen && (
+                  <View style={styles.petsPanel}>
+                    {myPets.length === 0 ? (
+                      <Text style={styles.petsEmpty}>{i18n.t('settings.pets.empty')}</Text>
+                    ) : (
+                      myPets.map((p, index) => (
+                        <TouchableOpacity
+                          key={`${p.id ?? 'noid'}-${index}`}
+                          style={styles.petItem}
+                          onPress={() => {
+                            setSpecies(p.species ?? '');
+                            setName(p.name ?? '');
+                            setAge(p.ageYears ? String(p.ageYears) : '');
+
+                            if (p.breed) {
+                              setBreed(p.breed);
+                            } else {
+                              setBreed("__other");
+                            }
+
+                            if (p.sex) setSex(p.sex as any);
+                            if (p.neutered != null) setNeutered(!!p.neutered);
+                            setEditingPetId(p.id ?? null);
+                            setPetsOpen(false);
+                          }}
+                        >
+                          <Text style={styles.petName}>{p.name || '—'}</Text>
+                        </TouchableOpacity>
+                      ))
+                    )}
+                  </View>
+                )}
+
+                <PetForm
+                  species={species as Species}
+                  name={name}
+                  ageYears={age}
+                  breed={breed}
+                  sex={sex}
+                  neutered={neutered}
+                  onNameChange={setName}
+                  onAgeChange={setAge}
+                  onBreedChange={setBreed}
+                  onSexChange={setSex}
+                  onNeuteredChange={setNeutered}
+                />
+
+                <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
+                  <Text style={styles.continueText}>{i18n.t('continue')}</Text>
+                </TouchableOpacity>
+              </ScrollView>
+            </KeyboardAvoidingView>
+          </View>
+        </Modal>
+      )}
 
       <TermsModal visible={showTermsModal} onAccept={handleAcceptTerms} onDecline={() => setShowTermsModal(false)} />
     </View>
@@ -363,7 +509,14 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: "#999",
   },
-  modalOverlay: { flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.5)' },
+    modalOverlay: { flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.5)' },
+  webModalOverlay: {
+    position: "absolute",
+    inset: 0,
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(0,0,0,0.5)",
+    zIndex: 10,
+  },
   modalContent: { backgroundColor: theme.colors.background, borderTopLeftRadius: 16, borderTopRightRadius: 16, padding: 20, minHeight: '50%' },
   modalTitle: { fontSize: 18, fontWeight: '600', marginBottom: 12, textAlign: 'center' },
   continueButton: { backgroundColor: theme.colors.buttonPrimaryBg, paddingVertical: 12, borderRadius: 8, marginTop: 12 },

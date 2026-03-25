@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
   Alert,
+  Platform,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
 
@@ -26,6 +27,35 @@ interface Props {
 
 export default function BurgerMenu({ visible, onClose }: Props) {
   const router = useRouter();
+
+  const showWebConfirm = async ({
+    title,
+    message,
+  }: {
+    title: string;
+    message: string;
+  }): Promise<void> => {
+    if (Platform.OS !== "web") return;
+
+    await new Promise<void>((resolve) => {
+      (window as any).__MAMASCOTA_CONFIRM_RESOLVE__ = resolve;
+
+      window.dispatchEvent(
+        new CustomEvent("mamascota:confirm", {
+          detail: {
+            title,
+            message,
+            buttons: [
+              {
+                key: "ok",
+                label: String(i18n.t("ok")),
+              },
+            ],
+          },
+        })
+      );
+    });
+  };
 
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [animalProfile, setAnimalProfile] = useState(false);
@@ -60,10 +90,17 @@ export default function BurgerMenu({ visible, onClose }: Props) {
     const cid = await AsyncStorage.getItem("conversationId");
 
     if (!cid) {
-      Alert.alert(
-        String(i18n.t("no_active_chat_title")),
-        String(i18n.t("no_active_chat_message"))
-      );
+      if (Platform.OS === "web") {
+        await showWebConfirm({
+          title: String(i18n.t("no_active_chat_title")),
+          message: String(i18n.t("no_active_chat_message")),
+        });
+      } else {
+        Alert.alert(
+          String(i18n.t("no_active_chat_title")),
+          String(i18n.t("no_active_chat_message"))
+        );
+      }
       return;
     }
 

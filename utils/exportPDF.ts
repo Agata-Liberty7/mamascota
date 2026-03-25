@@ -334,11 +334,24 @@ export async function exportSummaryPDF(sessionId: string) {
     // fallback — собрать заметки владельца напрямую из чата
     const ownerNotesFallback = buildOwnerNotesFromChatRaw(chatRaw);
 
-
     const locale =
       (await AsyncStorage.getItem("pdfLanguage")) ||
       i18n.locale ||
       "en";
+
+    // ❗ Проверка: есть ли финализация (decisionTree)
+    const dtKey = `decisionTree:${sessionId}:${locale}`;
+    const dtRaw = await AsyncStorage.getItem(dtKey);
+
+    if (!dtRaw) {
+      alert(
+        i18n.t("chat.pdf_not_ready", {
+          defaultValue:
+            "The consultation is not finished yet. Complete it to generate a report.",
+        })
+      );
+      return;
+    }
 
     const previousLocale = i18n.locale;
     i18n.locale = locale;
@@ -496,9 +509,47 @@ ${
 </html>
     `.trim();
 
+    const safePetName = (petName || "pet")
+      .toLowerCase()
+      .replace(/\s+/g, "_")
+      .replace(/[^a-z0-9_а-яё]/gi, "");
+
+    const dateObj = new Date(summary.date);
+    const yyyy = dateObj.getFullYear();
+    const mm = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const dd = String(dateObj.getDate()).padStart(2, "0");
+    const hh = String(dateObj.getHours()).padStart(2, "0");
+    const min = String(dateObj.getMinutes()).padStart(2, "0");
+
+    const fileName = `mamascota_${safePetName}_${yyyy}-${mm}-${dd}_${hh}-${min}.pdf`;
+
+
     //
     // 8) Экспорт PDF
     //
+    if (Platform.OS === "web") {
+      const printWindow = window.open("", "_blank");
+
+      if (!printWindow) {
+        alert("Popup blocked");
+        return;
+      }
+
+      printWindow.document.open();
+      printWindow.document.write(
+        html.replace("<title>", `<title>${fileName} - `)
+      );
+      printWindow.document.close();
+
+      setTimeout(() => {
+        printWindow.focus();
+        printWindow.print();
+      }, 300);
+
+      return;
+    }
+
+    // ⬇️ ЭТО ОСТАЁТСЯ ДЛЯ MOBILE
     const { uri } = await Print.printToFileAsync({ html });
 
     if (Platform.OS === "android") {
@@ -514,13 +565,13 @@ ${
       // 2) После просмотра — системное меню (сохранить/переслать/печать…)
       await Sharing.shareAsync(uri, {
         mimeType: "application/pdf",
-        dialogTitle: title,
+        dialogTitle: fileName,
       });
     } else {
       // iOS: сразу системное меню Share (самый стабильный путь в Expo)
       await Sharing.shareAsync(uri, {
         mimeType: "application/pdf",
-        dialogTitle: title,
+        dialogTitle: fileName,
         UTI: "com.adobe.pdf",
       });
     }
