@@ -8,10 +8,12 @@ import { useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   Keyboard,
   KeyboardAvoidingView,
   Modal,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -124,14 +126,16 @@ export default function ChatScreen() {
   const [thinkingHint, setThinkingHint] = useState<string | null>(null);
   const [pdfConversationId, setPdfConversationId] = useState<string | null>(null);
   const [pdfGenerating, setPdfGenerating] = useState(false);
+  const [pdfTextKey, setPdfTextKey] = useState<"pdf.generating" | "pdf.preparing_language">("pdf.generating");
   const [finalizing, setFinalizing] = useState(false);
   const [pdfLangModalVisible, setPdfLangModalVisible] = useState(false);
-  const [currentPdfLang, setCurrentPdfLang] = useState<string>("en");  
+  const [currentPdfLang, setCurrentPdfLang] = useState<string>("en");   
 
   const [phase, setPhase] = useState<"intake" | "clarify" | "summary" | "ended" | null>(null);
   const [isPdfReady, setIsPdfReady] = useState(false);
   const [isDecisionTreeStale, setIsDecisionTreeStale] = useState(false);
   const [isPostSummaryUpdateMode, setIsPostSummaryUpdateMode] = useState(false);
+  const [pdfAllowed, setPdfAllowed] = useState(false);
 
 
   // 🔥 ВАЖНО: по умолчанию не показываем селектор
@@ -262,9 +266,10 @@ export default function ChatScreen() {
             setShowSelector(false);
             setIsPostSummaryUpdateMode(true);
 
-            // ✅ чтобы PDF-кнопка корректно восстанавливалась после возврата из Summary
-            setPdfConversationId(id);
-            await refreshPdfReadyState(id);
+            // ✅ consultation PDF доступен только для реально финализированной сессии
+            const allowed = await isSessionPdfAllowed(id);
+            setPdfConversationId(allowed ? id : null);
+            await refreshPdfReadyState(allowed ? id : null);
           }
         }
         await AsyncStorage.removeItem("restoreFromSummary");
@@ -371,6 +376,9 @@ useEffect(() => {
       // PDF CTA: показываем только если агент явно финализировал
       if (typeof result === "object" && result?.sessionEnded) {
         const cid = result.conversationId ?? null;
+        if (cid) {
+          await markSessionPdfAllowed(cid);
+        }
         setPdfConversationId(cid);
         await refreshPdfReadyState(cid);
       } else {
@@ -380,8 +388,6 @@ useEffect(() => {
 
       if (typeof result === "object" && result?.phase) {
         setPhase(result.phase);
-      } else {
-        setPhase(null);
       }
 
 
@@ -487,6 +493,9 @@ useEffect(() => {
           setIsDecisionTreeStale(false);
         } else if (typeof result === "object" && result?.sessionEnded) {
           const cid = result.conversationId ?? null;
+          if (cid) {
+            await markSessionPdfAllowed(cid);
+          }
           setPdfConversationId(cid);
           await refreshPdfReadyState(cid);
         } else {
@@ -546,6 +555,21 @@ useEffect(() => {
       setIsPdfReady(false);
     }
   }
+  async function markSessionPdfAllowed(conversationId: string) {
+    try {
+      await AsyncStorage.setItem(`pdfAllowed:${conversationId}`, "1");
+    } catch {}
+  }
+
+  async function isSessionPdfAllowed(conversationId: string) {
+  try {
+    const raw = await AsyncStorage.getItem(`pdfAllowed:${conversationId}`);
+    return raw === "1";
+  } catch {
+    return false;
+  }
+}
+
   function buildConversationHistoryTail(max = 20) {
   const trimmed = chat
     .filter((m) => m && (m.role === "user" || m.role === "assistant"))
@@ -783,7 +807,28 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
       console.log("📄 PDF step 2: conversationId =", id);
 
       if (!id) {
-        alert(i18n.t("chat.pdf_no_session", { defaultValue: "No active session yet." }));
+        if (Platform.OS === "web") {
+          await new Promise<void>((resolve) => {
+            (window as any).__MAMASCOTA_CONFIRM_RESOLVE__ = resolve;
+
+            window.dispatchEvent(
+              new CustomEvent("mamascota:confirm", {
+                detail: {
+                  title: String(i18n.t("alert_title", { defaultValue: "Attention" })),
+                  message: String(i18n.t("chat.pdf_not_ready")),
+                  buttons: [
+                    {
+                      key: "ok",
+                      label: String(i18n.t("ok_button")),
+                    },
+                  ],
+                },
+              })
+            );
+          });
+        } else {
+          alert(i18n.t("chat.pdf_not_ready"));
+        }
         return;
       }
 
@@ -813,6 +858,49 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
     console.log("🟥 handlePdfNow pressed");
     if (pdfGenerating || loading || finalizing) return;
 
+    if (!pdfConversationId) {
+      if (Platform.OS === "web") {
+        await new Promise<void>((resolve) => {
+          (window as any).__MAMASCOTA_CONFIRM_RESOLVE__ = resolve;
+
+          window.dispatchEvent(
+            new CustomEvent("mamascota:confirm", {
+              detail: {
+                title: String(
+                  i18n.t("alert_title", {
+                    defaultValue: "Attention",
+                  })
+                ),
+                message: String(
+                  i18n.t("chat.pdf_not_ready", {
+                    defaultValue:
+                      "The consultation is not finished yet. Complete it to generate a report.",
+                  })
+                ),
+                buttons: [
+                  {
+                    key: "ok",
+                    label: String(i18n.t("ok_button")),
+                  },
+                ],
+              },
+            })
+          );
+        });
+      } else {
+      Alert.alert(
+        String(i18n.t("alert_title", { defaultValue: "Attention" })),
+        String(
+          i18n.t("chat.pdf_not_ready", {
+            defaultValue:
+              "The consultation is not finished yet. Complete it to generate a report.",
+          })
+        )
+      );
+      }
+      return;
+    }
+
     const savedPdfLang =
       (await AsyncStorage.getItem("pdfLanguage")) ||
       i18n.locale ||
@@ -824,7 +912,9 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
 
   const isWaitingForSummary = loading && !pdfGenerating && (phase === "summary" || phase === "ended");
   const waitingText = isWaitingForSummary
-    ? i18n.t("chat.waiting.summary")
+    ? i18n.t("chat.waiting.summary", {
+        defaultValue: "Please wait, I’m preparing the summary…",
+      })
     : thinkingHint;
     
   // ======================================================
@@ -837,14 +927,16 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
         behavior="padding"
         keyboardVerticalOffset={headerHeight}
       >
-        <LoadingPDF visible={pdfGenerating} />
+        <LoadingPDF visible={pdfGenerating} textKey={pdfTextKey} />
         
         <Modal transparent animationType="fade" visible={finalizing}>
           <View style={styles.overlay}>
             <View style={styles.box}>
               <ActivityIndicator size="large" color="#007AFF" />
               <Text style={styles.text}>
-                {i18n.t("chat.waiting.summary")}
+                {i18n.t("chat.waiting.summary", {
+                  defaultValue: "Please wait, I’m preparing the summary…",
+                })}
               </Text>
             </View>
           </View>
@@ -868,6 +960,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
                     setPdfLangModalVisible(false);
 
                     setTimeout(async () => {
+                      setPdfTextKey("pdf.preparing_language");
                       await handlePdfNowActual();
                     }, 600);
                   }}
@@ -974,27 +1067,26 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
           style={styles.inputArea}
           onLayout={(e) => setInputHeight(e.nativeEvent.layout.height)}
         >
-          {(() => {
-        const isPdfEnabled = !!pdfConversationId; // ✅ включаем по факту финализации
-        const isDisabled = !isPdfEnabled || loading || pdfGenerating || finalizing;
+        {(() => {
+          const isDisabled = loading || pdfGenerating || finalizing;
 
-        return (
-          <TouchableOpacity
-            style={[
-              styles.pdfQuickBtn,
-              isDisabled && { opacity: 0.35 },
-            ]}
-            onPress={handlePdfNow}
-            disabled={isDisabled}
-          >
-            <MaterialIcons
-              name="picture-as-pdf"
-              size={26}
-              color={isPdfEnabled ? "#E53935" : "#BDBDBD"}
-            />
-          </TouchableOpacity>
-        );
-      })()}
+          return (
+            <TouchableOpacity
+              style={[
+                styles.pdfQuickBtn,
+                isDisabled && { opacity: 0.35 },
+              ]}
+              onPress={handlePdfNow}
+              disabled={isDisabled}
+            >
+              <MaterialIcons
+                name="picture-as-pdf"
+                size={26}
+                color={pdfConversationId ? "#E53935" : "#F28B82"}
+              />
+            </TouchableOpacity>
+          );
+        })()}
 
 
 

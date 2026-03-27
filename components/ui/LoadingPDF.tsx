@@ -2,7 +2,13 @@ import React from "react";
 import { Modal, View, ActivityIndicator, Text, StyleSheet } from "react-native";
 import i18n from "../../i18n";
 
-export default function LoadingPDF({ visible }: { visible: boolean }) {
+export default function LoadingPDF({
+  visible,
+  textKey = "pdf.generating",
+}: {
+  visible: boolean;
+  textKey?: "pdf.generating" | "pdf.preparing_language";
+}) {
   if (!visible) return null;
 
   return (
@@ -11,7 +17,12 @@ export default function LoadingPDF({ visible }: { visible: boolean }) {
         <View style={styles.box}>
           <ActivityIndicator size="large" color="#007AFF" />
           <Text style={styles.text}>
-            {i18n.t("pdf.generating", { defaultValue: "Generating PDF…" })}
+            {i18n.t(textKey, {
+              defaultValue:
+                textKey === "pdf.preparing_language"
+                  ? "Preparing report in selected language…"
+                  : "Generating PDF…",
+            })}
           </Text>
         </View>
       </View>

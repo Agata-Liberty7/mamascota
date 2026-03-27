@@ -2,6 +2,7 @@
   "language_notice_title": "Langue détectée",
   "language_notice_message": "La langue de l’interface a été définie automatiquement.",
   "ok_button": "OK",
+  "alert_title": "Attention",
 
   "exit_title": "Voulez-vous quitter ?",
   "exit_message": "Vous pouvez enregistrer votre session pour continuer plus tard.",
@@ -133,6 +134,11 @@
       "summary": "Étape: Résumé",
       "ended": "Étape: Terminé"
     },
+    "pdf_ready": "Votre résumé PDF est prêt",
+    "pdf_not_ready": "La consultation n’est pas encore terminée. Terminez-la pour générer un rapport.",
+    "pdf_error": "Impossible de créer le PDF. Veuillez réessayer.",
+    "open_pdf": "Ouvrir le PDF",
+    "share_pdf": "Partager",
     "pet_default": "L’animal",
     "symptom_intro": "présente les symptômes suivants",
     "ask_confirmation": "Merci de confirmer si c’est exact ou d’ajouter des précisions",
@@ -142,7 +148,8 @@
       "hint1": "Analyse des informations…",
       "hint2": "Examen des observations…",
       "hint3": "Prise en compte de l’âge…",
-      "hint4": "Encore un instant…"
+      "hint4": "Encore un instant…",
+      "summary": "Veuillez patienter, je prépare le résumé…"
     }
   },
   "onboarding_1_title": "Mamascota est là",
@@ -212,6 +219,7 @@
     "urgent_title": "Urgent maintenant si...",
     "plan_title": "Plan de visite",
     "generating": "Création du PDF...",
+    "preparing_language": "Préparation du rapport dans la langue sélectionnée...",
     "language_title": "Choisissez la langue du PDF",
 
     "diary_title": "Journal des observations",

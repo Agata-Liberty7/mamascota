@@ -152,9 +152,19 @@ async function ensureDecisionTreeCachedForSummary(
   );
 }
 
+async function isSessionPdfAllowed(conversationId: string) {
+  try {
+    const raw = await AsyncStorage.getItem(`pdfAllowed:${conversationId}`);
+    return raw === "1";
+  } catch {
+    return false;
+  }
+}
+
 export default function SummaryScreen() {
   const [sessions, setSessions] = useState<SummaryItem[]>([]);
   const [pdfLoading, setPdfLoading] = useState(false);
+  const [pdfTextKey, setPdfTextKey] = useState<"pdf.generating" | "pdf.preparing_language">("pdf.generating");
   const [pdfLangModalVisible, setPdfLangModalVisible] = useState(false);
   const [csvModalVisible, setCsvModalVisible] = useState(false);
   const [pendingPdfItem, setPendingPdfItem] = useState<SummaryItem | null>(null);
@@ -183,8 +193,8 @@ export default function SummaryScreen() {
             message,
             buttons: [
               {
-                key: "ok",
-                label: String(i18n.t("ok")),
+                key: "ok_button",
+                label: String(i18n.t("ok_button", { defaultValue: "OK" })),
               },
             ],
           },
@@ -293,6 +303,33 @@ export default function SummaryScreen() {
   // =========================
   const handleExportPDF = async (id: string, petName: string) => {
     try {
+      const allowed = await isSessionPdfAllowed(id);
+
+      if (!allowed) {
+        if (Platform.OS === "web") {
+          await showWebConfirm({
+            title: String(t("alert_title", "Attention")),
+            message: String(
+              i18n.t("chat.pdf_not_ready", {
+                defaultValue:
+                  "The consultation is not finished yet. Complete it to generate a report.",
+              })
+            ),
+          });
+        } else {
+          Alert.alert(
+            String(t("alert_title", "Attention")),
+            String(
+              i18n.t("chat.pdf_not_ready", {
+                defaultValue:
+                  "The consultation is not finished yet. Complete it to generate a report.",
+              })
+            )
+          );
+        }
+        return;
+      }
+
       setPdfLoading(true);
       await ensureDecisionTreeCachedForSummary(id, petName);
       await exportSummaryPDF(id);
@@ -308,6 +345,7 @@ export default function SummaryScreen() {
     sessionDate: string | number
   ) => {
     try {
+      setPdfTextKey("pdf.generating");
       setPdfLoading(true);
       await exportObservationDiaryPDF(petName, sessionDate);
     } catch (err) {
@@ -369,6 +407,32 @@ export default function SummaryScreen() {
 
           <TouchableOpacity
             onPress={async () => {
+              const allowed = await isSessionPdfAllowed(item.id);
+
+              if (!allowed) {
+                if (Platform.OS === "web") {
+                  await showWebConfirm({
+                    title: String(i18n.t("alert_title", { defaultValue: "Attention" })),
+                    message: String(
+                      i18n.t("chat.pdf_not_ready", {
+                        defaultValue:
+                          "The consultation is not finished yet. Complete it to generate a report.",
+                      })
+                    ),
+                  });
+                } else {
+                  Alert.alert(
+                    String(i18n.t("alert_title", { defaultValue: "Attention" })),
+                    String(
+                      i18n.t("chat.pdf_not_ready", {
+                        defaultValue:
+                          "The consultation is not finished yet. Complete it to generate a report.",
+                      })
+                    )
+                  );
+                }
+                return;
+              }
 
               const savedPdfLang =
                 (await AsyncStorage.getItem("pdfLanguage")) ||
@@ -381,7 +445,7 @@ export default function SummaryScreen() {
               setPdfLangModalVisible(true);
             }}
             style={styles.iconButton}
-            >
+          >
             <MaterialIcons name="picture-as-pdf" size={22} color="#E53935" />
           </TouchableOpacity>
 
@@ -478,17 +542,19 @@ export default function SummaryScreen() {
                       setTimeout(async () => {
                         if (!pendingPdfItem) return;
 
-                        if (pendingPdfType === "diary") {
-                          await handleExportObservationDiaryPDF(
-                            pendingPdfItem.petName,
-                            pendingPdfItem.date
+                        if (pendingPdfType === "summary") {
+                          setPdfTextKey("pdf.preparing_language");
+                          await handleExportPDF(
+                            pendingPdfItem.id,
+                            pendingPdfItem.petName
                           );
                           return;
                         }
 
-                        await handleExportPDF(
-                          pendingPdfItem.id,
-                          pendingPdfItem.petName
+                        setPdfTextKey("pdf.generating");
+                        await handleExportObservationDiaryPDF(
+                          pendingPdfItem.petName,
+                          pendingPdfItem.date
                         );
                       }, 600);
                     }}
@@ -583,7 +649,7 @@ export default function SummaryScreen() {
         </Modal>
 
       {/* 🔥 МОДАЛКА ЗАГРУЗКИ PDF */}
-      <LoadingPDF visible={pdfLoading} />
+      <LoadingPDF visible={pdfLoading} textKey={pdfTextKey} />
     </View>
   );
 }

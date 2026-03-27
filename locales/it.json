@@ -2,6 +2,7 @@
   "language_notice_title": "Lingua rilevata",
   "language_notice_message": "La lingua dell’interfaccia è stata impostata automaticamente.",
   "ok_button": "OK",
+  "alert_title": "Attenzione",
 
   "exit_title": "Vuoi uscire?",
   "exit_message": "Puoi salvare la sessione per continuare più tardi.",
@@ -134,6 +135,8 @@
       "ended": "Fase: Terminato"
     },
     "pdf_ready": "Il riepilogo PDF è pronto",
+    "pdf_not_ready": "La consulenza non è ancora terminata. Completa per generare un rapporto.",
+    "pdf_error": "Non è stato possibile creare il PDF. Riprova.",
     "open_pdf": "Apri PDF",
     "share_pdf": "Condividi",
     "pet_default": "L’animale",
@@ -145,7 +148,8 @@
       "hint1": "Sto esaminando le informazioni…",
       "hint2": "Valutando le osservazioni…",
       "hint3": "Tenendo conto dell’età…",
-      "hint4": "Ancora un momento…"
+      "hint4": "Ancora un momento…",
+      "summary": "Attendi, sto preparando il riepilogo…"
     }
   },
   "onboarding_1_title": "Mamascota è con te",
@@ -216,6 +220,7 @@
     "urgent_title": "Urgente ora se...",
     "plan_title": "Piano della visita",
     "generating": "Creazione del PDF...",
+    "preparing_language": "Preparazione del rapporto nella lingua selezionata...",
     "language_title": "Scegli la lingua del PDF",
 
     "diary_title": "Diario delle osservazioni",

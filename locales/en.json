@@ -2,6 +2,7 @@
   "language_notice_title": "Language detected",
   "language_notice_message": "The interface language has been set automatically.",
   "ok_button": "OK",
+  "alert_title": "Attention",
 
   "exit_title": "Do you want to exit?",
   "exit_message": "You can save your session to continue later.",
@@ -134,6 +135,8 @@
       "ended": "Phase: Ended"
     },
     "pdf_ready": "Your PDF summary is ready",
+    "pdf_not_ready": "The consultation is not finished yet. Complete it to generate a report.",
+    "pdf_error": "Failed to create PDF. Please try again.",
     "open_pdf": "Open PDF",
     "share_pdf": "Share",
     "pet_default": "The pet",
@@ -145,7 +148,8 @@
       "hint1": "Reviewing the information…",
       "hint2": "Considering the observations…",
       "hint3": "Taking the pet’s age into account…",
-      "hint4": "Almost ready…"
+      "hint4": "Almost ready…",
+      "summary": "Please wait, I’m preparing the summary…"
     }
   },
 
@@ -216,6 +220,7 @@
     "urgent_title": "Immediate action needed if...",
     "plan_title": "Plan for the vet visit",
     "generating": "Generating PDF...",
+    "preparing_language": "Preparing report in the selected language...",
     "language_title": "Choose PDF language",
 
     "diary_title": "Observation diary",
