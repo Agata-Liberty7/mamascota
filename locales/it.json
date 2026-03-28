@@ -169,7 +169,9 @@
 
   "summary": {
     "empty_title": "Le tue consulenze appariranno qui",
-    "empty_subtitle": "Avvia una nuova chat e salvala al termine: apparirà in questo elenco."
+    "empty_subtitle": "Avvia una nuova chat e salvala al termine: apparirà in questo elenco.",
+    "delete_confirm": "Eliminare questa sessione salvata?",
+    "delete_error": "Impossibile eliminare la sessione salvata. Riprova."
   },  
 
   
@@ -237,8 +239,8 @@
   },
 
   "csv": {
-    "download_title": "Tabella in formato CSV",
-    "download_hint": "Questo file CSV contiene i dati del diario delle osservazioni del tuo animale, che puoi aprire con Excel, Numbers, o Google Sheets.",
+    "download_title": "File CSV",
+    "download_hint": "Scarica il file, quindi aprilo in Excel, Numbers, Google Sheets o OpenOffice.",
     "download_button": "Scarica"
-  }  
+  } 
 }

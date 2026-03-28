@@ -170,7 +170,9 @@
 
   "summary": {
     "empty_title": "Your consultations will appear here",
-    "empty_subtitle": "Start a new chat and save it when you finish – it will show up in this list."
+    "empty_subtitle": "Start a new chat and save it when you finish – it will show up in this list.",
+    "delete_confirm": "Delete this saved session?",
+    "delete_error": "Could not delete the saved session. Please try again."
   },
   
   "settings": {
@@ -238,8 +240,8 @@
   },
 
   "csv": {
-    "download_title": "Table in CSV format",
-    "download_hint": "This file may not open with standard applications on your phone. Download it to open later in Excel, Numbers, Google Sheets or OpenOffice on another device.",
+    "download_title": "CSV file",
+    "download_hint": "Download the file, then open it in Excel, Numbers, Google Sheets, or OpenOffice.",
     "download_button": "Download"
   } 
 }

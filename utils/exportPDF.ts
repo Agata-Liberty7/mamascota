@@ -771,17 +771,31 @@ export async function exportObservationDiaryPDF(
         i18n.t("chat.pet_default", { locale, defaultValue: "Pet" }),
       speciesLabel,
       startDate,
+      locale,
     });
 
-    const title = i18n.t("pdf.diary_title", {
-      locale,
-      defaultValue: "Observation Diary",
-    });
+    const safePetName = (petName || "pet")
+      .toLowerCase()
+      .replace(/\s+/g, "_")
+      .replace(/[^a-z0-9_а-яё]/gi, "");
+
+    const dateObj = new Date();
+    const yyyy = dateObj.getFullYear();
+    const mm = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const dd = String(dateObj.getDate()).padStart(2, "0");
+
+    const fileName = `mamascota_diary_${safePetName}_${yyyy}-${mm}-${dd}.pdf`;
 
     const { uri } = await Print.printToFileAsync({ html });
+    const newPath = FileSystem.documentDirectory + fileName;
+
+    await FileSystem.moveAsync({
+      from: uri,
+      to: newPath,
+    });
 
     if (Platform.OS === "android") {
-      const cUri = await FileSystem.getContentUriAsync(uri);
+      const cUri = await FileSystem.getContentUriAsync(newPath);
 
       await IntentLauncher.startActivityAsync("android.intent.action.VIEW", {
         data: cUri,
@@ -789,18 +803,17 @@ export async function exportObservationDiaryPDF(
         type: "application/pdf",
       });
 
-      await Sharing.shareAsync(uri, {
+      await Sharing.shareAsync(newPath, {
         mimeType: "application/pdf",
-        dialogTitle: title,
+        dialogTitle: fileName,
       });
     } else {
-      await Sharing.shareAsync(uri, {
+      await Sharing.shareAsync(newPath, {
         mimeType: "application/pdf",
-        dialogTitle: title,
+        dialogTitle: fileName,
         UTI: "com.adobe.pdf",
       });
     }
-
   } catch (err) {
     console.error("❌ exportObservationDiaryPDF error:", err);
     alert(i18n.t("privacy_paragraph2"));
@@ -837,6 +850,34 @@ export async function exportObservationDiaryCSV(
       startDate,
     });
 
+    const safePetName = (petName || "pet")
+      .toLowerCase()
+      .replace(/\s+/g, "_")
+      .replace(/[^a-z0-9_а-яё]/gi, "");
+
+    const dateObj = new Date();
+    const yyyy = dateObj.getFullYear();
+    const mm = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const dd = String(dateObj.getDate()).padStart(2, "0");
+
+    const fileName = `mamascota_diary_${safePetName}_${yyyy}-${mm}-${dd}.csv`;
+
+    if (Platform.OS === "web") {
+      // fileName already prepared above
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      return;
+    }
+
     const fileUri =
       FileSystem.documentDirectory +
       `observation-diary-${Date.now()}.csv`;
@@ -845,19 +886,35 @@ export async function exportObservationDiaryCSV(
       encoding: FileSystem.EncodingType.UTF8,
     });
 
-    const canShare = await Sharing.isAvailableAsync();
-    if (!canShare) {
-      throw new Error("SharingUnavailable");
+    if (Platform.OS === "android") {
+      const cUri = await FileSystem.getContentUriAsync(fileUri);
+
+      await IntentLauncher.startActivityAsync("android.intent.action.VIEW", {
+        data: cUri,
+        flags: 1,
+        type: "*/*",
+      });
+      return;
     }
 
-    await Sharing.shareAsync(fileUri, {
-      mimeType: "text/csv",
-      dialogTitle: i18n.t("csv.download_title", {
-        locale,
-        defaultValue: "CSV file",
-      }),
-      UTI: "public.comma-separated-values-text",
-    });
+    const canShare = await Sharing.isAvailableAsync();
+
+    if (canShare) {
+      await Sharing.shareAsync(fileUri, {
+        mimeType: "text/csv",
+        dialogTitle: i18n.t("csv.download_title", {
+          locale,
+          defaultValue: "CSV file",
+        }),
+        UTI: "public.comma-separated-values-text",
+      });
+    } else {
+      alert(
+        i18n.t("csv.download_title", {
+          defaultValue: "CSV file",
+        })
+      );
+    }
   } catch (err) {
     console.error("❌ exportObservationDiaryCSV error:", err);
     alert(i18n.t("privacy_paragraph2"));

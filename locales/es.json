@@ -172,7 +172,9 @@
 
   "summary": {
     "empty_title": "Tus consultas aparecerán aquí",
-    "empty_subtitle": "Inicia un nuevo chat y guárdalo al terminar. Aparecerá en esta lista."
+    "empty_subtitle": "Inicia un nuevo chat y guárdalo al terminar. Aparecerá en esta lista.",
+    "delete_confirm": "¿Eliminar esta sesión guardada?",
+    "delete_error": "No se pudo eliminar la sesión guardada. Por favor, inténtalo de nuevo."
   }, 
 
   "settings": {
@@ -241,8 +243,8 @@
   },
 
   "csv": {
-    "download_title": "Tabla en formato CSV",
-    "download_hint": "Este archivo puede no abrirse con las aplicaciones estándar en tu teléfono. Descárgalo para abrirlo más tarde en Excel, Numbers, Google Sheets o OpenOffice en otro dispositivo.",
+    "download_title": "Archivo CSV",
+    "download_hint": "Descarga el archivo y luego ábrelo en Excel, Numbers, Google Sheets o OpenOffice.",
     "download_button": "Descargar"
-  } 
+  }
 }

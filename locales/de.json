@@ -170,7 +170,9 @@
 
   "summary": {
     "empty_title": "Ihre Beratungsgespräche werden hier angezeigt",
-    "empty_subtitle": "Starten Sie einen neuen Chat und speichern Sie ihn nach Beendigung – er wird dann in dieser Liste erscheinen."
+    "empty_subtitle": "Starten Sie einen neuen Chat und speichern Sie ihn nach Beendigung – er wird dann in dieser Liste erscheinen.",
+    "delete_confirm": "Diese gespeicherte Sitzung löschen?",
+    "delete_error": "Konnte die gespeicherte Sitzung nicht löschen. Bitte versuchen Sie es erneut."
   },
   
   "settings": {
@@ -238,8 +240,8 @@
   },
 
   "csv": {
-    "download_title": "Tabelle in CSV-Format",
-    "download_hint": "Diese Datei kann möglicherweise nicht mit den Standardanwendungen auf Ihrem Telefon geöffnet werden. Laden Sie sie herunter, um sie später in Excel, Numbers, Google Sheets oder OpenOffice auf einem anderen Gerät zu öffnen.",
+    "download_title": "CSV-Datei",
+    "download_hint": "Laden Sie die Datei herunter und öffnen Sie sie dann in Excel, Numbers, Google Sheets oder OpenOffice.",
     "download_button": "Herunterladen"
-  } 
+  }
 }

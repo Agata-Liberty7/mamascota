@@ -169,7 +169,9 @@
 
   "summary": {
     "empty_title": "Vos consultations apparaîtront ici",
-    "empty_subtitle": "Démarrez une nouvelle conversation et enregistrez-la une fois terminée; elle apparaîtra dans cette liste."
+    "empty_subtitle": "Démarrez une nouvelle conversation et enregistrez-la une fois terminée; elle apparaîtra dans cette liste.",
+    "delete_confirm": "Supprimer cette session enregistrée ?",
+    "delete_error": "Impossible de supprimer la session enregistrée. Veuillez réessayer."
   }, 
   
   "settings": {
@@ -237,8 +239,8 @@
   },
 
   "csv": {
-    "download_title": "Tableau au format CSV",
-    "download_hint": "Ce fichier peut ne pas s’ouvrir avec les applications standard sur votre téléphone. Téléchargez-le pour l’ouvrir plus tard dans Excel, Numbers, Google Sheets ou OpenOffice sur un autre appareil.",
+    "download_title": "Fichier CSV",
+    "download_hint": "Téléchargez le fichier, puis ouvrez-le dans Excel, Numbers, Google Sheets ou OpenOffice.",
     "download_button": "Télécharger"
-  } 
+  }
 }

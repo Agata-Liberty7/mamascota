@@ -4,6 +4,7 @@ type GenerateObservationDiaryPdfParams = {
   petName?: string;
   speciesLabel?: string;
   startDate?: string;
+  locale?: string;
 };
 
 const escapeHtml = (value: string) =>
@@ -18,50 +19,54 @@ export function generateObservationDiaryPdf({
   petName,
   speciesLabel,
   startDate,
+  locale,
 }: GenerateObservationDiaryPdfParams = {}) {
-  const locale = i18n.locale || "en";
-  const isRTL = ["he", "ar", "fa", "ur"].includes(locale);
+  const resolvedLocale = locale || i18n.locale || "en";
+  const isRTL = ["he", "ar", "fa", "ur"].includes(resolvedLocale);
 
   const safePetName = escapeHtml(
-    petName || i18n.t("chat.pet_default", { defaultValue: "Pet" })
+    petName || i18n.t("chat.pet_default", { locale: resolvedLocale, defaultValue: "Pet" })
   );
   const safeSpeciesLabel = escapeHtml(speciesLabel || "—");
   const safeStartDate = escapeHtml(
-    startDate || new Date().toLocaleDateString(locale)
+    startDate || new Date().toLocaleDateString(resolvedLocale)
   );
 
   const title = escapeHtml(
     i18n.t("pdf.diary_title", {
+      locale: resolvedLocale,
       defaultValue: "Observation Diary",
     })
   );
 
   const intro = escapeHtml(
     i18n.t("pdf.diary_intro", {
+      locale: resolvedLocale,
       defaultValue:
         "Track your pet’s symptoms daily. This record can help your veterinarian better understand the situation.",
     })
   );
 
   const petLabel = escapeHtml(
-    i18n.t("pdf.diary_pet", { defaultValue: "Pet" })
+    i18n.t("pdf.diary_pet", { locale: resolvedLocale, defaultValue: "Pet" })
   );
   const speciesText = escapeHtml(
-    i18n.t("pdf.diary_species", { defaultValue: "Species" })
+    i18n.t("pdf.diary_species", { locale: resolvedLocale, defaultValue: "Species" })
   );
   const startDateLabel = escapeHtml(
-    i18n.t("pdf.diary_start_date", { defaultValue: "Date started" })
+    i18n.t("pdf.diary_start_date", { locale: resolvedLocale, defaultValue: "Date started" })
   );
 
   const headers = [
-    i18n.t("pdf.diary_date", { defaultValue: "Date" }),
-    i18n.t("pdf.diary_appetite", { defaultValue: "Appetite" }),
+    i18n.t("pdf.diary_date", { locale: resolvedLocale, defaultValue: "Date" }),
+    i18n.t("pdf.diary_appetite", { locale: resolvedLocale, defaultValue: "Appetite" }),
     i18n.t("pdf.diary_water_intake", {
+      locale: resolvedLocale,
       defaultValue: "Water intake",
     }),
-    i18n.t("pdf.diary_activity", { defaultValue: "Activity" }),
-    i18n.t("pdf.diary_symptoms", { defaultValue: "Symptoms" }),
-    i18n.t("pdf.diary_notes", { defaultValue: "Notes" }),
+    i18n.t("pdf.diary_activity", { locale: resolvedLocale, defaultValue: "Activity" }),
+    i18n.t("pdf.diary_symptoms", { locale: resolvedLocale, defaultValue: "Symptoms" }),
+    i18n.t("pdf.diary_notes", { locale: resolvedLocale, defaultValue: "Notes" }),
   ].map((label) => escapeHtml(label));
 
   const tableRows = Array.from({ length: 14 }, () => {
@@ -79,7 +84,7 @@ export function generateObservationDiaryPdf({
 
   return `
     <!DOCTYPE html>
-    <html lang="${escapeHtml(locale)}" dir="${isRTL ? "rtl" : "ltr"}">
+    <html lang="${escapeHtml(resolvedLocale)}" dir="${isRTL ? "rtl" : "ltr"}">
       <head>
         <meta charset="UTF-8" />
         <title>${title}</title>

@@ -170,7 +170,9 @@
 
   "summary": {
     "empty_title": "ההתייעצויות שלך יופיעו כאן",
-    "empty_subtitle": "התחל צ'אט חדש ושמור אותו כשתסיים - הוא יופיע ברשימה זו"
+    "empty_subtitle": "התחל צ'אט חדש ושמור אותו כשתסיים - הוא יופיע ברשימה זו",
+    "delete_confirm": "למחוק הפעלה שמורה זו?",
+    "delete_error": "לא ניתן למחוק את ההפעלה השמורה. אנא נסה שוב."
   },
   
   "settings": {
@@ -237,8 +239,8 @@
   },
 
   "csv": {
-    "download_title": "טבלה בפורמט CSV",
-    "download_hint": " ניתן להוריד את כל התצפיות שלך כקובץ CSV כדי לנתח אותן או לשתף עם הווטרינר שלך.",
-    "download_button": "הורד"
-  } 
+    "download_title": "קובץ CSV",
+    "download_hint": "הורידו את הקובץ ולאחר מכן פתחו אותו ב-Excel, Numbers, Google Sheets או OpenOffice.",
+    "download_button": "הורדה"
+  }
 }

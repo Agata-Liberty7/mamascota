@@ -274,25 +274,95 @@ export default function SummaryScreen() {
   // DELETE SESSION
   // =========================
   const handleDelete = async (id: string) => {
-    try {
+    const performDelete = async () => {
       const stored = await AsyncStorage.getItem("chatSummary");
       const parsed: SummaryItem[] = stored ? JSON.parse(stored) : [];
       const updated = parsed.filter((rec) => rec.id !== id);
 
       await AsyncStorage.setItem("chatSummary", JSON.stringify(updated));
       await AsyncStorage.removeItem(`chatHistory:${id}`);
+      await AsyncStorage.removeItem(`chat:history:${id}`);
 
       setSessions(updated);
-    } catch (err) {
+    };
+
+    try {
       if (Platform.OS === "web") {
-        await showWebConfirm({
-          title: String(t("menu.summary", "History")),
-          message: String(t("privacy_paragraph2", "If you agree, let's continue together.")),
+        await new Promise<void>((resolve) => {
+          (window as any).__MAMASCOTA_CONFIRM_RESOLVE__ = async (actionKey?: string) => {
+            try {
+              if (actionKey === "delete") {
+                await performDelete();
+              }
+            } finally {
+              resolve();
+            }
+          };
+
+          window.dispatchEvent(
+            new CustomEvent("mamascota:confirm", {
+              detail: {
+                title: String(i18n.t("alert_title", { defaultValue: "Attention" })),
+                message: String(
+                  i18n.t("summary.delete_confirm", {
+                    defaultValue: "Delete this saved session?",
+                  })
+                ),
+                buttons: [
+                  {
+                    key: "cancel",
+                    label: String(i18n.t("cancel", { defaultValue: "Cancel" })),
+                  },
+                  {
+                    key: "delete",
+                    label: String(i18n.t("delete", { defaultValue: "Delete" })),
+                  },
+                ],
+              },
+            })
+          );
         });
       } else {
         Alert.alert(
-          String(t("menu.summary", "History")),
-          String(t("privacy_paragraph2", "If you agree, let's continue together."))
+          String(i18n.t("alert_title", { defaultValue: "Attention" })),
+          String(
+            i18n.t("summary.delete_confirm", {
+              defaultValue: "Delete this saved session?",
+            })
+          ),
+          [
+            {
+              text: String(i18n.t("cancel", { defaultValue: "Cancel" })),
+              style: "cancel",
+            },
+            {
+              text: String(i18n.t("delete", { defaultValue: "Delete" })),
+              style: "destructive",
+              onPress: () => {
+                void performDelete();
+              },
+            },
+          ]
+        );
+      }
+    } catch (err) {
+      if (Platform.OS === "web") {
+        await showWebConfirm({
+          title: String(i18n.t("alert_title", { defaultValue: "Attention" })),
+          message: String(
+            i18n.t("summary.delete_error", {
+              defaultValue: "Could not delete the saved session. Please try again.",
+            })
+          ),
+        });
+      } else {
+        Alert.alert(
+          String(i18n.t("alert_title", { defaultValue: "Attention" })),
+          String(
+            i18n.t("summary.delete_error", {
+              defaultValue: "Could not delete the saved session. Please try again.",
+            })
+          )
         );
       }
     }
@@ -449,32 +519,36 @@ export default function SummaryScreen() {
             <MaterialIcons name="picture-as-pdf" size={22} color="#E53935" />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={async () => {
-              const savedPdfLang =
-                (await AsyncStorage.getItem("pdfLanguage")) ||
-                i18n.locale ||
-                "en";
+          {Platform.OS !== "web" && (
+            <TouchableOpacity
+              onPress={async () => {
+                const savedPdfLang =
+                  (await AsyncStorage.getItem("pdfLanguage")) ||
+                  i18n.locale ||
+                  "en";
 
-              setCurrentPdfLang(savedPdfLang);
-              setPendingPdfType("diary");
-              setPendingPdfItem(item);
-              setPdfLangModalVisible(true);
-            }}
-            style={styles.iconButton}
-          >
-            <MaterialIcons name="table-chart" size={22} color="#42A5F5" />
-          </TouchableOpacity>
+                setCurrentPdfLang(savedPdfLang);
+                setPendingPdfType("diary");
+                setPendingPdfItem(item);
+                setPdfLangModalVisible(true);
+              }}
+              style={styles.iconButton}
+            >
+              <MaterialIcons name="description" size={22} color="#42A5F5" />
+            </TouchableOpacity>
+          )}
 
-          <TouchableOpacity
-            onPress={() => {
-              setPendingCsvItem(item);
-              setCsvModalVisible(true);
-            }}
-            style={styles.iconButton}
-          >
-            <MaterialIcons name="insert-drive-file" size={22} color="#43A047" />
-          </TouchableOpacity>
+          {Platform.OS === "web" && (
+            <TouchableOpacity
+              onPress={() => {
+                setPendingCsvItem(item);
+                setCsvModalVisible(true);
+              }}
+              style={styles.iconButton}
+            >
+              <MaterialIcons name="insert-drive-file" size={22} color="#43A047" />
+            </TouchableOpacity>
+          )}
 
           <TouchableOpacity
             onPress={() => handleDelete(item.id)}
@@ -701,10 +775,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",
     flexShrink: 0,
-    gap: 2,
+    gap: 8,
   },
   iconButton: {
-    paddingHorizontal: 3,
+    paddingHorizontal: 6,
     paddingVertical: 4,
   },
   empty: {
