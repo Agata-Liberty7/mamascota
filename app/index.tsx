@@ -9,6 +9,8 @@ import LanguageNotice from "../components/ui/LanguageNotice";
 import { detectAndSetInitialLanguage } from "../utils/detectLanguage";
 import i18n from '../i18n';
 import { theme } from '../src/theme';
+import { useDeviceClass } from '../hooks/useDeviceClass';
+
 
 
 export default function StartScreen() {
@@ -17,6 +19,8 @@ export default function StartScreen() {
   const [onboardingSeen, setOnboardingSeen] = useState<boolean>(false);
   const [currentLanguage, setCurrentLanguage] = useState<string | null>(null);
   const [checking, setChecking] = useState(true);
+  const { isWeb, isDesktopLike, isTabletLike } = useDeviceClass();
+  const heroWeb = require('../assets/images/Mamascota_2_web.png');
 
   useEffect(() => {
     (async () => {
@@ -95,7 +99,7 @@ export default function StartScreen() {
     // cancel — ничего не делаем
   };
 
-  const styles = StyleSheet.create({
+  const stylesMobile = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: theme.colors.background,
@@ -103,12 +107,27 @@ export default function StartScreen() {
       alignItems: 'center',
       paddingHorizontal: 20,
     },
+    content: {
+      width: '100%',
+      alignItems: 'center',
+    },
+    topBlock: {
+      width: '100%',
+      alignItems: 'center',
+    },
+    heroBlock: {
+      width: '100%',
+      alignItems: 'center',
+    },
+    bottomBlock: {
+      width: '100%',
+      alignItems: 'center',
+    },
     image: {
-      width: '95%',     // тянемся по ширине экрана
+      width: '85%',
       height: undefined,
-      aspectRatio: 0.95,   // квадрат, сохраняет пропорции
+      aspectRatio: 0.95,
       marginVertical: 10,
-      // maxWidth: 480,  // (необязательно) ограничитель на больших экранах
     },
     title: {
       fontSize: 34,
@@ -133,22 +152,95 @@ export default function StartScreen() {
       paddingVertical: 12,
       paddingHorizontal: 40,
       borderRadius: theme.radius.xl,
-      shadowColor: '#000',
-      shadowOpacity: 0.2,
-      shadowRadius: 4,
-      shadowOffset: { width: 0, height: 2 },
+      alignItems: 'center',
     },
     buttonText: {
       color: theme.colors.buttonPrimaryText,
       fontSize: 16,
       fontWeight: 'bold',
     },
-    // ⬇️ добавили только это
-    langWrapper: {
-      marginTop: theme.spacing(3),
-      marginBottom: theme.spacing(1),
+  });
+
+  const stylesWeb = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+      alignItems: 'center',
+      paddingHorizontal: 24,
+      paddingTop: 28,
+      paddingBottom: 24,
+    },
+    content: {
+      flex: 1,
+      width: '100%',
+      maxWidth: 960,
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      alignSelf: 'center',
+    },
+    topBlock: {
+      width: '100%',
+      alignItems: 'center',
+      paddingTop: 4,
+    },
+    heroBlock: {
+      width: '100%',
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '50%',
+    },
+    bottomBlock: {
+      width: '100%',
+      alignItems: 'center',
+      paddingBottom: 16,
+      marginTop: 16,
+    },
+    title: {
+      fontSize: 30,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      color: theme.colors.textPrimary,
+      marginBottom: 6,
+    },
+    subtitle: {
+      fontSize: 15,
+      textAlign: 'center',
+      color: theme.colors.textSecondary,
+      marginBottom: 0,
+    },
+    image: {
+      width: '80%',
+      maxWidth: 400,
+      height: undefined,
+      aspectRatio: 0.95,
+    },
+    description: {
+      fontSize: 15,
+      lineHeight: 21,
+      textAlign: 'center',
+      color: theme.colors.textSecondary,
+      marginBottom: 14,
+      maxWidth: 360,
+    },
+    button: {
+      backgroundColor: theme.colors.buttonPrimaryBg,
+      minHeight: 44,
+      minWidth: 180,
+      paddingVertical: 10,
+      paddingHorizontal: 30,
+      borderRadius: theme.radius.xl,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    buttonText: {
+      color: theme.colors.buttonPrimaryText,
+      fontSize: 15,
+      fontWeight: 'bold',
     },
   });
+
+  const styles = isWeb ? stylesWeb : stylesMobile;
 
   if (checking) return null;
 
@@ -158,20 +250,47 @@ export default function StartScreen() {
       <LanguageNotice />
 
       <View style={styles.container}>
-        <Text style={styles.title}>Mamascota</Text>
-        <Text style={styles.subtitle}>{i18n.t('start_subtitle')}</Text>
+        {isWeb ? (
+          <View style={styles.content}>
+            <View style={styles.topBlock}>
+              <Text style={styles.title}>Mamascota</Text>
+              <Text style={styles.subtitle}>{i18n.t('start_subtitle')}</Text>
+            </View>
 
-        <Image
-          source={theme.images.start.hero}
-          style={styles.image}
-          resizeMode="contain"
-        />
+            <View style={styles.heroBlock}>
+              <Image
+                source={heroWeb}
+                style={styles.image}
+                resizeMode="contain"
+              />
+            </View>
 
-        <Text style={styles.description}>{i18n.t('start_description')}</Text>
+            <View style={styles.bottomBlock}>
+              <Text style={styles.description}>{i18n.t('start_description')}</Text>
 
-        <TouchableOpacity style={styles.button} onPress={handleStart}>
-          <Text style={styles.buttonText}>{i18n.t('start_button')}</Text>
-        </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={handleStart}>
+                <Text style={styles.buttonText}>{i18n.t('start_button')}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ) : (
+          <View style={styles.content}>
+            <Text style={styles.title}>Mamascota</Text>
+            <Text style={styles.subtitle}>{i18n.t('start_subtitle')}</Text>
+
+            <Image
+              source={theme.images.start.hero}
+              style={styles.image}
+              resizeMode="contain"
+            />
+
+            <Text style={styles.description}>{i18n.t('start_description')}</Text>
+
+            <TouchableOpacity style={styles.button} onPress={handleStart}>
+              <Text style={styles.buttonText}>{i18n.t('start_button')}</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </>
   );

@@ -5,6 +5,7 @@ type DeviceClass = {
   isNative: boolean;
   isTabletLike: boolean;
   isPhoneLike: boolean;
+  isDesktopLike: boolean;
   width: number;
 };
 
@@ -14,15 +15,16 @@ export function useDeviceClass(): DeviceClass {
   const isWeb = Platform.OS === "web";
   const isNative = !isWeb;
 
-  // 768 — безопасный базовый breakpoint для tablet-like layout
-  const isTabletLike = isNative && width >= 768;
-  const isPhoneLike = isNative && width < 768;
+  const isDesktopLike = isWeb && width >= 1024;
+  const isTabletLike = width >= 768 && width < 1024;
+  const isPhoneLike = width < 768;
 
   return {
     isWeb,
     isNative,
     isTabletLike,
     isPhoneLike,
+    isDesktopLike,
     width,
   };
 }
