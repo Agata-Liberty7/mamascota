@@ -197,14 +197,14 @@ export default function StartScreen() {
       marginTop: 16,
     },
     title: {
-      fontSize: 30,
+      fontSize: 36,
       fontWeight: 'bold',
       textAlign: 'center',
       color: theme.colors.textPrimary,
       marginBottom: 6,
     },
     subtitle: {
-      fontSize: 15,
+      fontSize: 18,
       textAlign: 'center',
       color: theme.colors.textSecondary,
       marginBottom: 0,
@@ -216,7 +216,7 @@ export default function StartScreen() {
       aspectRatio: 0.95,
     },
     description: {
-      fontSize: 15,
+      fontSize: 18,
       lineHeight: 21,
       textAlign: 'center',
       color: theme.colors.textSecondary,
@@ -235,7 +235,7 @@ export default function StartScreen() {
     },
     buttonText: {
       color: theme.colors.buttonPrimaryText,
-      fontSize: 15,
+      fontSize: 18,
       fontWeight: 'bold',
     },
   });
