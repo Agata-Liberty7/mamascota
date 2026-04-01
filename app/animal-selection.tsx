@@ -3,7 +3,6 @@ import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
-  Dimensions,
   FlatList,
   Image,
   KeyboardAvoidingView,
@@ -34,6 +33,8 @@ export default function AnimalSelection() {
   const { langKey, from } = useLocalSearchParams();
   const normalizedLangKey = Array.isArray(langKey) ? langKey[0] : langKey ?? 'default';
   const normalizedFrom = Array.isArray(from) ? from[0] : from;
+
+
 
   const [selectedAnimal, setSelectedAnimal] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -267,20 +268,18 @@ export default function AnimalSelection() {
     });
   };
 
-
-
-  const screenWidth = Dimensions.get('window').width;
   const numColumns = 3;
-  const spacing = 16;
-  const itemWidth = (screenWidth - spacing * (numColumns + 1)) / numColumns;
+
 
   return (
     <View key={normalizedLangKey} style={styles.container}>
       <Text style={styles.title}>{i18n.t('animal_question')}</Text>
       <FlatList
+        key="animals-3"
         data={animals}
         numColumns={numColumns}
         keyExtractor={(item) => item.id}
+        columnWrapperStyle={styles.columnWrapper}
         contentContainerStyle={styles.grid}
         ListFooterComponent={
           <View style={styles.footerContainer}>
@@ -320,7 +319,7 @@ export default function AnimalSelection() {
             <TouchableOpacity
               style={[
                 styles.card,
-                { width: itemWidth },
+                Platform.OS === "web" && styles.cardWeb,
                 !isEnabled && styles.cardDisabled,
               ]}
               disabled={!isEnabled}
@@ -482,17 +481,47 @@ export default function AnimalSelection() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingTop: 16, backgroundColor: theme.colors.background },
-  title: { fontSize: 18, fontWeight: '600', marginBottom: 16, textAlign: 'center' },
-  grid: { paddingHorizontal: 16, paddingBottom: 32 },
+  container: {
+    flex: 1,
+    paddingTop: 16,
+    backgroundColor: theme.colors.background,
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 16,
+    textAlign: 'center',
+    width: "100%",
+    maxWidth: 980,
+    paddingHorizontal: 16,
+  },
+  grid: {
+    width: "100%",
+    maxWidth: 980,
+    paddingHorizontal: 16,
+    paddingBottom: 32,
+    alignSelf: "center",
+  },
+  columnWrapper: {
+    justifyContent: "center",
+    gap: 16,
+  },
   // 🟦 Карточка-животное как кнопка
   card: {
     borderRadius: 16,
     paddingVertical: 10,
-    margin: 8,
+    marginBottom: 16,
     alignItems: "center",
-    backgroundColor: "#F5F7FB", // мягкая светлая подложка
+    backgroundColor: "#F5F7FB",
   },
+  cardWeb: {
+    flexBasis: "31%",
+    maxWidth: 240,
+    flexGrow: 0,
+    flexShrink: 1,
+  },
+
   // 🔒 Для заблокированных видов
   cardDisabled: {
     opacity: 0.4,

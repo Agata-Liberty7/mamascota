@@ -18,8 +18,6 @@ import i18n from "../../i18n";
 import { clearConversationId } from "../../utils/chatWithGPT";
 import { handleActiveSessionDecision } from "../../utils/handleActiveSessionDecision";
 
-const screenWidth = Dimensions.get("window").width;
-
 interface Props {
   visible: boolean;
   onClose: () => void;
@@ -132,34 +130,35 @@ export default function BurgerMenu({ visible, onClose }: Props) {
       },
     },
     {
-      label: String(i18n.t("menu.start_consultation")),
+    label: String(i18n.t("menu.start_consultation")),
       icon: "pets",
       // выбор животного доступен только после согласия с условиями
       enabled: termsAccepted,
       action: async () => {
-        const decision = await handleActiveSessionDecision();
+        onClose();
 
-        if (decision === "resume") {
-          await AsyncStorage.setItem("restoreFromSummary", "1");
-          onClose();
-          setTimeout(() => router.replace("/chat"), 120);
-          return;
-        }
+        setTimeout(async () => {
+          const decision = await handleActiveSessionDecision();
 
-        if (decision === "start_new") {
-          await clearConversationId();
-          onClose();
-          setTimeout(() => router.replace("/animal-selection"), 120);
-          return;
-        }
+          if (decision === "resume") {
+            await AsyncStorage.setItem("restoreFromSummary", "1");
+            router.replace("/chat");
+            return;
+          }
 
-        if (decision === "no_active") {
-          onClose();
-          setTimeout(() => router.replace("/animal-selection"), 120);
-          return;
-        }
+          if (decision === "start_new") {
+            await clearConversationId();
+            router.replace("/animal-selection");
+            return;
+          }
 
-        // cancel — ничего не делаем
+          if (decision === "no_active") {
+            router.replace("/animal-selection");
+            return;
+          }
+
+          // cancel — ничего не делаем
+        }, 180);
       },
     },
     {
@@ -259,15 +258,17 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
+    paddingTop: 80,
   },
   menuContainer: {
     backgroundColor: "#fff",
     borderRadius: 16,
     paddingVertical: 24,
     paddingHorizontal: 20,
-    width: screenWidth * 0.8,
+    width: "90%",
+    maxWidth: 420,
     alignItems: "flex-start",
   },
   menuItem: {

@@ -132,7 +132,7 @@ const stylesWeb = StyleSheet.create({
     marginBottom: 6,
   },
   heroBlockWeb: {
-    width: '50%',
+    width: '90%',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
