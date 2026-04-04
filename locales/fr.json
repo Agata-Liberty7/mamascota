@@ -3,7 +3,10 @@
   "language_notice_message": "La langue de l’interface a été définie automatiquement.",
   "ok_button": "OK",
   "alert_title": "Attention",
-
+  "paywall_trial_expired": "La période d'essai est terminée. Pour continuer, veuillez souscrire à l'accès.",
+  "paywall_limit_reached": "La limite d'utilisation gratuite a été atteinte. Pour continuer, veuillez souscrire à l'accès.",
+  "paywall_go_to_payment": "Passer au paiement",
+  
   "exit_title": "Voulez-vous quitter ?",
   "exit_message": "Vous pouvez enregistrer votre session pour continuer plus tard.",
   "exit_save": "Enregistrer la session",
@@ -97,7 +100,7 @@
 
   "symptomSelector": {
     "title": "Qu’avez-vous remarqué chez votre animal ?",
-    "hint": "Sélectionnez jusqu’à 3 symptômes principaux que vous avez observés",
+    "hint": "Sélectionnez jusqu’à 5 symptômes principaux que vous avez observés",
     "confirm": "Demander à l’assistant"
   },
 
@@ -118,8 +121,28 @@
     "blood_in_urine": "Sang dans les urines",
     "itching_skin": "Démangeaisons, se gratte",
     "skin_lesions": "Problèmes de peau",
-    "ear_problems": "Problèmes d'oreilles",
-    "eye_problems": "Problèmes des yeux",
+    "skin_redness": "Rougeur de la peau",
+    "hair_loss": "Perte de poils",
+    "wounds_or_ulcers": "Plaies ou ulcères",
+
+    "ear_discharge": "Secrétaire des oreilles",
+    "ear_odor": "Mauvaise odeur des oreilles",
+    "ear_pain": "Douleur d'oreille",
+    "head_shaking": "Secouage de la tête / grattage des oreilles",
+
+    "eye_redness": "Yeux rouges",
+    "eye_discharge": "Secrétaire oculaire",
+    "eye_tearing": "Yeux larmoyants",
+    "eyelid_swelling": "Paupières gonflées",
+    "eye_cloudiness": "Yeux troubles",
+    "eye_pain": "Douleur oculaire ou inconfort",
+
+    "aggression": "Comportement agressif",
+    "disorientation": "Désorientation / confusion",
+
+    "pain_localized": "Dolor en un área específica",
+    "pain_general": "Dolor general / malestar",
+
     "behavior_change": "Comportement changé",
     "anxiety_stress": "Anxiété / stress",
     "seizures": "Crises / convulsions",
@@ -153,16 +176,15 @@
     }
   },
   "onboarding_1_title": "Mamascota est là",
-  "onboarding_1_subtitle": "Je vous aide à identifier les signes importants et à vous préparer à la visite chez le vétérinaire.",
-
+  "onboarding_1_subtitle": "Je vous aide à identifier les [[signes importants]] et à vous préparer à la [[visite chez le vétérinaire]].",
+  "onboarding_2_subtitle": "Décrivez avec [[vos propres mots]].\nSi vous devez interrompre, vous pouvez continuer [[plus tard]].\nJe pose des questions étape par étape afin de ne rien manquer d’important.",
+  "onboarding_3_subtitle": "Vous me dites ce que vous avez remarqué, et je vous aide à [[mettre en évidence l’essentiel]] et à [[organiser vos observations]].",
+  "onboarding_4_subtitle": "Créez un [[rapport PDF]] clair et suivez l’état de votre animal avec un simple [[Journal des observations]].\nApportez le rapport à votre vétérinaire pour qu’il puisse voir [[l’image complète]] immédiatement.",
   "onboarding_2_title": "Nous communiquons simplement",
-  "onboarding_2_subtitle": "Décrivez avec vos propres mots.\nSi vous devez interrompre, vous pouvez continuer plus tard.\nJe pose des questions étape par étape afin de ne rien manquer d’important.",
 
   "onboarding_3_title": "Vous observez — \nje vous aide",
-  "onboarding_3_subtitle": "Vous me dites ce que vous avez remarqué, et je vous aide à mettre en évidence l’essentiel et à organiser vos observations.",
 
-  "onboarding_4_title": "Mémo pour la clinique",
-  "onboarding_4_subtitle": "À partir du dialogue, vous pouvez créer un rapport PDF clair de l’anamnèse à apporter à la clinique, afin que le vétérinaire voie rapidement l’ensemble de la situation.",
+  "onboarding_4_title": "Rapports pour votre vétérinaire",
   "onboarding_skip": "Sauter",
   "onboarding_next": "Suivant",
   "onboarding_start": "Commencer",
@@ -171,7 +193,8 @@
     "empty_title": "Vos consultations apparaîtront ici",
     "empty_subtitle": "Démarrez une nouvelle conversation et enregistrez-la une fois terminée; elle apparaîtra dans cette liste.",
     "delete_confirm": "Supprimer cette session enregistrée ?",
-    "delete_error": "Impossible de supprimer la session enregistrée. Veuillez réessayer."
+    "delete_error": "Impossible de supprimer la session enregistrée. Veuillez réessayer.",
+    "tools_hint": "Ici, vous pouvez ouvrir un rapport PDF, utiliser le Journal des observations ou exporter un CSV (en web app) pour le suivi."
   }, 
   
   "settings": {

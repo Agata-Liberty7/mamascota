@@ -17,6 +17,7 @@ import * as Animatable from "react-native-animatable";
 import i18n from "../../i18n";
 import { clearConversationId } from "../../utils/chatWithGPT";
 import { handleActiveSessionDecision } from "../../utils/handleActiveSessionDecision";
+import { isPaid, isTrialActive } from "../../utils/access";
 
 interface Props {
   visible: boolean;
@@ -29,13 +30,19 @@ export default function BurgerMenu({ visible, onClose }: Props) {
   const showWebConfirm = async ({
     title,
     message,
+    buttons,
   }: {
     title: string;
     message: string;
-  }): Promise<void> => {
-    if (Platform.OS !== "web") return;
+    buttons?: Array<{
+      key: string;
+      label: string;
+      destructive?: boolean;
+    }>;
+  }): Promise<string> => {
+    if (Platform.OS !== "web") return "cancel";
 
-    await new Promise<void>((resolve) => {
+    return await new Promise<string>((resolve) => {
       (window as any).__MAMASCOTA_CONFIRM_RESOLVE__ = resolve;
 
       window.dispatchEvent(
@@ -43,12 +50,15 @@ export default function BurgerMenu({ visible, onClose }: Props) {
           detail: {
             title,
             message,
-            buttons: [
-              {
-                key: "ok",
-                label: String(i18n.t("ok")),
-              },
-            ],
+            buttons:
+              buttons && buttons.length > 0
+                ? buttons
+                : [
+                    {
+                      key: "ok",
+                      label: String(i18n.t("ok_button")),
+                    },
+                  ],
           },
         })
       );
@@ -135,6 +145,71 @@ export default function BurgerMenu({ visible, onClose }: Props) {
       // выбор животного доступен только после согласия с условиями
       enabled: termsAccepted,
       action: async () => {
+        const paid = await isPaid();
+        const trialActive = await isTrialActive();
+
+        if (!paid && !trialActive) {
+          onClose();
+
+          setTimeout(async () => {
+            if (Platform.OS === "web") {
+              const result = await showWebConfirm({
+                title: String(i18n.t("alert_title", { defaultValue: "Attention" })),
+                message: String(
+                  i18n.t("paywall_trial_expired", {
+                    defaultValue: "Trial expired. Please upgrade to continue.",
+                  })
+                ),
+                buttons: [
+                  {
+                    key: "pay",
+                    label: String(
+                      i18n.t("paywall_go_to_payment", {
+                        defaultValue: "Upgrade",
+                      })
+                    ),
+                  },
+                  {
+                    key: "cancel",
+                    label: String(i18n.t("cancel")),
+                  },
+                ],
+              });
+
+              if (result === "pay") {
+                window.location.href = "https://mamascota.com";
+              }
+            } else {
+              Alert.alert(
+                String(i18n.t("alert_title", { defaultValue: "Attention" })),
+                String(
+                  i18n.t("paywall_trial_expired", {
+                    defaultValue: "Trial expired. Please upgrade to continue.",
+                  })
+                ),
+                [
+                  {
+                    text: String(
+                      i18n.t("paywall_go_to_payment", {
+                        defaultValue: "Upgrade",
+                      })
+                    ),
+                    onPress: () => {
+                      router.push("https://mamascota.com");
+                    },
+                  },
+                  {
+                    text: String(i18n.t("cancel")),
+                    style: "cancel",
+                  },
+                ]
+              );
+            }
+          }, 180);
+
+          return;
+        }
+
         onClose();
 
         setTimeout(async () => {
@@ -243,6 +318,47 @@ export default function BurgerMenu({ visible, onClose }: Props) {
             />
             <Text style={styles.menuText}>{i18n.t("exit_button")}</Text>
           </TouchableOpacity>
+
+          {/* DEV — Trial controls */}
+          {__DEV__ && (
+            <View style={{ width: "100%", marginTop: 12 }}>
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={async () => {
+                  await AsyncStorage.setItem(
+                    "access.trialStart",
+                    String(Date.now() - 15 * 24 * 60 * 60 * 1000)
+                  );
+                  console.log("🔥 Trial forced EXPIRED");
+                }}
+              >
+                <Text style={{ color: "#E53935" }}>DEV: Expire trial</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={async () => {
+                  await AsyncStorage.setItem(
+                    "access.trialStart",
+                    String(Date.now())
+                  );
+                  console.log("🟢 Trial reset ACTIVE");
+                }}
+              >
+                <Text style={{ color: "#43A047" }}>DEV: Activate trial</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={async () => {
+                  await AsyncStorage.setItem("access.pdfCount", "0");
+                  console.log("📄 PDF count reset");
+                }}
+              >
+                <Text style={{ color: "#1E88E5" }}>DEV: Reset PDF count</Text>
+              </TouchableOpacity>
+            </View>
+          )}
 
           {/* Закрыть */}
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>

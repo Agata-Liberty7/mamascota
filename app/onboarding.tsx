@@ -37,6 +37,10 @@ const stylesMobile = StyleSheet.create({
     marginHorizontal: 28,
     lineHeight: 22,
   },
+  onbSubtitleAccent: {
+    fontWeight: '700',
+    color: theme.colors.buttonPrimaryBg,
+  },
   onbImage: {
     width: '100%',
     height: undefined,
@@ -88,6 +92,10 @@ const stylesWeb = StyleSheet.create({
     lineHeight: 28,
     maxWidth: 480,
     alignSelf: 'center',
+  },
+  onbSubtitleAccent: {
+    fontWeight: '700',
+    color: theme.colors.buttonPrimaryBg,
   },
   onbImage: {
     width: '100%',
@@ -160,6 +168,31 @@ const stylesWeb = StyleSheet.create({
   },
 });
 
+function renderHighlightedText(
+  text: string,
+  baseStyle: any,
+  accentStyle: any
+) {
+  const parts = String(text || '').split(/(\[\[.*?\]\])/g);
+
+  return (
+    <Text style={baseStyle}>
+      {parts.map((part, idx) => {
+        const match = part.match(/^\[\[(.*?)\]\]$/);
+        if (match) {
+          return (
+            <Text key={idx} style={accentStyle}>
+              {match[1]}
+            </Text>
+          );
+        }
+
+        return <Text key={idx}>{part}</Text>;
+      })}
+    </Text>
+  );
+}
+
 function Slide({
   imgSource,
   titleKey,
@@ -175,7 +208,11 @@ function Slide({
     <>
       <Text style={styles.onbTitle}>{i18n.t(titleKey)}</Text>
       <Image source={imgSource} style={styles.onbImage} resizeMode="contain" />
-      <Text style={styles.onbSubtitle}>{i18n.t(subtitleKey)}</Text>
+      {renderHighlightedText(
+        String(i18n.t(subtitleKey)),
+        styles.onbSubtitle,
+        styles.onbSubtitleAccent
+      )}
     </>
   );
 }
@@ -212,6 +249,11 @@ export default function OnboardingScreen() {
         image: theme.images.onboarding.step3,
         title: i18n.t('onboarding_3_title'),
         subtitle: i18n.t('onboarding_3_subtitle'),
+      },
+      {
+        image: theme.images.onboarding.step4,
+        title: i18n.t('onboarding_4_title'),
+        subtitle: i18n.t('onboarding_4_subtitle'),
       },
     ],
     [i18n.locale]
@@ -259,6 +301,19 @@ export default function OnboardingScreen() {
       title: '',
       subtitle: '',
     },
+    {
+      backgroundColor: theme.colors.background,
+      image: (
+        <Slide
+          imgSource={theme.images.onboarding.step4}
+          titleKey="onboarding_4_title"
+          subtitleKey="onboarding_4_subtitle"
+          styles={stylesMobile}
+        />
+      ),
+      title: '',
+      subtitle: '',
+    },
   ] as const;
 
   const lastIndex = webSlides.length - 1;
@@ -299,7 +354,11 @@ export default function OnboardingScreen() {
           </View>
 
           <View style={stylesWeb.bottomBlockWeb}>
-            <Text style={stylesWeb.onbSubtitle}>{currentWebSlide.subtitle}</Text>
+            {renderHighlightedText(
+              String(currentWebSlide.subtitle),
+              stylesWeb.onbSubtitle,
+              stylesWeb.onbSubtitleAccent
+            )}
 
             <TouchableOpacity
               onPress={handleArrowPress}

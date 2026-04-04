@@ -3,6 +3,9 @@
   "language_notice_message": "El idioma de la interfaz se ha configurado automáticamente.",
   "ok_button": "Entendido",
   "alert_title": "Atención",
+  "paywall_trial_expired": "El período de prueba ha expirado. Para continuar, por favor suscríbete al acceso.",
+  "paywall_limit_reached": "Has alcanzado el límite de uso gratuito. Para continuar, por favor suscríbete al acceso.",
+  "paywall_go_to_payment": "Passar al pago",
 
   "exit_title": "¿Deseas salir?",
   "exit_message": "Puedes guardar tu sesión para continuar más tarde.",
@@ -99,7 +102,7 @@
 
   "symptomSelector": {
     "title": "¿Qué has notado en tu mascota?",
-    "hint": "Selecciona hasta 3 síntomas principales que hayas notado",
+    "hint": "Selecciona hasta 5 síntomas principales que hayas notado",
     "confirm": "Preguntar al asistente"
   },
 
@@ -120,8 +123,28 @@
     "blood_in_urine": "Sangre en la orina",
     "itching_skin": "Picores, se rasca",
     "skin_lesions": "Problemas de piel",
-    "ear_problems": "Problemas de oídos",
-    "eye_problems": "Problemas de ojos",
+    "skin_redness": "Piel enrojecida",
+    "hair_loss": "Pérdida de pelo",
+    "wounds_or_ulcers": "Heridas / úlceras",
+
+    "ear_discharge": "Secreción en las orejas",
+    "ear_odor": "Mal olor de las orejas",
+    "ear_pain": "Dolor de oído",
+    "head_shaking": "Sacudir la cabeza / rascarse las orejas",
+
+    "eye_redness": "Ojos rojos",
+    "eye_discharge": "Secreción ocular",
+    "eye_tearing": "Ojos llorosos",
+    "eyelid_swelling": "Párpados hinchados",
+    "eye_cloudiness": "Ojos nublados",
+    "eye_pain": "Dolor ocular o malestar",
+
+    "aggression": "Comportamiento agresivo",
+    "disorientation": "Desorientación / confusión",
+
+    "pain_localized": "Dolor en un área específica",
+    "pain_general": "Dolor general / malestar",
+
     "behavior_change": "Cambio de conducta",
     "anxiety_stress": "Ansiedad / estrés",
     "seizures": "Convulsiones",
@@ -156,16 +179,13 @@
     }
   },
   "onboarding_1_title": "Mamascota está contigo",
-  "onboarding_1_subtitle": "Te ayudo a identificar signos importantes y prepararte para la visita al veterinario.",
-
+  "onboarding_1_subtitle": "Te ayudo a identificar [[signos importantes]] y a prepararte para la [[visita al veterinario]].",
+  "onboarding_2_subtitle": "Cuéntame con [[tus propias palabras]].\nSi necesitas pausar, puedes continuar [[más tarde]].\nHago preguntas paso a paso para no pasar por alto nada importante.",
+  "onboarding_3_subtitle": "Tú me cuentas lo que notaste, y yo te ayudo a [[destacar lo importante]] y [[organizar tus observaciones]].",
+  "onboarding_4_subtitle": "Crea un [[informe PDF]] claro y sigue el estado de tu mascota con un simple [[Diario de observación]].\nLleva el informe a tu veterinario para que pueda ver la [[imagen completa]] de inmediato.", 
   "onboarding_2_title": "Nos comunicamos de forma sencilla",
-  "onboarding_2_subtitle": "Cuéntame con tus propias palabras.\nSi necesitas pausar, puedes continuar más tarde.\nHago preguntas paso a paso para no pasar por alto nada importante.",
-
   "onboarding_3_title": "Tú observas — \nyo ayudo",
-  "onboarding_3_subtitle": "Tú me cuentas lo que notaste, y yo te ayudo a destacar lo importante y organizar tus observaciones.",
-
-  "onboarding_4_title": "Guía para la clínica",
-  "onboarding_4_subtitle": "A partir del diálogo, puedes crear un informe PDF claro del historial para llevarlo a la clínica y que el veterinario vea rápidamente el panorama completo.",
+  "onboarding_4_title": "Informes para tu veterinario",
   "onboarding_skip": "Saltar",  
   "onboarding_next": "Siguiente",
   "onboarding_start": "Empezar",
@@ -174,7 +194,8 @@
     "empty_title": "Tus consultas aparecerán aquí",
     "empty_subtitle": "Inicia un nuevo chat y guárdalo al terminar. Aparecerá en esta lista.",
     "delete_confirm": "¿Eliminar esta sesión guardada?",
-    "delete_error": "No se pudo eliminar la sesión guardada. Por favor, inténtalo de nuevo."
+    "delete_error": "No se pudo eliminar la sesión guardada. Por favor, inténtalo de nuevo.",
+    "tools_hint": "Aquí puedes abrir un informe PDF, usar el Diario de observación o exportar CSV (en web app) para el seguimiento posterior."
   }, 
 
   "settings": {

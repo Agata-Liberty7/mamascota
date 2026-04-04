@@ -12,6 +12,7 @@ import {
   FlatList,
   Keyboard,
   KeyboardAvoidingView,
+  Linking,
   Modal,
   Platform,
   StyleSheet,
@@ -29,9 +30,11 @@ import { exportSummaryPDF } from "../utils/exportPDF";
 import type { Pet } from "../types/pet";
 import { chatWithGPT } from "../utils/chatWithGPT";
 import { getActivePetId, getPets } from "../utils/pets";
+import { canGeneratePdf, incrementPdfCount } from "../utils/access";
 
 import MenuButton from "../components/ui/MenuButton";
 import LocalizedExitButton from "../components/ui/LocalizedExitButton";
+
 
 
 type ChatMessage = {
@@ -797,7 +800,75 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
 
     try {
       console.log("📄 PDF step 1: start");
-      setPdfGenerating(true);
+
+      const accessAllowed = await canGeneratePdf();
+
+      if (!accessAllowed) {
+        if (Platform.OS === "web") {
+          const result = await new Promise<string>((resolve) => {
+            (window as any).__MAMASCOTA_CONFIRM_RESOLVE__ = resolve;
+
+            window.dispatchEvent(
+              new CustomEvent("mamascota:confirm", {
+                detail: {
+                  title: String(
+                    i18n.t("alert_title", { defaultValue: "Attention" })
+                  ),
+                  message: String(
+                    i18n.t("paywall_limit_reached", {
+                      defaultValue: "Free limit reached. Upgrade to continue.",
+                    })
+                  ),
+                  buttons: [
+                    {
+                      key: "pay",
+                      label: String(
+                        i18n.t("paywall_go_to_payment", {
+                          defaultValue: "Upgrade",
+                        })
+                      ),
+                    },
+                    {
+                      key: "cancel",
+                      label: String(i18n.t("cancel")),
+                    },
+                  ],
+                },
+              })
+            );
+          });
+
+          if (result === "pay") {
+            window.location.href = "https://mamascota.com";
+          }
+        } else {
+          Alert.alert(
+            String(i18n.t("alert_title", { defaultValue: "Attention" })),
+            String(
+              i18n.t("paywall_limit_reached", {
+                defaultValue: "Free limit reached. Upgrade to continue.",
+              })
+            ),
+            [
+              {
+                text: String(
+                  i18n.t("paywall_go_to_payment", {
+                    defaultValue: "Upgrade",
+                  })
+                ),
+                onPress: async () => {
+                  await Linking.openURL("https://mamascota.com");
+                },
+              },
+              {
+                text: String(i18n.t("cancel")),
+                style: "cancel",
+              },
+            ]
+          );
+        }
+        return;
+      }
 
       const id =
         pdfConversationId ??
@@ -814,7 +885,9 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
             window.dispatchEvent(
               new CustomEvent("mamascota:confirm", {
                 detail: {
-                  title: String(i18n.t("alert_title", { defaultValue: "Attention" })),
+                  title: String(
+                    i18n.t("alert_title", { defaultValue: "Attention" })
+                  ),
                   message: String(i18n.t("chat.pdf_not_ready")),
                   buttons: [
                     {
@@ -827,7 +900,10 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
             );
           });
         } else {
-          alert(i18n.t("chat.pdf_not_ready"));
+          Alert.alert(
+            String(i18n.t("alert_title", { defaultValue: "Attention" })),
+            String(i18n.t("chat.pdf_not_ready"))
+          );
         }
         return;
       }
@@ -836,6 +912,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
       await refreshDecisionTreeIfStale(id);
       console.log("📄 PDF step 4: after refreshDecisionTreeIfStale");
 
+      setPdfGenerating(true);
       console.log("📄 PDF step 5: before saveSessionSilently");
       await saveSessionSilently(id);
       console.log("📄 PDF step 6: after saveSessionSilently");
@@ -844,11 +921,20 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
       await exportSummaryPDF(id);
       console.log("📄 PDF step 8: after exportSummaryPDF");
 
+      await incrementPdfCount();
+
       await refreshPdfReadyState(id);
       console.log("📄 PDF step 9: done");
     } catch (e) {
       console.error("❌ PDF now error:", e);
-      alert(i18n.t("chat.pdf_error", { defaultValue: "Could not generate PDF." }));
+      Alert.alert(
+        String(i18n.t("alert_title", { defaultValue: "Attention" })),
+        String(
+          i18n.t("chat.pdf_error", {
+            defaultValue: "Could not generate PDF.",
+          })
+        )
+      );
     } finally {
       setPdfGenerating(false);
     }

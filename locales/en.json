@@ -3,6 +3,9 @@
   "language_notice_message": "The interface language has been set automatically.",
   "ok_button": "OK",
   "alert_title": "Attention",
+  "paywall_trial_expired": "Your trial period has expired. To continue, please subscribe to access.",
+  "paywall_limit_reached": "You have reached the limit for free usage. To continue, please subscribe to access.",
+  "paywall_go_to_payment": "Go to Payment",
 
   "exit_title": "Do you want to exit?",
   "exit_message": "You can save your session to continue later.",
@@ -97,7 +100,7 @@
 
   "symptomSelector": {
     "title": "What have you noticed in your pet?",
-    "hint": "Select up to 3 main symptoms you have observed",
+    "hint": "Select up to 5 main symptoms you have observed",
     "confirm": "Ask the assistant"
   },
 
@@ -118,14 +121,34 @@
     "blood_in_urine": "Blood in urine",
     "itching_skin": "Itching / scratching",
     "skin_lesions": "Skin problems",
-    "ear_problems": "Ear problems",
-    "eye_problems": "Eye problems",
+    "skin_redness": "Redness of the skin",
+    "hair_loss": "Hair loss",
+    "wounds_or_ulcers": "Wounds / ulcers",
+    
+    "ear_discharge": "Discharge from ears",
+    "ear_odor": "Bad smell from ears",
+    "ear_pain": "Ear pain",
+    "head_shaking": "Shaking head / scratching ears",
+
+    "eye_redness": "Red eyes",
+    "eye_discharge": "Discharge from eyes",
+    "eye_tearing": "Watery eyes",
+    "eyelid_swelling": "Swollen eyelids",
+    "eye_cloudiness": "Cloudy eyes",
+    "eye_pain": "Eye pain or discomfort",
+
+    "aggression": "Aggressive behavior",
+    "disorientation": "Disorientation / confusion",
+
+    "pain_localized": "Pain in a specific area",
+    "pain_general": "General pain / discomfort",
     "behavior_change": "Behavior changed",
     "anxiety_stress": "Anxiety / stress",
     "seizures": "Seizures",
     "collapse_fainting": "Collapse / fainting",
     "custom": "Other"
   },
+
   "chat": {
     "summary_hint": "You can save the summary using the red icon at the bottom left, or by exiting and saving the session.",
     "phase": {
@@ -154,16 +177,13 @@
   },
 
   "onboarding_1_title": "Mamascota is here",
-  "onboarding_1_subtitle": "I help identify important signs and prepare for a veterinary visit.",
-
+  "onboarding_1_subtitle": "I help identify [[important signs]] and prepare for a [[veterinary visit]].",
+  "onboarding_2_subtitle": "Tell me in [[your own words]].\nIf you need to pause, you can continue [[later]].\nI ask questions step by step so nothing important is missed.",
+  "onboarding_3_subtitle": "You tell me what you noticed, and I help [[highlight what matters]] and [[organize your observations]].",
+  "onboarding_4_subtitle": "Create a clear [[PDF report]] and track your pet’s condition with an [[Observation Diary]].\nBring the report to your vet so they can see the [[full picture]] right away.",
   "onboarding_2_title": "We keep it simple",
-  "onboarding_2_subtitle": "Tell me in your own words.\nIf you need to pause, you can continue later.\nI ask questions step by step so nothing important is missed.",
-
   "onboarding_3_title": "You observe — \nI help",
-  "onboarding_3_subtitle": "You tell me what you noticed, and I help highlight what matters and organize your observations.",
-
-  "onboarding_4_title": "Clinic summary",
-  "onboarding_4_subtitle": "From the dialogue, you can create a clear PDF summary of the medical history to take to the clinic, so the veterinarian can quickly see the full picture.",
+  "onboarding_4_title": "Reports for your vet",
   "onboarding_skip": "Skip",
   "onboarding_next": "Next",
   "onboarding_start": "Start",
@@ -172,7 +192,8 @@
     "empty_title": "Your consultations will appear here",
     "empty_subtitle": "Start a new chat and save it when you finish – it will show up in this list.",
     "delete_confirm": "Delete this saved session?",
-    "delete_error": "Could not delete the saved session. Please try again."
+    "delete_error": "Could not delete the saved session. Please try again.",
+    "tools_hint": "Here you can open a PDF report, use the Observation Diary, or export CSV (en web app) for follow-up tracking."
   },
   
   "settings": {

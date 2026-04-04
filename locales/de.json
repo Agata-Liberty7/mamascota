@@ -3,6 +3,9 @@
   "language_notice_message": "Die Sprache der Benutzeroberfläche wurde automatisch festgelegt.",
   "ok_button": "OK",
   "alert_title": "Achtung",
+  "paywall_trial_expired": "Ihr Testzeitraum ist abgelaufen. Um fortzufahren, bitte abonnieren Sie den Zugang.",
+  "paywall_limit_reached": "Sie haben das Limit für kostenlose Nutzung erreicht. Um fortzufahren, bitte abonnieren Sie den Zugang.",
+  "paywall_go_to_payment": "Zur Zahlung gehen",
 
   "exit_title": "Möchten Sie beenden?",
   "exit_message": "Sie können Ihre Sitzung speichern, um später fortzufahren.",
@@ -97,7 +100,7 @@
 
   "symptomSelector": {
     "title": "Was haben Sie bei Ihrem Tier bemerkt?",
-    "hint": "Wählen Sie bis zu 3 Hauptsymptome aus, die Sie beobachtet haben",
+    "hint": "Wählen Sie bis zu 5 Hauptsymptome aus, die Sie beobachtet haben",
     "confirm": "Den Assistenten fragen"
   },
 
@@ -118,8 +121,27 @@
     "blood_in_urine": "Blut im Urin",
     "itching_skin": "Starker Juckreiz",
     "skin_lesions": "Hautprobleme",
-    "ear_problems": "Ohrenprobleme",
-    "eye_problems": "Augenprobleme",
+    "skin_redness": "Rötung der Haut",
+    "hair_loss": "Haarausfall",
+    "wounds_or_ulcers": "Wunden / Geschwüre",
+
+    "ear_discharge": "Ohrensekret",
+    "ear_odor": "Schlechter Geruch aus den Ohren",
+    "ear_pain": "Ohrenschmerzen",
+    "head_shaking": "Kopfschütteln / Ohrenkratzen",
+
+    "eye_redness": "Rote Augen",
+    "eye_discharge": "Augensekret",
+    "eye_tearing": "Tränen",
+    "eyelid_swelling": "Geschwollene Lidder",
+    "eye_cloudiness": "Trübheit der Augen",
+    "eye_pain": "Augenschmerzen oder Unbehagen",
+
+    "aggression": "Aggressives Verhalten",
+    "disorientation": "Desorientierung / Verwirrung",
+
+    "pain_localized": "Schmerzen in einer bestimmten Region",
+    "pain_general": "Allgemeine Schmerzen / Unbehagen",
     "behavior_change": "Verhaltensänderung",
     "anxiety_stress": "Angst / Stress",
     "seizures": "Anfälle / Krämpfe",
@@ -154,16 +176,13 @@
   },
   
   "onboarding_1_title": "Mamascota ist für Sie da",
-  "onboarding_1_subtitle": "Ich helfe, wichtige Anzeichen zu erkennen und sich auf den Tierarztbesuch vorzubereiten.",
-
+  "onboarding_1_subtitle": "Ich helfe, [[wichtige Anzeichen]] zu erkennen und mich auf den [[Tierarztbesuch]] vorzubereiten.",
+  "onboarding_2_subtitle": "Beschreiben Sie es in [[Ihren eigenen Worten]].\nWenn Sie pausieren möchten, können Sie [[später fortfahren]].\nIch stelle Fragen Schritt für Schritt, damit nichts Wichtiges übersehen wird.",
+  "onboarding_3_subtitle": "Sie erzählen, was Ihnen aufgefallen ist, und ich helfe, [[das Wesentliche herauszuarbeiten]] und [[zu ordnen]].",
+  "onboarding_4_subtitle": "Erstellen Sie einen [[PDF-Bericht]] und verfolgen Sie den Zustand Ihres Haustiers mit einem einfachen [[Beobachtungstagebuch]].\nBringen Sie den Bericht zu Ihrem Tierarzt, damit er sofort den [[Gesamtüberblick]] erhält.", 
   "onboarding_2_title": "Wir halten es einfach",
-  "onboarding_2_subtitle": "Beschreiben Sie es in Ihren eigenen Worten.\nWenn Sie pausieren möchten, können Sie später fortfahren.\nIch stelle Fragen Schritt für Schritt, damit nichts Wichtiges übersehen wird.",
-
   "onboarding_3_title": "Sie beobachten — \nich helfe",
-  "onboarding_3_subtitle": "Sie erzählen, was Ihnen aufgefallen ist, und ich helfe, das Wesentliche herauszuarbeiten und zu ordnen.",
-
-  "onboarding_4_title": "Spickzettel für die Praxis",
-  "onboarding_4_subtitle": "Aus dem Gespräch können Sie einen übersichtlichen PDF-Bericht zur Krankengeschichte erstellen und ihn zur Praxis mitnehmen, damit der Tierarzt schnell den Gesamtüberblick erhält.",
+  "onboarding_4_title": "Berichte für Ihren Tierarzt",
   "onboarding_skip": "Überspringen",
   "onboarding_next": "Weiter",
   "onboarding_start": "Start",
@@ -172,7 +191,8 @@
     "empty_title": "Ihre Beratungsgespräche werden hier angezeigt",
     "empty_subtitle": "Starten Sie einen neuen Chat und speichern Sie ihn nach Beendigung – er wird dann in dieser Liste erscheinen.",
     "delete_confirm": "Diese gespeicherte Sitzung löschen?",
-    "delete_error": "Konnte die gespeicherte Sitzung nicht löschen. Bitte versuchen Sie es erneut."
+    "delete_error": "Konnte die gespeicherte Sitzung nicht löschen. Bitte versuchen Sie es erneut.",
+    "tools_hint": "Hier können Sie einen PDF-Bericht öffnen, das Beobachtungstagebuch nutzen oder CSV (in der Web-App) für die weitere Verlaufskontrolle exportieren."
   },
   
   "settings": {

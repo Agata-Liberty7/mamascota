@@ -10,6 +10,7 @@ import {
   Image,
   Modal,
   Platform,
+  Linking,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
@@ -26,6 +27,7 @@ import {
 } from "../utils/exportPDF";
 // modal
 import LoadingPDF from "../components/ui/LoadingPDF";
+import { canGeneratePdf, incrementPdfCount } from "../utils/access";
 
 type SummaryItem = {
   id: string;
@@ -177,13 +179,19 @@ export default function SummaryScreen() {
   const showWebConfirm = async ({
     title,
     message,
+    buttons,
   }: {
     title: string;
     message: string;
-  }): Promise<void> => {
-    if (Platform.OS !== "web") return;
+    buttons?: Array<{
+      key: string;
+      label: string;
+      destructive?: boolean;
+    }>;
+  }): Promise<string> => {
+    if (Platform.OS !== "web") return "cancel";
 
-    await new Promise<void>((resolve) => {
+    return await new Promise<string>((resolve) => {
       (window as any).__MAMASCOTA_CONFIRM_RESOLVE__ = resolve;
 
       window.dispatchEvent(
@@ -191,12 +199,15 @@ export default function SummaryScreen() {
           detail: {
             title,
             message,
-            buttons: [
-              {
-                key: "ok_button",
-                label: String(i18n.t("ok_button", { defaultValue: "OK" })),
-              },
-            ],
+            buttons:
+              buttons && buttons.length > 0
+                ? buttons
+                : [
+                    {
+                      key: "ok",
+                      label: String(i18n.t("ok_button", { defaultValue: "OK" })),
+                    },
+                  ],
           },
         })
       );
@@ -400,9 +411,69 @@ export default function SummaryScreen() {
         return;
       }
 
+      const accessAllowed = await canGeneratePdf();
+
+      if (!accessAllowed) {
+        if (Platform.OS === "web") {
+          const result = await showWebConfirm({
+            title: String(t("alert_title", "Attention")),
+            message: String(
+              i18n.t("paywall_limit_reached", {
+                defaultValue: "Free limit reached. Upgrade to continue.",
+              })
+            ),
+            buttons: [
+              {
+                key: "pay",
+                label: String(
+                  i18n.t("paywall_go_to_payment", {
+                    defaultValue: "Upgrade",
+                  })
+                ),
+              },
+              {
+                key: "cancel",
+                label: String(i18n.t("cancel")),
+              },
+            ],
+          });
+
+          if (result === "pay") {
+            window.location.href = "https://mamascota.com";
+          }
+        } else {
+          Alert.alert(
+            String(t("alert_title", "Attention")),
+            String(
+              i18n.t("paywall_limit_reached", {
+                defaultValue: "Free limit reached. Upgrade to continue.",
+              })
+            ),
+            [
+              {
+                text: String(
+                  i18n.t("paywall_go_to_payment", {
+                    defaultValue: "Upgrade",
+                  })
+                ),
+                onPress: async () => {
+                  await Linking.openURL("https://mamascota.com");
+                },
+              },
+              {
+                text: String(i18n.t("cancel")),
+                style: "cancel",
+              },
+            ]
+          );
+        }
+        return;
+      }
+
       setPdfLoading(true);
       await ensureDecisionTreeCachedForSummary(id, petName);
       await exportSummaryPDF(id);
+      await incrementPdfCount();
     } catch (err) {
       console.error("PDF export error:", err);
     } finally {
@@ -477,33 +548,6 @@ export default function SummaryScreen() {
 
           <TouchableOpacity
             onPress={async () => {
-              const allowed = await isSessionPdfAllowed(item.id);
-
-              if (!allowed) {
-                if (Platform.OS === "web") {
-                  await showWebConfirm({
-                    title: String(i18n.t("alert_title", { defaultValue: "Attention" })),
-                    message: String(
-                      i18n.t("chat.pdf_not_ready", {
-                        defaultValue:
-                          "The consultation is not finished yet. Complete it to generate a report.",
-                      })
-                    ),
-                  });
-                } else {
-                  Alert.alert(
-                    String(i18n.t("alert_title", { defaultValue: "Attention" })),
-                    String(
-                      i18n.t("chat.pdf_not_ready", {
-                        defaultValue:
-                          "The consultation is not finished yet. Complete it to generate a report.",
-                      })
-                    )
-                  );
-                }
-                return;
-              }
-
               const savedPdfLang =
                 (await AsyncStorage.getItem("pdfLanguage")) ||
                 i18n.locale ||
@@ -569,6 +613,12 @@ export default function SummaryScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>
         {t("menu.saved_sessions", "Consultation history")}
+      </Text>
+      <Text style={styles.toolsHint}>
+        {i18n.t("summary.tools_hint", {
+          defaultValue:
+            "Here you can open a PDF report, use the Observation Diary, or export CSV for follow-up tracking.",
+        })}
       </Text>
 
       {sessions.length === 0 ? (
@@ -881,6 +931,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "600",
     textAlign: "center",
+  },
+  toolsHint: {
+    fontSize: 14,
+    lineHeight: 20,
+    color: "#666",
+    marginBottom: 14,
   },
 
 });

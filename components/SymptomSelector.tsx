@@ -37,17 +37,38 @@ const SYMPTOMS = [
   'urinating_too_often',
   'blood_in_urine',
 
-  // Кожа, уши, глаза
+  // Кожа
   'itching_skin',
   'skin_lesions',
-  'ear_problems',
-  'eye_problems',
+  'skin_redness',
+  'hair_loss',
+  'wounds_or_ulcers',
+
+  // Уши
+  'ear_discharge',
+  'ear_odor',
+  'ear_pain',
+  'head_shaking',
+
+  // Глаза
+  'eye_redness',
+  'eye_discharge',
+  'eye_tearing',
+  'eyelid_swelling',
+  'eye_cloudiness',
+  'eye_pain',
 
   // Поведение и неврология
   'behavior_change',
   'anxiety_stress',
+  'aggression',
+  'disorientation',
   'seizures',
   'collapse_fainting',
+
+  // Боль (уточнение)
+  'pain_localized',
+  'pain_general',
 
   // Свой вариант
   'custom',
@@ -71,7 +92,7 @@ export default function SymptomSelector({ onSubmit }: Props) {
     setSelected(prev =>
       prev.includes(key)
         ? prev.filter(k => k !== key)
-        : prev.length < 3
+        : prev.length < 5
           ? [...prev, key]
           : prev
     );
