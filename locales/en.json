@@ -264,5 +264,16 @@
     "download_title": "CSV file",
     "download_hint": "Download the file, then open it in Excel, Numbers, Google Sheets, or OpenOffice.",
     "download_button": "Download"
-  } 
+  },
+  
+  "paywall": {
+    "title": "Full access",
+    "subtitle": "Unlock all features",
+    "feature_1": "PDF report for the veterinarian",
+    "feature_2": "Symptom tracking",
+    "feature_3": "Consultation history",
+    "price": "1,99 € / month",
+    "cta": "Get full access",
+    "note": "You can cancel at any time"
+  }
 }

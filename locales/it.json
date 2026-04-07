@@ -265,5 +265,16 @@
     "download_title": "File CSV",
     "download_hint": "Scarica il file, quindi aprilo in Excel, Numbers, Google Sheets o OpenOffice.",
     "download_button": "Scarica"
-  } 
+  },
+  
+  "paywall": {
+    "title": "Sblocca tutte le funzionalità",
+    "subtitle": "Sottoscrivi l’accesso per ottenere il massimo da Mamascota",
+    "feature_1": "Rapporti PDF dettagliati",
+    "feature_2": "Tracciamento dei sintomi",
+    "feature_3": "Cronologia delle consulenze",
+    "price": "1,99 € / mese",
+    "cta": "Ottieni l'accesso",
+    "note": "Puoi annullare in qualsiasi momento"
+  }
 }

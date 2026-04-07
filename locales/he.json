@@ -265,5 +265,16 @@
     "download_title": "קובץ CSV",
     "download_hint": "הורידו את הקובץ ולאחר מכן פתחו אותו ב-Excel, Numbers, Google Sheets או OpenOffice.",
     "download_button": "הורדה"
+  },
+  
+  "paywall": {
+    "title": "הפוטנציאל המלא של Mamascota",
+    "subtitle": "מנוי חודשי עם תכונות נוספות כדי לעזור לך לדאוג טוב יותר לחיית המחמד שלך.",
+    "feature_1": "דוח PDF לוטרינר",
+    "feature_2": "מעקב אחרי סימפטומים",
+    "feature_3": "היסטוריה של_consultations",
+    "price": "1,99 € / חודש",
+    "cta": "קבלת גישה",
+    "note": "ניתן לבטל בכל עת"
   }
 }

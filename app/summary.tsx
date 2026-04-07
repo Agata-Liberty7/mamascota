@@ -439,7 +439,7 @@ export default function SummaryScreen() {
           });
 
           if (result === "pay") {
-            window.location.href = "https://mamascota.com";
+            router.push("/paywall");
           }
         } else {
           Alert.alert(
@@ -456,8 +456,8 @@ export default function SummaryScreen() {
                     defaultValue: "Upgrade",
                   })
                 ),
-                onPress: async () => {
-                  await Linking.openURL("https://mamascota.com");
+                onPress: () => {
+                  router.push("/paywall");
                 },
               },
               {

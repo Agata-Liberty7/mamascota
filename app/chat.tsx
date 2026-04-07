@@ -3,7 +3,7 @@ import LoadingPDF from "../components/ui/LoadingPDF";
 
 // @ts-ignore
 import { useHeaderHeight } from "@react-navigation/elements";
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
@@ -117,6 +117,7 @@ function formatAssistantBubbleContent(
 
 export default function ChatScreen() {
   const navigation = useNavigation();
+  const router = useRouter();
   const { pet: petParam } = useLocalSearchParams<{ pet?: string }>();
   const lang = (i18n.locale || "").split("-")[0];
   const isRTL = lang === "he";
@@ -839,7 +840,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
           });
 
           if (result === "pay") {
-            window.location.href = "https://mamascota.com";
+            router.push("/paywall");
           }
         } else {
           Alert.alert(
@@ -856,8 +857,8 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
                     defaultValue: "Upgrade",
                   })
                 ),
-                onPress: async () => {
-                  await Linking.openURL("https://mamascota.com");
+                onPress: () => {
+                  router.push("/paywall");
                 },
               },
               {

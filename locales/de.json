@@ -263,5 +263,16 @@
     "download_title": "CSV-Datei",
     "download_hint": "Laden Sie die Datei herunter und öffnen Sie sie dann in Excel, Numbers, Google Sheets oder OpenOffice.",
     "download_button": "Herunterladen"
+  },
+  
+  "paywall": {
+    "title": "Vollständiger Zugriff",
+    "subtitle": "Entsperre alle Funktionen",
+    "feature_1": "PDF-Bericht für den Tierarzt",
+    "feature_2": "Symptomverfolgung",
+    "feature_3": "Konsultationshistorie",
+    "price": "1,99 € / Monat",
+    "cta": "Vollständigen Zugriff erhalten",
+    "note": "Sie können jederzeit kündigen"
   }
 }

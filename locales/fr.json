@@ -265,5 +265,16 @@
     "download_title": "Fichier CSV",
     "download_hint": "Téléchargez le fichier, puis ouvrez-le dans Excel, Numbers, Google Sheets ou OpenOffice.",
     "download_button": "Télécharger"
+  },
+  
+  "paywall": {
+    "title": "Plein accès",
+    "subtitle": "Débloquez toutes les fonctionnalités",
+    "feature_1": "Rapport PDF pour le vétérinaire",
+    "feature_2": "Suivi des symptômes",
+    "feature_3": "Historique des consultations",
+    "price": "1,99 € / mois",
+    "cta": "Obtenez l'accès",
+    "note": "Vous pouvez annuler à tout moment"
   }
 }
