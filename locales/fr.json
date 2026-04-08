@@ -246,6 +246,7 @@
     "generating": "Création du PDF...",
     "preparing_language": "Préparation du rapport dans la langue sélectionnée...",
     "language_title": "Choisissez la langue du PDF",
+    "share_hint": "Partagez le rapport avec le vétérinaire avant la visite ou emportez-le avec vous — cela réduira considérablement le temps d’attente et l’assistance à votre animal",
 
     "diary_title": "Journal des observations",
     "diary_intro": "Enregistrez les observations quotidiennes et les changements de l’état de votre animal. Ces enregistrements aideront le vétérinaire à faire une évaluation plus précise de la situation.",

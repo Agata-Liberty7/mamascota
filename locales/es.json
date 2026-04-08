@@ -248,6 +248,7 @@
     "generating": "Creando PDF...",
     "preparing_language": "Preparando el informe en el idioma seleccionado...",
     "language_title": "Elige el idioma del PDF",
+    "share_hint": "Comparte el informe con el veterinario antes de la visita o llévalo contigo — esto reducirá significativamente el tiempo de espera y la asistencia a tu mascota",
 
     "diary_title": "Diario de observaciones",
     "diary_intro": "Registra las observaciones diarias y los cambios en el estado de tu mascota. Estas notas ayudarán al veterinario a evaluar la situación de manera más precisa.",

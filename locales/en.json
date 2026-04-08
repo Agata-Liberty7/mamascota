@@ -245,6 +245,7 @@
     "generating": "Generating PDF...",
     "preparing_language": "Preparing report in the selected language...",
     "language_title": "Choose PDF language",
+    "share_hint": "Share the report with your veterinarian before the visit or take it with you — this will significantly reduce the waiting time and assistance for your pet",
 
     "diary_title": "Observation diary",
     "diary_intro": "Here you can keep a diary of your pet’s condition and symptoms. These records will help the veterinarian make a more accurate assessment of the situation.",

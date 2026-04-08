@@ -247,6 +247,8 @@
     "generating": "Creazione del PDF...",
     "preparing_language": "Preparazione del rapporto nella lingua selezionata...",
     "language_title": "Scegli la lingua del PDF",
+    "share_hint": "Condividi il rapporto con il veterinario prima della visita o porta con te — questo ridurrà significativamente il tempo di attesa e l'assistenza al tuo animale",
+
 
     "diary_title": "Diario delle osservazioni",
     "diary_intro": "Registra ogni giorno i sintomi e i cambiamenti nello stato del tuo animale. Queste note aiuteranno il veterinario a valutare meglio la situazione.",

@@ -345,18 +345,7 @@ export async function exportSummaryPDF(sessionId: string) {
       i18n.locale ||
       "en";
 
-    const pdfAllowedRaw = await AsyncStorage.getItem(`pdfAllowed:${sessionId}`);
-
-    if (pdfAllowedRaw !== "1") {
-      alert(
-        i18n.t("chat.pdf_not_ready", {
-          defaultValue:
-            "The consultation is not finished yet. Complete it to generate a report.",
-        })
-      );
-      return;
-    }
-
+      
     const dtKey = `decisionTree:${sessionId}:${locale}`;
     const dtRaw = await AsyncStorage.getItem(dtKey);
 
@@ -582,6 +571,16 @@ h3 {
 
 <h1>${escapeHtml(normalizePdfText(title))}</h1>
 
+<p style="margin-top: 6px; font-size: 13px; color: #444;">
+  ${escapeHtml(normalizePdfText(
+    i18n.t("pdf.share_hint", {
+      locale,
+      defaultValue:
+        "Send this report to your veterinarian before the visit or bring it with you — it can significantly reduce consultation time.",
+    })
+  ))}
+</p>
+
 <h2>${escapeHtml(normalizePdfText(animalDataTitle))}</h2>
 
 <div class="animal-card">
@@ -683,24 +682,18 @@ h3 {
     const fileName = `mamascota_${safePetName}_${yyyy}-${mm}-${dd}_${hh}-${min}.pdf`;
 
     if (Platform.OS === "web") {
-      const printWindow = window.open("", "_blank");
+      const blob = new Blob([html], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
 
-      if (!printWindow) {
-        alert("Popup blocked");
-        return;
-      }
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName.replace(".pdf", ".html");
 
-      printWindow.document.open();
-      printWindow.document.write(
-        html.replace("<title>", `<title>${fileName} - `)
-      );
-      printWindow.document.close();
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
-      setTimeout(() => {
-        printWindow.focus();
-        printWindow.print();
-      }, 300);
-
+      URL.revokeObjectURL(url);
       return;
     }
 

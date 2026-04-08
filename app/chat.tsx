@@ -924,9 +924,12 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
 
       console.log("📄 PDF step 7: before exportSummaryPDF");
       await exportSummaryPDF(id);
-      console.log("📄 PDF step 8: after exportSummaryPDF");
 
-      await incrementPdfCount();
+      const alreadyGenerated = await AsyncStorage.getItem(`pdfGenerated:${id}`);
+      if (!alreadyGenerated) {
+        await incrementPdfCount();
+        await AsyncStorage.setItem(`pdfGenerated:${id}`, "1");
+      }
 
       await refreshPdfReadyState(id);
       console.log("📄 PDF step 9: done");

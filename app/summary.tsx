@@ -477,7 +477,12 @@ export default function SummaryScreen() {
 
       setPdfTextKey("pdf.generating");
       await exportSummaryPDF(id);
-      await incrementPdfCount();
+
+      const alreadyGenerated = await AsyncStorage.getItem(`pdfGenerated:${id}`);
+      if (!alreadyGenerated) {
+        await incrementPdfCount();
+        await AsyncStorage.setItem(`pdfGenerated:${id}`, "1");
+      }
     } catch (err) {
       console.error("PDF export error:", err);
     } finally {
