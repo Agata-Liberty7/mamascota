@@ -470,8 +470,12 @@ export default function SummaryScreen() {
         return;
       }
 
+      setPdfTextKey("pdf.preparing_language");
       setPdfLoading(true);
+
       await ensureDecisionTreeCachedForSummary(id, petName);
+
+      setPdfTextKey("pdf.generating");
       await exportSummaryPDF(id);
       await incrementPdfCount();
     } catch (err) {

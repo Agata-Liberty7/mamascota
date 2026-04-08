@@ -643,7 +643,10 @@ async function ensureDecisionTreeCached(conversationId: string) {
 }
 
 async function refreshDecisionTreeIfStale(conversationId: string) {
-  const locale = i18n.locale || "en";
+  const locale =
+    (await AsyncStorage.getItem("pdfLanguage")) ||
+    i18n.locale ||
+    "en";
   const dtKey = `decisionTree:${conversationId}:${locale}`;
   const raw = await AsyncStorage.getItem(dtKey);
 
@@ -909,11 +912,12 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
         return;
       }
 
+      setPdfGenerating(true);
+
       console.log("📄 PDF step 3: before refreshDecisionTreeIfStale");
       await refreshDecisionTreeIfStale(id);
       console.log("📄 PDF step 4: after refreshDecisionTreeIfStale");
 
-      setPdfGenerating(true);
       console.log("📄 PDF step 5: before saveSessionSilently");
       await saveSessionSilently(id);
       console.log("📄 PDF step 6: after saveSessionSilently");
