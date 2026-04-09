@@ -700,18 +700,17 @@ h3 {
         typeof window.matchMedia === "function" &&
         window.matchMedia("(display-mode: standalone)").matches;
 
+      const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+      const previewUrl = URL.createObjectURL(blob);
+
       if (isStandalone) {
-        document.open();
-        document.write(
-          html.replace("<title>", `<title>${fileName} - `)
-        );
-        document.close();
+        window.location.href = previewUrl;
         return;
       }
 
-      const previewWindow = window.open("", "_blank", "noopener,noreferrer");
+      const opened = window.open(previewUrl, "_blank");
 
-      if (!previewWindow) {
+      if (!opened) {
         alert(
           i18n.t("chat.pdf_error", {
             defaultValue: "Could not open the report preview.",
@@ -720,12 +719,12 @@ h3 {
         return;
       }
 
-      previewWindow.document.open();
-      previewWindow.document.write(
-        html.replace("<title>", `<title>${fileName} - `)
-      );
-      previewWindow.document.close();
-      previewWindow.focus();
+      setTimeout(() => {
+        try {
+          URL.revokeObjectURL(previewUrl);
+        } catch {}
+      }, 60000);
+
       return;
     }
 
