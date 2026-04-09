@@ -209,6 +209,19 @@ async function getSpeciesImageUri(species: string): Promise<string> {
   }
 }
 
+function isStandalonePwaWeb(): boolean {
+  if (Platform.OS !== "web") return false;
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+    return false;
+  }
+
+  try {
+    return window.matchMedia("(display-mode: standalone)").matches;
+  } catch {
+    return false;
+  }
+}
+
 async function buildDecisionTree(conversationId: string, locale: string) {
   const raw =
     (await AsyncStorage.getItem(`chatHistory:${conversationId}`)) ??
@@ -682,18 +695,37 @@ h3 {
     const fileName = `mamascota_${safePetName}_${yyyy}-${mm}-${dd}_${hh}-${min}.pdf`;
 
     if (Platform.OS === "web") {
-      const blob = new Blob([html], { type: "text/html" });
-      const url = URL.createObjectURL(blob);
+      const isStandalone =
+        typeof window !== "undefined" &&
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(display-mode: standalone)").matches;
 
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = fileName.replace(".pdf", ".html");
+      if (isStandalone) {
+        document.open();
+        document.write(
+          html.replace("<title>", `<title>${fileName} - `)
+        );
+        document.close();
+        return;
+      }
 
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      const previewWindow = window.open("", "_blank", "noopener,noreferrer");
 
-      URL.revokeObjectURL(url);
+      if (!previewWindow) {
+        alert(
+          i18n.t("chat.pdf_error", {
+            defaultValue: "Could not open the report preview.",
+          })
+        );
+        return;
+      }
+
+      previewWindow.document.open();
+      previewWindow.document.write(
+        html.replace("<title>", `<title>${fileName} - `)
+      );
+      previewWindow.document.close();
+      previewWindow.focus();
       return;
     }
 
