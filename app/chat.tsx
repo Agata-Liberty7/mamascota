@@ -115,6 +115,19 @@ function formatAssistantBubbleContent(
   return `${title.toLocaleUpperCase(i18n.locale || "en")}\n${rest}`;
 }
 
+function isStandalonePwaWeb(): boolean {
+  if (Platform.OS !== "web") return false;
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+    return false;
+  }
+
+  try {
+    return window.matchMedia("(display-mode: standalone)").matches;
+  } catch {
+    return false;
+  }
+}
+
 export default function ChatScreen() {
   const navigation = useNavigation();
   const router = useRouter();
@@ -799,7 +812,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
     }
   }
 
-  const handlePdfNowActual = async () => {
+  const handlePdfNowActual = async (previewWindow?: Window | null) => {
     if (pdfGenerating) return;
 
     try {
@@ -923,7 +936,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
       console.log("📄 PDF step 6: after saveSessionSilently");
 
       console.log("📄 PDF step 7: before exportSummaryPDF");
-      await exportSummaryPDF(id);
+      await exportSummaryPDF(id, previewWindow);
 
       const selectedPdfLang =
         (await AsyncStorage.getItem("pdfLanguage")) ||
@@ -1061,8 +1074,13 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
                     setPdfLangModalVisible(false);
 
                     setTimeout(async () => {
+                      const previewWindow =
+                        Platform.OS === "web"
+                          ? window.open("", isStandalonePwaWeb() ? "_self" : "_blank")
+                          : null;
+
                       setPdfTextKey("pdf.preparing_language");
-                      await handlePdfNowActual();
+                      await handlePdfNowActual(previewWindow);
                     }, 600);
                   }}
                 >

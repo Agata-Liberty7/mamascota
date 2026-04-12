@@ -39,6 +39,19 @@ type SummaryItem = {
 // перевод с fallback
 const t = (k: string, def: string) => i18n.t(k, { defaultValue: def });
 
+function isStandalonePwaWeb(): boolean {
+  if (Platform.OS !== "web") return false;
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+    return false;
+  }
+
+  try {
+    return window.matchMedia("(display-mode: standalone)").matches;
+  } catch {
+    return false;
+  }
+}
+
 async function getPetByName(petName: string) {
   try {
     const petsRaw = await AsyncStorage.getItem("pets:list");
@@ -382,7 +395,11 @@ export default function SummaryScreen() {
   // =========================
   // PDF EXPORT
   // =========================
-  const handleExportPDF = async (id: string, petName: string) => {
+  const handleExportPDF = async (
+    id: string,
+    petName: string,
+    previewWindow?: Window | null
+  ) => {
     try {
       const allowed = await isSessionPdfAllowed(id);
 
@@ -476,7 +493,7 @@ export default function SummaryScreen() {
       await ensureDecisionTreeCachedForSummary(id, petName);
 
       setPdfTextKey("pdf.generating");
-      await exportSummaryPDF(id);
+      await exportSummaryPDF(id, previewWindow);
 
       const selectedPdfLang =
         (await AsyncStorage.getItem("pdfLanguage")) ||
@@ -683,10 +700,16 @@ export default function SummaryScreen() {
                         if (!pendingPdfItem) return;
 
                         if (pendingPdfType === "summary") {
+                          const previewWindow =
+                            Platform.OS === "web"
+                              ? window.open("", isStandalonePwaWeb() ? "_self" : "_blank")
+                              : null;
+
                           setPdfTextKey("pdf.preparing_language");
                           await handleExportPDF(
                             pendingPdfItem.id,
-                            pendingPdfItem.petName
+                            pendingPdfItem.petName,
+                            previewWindow
                           );
                           return;
                         }

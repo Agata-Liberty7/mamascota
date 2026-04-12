@@ -330,7 +330,10 @@ async function getDecisionTreeCached(sessionId: string, locale: string) {
   }
 }
 
-export async function exportSummaryPDF(sessionId: string) {
+export async function exportSummaryPDF(
+  sessionId: string,
+  previewWindow?: Window | null
+) {
   try {
     const chatRaw =
       (await AsyncStorage.getItem(`chatHistory:${sessionId}`)) ??
@@ -695,29 +698,20 @@ h3 {
     const fileName = `mamascota_${safePetName}_${yyyy}-${mm}-${dd}_${hh}-${min}.pdf`;
 
     if (Platform.OS === "web") {
-      const isStandalone =
-        typeof window !== "undefined" &&
-        typeof window.matchMedia === "function" &&
-        window.matchMedia("(display-mode: standalone)").matches;
-
       const blob = new Blob([html], { type: "text/html;charset=utf-8" });
       const previewUrl = URL.createObjectURL(blob);
 
-      if (isStandalone) {
-        window.location.href = previewUrl;
-        return;
+      const targetWindow =
+        previewWindow && !previewWindow.closed
+          ? previewWindow
+          : window.open("", "_blank");
+
+      if (!targetWindow) {
+        URL.revokeObjectURL(previewUrl);
+        throw new Error("PdfPreviewWindowBlocked");
       }
 
-      const opened = window.open(previewUrl, "_blank");
-
-      if (!opened) {
-        alert(
-          i18n.t("chat.pdf_error", {
-            defaultValue: "Could not open the report preview.",
-          })
-        );
-        return;
-      }
+      targetWindow.location.href = previewUrl;
 
       setTimeout(() => {
         try {
