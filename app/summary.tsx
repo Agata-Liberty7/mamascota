@@ -397,8 +397,7 @@ export default function SummaryScreen() {
   // =========================
   const handleExportPDF = async (
     id: string,
-    petName: string,
-    previewWindow?: Window | null
+    petName: string
   ) => {
     try {
       const allowed = await isSessionPdfAllowed(id);
@@ -494,7 +493,7 @@ export default function SummaryScreen() {
       await ensureDecisionTreeCachedForSummary(id, petName);
 
       setPdfTextKey("pdf.generating");
-      await exportSummaryPDF(id, previewWindow);
+      await exportSummaryPDF(id);
 
       const selectedPdfLang =
         (await AsyncStorage.getItem("pdfLanguage")) ||
@@ -693,11 +692,6 @@ export default function SummaryScreen() {
                     key={langCode}
                     style={styles.pdfLangChip}
                     onPress={async () => {
-                      const previewWindow =
-                        Platform.OS === "web" && pendingPdfType === "summary"
-                          ? window.open("", isStandalonePwaWeb() ? "_self" : "_blank")
-                          : null;
-
                       await AsyncStorage.setItem("pdfLanguage", langCode);
                       setCurrentPdfLang(langCode);
                       setPdfLangModalVisible(false);
@@ -708,8 +702,7 @@ export default function SummaryScreen() {
                         setPdfTextKey("pdf.preparing_language");
                         await handleExportPDF(
                           pendingPdfItem.id,
-                          pendingPdfItem.petName,
-                          previewWindow
+                          pendingPdfItem.petName
                         );
                         return;
                       }

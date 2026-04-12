@@ -816,7 +816,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
     }
   }
 
-  const handlePdfNowActual = async (previewWindow?: Window | null) => {
+  const handlePdfNowActual = async () => {
     if (pdfGenerating) return;
 
     try {
@@ -941,7 +941,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
       console.log("📄 PDF step 6: after saveSessionSilently");
 
       console.log("📄 PDF step 7: before exportSummaryPDF");
-      await exportSummaryPDF(id, previewWindow);
+      await exportSummaryPDF(id);
 
       const selectedPdfLang =
         (await AsyncStorage.getItem("pdfLanguage")) ||
@@ -1074,17 +1074,12 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
                   key={langCode}
                   style={styles.pdfLangChip}
                   onPress={async () => {
-                    const previewWindow =
-                      Platform.OS === "web"
-                        ? window.open("", isStandalonePwaWeb() ? "_self" : "_blank")
-                        : null;
-
                     await AsyncStorage.setItem("pdfLanguage", langCode);
                     setCurrentPdfLang(langCode);
                     setPdfLangModalVisible(false);
 
                     setPdfTextKey("pdf.preparing_language");
-                    await handlePdfNowActual(previewWindow);
+                    await handlePdfNowActual();
                   }}
                 >
                   <Text
