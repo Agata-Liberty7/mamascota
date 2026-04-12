@@ -68,6 +68,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [animalProfile, setAnimalProfile] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
+  const [devMode, setDevMode] = useState(false);
 
   useEffect(() => {
     const loadFlags = async () => {
@@ -86,11 +87,15 @@ export default function BurgerMenu({ visible, onClose }: Props) {
       setTermsAccepted(isAccepted);
       setAnimalProfile(!!profile);
       setConversationId(cid || null);
+
+      const dev = await AsyncStorage.getItem("devMode");
+      setDevMode(dev === "1");
     };
 
     if (visible) {
       loadFlags();
     }
+    
   }, [visible]);
 
   // 🔥 Переход в чат — всегда проверяем, что есть conversationId
@@ -319,8 +324,21 @@ export default function BurgerMenu({ visible, onClose }: Props) {
             <Text style={styles.menuText}>{i18n.t("exit_button")}</Text>
           </TouchableOpacity>
 
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={async () => {
+              const next = devMode ? "0" : "1";
+              await AsyncStorage.setItem("devMode", next);
+              setDevMode(next === "1");
+            }}
+          >
+            <Text style={{ color: devMode ? "#43A047" : "#999" }}>
+              {devMode ? "🧪 Dev mode ON" : "🧪 Dev mode OFF"}
+            </Text>
+          </TouchableOpacity>
+
           {/* DEV — Trial controls */}
-          {__DEV__ && (
+          {devMode && (
             <View style={{ width: "100%", marginTop: 12 }}>
               <TouchableOpacity
                 style={styles.menuItem}
@@ -356,6 +374,18 @@ export default function BurgerMenu({ visible, onClose }: Props) {
                 }}
               >
                 <Text style={{ color: "#1E88E5" }}>DEV: Reset PDF count</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={async () => {
+                  const keys = await AsyncStorage.getAllKeys();
+                  const pdfKeys = keys.filter((k) => k.startsWith("pdfGenerated:"));
+                  await AsyncStorage.multiRemove(pdfKeys);
+                  console.log("🧹 PDF cache cleared");
+                }}
+              >
+                <Text style={{ color: "#FB8C00" }}>DEV: Clear PDF cache</Text>
               </TouchableOpacity>
             </View>
           )}
