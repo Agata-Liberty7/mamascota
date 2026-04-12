@@ -818,7 +818,8 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
     try {
       console.log("📄 PDF step 1: start");
 
-      const accessAllowed = await canGeneratePdf();
+      const devMode = (await AsyncStorage.getItem("devMode")) === "1";
+      const accessAllowed = devMode ? true : await canGeneratePdf();
 
       if (!accessAllowed) {
         if (Platform.OS === "web") {
