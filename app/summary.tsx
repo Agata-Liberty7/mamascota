@@ -693,34 +693,32 @@ export default function SummaryScreen() {
                     key={langCode}
                     style={styles.pdfLangChip}
                     onPress={async () => {
+                      const previewWindow =
+                        Platform.OS === "web" && pendingPdfType === "summary"
+                          ? window.open("", isStandalonePwaWeb() ? "_self" : "_blank")
+                          : null;
+
                       await AsyncStorage.setItem("pdfLanguage", langCode);
                       setCurrentPdfLang(langCode);
                       setPdfLangModalVisible(false);
 
-                      setTimeout(async () => {
-                        if (!pendingPdfItem) return;
+                      if (!pendingPdfItem) return;
 
-                        if (pendingPdfType === "summary") {
-                          const previewWindow =
-                            Platform.OS === "web"
-                              ? window.open("", isStandalonePwaWeb() ? "_self" : "_blank")
-                              : null;
-
-                          setPdfTextKey("pdf.preparing_language");
-                          await handleExportPDF(
-                            pendingPdfItem.id,
-                            pendingPdfItem.petName,
-                            previewWindow
-                          );
-                          return;
-                        }
-
-                        setPdfTextKey("pdf.generating");
-                        await handleExportObservationDiaryPDF(
+                      if (pendingPdfType === "summary") {
+                        setPdfTextKey("pdf.preparing_language");
+                        await handleExportPDF(
+                          pendingPdfItem.id,
                           pendingPdfItem.petName,
-                          pendingPdfItem.date
+                          previewWindow
                         );
-                      }, 600);
+                        return;
+                      }
+
+                      setPdfTextKey("pdf.generating");
+                      await handleExportObservationDiaryPDF(
+                        pendingPdfItem.petName,
+                        pendingPdfItem.date
+                      );
                     }}
                   >
                     <Text

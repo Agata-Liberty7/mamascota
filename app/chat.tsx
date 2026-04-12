@@ -1070,19 +1070,17 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
                   key={langCode}
                   style={styles.pdfLangChip}
                   onPress={async () => {
+                    const previewWindow =
+                      Platform.OS === "web"
+                        ? window.open("", isStandalonePwaWeb() ? "_self" : "_blank")
+                        : null;
+
                     await AsyncStorage.setItem("pdfLanguage", langCode);
                     setCurrentPdfLang(langCode);
                     setPdfLangModalVisible(false);
 
-                    setTimeout(async () => {
-                      const previewWindow =
-                        Platform.OS === "web"
-                          ? window.open("", isStandalonePwaWeb() ? "_self" : "_blank")
-                          : null;
-
-                      setPdfTextKey("pdf.preparing_language");
-                      await handlePdfNowActual(previewWindow);
-                    }, 600);
+                    setPdfTextKey("pdf.preparing_language");
+                    await handlePdfNowActual(previewWindow);
                   }}
                 >
                   <Text
