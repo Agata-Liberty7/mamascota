@@ -329,6 +329,34 @@ async function getDecisionTreeCached(sessionId: string, locale: string) {
     return null;
   }
 }
+async function waitForStoredSummaryAndDecisionTree(
+  sessionId: string,
+  locale: string,
+  attempts = 8,
+  delayMs = 150
+) {
+  for (let i = 0; i < attempts; i += 1) {
+    const summaryRaw = await AsyncStorage.getItem("chatSummary");
+    const dtRaw = await AsyncStorage.getItem(`decisionTree:${sessionId}:${locale}`);
+
+    let summary: any = null;
+
+    try {
+      const parsed = summaryRaw ? JSON.parse(summaryRaw) : [];
+      if (Array.isArray(parsed)) {
+        summary = parsed.find((s: any) => s?.id === sessionId) ?? null;
+      }
+    } catch {}
+
+    if (summary && dtRaw) {
+      return { summary, dtRaw };
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, delayMs));
+  }
+
+  return { summary: null, dtRaw: null };
+}
 
 export async function exportSummaryPDF(
   sessionId: string,
@@ -339,17 +367,7 @@ export async function exportSummaryPDF(
       (await AsyncStorage.getItem(`chatHistory:${sessionId}`)) ??
       (await AsyncStorage.getItem(`chat:history:${sessionId}`));
 
-    const summaryRaw = await AsyncStorage.getItem("chatSummary");
-
-    if (!chatRaw || !summaryRaw) {
-      alert(i18n.t("settings.clear_done_message"));
-      return;
-    }
-
-    const allSummaries = JSON.parse(summaryRaw);
-    const summary = allSummaries.find((s: any) => s.id === sessionId);
-
-    if (!summary) {
+    if (!chatRaw) {
       alert(i18n.t("settings.clear_done_message"));
       return;
     }
@@ -361,9 +379,18 @@ export async function exportSummaryPDF(
       i18n.locale ||
       "en";
 
-      
-    const dtKey = `decisionTree:${sessionId}:${locale}`;
-    const dtRaw = await AsyncStorage.getItem(dtKey);
+    const waited = await waitForStoredSummaryAndDecisionTree(sessionId, locale);
+    let summary = waited.summary;
+    const dtRaw = waited.dtRaw;
+
+    if (!summary) {
+      summary = {
+        id: sessionId,
+        date: new Date().toISOString(),
+        petName: i18n.t("chat.pet_default", { locale, defaultValue: "Pet" }),
+        symptomKeys: [],
+      };
+    }
 
     if (!dtRaw) {
       alert(

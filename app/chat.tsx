@@ -220,7 +220,11 @@ export default function ChatScreen() {
 
         setShowSelector(false);
         setIsPostSummaryUpdateMode(false);
-        await refreshPdfReadyState(id);
+
+        const allowed = await isSessionPdfAllowed(id);
+        setPdfConversationId(allowed ? id : null);
+
+        await refreshPdfReadyState(allowed ? id : null);
 
       } else {
         // если истории нет — начинаем новый диалог
