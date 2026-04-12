@@ -478,10 +478,17 @@ export default function SummaryScreen() {
       setPdfTextKey("pdf.generating");
       await exportSummaryPDF(id);
 
-      const alreadyGenerated = await AsyncStorage.getItem(`pdfGenerated:${id}`);
+      const selectedPdfLang =
+        (await AsyncStorage.getItem("pdfLanguage")) ||
+        i18n.locale ||
+        "en";
+
+      const pdfVariantKey = `pdfGenerated:${id}:${selectedPdfLang}`;
+      const alreadyGenerated = await AsyncStorage.getItem(pdfVariantKey);
+
       if (!alreadyGenerated) {
         await incrementPdfCount();
-        await AsyncStorage.setItem(`pdfGenerated:${id}`, "1");
+        await AsyncStorage.setItem(pdfVariantKey, "1");
       }
     } catch (err) {
       console.error("PDF export error:", err);
