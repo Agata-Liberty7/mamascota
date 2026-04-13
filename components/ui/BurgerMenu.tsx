@@ -380,9 +380,15 @@ export default function BurgerMenu({ visible, onClose }: Props) {
                 style={styles.menuItem}
                 onPress={async () => {
                   const keys = await AsyncStorage.getAllKeys();
-                  const pdfKeys = keys.filter((k) => k.startsWith("pdfGenerated:"));
+
+                  const pdfKeys = keys.filter((k) =>
+                    k.startsWith("pdfGenerated:") ||
+                    k.startsWith("decisionTree:")
+                  );
+
                   await AsyncStorage.multiRemove(pdfKeys);
-                  console.log("🧹 PDF cache cleared");
+
+                  console.log("🧹 PDF cache cleared (generated + decisionTree)");
                 }}
               >
                 <Text style={{ color: "#FB8C00" }}>DEV: Clear PDF cache</Text>

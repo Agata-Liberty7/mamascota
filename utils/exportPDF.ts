@@ -697,26 +697,22 @@ h3 {
     const fileName = `mamascota_${safePetName}_${yyyy}-${mm}-${dd}_${hh}-${min}.pdf`;
 
     if (Platform.OS === "web") {
-      const blob = new Blob([html], { type: "text/html;charset=utf-8" });
-      const previewUrl = URL.createObjectURL(blob);
-
       const targetWindow =
         previewWindow && !previewWindow.closed
           ? previewWindow
           : window.open("", "_blank");
 
       if (!targetWindow) {
-        URL.revokeObjectURL(previewUrl);
         throw new Error("PdfPreviewWindowBlocked");
       }
 
-      targetWindow.location.href = previewUrl;
-
-      setTimeout(() => {
-        try {
-          URL.revokeObjectURL(previewUrl);
-        } catch {}
-      }, 60000);
+      try {
+        targetWindow.document.open();
+        targetWindow.document.write(html);
+        targetWindow.document.close();
+      } catch {
+        targetWindow.location.href = `data:text/html;charset=utf-8,${encodeURIComponent(html)}`;
+      }
 
       return;
     }

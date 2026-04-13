@@ -1046,7 +1046,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
         behavior="padding"
         keyboardVerticalOffset={headerHeight}
       >
-        <LoadingPDF visible={pdfGenerating} textKey={pdfTextKey} />
+        <LoadingPDF visible={Platform.OS !== "web" && pdfGenerating} textKey={pdfTextKey} />
         
         <Modal transparent animationType="fade" visible={finalizing}>
           <View style={styles.overlay}>

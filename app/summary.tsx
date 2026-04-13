@@ -848,7 +848,7 @@ export default function SummaryScreen() {
         </Modal>
 
       {/* 🔥 МОДАЛКА ЗАГРУЗКИ PDF */}
-      <LoadingPDF visible={pdfLoading} textKey={pdfTextKey} />
+      <LoadingPDF visible={Platform.OS !== "web" && pdfLoading} textKey={pdfTextKey} />
     </View>
   );
 }
