@@ -816,7 +816,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
     }
   }
 
-  const handlePdfNowActual = async () => {
+  const handlePdfNowActual = async (previewWindow?: Window | null) => {
     if (pdfGenerating) return;
 
     try {
@@ -1074,12 +1074,54 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
                   key={langCode}
                   style={styles.pdfLangChip}
                   onPress={async () => {
+                    const previewWindow =
+                      Platform.OS === "web"
+                        ? window.open("", isStandalonePwaWeb() ? "_self" : "mamascota_pdf_preview")
+                        : null;
+
+                    if (previewWindow && Platform.OS === "web") {
+                      try {
+                        previewWindow.document.open();
+                        previewWindow.document.write(`
+                          <!DOCTYPE html>
+                          <html lang="${langCode}">
+                            <head>
+                              <meta charset="UTF-8" />
+                              <title>${String(
+                                i18n.t("pdf.generating", { defaultValue: "Preparing PDF..." })
+                              )}</title>
+                              <style>
+                                body {
+                                  margin: 0;
+                                  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+                                  display: flex;
+                                  align-items: center;
+                                  justify-content: center;
+                                  min-height: 100vh;
+                                  color: #333;
+                                  background: #fff;
+                                  text-align: center;
+                                  padding: 24px;
+                                }
+                              </style>
+                            </head>
+                            <body>
+                              <div>${String(
+                                i18n.t("pdf.generating", { defaultValue: "Preparing PDF..." })
+                              )}</div>
+                            </body>
+                          </html>
+                        `);
+                        previewWindow.document.close();
+                      } catch {}
+                    }
+
                     await AsyncStorage.setItem("pdfLanguage", langCode);
                     setCurrentPdfLang(langCode);
                     setPdfLangModalVisible(false);
 
                     setPdfTextKey("pdf.preparing_language");
-                    await handlePdfNowActual();
+                    await handlePdfNowActual(previewWindow);
                   }}
                 >
                   <Text

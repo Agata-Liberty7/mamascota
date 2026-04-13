@@ -331,7 +331,8 @@ async function getDecisionTreeCached(sessionId: string, locale: string) {
 }
 
 export async function exportSummaryPDF(
-  sessionId: string
+  sessionId: string,
+  previewWindow?: Window | null
 ) {
   try {
     const chatRaw =
@@ -699,12 +700,17 @@ h3 {
       const blob = new Blob([html], { type: "text/html;charset=utf-8" });
       const previewUrl = URL.createObjectURL(blob);
 
-      const targetWindow = window.open(previewUrl, "_blank");
+      const targetWindow =
+        previewWindow && !previewWindow.closed
+          ? previewWindow
+          : window.open("", "_blank");
 
       if (!targetWindow) {
         URL.revokeObjectURL(previewUrl);
         throw new Error("PdfPreviewWindowBlocked");
       }
+
+      targetWindow.location.href = previewUrl;
 
       setTimeout(() => {
         try {

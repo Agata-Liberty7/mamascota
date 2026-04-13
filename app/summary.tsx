@@ -397,7 +397,8 @@ export default function SummaryScreen() {
   // =========================
   const handleExportPDF = async (
     id: string,
-    petName: string
+    petName: string,
+    previewWindow?: Window | null
   ) => {
     try {
       const allowed = await isSessionPdfAllowed(id);
@@ -493,7 +494,7 @@ export default function SummaryScreen() {
       await ensureDecisionTreeCachedForSummary(id, petName);
 
       setPdfTextKey("pdf.generating");
-      await exportSummaryPDF(id);
+      await exportSummaryPDF(id, previewWindow);
 
       const selectedPdfLang =
         (await AsyncStorage.getItem("pdfLanguage")) ||
@@ -692,6 +693,48 @@ export default function SummaryScreen() {
                     key={langCode}
                     style={styles.pdfLangChip}
                     onPress={async () => {
+                      const previewWindow =
+                        Platform.OS === "web" && pendingPdfType === "summary"
+                          ? window.open("", isStandalonePwaWeb() ? "_self" : "mamascota_pdf_preview")
+                          : null;
+
+                      if (previewWindow && Platform.OS === "web") {
+                        try {
+                          previewWindow.document.open();
+                          previewWindow.document.write(`
+                            <!DOCTYPE html>
+                            <html lang="${langCode}">
+                              <head>
+                                <meta charset="UTF-8" />
+                                <title>${String(
+                                  i18n.t("pdf.generating", { defaultValue: "Preparing PDF..." })
+                                )}</title>
+                                <style>
+                                  body {
+                                    margin: 0;
+                                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    min-height: 100vh;
+                                    color: #333;
+                                    background: #fff;
+                                    text-align: center;
+                                    padding: 24px;
+                                  }
+                                </style>
+                              </head>
+                              <body>
+                                <div>${String(
+                                  i18n.t("pdf.generating", { defaultValue: "Preparing PDF..." })
+                                )}</div>
+                              </body>
+                            </html>
+                          `);
+                          previewWindow.document.close();
+                        } catch {}
+                      }
+
                       await AsyncStorage.setItem("pdfLanguage", langCode);
                       setCurrentPdfLang(langCode);
                       setPdfLangModalVisible(false);
@@ -702,7 +745,8 @@ export default function SummaryScreen() {
                         setPdfTextKey("pdf.preparing_language");
                         await handleExportPDF(
                           pendingPdfItem.id,
-                          pendingPdfItem.petName
+                          pendingPdfItem.petName,
+                          previewWindow
                         );
                         return;
                       }
