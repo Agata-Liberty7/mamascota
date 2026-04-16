@@ -1,73 +1,109 @@
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
+// ===============================
+//  🌐 SERVER.MJS — ЧИСТАЯ ВЕРСИЯ
+// ===============================
 
+// ES module utils
+import path from "path";
+import { fileURLToPath } from "url";
+import fs from "fs/promises";
+
+
+// Node
 import os from "os";
 
+// Express stack
 import express from "express";
-const cors = require("cors");
-import "dotenv/config";
+import cors from "cors";
 
+// Dotenv (важно — грузим .env вручную!)
+import dotenv from "dotenv";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(__dirname, ".env") });
+// 📄 Путь к системному промпту Mamascota Familiar
+const PROMPT_PATH = path.join(__dirname, "profiles", "mamascota-familiar.md");
+
+// 🧠 Глобальная переменная для текста промпта
+let SYSTEM_PROMPT = "";
+
+
+// Mamascota logic
 import { processMessage } from "./mamascota-agent.mjs";
 import { loadKnowledgeBase } from "./utils/knowledgeBase-loader.mjs";
+
+// ===============================
+//  🚀 EXPRESS И КОНФИГУРАЦИЯ
+// ===============================
 
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: "2mb" }));
 
-// 🧠 Тестовая проверка YAML при старте
+// ===============================
+//  🧠 ТЕСТ ЗАГРУЗКИ YAML ПРИ СТАРТЕ
+// ===============================
 (async () => {
-  console.log("🧠 Тест: пробую загрузить YAML при старте прокси...");
-  const kb = await loadKnowledgeBase();
-  console.log("✅ Тестовая загрузка YAML завершена, найдено:", kb?.length || 0);
+  try {
+    console.log("🧠 Тест: пробую загрузить YAML при старте прокси...");
+    const kb = await loadKnowledgeBase();
+    console.log("✅ YAML загружен, алгоритмов:", kb?.length || 0);
+
+    console.log("📄 Тест: пробую загрузить системный промпт Mamascota Familiar...");
+    SYSTEM_PROMPT = await fs.readFile(PROMPT_PATH, "utf8");
+    console.log("✅ Промпт загружен, длина:", SYSTEM_PROMPT.length);
+  } catch (err) {
+    console.error("❌ Ошибка инициализации (YAML/Prompt):", err);
+  }
 })();
 
-// 🧠 Глобальное хранилище диалоговой памяти (RAM)
-const conversationMemory = {};
-// Формат: { [conversationId]: [{ role: "user"|"assistant"|"system", content: string }] }
 
+// ===============================
+//  💬 ПАМЯТЬ ДИАЛОГОВ
+// ===============================
+const conversationMemory = {}; 
+// { conversationId: [ {role, content}, ... ] }
+
+// ===============================
+//  📩 ENDPOINT: /agent
+// ===============================
 app.post("/agent", async (req, res) => {
   try {
-    // 🔹 1. Читаем данные из тела запроса
     const { message = "", pet = {}, symptomKeys = [], userLang } = req.body || {};
 
-    // 🔹 2. Проверяем наличие питомца
     if (!pet?.species) {
-      return res.status(400).json({ ok: false, error: "Нет данных о питомце" });
+      return res.status(400).json({ ok: false, error: "NO_PET_DATA" });
     }
 
-    // 🔹 3. Определяем язык (userLang → pet.lang → .env → en)
     const lang = userLang || pet?.lang || process.env.DEFAULT_LANG || "en";
+    // 🌐 LANG OVERRIDE — принудительная смена языка агента в текущей сессии
+    const langOverride = userLang || "en";
 
-    console.log("📨 Запрос получен:", { message, pet, symptomKeys, lang });
+    console.log("🌐 /agent call:", {
+      userLang,
+      lang,
+      langOverride,
+      conversationIdRaw: req.body?.conversationId,
+    });
 
-    // 🧵 conversationId: если не пришёл от клиента — создаём новый
     const conversationId = req.body.conversationId || Date.now().toString();
-    console.log("🧵 ID диалога:", conversationId);
 
-    // 🧩 Инициализация истории, если нет
+
     if (!conversationMemory[conversationId]) {
       conversationMemory[conversationId] = [];
     }
 
-    // Добавляем текущее сообщение пользователя в историю
-    conversationMemory[conversationId].push({
-      role: "user",
-      content: message,
-    });
+    conversationMemory[conversationId].push({ role: "user", content: message });
 
-    // 🔹 4. Передаём язык и историю в процессинг
     const reply = await processMessage(
       message,
       pet,
       symptomKeys,
-      lang,
+      lang,              // старое поведение не трогаем
       conversationId,
-      conversationMemory[conversationId] // история диалога
+      conversationMemory[conversationId],
+      langOverride       // добавляем override
     );
 
-    console.log("📤 Ответ сформирован:", reply);
 
-    // 💬 Сохраняем ответ агента в историю
     if (reply?.reply) {
       conversationMemory[conversationId].push({
         role: "assistant",
@@ -75,32 +111,38 @@ app.post("/agent", async (req, res) => {
       });
     }
 
-    // 🔹 5. Возвращаем ответ клиенту
     res.json(reply);
   } catch (err) {
-    console.error("✖ Ошибка сервера:", err);
-    return res.status(500).json({ ok: false, error: String(err) });
+    console.error("❌ Ошибка сервера /agent:", err);
+    res.status(500).json({ ok: false, error: String(err) });
   }
 });
+
+// ===============================
+//  🌐 LOCAL IP DETECT
+// ===============================
 function getLocalIP() {
   const interfaces = os.networkInterfaces();
   for (const name in interfaces) {
     for (const iface of interfaces[name]) {
-      if (iface.family === "IPv4" && !iface.internal) {
-        return iface.address;
-      }
+      if (iface.family === "IPv4" && !iface.internal) return iface.address;
     }
   }
   return "localhost";
 }
 
+// ===============================
+//  🚀 START SERVER
+// ===============================
 const PORT = process.env.PORT || 3001;
 const localIP = getLocalIP();
 
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`✅ Прокси активен на всех интерфейсах: http://0.0.0.0:${PORT}`);
-  console.log(`🌐 Доступен по LAN: http://${localIP}:${PORT}`);
+  console.log(`\n==================================`);
+  console.log(`✅ Прокси запущен`);
+  console.log(`🌍 Local:        http://${localIP}:${PORT}`);
+  console.log(`🌐 LAN/0.0.0.0:  http://0.0.0.0:${PORT}`);
+  console.log(`==================================\n`);
 });
 
 export default app;
-

@@ -1,5 +1,9 @@
 {
   "expo": {
+    "extra": {
+      "proxyUrl": "https://agent-perf.mamascota.com/agent",
+      "fallbackProxyUrl": "https://agent2.mamascota.com/agent"
+    },
     "name": "mamascota-familiar",
     "slug": "mamascota-familiar",
     "version": "1.0.0",

@@ -1,0 +1,585 @@
+pets:
+  # --- Собаки (Полный список из предоставленного файла) ---
+  dogs:
+    - breed: "Affenpinscher"
+      size_class: "Миниатюрная"
+      weight_kg: "3-4.5"
+      height_cm: "23-30" # Высота в холке (в/х)
+    
+    - breed: "Afghan Hound"
+      size_class: "Крупная"
+      weight_kg: "20-27"
+      height_cm: "64-74"
+    
+    - breed: "Airdale Terrier"
+      size_class: "Крупная"
+      weight_kg: "23-29"
+      height_cm: "58-61"
+      
+    - breed: "Akita"
+      size_class: "Очень крупная"
+      weight_kg: "32-59"
+      height_cm: "61-71"
+
+    - breed: "Alaskan Malamute"
+      size_class: "Очень крупная"
+      weight_kg: "32-43"
+      height_cm: "58-64"
+
+    - breed: "American Foxhound"
+      size_class: "Крупная"
+      weight_kg: "29-32"
+      height_cm: "53-64"
+
+    - breed: "American Staffordshire Terrier"
+      size_class: "Средняя"
+      weight_kg: "25-30"
+      height_cm: "43-48"
+      
+    - breed: "American Water Spaniel"
+      size_class: "Средняя"
+      weight_kg: "11-20"
+      height_cm: "38-46"
+
+    - breed: "Australian Cattle Dog"
+      size_class: "Средняя"
+      weight_kg: "15-20"
+      height_cm: "43-51"
+      
+    - breed: "Basenji"
+      size_class: "Средняя/Малая"
+      weight_kg: "10-12"
+      height_cm: "40-43"
+
+    - breed: "Basset Hound"
+      size_class: "Средняя"
+      weight_kg: "20-30"
+      height_cm: "33-38"
+      
+    - breed: "Beagle"
+      size_class: "Малая/Средняя"
+      weight_kg: "8-14"
+      height_cm: "33-41"
+
+    - breed: "Bearded Collie"
+      size_class: "Крупная"
+      weight_kg: "18-27"
+      height_cm: "51-56"
+
+    - breed: "Bedlington Terrier"
+      size_class: "Средняя/Малая"
+      weight_kg: "8-10"
+      height_cm: "41-43"
+
+    - breed: "Bernesse Mountain Dog"
+      size_class: "Гигантская"
+      weight_kg: "35-50"
+      height_cm: "58-70"
+      
+    - breed: "Bichon Frise"
+      size_class: "Малая"
+      weight_kg: "5-8"
+      height_cm: "23-30"
+
+    - breed: "Bloodhound"
+      size_class: "Гигантская"
+      weight_kg: "36-50"
+      height_cm: "58-69"
+
+    - breed: "Blue Tick Hound"
+      size_class: "Крупная"
+      weight_kg: "20-36"
+      height_cm: "53-69"
+
+    - breed: "Border Collie"
+      size_class: "Средняя"
+      weight_kg: "12-20"
+      height_cm: "46-56"
+      
+    - breed: "Border Terrier"
+      size_class: "Малая"
+      weight_kg: "5-7"
+      height_cm: "28-40"
+      
+    - breed: "Borzoi"
+      size_class: "Гигантская"
+      weight_kg: "27-48"
+      height_cm: "68-85"
+
+    - breed: "Boston Terrier"
+      size_class: "Малая"
+      weight_kg: "4.5-11"
+      height_cm: "38-43"
+      
+    - breed: "Bouvier de Flandres"
+      size_class: "Крупная"
+      weight_kg: "27-40"
+      height_cm: "59-68"
+      
+    - breed: "Boxer"
+      size_class: "Крупная"
+      weight_kg: "25-32"
+      height_cm: "53-63"
+
+    - breed: "Briard"
+      size_class: "Крупная"
+      weight_kg: "35-40"
+      height_cm: "56-68"
+
+    - breed: "Brittany Spaniel"
+      size_class: "Средняя"
+      weight_kg: "14-18"
+      height_cm: "47-52"
+
+    - breed: "Brussels Griffon"
+      size_class: "Миниатюрная"
+      weight_kg: "3.5-5"
+      height_cm: "18-20"
+
+    - breed: "Bull Terrier"
+      size_class: "Средняя"
+      weight_kg: "22-38"
+      height_cm: "45-55"
+
+    - breed: "Bull Terrier Miniatura"
+      size_class: "Малая"
+      weight_kg: "11-15"
+      height_cm: "25-35"
+
+    - breed: "Bulldog Francés"
+      size_class: "Малая"
+      weight_kg: "8-14"
+      height_cm: "28-33"
+
+    - breed: "Bulldog Inglés"
+      size_class: "Средняя"
+      weight_kg: "18-25"
+      height_cm: "31-40"
+
+    - breed: "Bullmastiff"
+      size_class: "Гигантская"
+      weight_kg: "50-59"
+      height_cm: "61-69"
+
+    - breed: "Cairn Terrier"
+      size_class: "Малая"
+      weight_kg: "6-7"
+      height_cm: "28-31"
+
+    - breed: "Caniche Miniatura"
+      size_class: "Малая"
+      weight_kg: "6.5-9"
+      height_cm: "28-38"
+
+    - breed: "Caniche Standard"
+      size_class: "Крупная"
+      weight_kg: "20-32"
+      height_cm: "45-60"
+
+    - breed: "Caniche Toy"
+      size_class: "Миниатюрная"
+      weight_kg: "2-3"
+      height_cm: "до 28"
+
+    - breed: "Cardigan Welsh Corgi"
+      size_class: "Малая"
+      weight_kg: "10-15"
+      height_cm: "25-30"
+
+    - breed: "Cavalier King Charles Spaniel"
+      size_class: "Малая"
+      weight_kg: "5.5-8"
+      height_cm: "30-33"
+
+    - breed: "Chesapeake Bay Retriever"
+      size_class: "Крупная"
+      weight_kg: "25-36"
+      height_cm: "53-66"
+
+    - breed: "Chihuahua"
+      size_class: "Миниатюрная"
+      weight_kg: "1.5-3.0"
+      height_cm: "15-23"
+
+    - breed: "Chow Chow"
+      size_class: "Крупная"
+      weight_kg: "20-32"
+      height_cm: "46-56"
+
+    - breed: "Clumber Spaniel"
+      size_class: "Средняя/Крупная"
+      weight_kg: "25-39"
+      height_cm: "48-51"
+
+    - breed: "Cocker Spaniel Americano"
+      size_class: "Средняя"
+      weight_kg: "11-13"
+      height_cm: "34-39"
+
+    - breed: "Cocker Spaniel Inglés"
+      size_class: "Средняя"
+      weight_kg: "12-16"
+      height_cm: "38-41"
+
+    - breed: "Collie"
+      size_class: "Крупная"
+      weight_kg: "18-30"
+      height_cm: "51-61"
+
+    - breed: "Coonhound Negro y Marrón"
+      size_class: "Крупная"
+      weight_kg: "20-34"
+      height_cm: "58-69"
+
+    - breed: "Curly-Coated Retriever"
+      size_class: "Крупная"
+      weight_kg: "32-41"
+      height_cm: "63-69"
+
+    - breed: "Dachshund Miniatura"
+      size_class: "Малая"
+      weight_kg: "до 5"
+      height_cm: "13-18"
+
+    - breed: "Dachshund Standard"
+      size_class: "Малая"
+      weight_kg: "7-15"
+      height_cm: "18-25"
+
+    - breed: "Dálmata"
+      size_class: "Крупная"
+      weight_kg: "15-32"
+      height_cm: "54-61"
+
+    - breed: "Dandie Dinmont Terrier"
+      size_class: "Малая"
+      weight_kg: "8-11"
+      height_cm: "20-28"
+
+    - breed: "Doberman Pinscher"
+      size_class: "Крупная"
+      weight_kg: "32-45"
+      height_cm: "61-72"
+
+    - breed: "Dogo Argentino"
+      size_class: "Очень крупная"
+      weight_kg: "40-45"
+      height_cm: "60-68"
+
+    - breed: "Dogo de Burdeos"
+      size_class: "Гигантская"
+      weight_kg: "54-65"
+      height_cm: "58-69"
+
+    - breed: "Elkhound Norwegian"
+      size_class: "Средняя"
+      weight_kg: "20-23"
+      height_cm: "48-52"
+
+    - breed: "English Springer Spaniel"
+      size_class: "Средняя"
+      weight_kg: "18-25"
+      height_cm: "48-51"
+
+    - breed: "Finnish Spitz"
+      size_class: "Средняя"
+      weight_kg: "10-13"
+      height_cm: "40-50"
+
+    - breed: "Flat Coated Retriever"
+      size_class: "Крупная"
+      weight_kg: "25-36"
+      height_cm: "56-61"
+
+    - breed: "Golden Retriever"
+      size_class: "Крупная"
+      weight_kg: "25-34"
+      height_cm: "55-61"
+
+    - breed: "Gran Danés"
+      size_class: "Гигантская"
+      weight_kg: "45-90"
+      height_cm: "71-86"
+
+    - breed: "Great Pyrenees"
+      size_class: "Гигантская"
+      weight_kg: "45-56"
+      height_cm: "64-81"
+
+    - breed: "Greyhound"
+      size_class: "Крупная"
+      weight_kg: "25-40"
+      height_cm: "68-76"
+
+    - breed: "Irish Wolfhound"
+      size_class: "Гигантская"
+      weight_kg: "40-70"
+      height_cm: "71-86"
+
+    - breed: "Italian Greyhound"
+      size_class: "Миниатюрная"
+      weight_kg: "3-5"
+      height_cm: "32-38"
+
+    - breed: "Jack Russell Terrier"
+      size_class: "Малая"
+      weight_kg: "6-8"
+      height_cm: "25-30"
+
+    - breed: "Keeshond"
+      size_class: "Средняя"
+      weight_kg: "16-20"
+      height_cm: "43-48"
+
+    - breed: "Labrador Retriever"
+      size_class: "Крупная"
+      weight_kg: "25-36"
+      height_cm: "55-62"
+      
+    - breed: "Lhasa Apso"
+      size_class: "Малая"
+      weight_kg: "5.5-8"
+      height_cm: "25-28"
+
+    - breed: "Maltés"
+      size_class: "Миниатюрная"
+      weight_kg: "3-4"
+      height_cm: "20-25"
+
+    - breed: "Mastiff"
+      size_class: "Гигантская"
+      weight_kg: "50-100"
+      height_cm: "70-91"
+
+    - breed: "Mastín Tibetano"
+      size_class: "Гигантская"
+      weight_kg: "45-73"
+      height_cm: "61-71"
+
+    - breed: "Ovejero Alemán"
+      size_class: "Крупная"
+      weight_kg: "22-40"
+      height_cm: "55-65"
+      
+    - breed: "Ovejero Australiano"
+      size_class: "Средняя"
+      weight_kg: "16-29"
+      height_cm: "46-58"
+      
+    - breed: "Ovejero Belga"
+      size_class: "Крупная"
+      weight_kg: "20-30"
+      height_cm: "56-66"
+
+    - breed: "Papillón"
+      size_class: "Миниатюрная"
+      weight_kg: "3-4.5"
+      height_cm: "20-28"
+
+    - breed: "Pembroke Welsh Corgi"
+      size_class: "Малая"
+      weight_kg: "10-14"
+      height_cm: "25-30"
+
+    - breed: "Pequinés"
+      size_class: "Малая"
+      weight_kg: "3-6.5"
+      height_cm: "15-23"
+
+    - breed: "Pomerania"
+      size_class: "Миниатюрная"
+      weight_kg: "1.5-3.5"
+      height_cm: "18-30"
+
+    - breed: "Pug"
+      size_class: "Малая"
+      weight_kg: "6-8"
+      height_cm: "25-33"
+
+    - breed: "Rhodesian Ridgeback"
+      size_class: "Крупная"
+      weight_kg: "36-42"
+      height_cm: "61-69"
+
+    - breed: "Rottweiler"
+      size_class: "Крупная"
+      weight_kg: "35-60"
+      height_cm: "56-69"
+
+    - breed: "Samoyedo"
+      size_class: "Крупная"
+      weight_kg: "16-30"
+      height_cm: "46-56"
+
+    - breed: "San Bernardo"
+      size_class: "Гигантская"
+      weight_kg: "65-120"
+      height_cm: "65-90"
+
+    - breed: "Schnauzer Gigante"
+      size_class: "Крупная"
+      weight_kg: "35-47"
+      height_cm: "60-70"
+
+    - breed: "Schnauzer Miniatura"
+      size_class: "Малая"
+      weight_kg: "5-9"
+      height_cm: "30-35"
+
+    - breed: "Scottish Terrier"
+      size_class: "Малая"
+      weight_kg: "8.5-10.5"
+      height_cm: "25-28"
+
+    - breed: "Shar Pei Chino"
+      size_class: "Средняя"
+      weight_kg: "18-25"
+      height_cm: "46-51"
+
+    - breed: "Shih Tzu"
+      size_class: "Малая"
+      weight_kg: "4-7.5"
+      height_cm: "20-28"
+
+    - breed: "Siberian Husky"
+      size_class: "Средняя"
+      weight_kg: "16-27"
+      height_cm: "50-60"
+      
+    - breed: "Terranova"
+      size_class: "Гигантская"
+      weight_kg: "45-68"
+      height_cm: "66-71"
+
+    - breed: "Terrier Irlandés"
+      size_class: "Средняя"
+      weight_kg: "11-12"
+      height_cm: "46-48"
+
+    - breed: "Tibetan Terrier"
+      size_class: "Средняя"
+      weight_kg: "8-14"
+      height_cm: "35-41"
+
+    - breed: "Vizsla"
+      size_class: "Крупная"
+      weight_kg: "20-30"
+      height_cm: "53-64"
+
+    - breed: "Weimaraner"
+      size_class: "Крупная"
+      weight_kg: "25-40"
+      height_cm: "58-69"
+
+    - breed: "West Highland White Terrier"
+      size_class: "Малая"
+      weight_kg: "6-10"
+      height_cm: "25-28"
+
+  # --- Кошки (на основе общих стандартов) ---
+  cats:
+    - breed: "Abyssinian"
+      size_class: "Средняя"
+      weight_kg: "3-5"
+      length_cm: "40-50" 
+
+    - breed: "American Shorthair"
+      size_class: "Средняя/Крупная"
+      weight_kg: "3.5-7"
+      length_cm: "40-55"
+
+    - breed: "Bengal" 
+      size_class: "Крупная"
+      weight_kg: "4.5-8"
+      length_cm: "45-60"
+
+    - breed: "British Shorthair"
+      size_class: "Крупная"
+      weight_kg: "4-8"
+      length_cm: "45-60"
+
+    - breed: "Burmese"
+      size_class: "Средняя"
+      weight_kg: "3-6.5"
+      length_cm: "35-45"
+
+    - breed: "Cornish Rex" 
+      size_class: "Средняя/Малая"
+      weight_kg: "2.5-4.5"
+      length_cm: "30-40"
+      
+    - breed: "Devon Rex"
+      size_class: "Средняя/Малая"
+      weight_kg: "2.5-4.5"
+      length_cm: "30-40"
+      
+    - breed: "Europeo Común (Европейская короткошерстная)" # ДОБАВЛЕНО
+      size_class: "Средняя"
+      weight_kg: 
+        male: "4-6"
+        female: "3-5"
+      length_cm: "40-50"
+
+    - breed: "Himalayan"
+      size_class: "Средняя"
+      weight_kg: "3-5.5"
+      length_cm: "40-50"
+
+    - breed: "Maine Coon"
+      size_class: "Очень крупная"
+      weight_kg:
+        male: "6-11"
+        female: "4-7"
+      length_cm: "80-100" 
+
+    - breed: "Manx"
+      size_class: "Средняя"
+      weight_kg: "3.5-5.5"
+      length_cm: "35-45"
+
+    - breed: "Norwegian Forest Cat"
+      size_class: "Крупная"
+      weight_kg: "5.5-9"
+      length_cm: "50-70"
+      
+    - breed: "Persian"
+      size_class: "Средняя"
+      weight_kg: "3-5.5"
+      length_cm: "40-50"
+
+    - breed: "Ragdoll"
+      size_class: "Крупная"
+      weight_kg:
+        male: "6-9"
+        female: "4.5-7"
+      length_cm: "60-90"
+
+    - breed: "Russian Blue"
+      size_class: "Средняя"
+      weight_kg: "3.5-6.5"
+      length_cm: "40-50"
+
+    - breed: "Scottish Fold"
+      size_class: "Средняя"
+      weight_kg: "3-6"
+      length_cm: "40-50"
+
+    - breed: "Siamese"
+      size_class: "Средняя"
+      weight_kg: "3-5"
+      length_cm: "40-50"
+
+    - breed: "Sphynx"
+      size_class: "Средняя"
+      weight_kg: "3.5-7"
+      length_cm: "35-45"
+
+    - breed: "Turkish Angora"
+      size_class: "Средняя"
+      weight_kg: "3-5"
+      length_cm: "30-40"
+
+    - breed: "Turkish Van"
+      size_class: "Крупная"
+      weight_kg: "4.5-7"
+      length_cm: "40-60"

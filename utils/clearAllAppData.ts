@@ -1,39 +1,69 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// utils/clearAllAppData.ts
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /**
- * Полная очистка всех данных приложения.
- * Удаляет все ключи, кроме системных от Expo.
- * Вызывает безопасную перезагрузку состояния.
+ * Полная очистка рабочих данных приложения:
+ * - питомцы (новая и старая модели),
+ * - сессии и история чатов,
+ * - симптомы.
+ *
+ * Специально НЕ трогаем:
+ * - selectedLanguage
+ * - флаги онбординга / уведомлений
+ * - настройки масштаба текста
  */
-export const clearAllAppData = async () => {
+export async function clearAllAppData() {
   try {
-    // 1. Собираем все наши ключи
-    const keys = await AsyncStorage.getAllKeys();
+    const allKeys = await AsyncStorage.getAllKeys();
 
-    // 2. Фильтруем, чтобы случайно не удалить системные ключи Expo
-    const toDelete = keys.filter((key) =>
-      [
-        "petsList",
-        "activePetId",
-        "selectedLanguage",
-        "onboardingSeen",
-        "hasSeenLanguageNotice",
-        "sessionSaved",
-        "chatSummary",
-        "conversationId",
-        "symptomKeys",
-        "selectedSymptoms",
-        "symptoms",
-        "chatHistory",
-        "animalProfile",
-        "currentPetId",
-      ].includes(key)
+    const explicitKeys = [
+      // 🐾 Питомцы — новая модель
+      'pets:list',
+      'pets:activeId',
+
+      // 🐾 Питомцы — легаси-ключи (на всякий случай, чтобы вычистить хвосты)
+      'pets',
+      'petsList',
+      'activePetId',
+      'currentPetId',
+      'animalProfile',
+
+      // 💬 Чат / сессии
+      'chatSummary', 
+      'sessionSaved',
+      'lastChatSessionExists',
+      'restoreFromSummary',
+      'restoreFromHistory',
+
+      // ⚖️ Согласие с условиями и онбординг
+      'acceptedTerms',
+      'termsAccepted',
+      'seenOnboarding',   // каноничный флаг
+      'onboardingSeen',   // на всякий случай: чистим старый ключ, если где-то остался
+
+      // 🤒 Симптомы
+      'symptomKeys',
+      'selectedSymptoms',
+      'symptoms',
+
+      'access.pdfLangSet',
+      'access.trialStart',
+      'access.isPaid',
+    ];
+
+    const keysToRemove = allKeys.filter((key) =>
+      explicitKeys.includes(key) ||
+      key.startsWith('chatHistory:') ||
+      key.startsWith('chatSummary:')
     );
 
-    await AsyncStorage.multiRemove(toDelete);
-
-    console.log("🧹 Полная очистка завершена:", toDelete);
-  } catch (error) {
-    console.error("Ошибка очистки данных приложения:", error);
+    if (keysToRemove.length > 0) {
+      await AsyncStorage.multiRemove(keysToRemove);
+      console.log('🧹 clearAllAppData removed keys:', keysToRemove);
+    } else {
+      console.log('🧹 clearAllAppData: nothing to remove');
+    }
+  } catch (err) {
+    console.error('❌ clearAllAppData error:', err);
   }
-};
+}

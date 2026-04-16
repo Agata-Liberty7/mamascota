@@ -15,6 +15,10 @@ export const detectAndSetInitialLanguage = async () => {
     lang = SUPPORTED.includes(systemLang) ? systemLang : "en";
 
     await AsyncStorage.setItem("selectedLanguage", lang);
+
+    // небольшой delay для Android, чтобы LanguageNotice успел смонтироваться
+    await new Promise(r => setTimeout(r, 50));
+
   }
 
   // 3. применяем язык

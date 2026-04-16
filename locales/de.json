@@ -2,23 +2,27 @@
   "language_notice_title": "Sprache erkannt",
   "language_notice_message": "Die Sprache der Benutzeroberfläche wurde automatisch festgelegt.",
   "ok_button": "OK",
+  "alert_title": "Achtung",
+  "paywall_trial_expired": "Ihr Testzeitraum ist abgelaufen. Um fortzufahren, bitte abonnieren Sie den Zugang.",
+  "paywall_limit_reached": "Sie haben das Limit für kostenlose Nutzung erreicht. Um fortzufahren, bitte abonnieren Sie den Zugang.",
+  "paywall_go_to_payment": "Zur Zahlung gehen",
 
   "exit_title": "Möchten Sie beenden?",
-  "exit_message": "Sie können Ihre Sitzung speichern, um später fortzufahren, oder alle Daten löschen.",
+  "exit_message": "Sie können Ihre Sitzung speichern, um später fortzufahren.",
   "exit_save": "Sitzung speichern",
-  "exit_delete": "Sitzung löschen",
+  "exit_delete": "Beenden und neu starten",
   "exit_button": "Beenden",
 
-  "terms_title": "Allgemeine Geschäftsbedingungen",
-  "terms_paragraph1": "Ich möchte Ihnen etwas Wichtiges mitteilen.",
-  "terms_paragraph2": "Ich bin Ihr Assistent und ersetze keine professionelle tierärztliche Betreuung. Meine Hinweise dienen nur zur Information, um Ihnen zu helfen, Ihren Gefährten besser zu verstehen.",
-  "terms_paragraph3": "Verschlechtert sich sein Zustand, konsultieren Sie immer einen Tierarzt.",
+  "terms_title": "Nutzungsbedingungen",
+  "terms_paragraph1": "Bevor wir fortfahren, möchte ich eine wichtige Sache klarstellen.",
+  "terms_paragraph2": "Ich bin eine digitale Assistenz zur Beobachtung des Zustands Ihres Haustiers und ersetze KEINE professionelle tierärztliche Betreuung.\nIch stelle KEINE Diagnosen und verschreibe KEINE Behandlung.",
+  "terms_paragraph3": "Wenn du eine Verschlechterung bemerkst oder etwas dir Sorgen bereitet, ist es wichtig, so bald wie möglich eine Tierärztin oder einen Tierarzt aufzusuchen.",
   "terms_accept": "Ich akzeptiere die Bedingungen",
-  "terms_decline": "Ich akzeptiere nicht",
+  "terms_decline": "Ich lehne ab",
 
-  "privacy_policy": "Datenschutzerklärung",
-  "privacy_paragraph1": "Durch die Nutzung bestätigen Sie, dass Sie diese Grenzen verstehen und zustimmen, dass ich Ihre Daten nur zur besseren Unterstützung verwende.",
-  "privacy_paragraph2": "Wenn Sie einverstanden sind, machen wir gemeinsam weiter.",
+  "privacy_title": "Datenschutz",
+  "privacy_paragraph1": "Damit ich dich gut begleiten kann, ist es wichtig, deine Situation und den Zustand deines Tieres zu verstehen.",
+  "privacy_paragraph2": "Ich nutze deine Daten nur für diesen Dialog\nund gebe sie nicht weiter.",
   "privacy_accept": "Akzeptieren",
   "privacy_decline": "Ablehnen",
 
@@ -35,6 +39,8 @@
   "animal_reptile": "Reptil",
   "animal_fish": "Fisch",
   "animal_exotic": "Exotisch",
+  "coming_soon": "Bald",
+  "coming_soon_message": "Das Hinzufügen weiterer Tierarten wird in einer der kommenden Versionen der App verfügbar sein.",
 
   "animal_question": "Über welches Tier möchten Sie fragen?",
   "not_in_list": "Nicht in der Liste?",
@@ -43,6 +49,10 @@
   "species_placeholder": "Art / Rasse",
   "age_placeholder": "Alter",
   "name_placeholder": "Name",
+  "breedWarning": {
+    "title": "Die Rasse ist wichtig",
+    "message": "Damit kann der Assistent rassespezifische Veranlagungen besser berücksichtigen. Ohne diese Angabe bleiben die Antworten allgemeiner."
+  },
 
   "continue_without_data_title": "Ohne Angaben fortfahren?",
   "continue_without_data_message": "Diese Informationen helfen mir, Ihnen ein besseres Erlebnis zu bieten.",
@@ -54,16 +64,16 @@
   "save": "Speichern", 
   "delete": "Löschen",
 
-  "start_subtitle": "Tierpflege-Assistent",
-  "start_description": "Ich helfe Ihnen zu verstehen, was Ihr Tier fühlt",
-  "start_button": "Start",
+  "start_subtitle": "Digitale Nanny für Ihr Haustier",
+  "start_description": "Aufmerksamkeit ist der erste Schritt\nzur Hilfe",
+  "start_button": "Starten",
   "continue_title": "Fortfahren?",
   "continue_message": "Sie können Ihre vorherige Sitzung fortsetzen oder eine neue beginnen.",
   "start_new": "Neu starten",
   "continue_session": "Sitzung fortsetzen",
 
   "menu": {
-    "animal_selection": "Start",
+    "start_consultation": "Beratung starten",
     "change_language": "Sprache ändern",
     "lang_en": "Englisch",
     "lang_es": "Spanisch",
@@ -71,6 +81,7 @@
     "lang_he": "Hebräisch",
     "chat": "Chat",
     "summary": "Zusammenfassung",
+    "saved_sessions": "Gespeicherte Sitzungen",
     "settings": "Einstellungen",
     "about": "Über",
     "open": "Menü",
@@ -78,50 +89,111 @@
   },
 
   "about": {
-    "tagline": "Wie Mamascota funktioniert",
-    "p1": "Diese App hilft Tierhaltern, Symptome und Verhalten zu beobachten – ohne tierärztliche Betreuung zu ersetzen.",
-    "p2": "Sie basiert auf tierärztlichen Entscheidungsbäumen und Verhaltenslogik, angepasst für den Alltag.",
-    "p3": "Wir stellen keine Diagnosen. Wir helfen Ihnen, die richtigen Fragen zu stellen und rechtzeitig Hilfe zu suchen.",
-    "signature": "Mit Liebe zu Tieren und Aufmerksamkeit für Menschen erstellt.",
-    "follow": "Folgen Sie dem Projekt auf Instagram"
+    "tagline": "Über die App",
+    "p1": "Mamascota hilft, Beobachtungen zum Zustand Ihres Haustiers zu strukturieren.",
+    "p2": "Sie hilft zu erkennen, welche Anzeichen wichtig sind und was als Nächstes zu tun ist.",
+    "p3": "Mamascota stellt keine Diagnosen und ersetzt keine tierärztliche Behandlung.",
+    "signature": "Mit Fürsorge für Tiere und Respekt für Menschen entwickelt.",
+    "follow": "Projekt auf Instagram verfolgen",
+    "show_onboarding_again": "Mehr…"
   },
 
   "symptomSelector": {
     "title": "Was haben Sie bei Ihrem Tier bemerkt?",
-    "hint": "Wählen Sie bis zu 3 Hauptsymptome aus, die Sie beobachtet haben",
+    "hint": "Wählen Sie bis zu 5 Hauptsymptome aus, die Sie beobachtet haben",
     "confirm": "Den Assistenten fragen"
   },
 
   "symptoms": {
-    "lethargy": "Trägheit",
+    "lethargy": "Müde, teilnahmslos",
     "vomiting": "Erbrechen",
     "diarrhea": "Durchfall",
+    "constipation": "Verstopfung",
     "cough": "Husten",
-    "appetite_loss": "Appetitverlust",
-    "limping": "Lahmheit",
-    "drinking_too_much": "Trinkt zu viel",
+    "breathing_difficulty": "Atemnot",
+    "sneezing": "Niesen / Nasenausfluss",
+    "appetite_loss": "Kein Appetit",
+    "weight_loss": "Gewichtsverlust",
+    "limping": "Humpeln",
+    "pain_signs": "Er scheint Schmerzen zu haben",
+    "drinking_too_much": "Trinkt sehr viel",
+    "urinating_too_often": "Sehr häufiges Urinieren",
     "blood_in_urine": "Blut im Urin",
-    "seizures": "Krämpfe",
-    "custom": "Anderes Symptom"
+    "itching_skin": "Starker Juckreiz",
+    "skin_lesions": "Hautprobleme",
+    "skin_redness": "Rötung der Haut",
+    "hair_loss": "Haarausfall",
+    "wounds_or_ulcers": "Wunden / Geschwüre",
+
+    "ear_discharge": "Ohrensekret",
+    "ear_odor": "Schlechter Geruch aus den Ohren",
+    "ear_pain": "Ohrenschmerzen",
+    "head_shaking": "Kopfschütteln / Ohrenkratzen",
+
+    "eye_redness": "Rote Augen",
+    "eye_discharge": "Augensekret",
+    "eye_tearing": "Tränen",
+    "eyelid_swelling": "Geschwollene Lidder",
+    "eye_cloudiness": "Trübheit der Augen",
+    "eye_pain": "Augenschmerzen oder Unbehagen",
+
+    "aggression": "Aggressives Verhalten",
+    "disorientation": "Desorientierung / Verwirrung",
+
+    "pain_localized": "Schmerzen in einer bestimmten Region",
+    "pain_general": "Allgemeine Schmerzen / Unbehagen",
+    "behavior_change": "Verhaltensänderung",
+    "anxiety_stress": "Angst / Stress",
+    "seizures": "Anfälle / Krämpfe",
+    "collapse_fainting": "Zusammenbruch / Ohnmacht",
+    "custom": "Anderes"
   },
   "chat": {
+    "summary_hint": "Sie können die Zusammenfassung mit dem roten Symbol unten links speichern oder die Sitzung beenden und speichern.",
+    "phase": {
+      "intake": "Phase: Informationen sammeln",
+      "clarify": "Phase: Details klären",
+      "summary": "Phase: Zusammenfassen",
+      "ended": "Phase: Beendet"
+    },
+    "pdf_ready": "Deine PDF-Zusammenfassung ist fertig",
+    "pdf_not_ready": "Die Beratung ist noch nicht abgeschlossen. Schließen Sie sie ab, um einen Bericht zu generieren.",
+    "pdf_error": "PDF konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
+    "open_pdf": "PDF öffnen",
+    "share_pdf": "Teilen",
     "pet_default": "Das Tier",
     "symptom_intro": "zeigt die folgenden Symptome",
     "ask_confirmation": "Bitte bestätige, ob das stimmt, oder füge weitere Details hinzu",
     "placeholder": "Gib deine Nachricht ein...",
-    "invite": "Kannst du mir helfen zu verstehen, was das bedeuten könnte?"
+    "invite": "Kannst du mir helfen zu verstehen, was das bedeuten könnte?",
+    "waiting": {
+      "hint1": "Informationen werden geprüft…",
+      "hint2": "Beobachtungen werden berücksichtigt…",
+      "hint3": "Das Alter wird einbezogen…",
+      "hint4": "Einen Moment bitte…",
+      "summary": "Bitte warten, ich bereite die Zusammenfassung vor…"
+    }
   },
-  "onboarding_1_title": "Willkommen!",
-  "onboarding_1_subtitle": "Mamascota hilft Ihnen, Wichtiges zu bemerken und nichts zu vergessen. Ganz einfach.",
-  "onboarding_2_title": "Sie beobachten – ich unterstütze",
-  "onboarding_2_subtitle": "Sie müssen nicht alles wissen. Teilen Sie einfach, was Sie sehen, und ich hebe das Wichtige hervor.",
-  "onboarding_3_title": "Keine Diagnosen, nur Klarheit",
-  "onboarding_3_subtitle": "Diese App stellt keine Diagnose, hilft Ihnen aber zu verstehen, was passiert, und wann es Zeit ist, einen Tierarzt aufzusuchen.",
-  "onboarding_4_title": "Jedes Tier ist eine eigene Welt",
-  "onboarding_4_subtitle": "Alter, Art, Persönlichkeit – alles zählt. Ich passe mich Ihrer Realität an.",
+  
+  "onboarding_1_title": "Mamascota ist für Sie da",
+  "onboarding_1_subtitle": "Ich helfe, [[wichtige Anzeichen]] zu erkennen und mich auf den [[Tierarztbesuch]] vorzubereiten.",
+  "onboarding_2_subtitle": "Beschreiben Sie es in [[Ihren eigenen Worten]].\nWenn Sie pausieren möchten, können Sie [[später fortfahren]].\nIch stelle Fragen Schritt für Schritt, damit nichts Wichtiges übersehen wird.",
+  "onboarding_3_subtitle": "Sie erzählen, was Ihnen aufgefallen ist, und ich helfe, [[das Wesentliche herauszuarbeiten]] und [[zu ordnen]].",
+  "onboarding_4_subtitle": "Erstellen Sie einen [[PDF-Bericht]] und verfolgen Sie den Zustand Ihres Haustiers mit einem einfachen [[Beobachtungstagebuch]].\nBringen Sie den Bericht zu Ihrem Tierarzt, damit er sofort den [[Gesamtüberblick]] erhält.", 
+  "onboarding_2_title": "Wir halten es einfach",
+  "onboarding_3_title": "Sie beobachten — \nich helfe",
+  "onboarding_4_title": "Berichte für Ihren Tierarzt",
   "onboarding_skip": "Überspringen",
   "onboarding_next": "Weiter",
   "onboarding_start": "Start",
+
+  "summary": {
+    "empty_title": "Ihre Beratungsgespräche werden hier angezeigt",
+    "empty_subtitle": "Starten Sie einen neuen Chat und speichern Sie ihn nach Beendigung – er wird dann in dieser Liste erscheinen.",
+    "delete_confirm": "Diese gespeicherte Sitzung löschen?",
+    "delete_error": "Konnte die gespeicherte Sitzung nicht löschen. Bitte versuchen Sie es erneut.",
+    "tools_hint": "Hier können Sie einen PDF-Bericht öffnen, das Beobachtungstagebuch nutzen oder CSV (in der Web-App) für die weitere Verlaufskontrolle exportieren."
+  },
   
   "settings": {
     "remind_in_6h": "In 6 Stunden erneut erinnern",
@@ -144,6 +216,7 @@
       "name_label": "Name *",
       "species_label": "Art *",
       "breed_label": "Rasse",
+      "breed_hint": "Die Angabe der Rasse hilft, die Beratung für Ihr Tier besser anzupassen.",
       "age_label": "Alter (Jahre)"
     },
     "clear": "Löschen",
@@ -155,7 +228,52 @@
   "sex": "Geschlecht",
   "male": "Männlich",
   "female": "Weiblich",
-  "not_set": "Nicht festgelegt",
+  "not_set": "Nicht angegeben",
   "neutered_spayed": "Kastriert/Sterilisiert",
-  "animal_other": "Andere"
+  "animal_other": "Andere",
+
+  "pdf": {
+    "report_title": "Bericht für die Praxis von",
+    "date_label": "Datum und Uhrzeit",
+    "owner_notes_title": "Anamnese",
+    "focus_title": "Fokus für den Tierarzt",
+    "next_steps_title": "Nächste Schritte",
+    "observe_title": "Beobachtung zu Hause",
+    "urgent_title": "Sofortiges Handeln erforderlich, wenn...",
+    "plan_title": "Plan des Tierarztbesuchs",
+    "generating": "PDF wird erstellt...",
+    "preparing_language": "Bericht in ausgewählter Sprache wird vorbereitet...",
+    "language_title": "PDF-Sprache wählen",
+    "share_hint": "Teile den Bericht mit deinem Tierarzt vor dem Besuch oder nimm ihn mit – dies reduziert erheblich die Wartezeit und Unterstützung für deinen Haustier",
+
+    "diary_title": "Beobachtungstagebuch",
+    "diary_intro": "Hier können Sie ein Tagebuch Ihres Haustiers führen und Symptome sowie Veränderungen in seinem Zustand dokumentieren. Diese Aufzeichnungen helfen dem Tierarzt, die Situation genauer einzuschätzen.",
+    "diary_pet": "Haustier",
+    "diary_species": "Art",
+    "diary_start_date": "Start Date",
+
+    "diary_date": "Date",
+    "diary_appetite": "Appetite",
+    "diary_water_intake": "Water Intake",
+    "diary_activity": "Activity",
+    "diary_symptoms": "Symptoms",
+    "diary_notes": "Notes"
+  },
+
+  "csv": {
+    "download_title": "CSV-Datei",
+    "download_hint": "Laden Sie die Datei herunter und öffnen Sie sie dann in Excel, Numbers, Google Sheets oder OpenOffice.",
+    "download_button": "Herunterladen"
+  },
+  
+  "paywall": {
+    "title": "Vollständiger Zugriff",
+    "subtitle": "Entsperre alle Funktionen",
+    "feature_1": "PDF-Bericht für den Tierarzt",
+    "feature_2": "Symptomverfolgung",
+    "feature_3": "Konsultationshistorie",
+    "price": "1,99 € / Monat",
+    "cta": "Vollständigen Zugriff erhalten",
+    "note": "Sie können jederzeit kündigen"
+  }
 }

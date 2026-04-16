@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Pressable,
@@ -43,6 +43,7 @@ const tOr = (fallback: string, ...keys: string[]) => {
 };
 
 export default function SettingsScreen() {
+  const router = useRouter();  // 🔹 добавили
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.locale);
   const [pets, setPets] = useState<Pet[]>([]);
   const [activePetId, setActivePetIdState] = useState<string | null>(null);
@@ -93,7 +94,21 @@ export default function SettingsScreen() {
     await AsyncStorage.setItem('selectedLanguage', lang);
   };
 
-  const openEditor = (pet?: Pet) => {
+  const openEditor = async (pet?: Pet) => {
+    // 1️⃣ Проверяем, приняты ли Условия
+    const [accepted, legacy] = await Promise.all([
+      AsyncStorage.getItem("acceptedTerms"),
+      AsyncStorage.getItem("termsAccepted"),
+    ]);
+    const termsOk = accepted === "true" || legacy === "true";
+
+    if (!termsOk) {
+      // ❗ Условия не приняты — уводим в глобальный flow Terms → Onboarding
+      router.replace("/terms-screen");
+      return;
+    }
+
+    // 2️⃣ Всё ок — можно открывать редактор
     setEditing(pet);
     setFName(pet?.name ?? '');
     setFSpecies(pet?.species);
@@ -103,6 +118,7 @@ export default function SettingsScreen() {
     setFNeutered(pet?.neutered ?? false);
     setEditorOpen(true);
   };
+
   const closeEditor = () => setEditorOpen(false);
 
   const canSave = fName.trim().length > 0;
@@ -137,53 +153,31 @@ export default function SettingsScreen() {
 
   const handleFullReset = async () => {
     Alert.alert(
-      i18n.t("settings.clear_data_title"),      // ¿Borrar datos?
-      i18n.t("settings.clear_data_message"),    // Se eliminarán todas las sesiones...
+      i18n.t("settings.clear_data_title"),      // Заголовок
+      i18n.t("settings.clear_data_message"),    // Текст
       [
         { text: i18n.t("cancel"), style: "cancel" },
 
         {
-          text: i18n.t("settings.clear"),       // Borrar
+          text: i18n.t("settings.clear"),
           style: "destructive",
           onPress: async () => {
-            // 1️⃣ Полная очистка хранилища
+            // 1️⃣ Центральная очистка всех рабочих данных
             await clearAllAppData();
 
-            // 2️⃣ ДОП-ОЧИСТКА для Android (важно!)
-            await AsyncStorage.removeItem("pets");
-            await AsyncStorage.removeItem("activePetId");
-            await AsyncStorage.removeItem("currentPetId");
-            await AsyncStorage.removeItem("animalProfile");
-
-            // 3️⃣ Принудительно перезаписываем petsList — чтобы UI НЕ взял старый кэш
-            await AsyncStorage.setItem("petsList", JSON.stringify([]));
-
-            // 4️⃣ Сбрасываем состояние react-компонента
+            // 2️⃣ Сбрасываем локальное состояние экрана
             setPets([]);
+            setActivePetIdState(null);
 
-            console.log("🧹 Datos borrados (Android-safe)");
+            console.log("🧹 App data cleared via clearAllAppData");
 
-            // обновляем UI заново
+            // 3️⃣ Обновляем список питомцев и активного
             await refreshPets();
           },
         },
       ]
     );
   };
-
-  const debugShowAllKeys = async () => {
-    const keys = await AsyncStorage.getAllKeys();
-    const entries = await AsyncStorage.multiGet(keys);
-
-    console.log("📌 ВСЕ КЛЮЧИ В ANDROID:", keys);
-    console.log("📌 ВСЕ ДАННЫЕ:", entries);
-    
-    Alert.alert(
-      "Ключи в AsyncStorage",
-      keys.join("\n")
-    );
-  };
-
 
   return (
     <SafeAreaView style={styles.root}>
@@ -194,28 +188,6 @@ export default function SettingsScreen() {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>{i18n.t('menu.change_language')}</Text>
           <LanguageSelector selected={selectedLanguage} onSelect={applyLanguage} />
-        </View>
-
-        {/* 🔠 Размер текста */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>{i18n.t('settings.text_size')}</Text>
-          <Text style={styles.note}>{i18n.t('settings.text_size_hint')}</Text>
-
-          <View style={styles.segmentRow}>
-            {[0, 1, 2, 3].map((idx) => (
-              <Pressable
-                key={idx}
-                onPress={() => setScaleIndex(idx as 0 | 1 | 2 | 3)}
-                style={[styles.segment, scaleIndex === idx && styles.segmentActive]}
-              >
-                <Text style={styles.segmentText}>
-                  {idx === 0 ? i18n.t('settings.text_size_system') : idx === 1 ? 'A' : idx === 2 ? 'A+' : 'A++'}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-
-          <ThemedText style={{ fontSize: 16 }}>Aa Bb Cc 123 — preview</ThemedText>
         </View>
 
         {/* 🐾 Питомцы */}
@@ -259,19 +231,20 @@ export default function SettingsScreen() {
           )}
         </View>
 
-        {/* 🧹 Очистка */}
-        <View style={{ marginTop: 40, marginBottom: 20 }}>
-          <Button
-            title={`🧹 ${i18n.t("settings.clear_data")}`}
-            color="crimson"
+        {__DEV__ && (
+        <View style={styles.clearCardWrapper}>
+          <TouchableOpacity
+            style={styles.clearButton}
             onPress={handleFullReset}
-          />
-          <Button
-            title="🔍 Показать ключи (DEV)"
-            onPress={debugShowAllKeys}
-            color="gray"
-          />
+            activeOpacity={0.9}
+          >
+            <Text style={styles.clearButtonText}>
+              🧹 {i18n.t("settings.clear_data")}
+            </Text>
+          </TouchableOpacity>
         </View>
+      )}
+
       </ScrollView>
 
       {/* ✏️ Модалка редактирования / добавления */}
@@ -359,4 +332,39 @@ const styles = StyleSheet.create({
   },
   segmentActive: { borderColor: theme.colors.textPrimary, backgroundColor: theme.colors.cardBg },
   segmentText: { fontSize: 14, color: theme.colors.textPrimary },
+  
+  clearCardWrapper: {
+    marginTop: 40,
+    marginBottom: 24,
+  },
+
+  clearButton: {
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#FFE0B2',      // мягкая бежево-оранжевая рамка
+    backgroundColor: '#FFF7E6',  // тёплый светлый фон
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  clearButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#C62828',            // более спокойный красный (можно потом сменить под тему)
+    textAlign: 'center',
+  },
+
+  // Если захочешь использовать хинт (описание под текстом)
+  /*
+  clearButtonHint: {
+    marginTop: 4,
+    fontSize: 13,
+    color: '#6D4C41',
+    textAlign: 'center',
+  },
+  */
+
+
 });

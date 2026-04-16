@@ -1,0 +1,2754 @@
+fuente: Открытые ветеринарные источники (наследственные болезни)
+predisposiciones_raza_parte_1:
+  - especie: perro
+    raza: Affenpinscher
+    predisposiciones:
+      - enfermedad: Синдром брахицефальных дыхательных путей (Brachycephalic Airway Syndrome)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Luxación de patela)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава (Hip Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Легга-Кальве-Пертеса (Legg-Calve-Perthes Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Катаракта (Cataracts)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Разрыв крестообразной связки (Cruciate Ligament Tear)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заболевание митрального клапана (Mitral Valve Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Открытый артериальный проток (Patent Ductus Arteriosus, PDA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Afghan Hound
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава (Hip Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия локтевого сустава (Elbow Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь фон Виллебранда (Von Willebrand's Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипотиреоз (Hypothyroidism)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Хилоторакс (Chylothorax)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Некротическая миелопатия (Afghan Myelopathy)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (Gastric Dilatation Volvulus, GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Паностеит (Panosteitis)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Чувствительность к анестезии
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Airdale Terrier
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава (Canine Hip Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Церебеллярная абиотрофия / Атаксия (Cerebellar Ataxia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипотиреоз / Аутоиммунный тиреоидит (Hypothyroidism)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заболевания толстого кишечника (Colonic Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (Gastric Torsion, GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дерматит / Пиодермия (Dermatitis)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Проблемы с глазами (Eye Problems)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Akita
+    predisposiciones:
+      - enfermedad: Прогрессирующая атрофия сетчатки (Progressive Retinal Atrophy, PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Увеодерматологический синдром (Uveodermatologic Syndrome, VKH)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Аденопатия сальных желез (Sebaceous Adenitis)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Аутоиммунный гипотиреоз / Тиреоидит
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь фон Виллебранда (Von Willebrand's Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (Gastric Torsion, GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава (Hip Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Приобретенная миастения (Acquired Myasthenia Gravis)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Пузырчатка листовидная (Pemphigus Foliaceus)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Аддисона (Addison's Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Синдром Кушинга (Cushing's Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+  - especie: perro
+    raza: Alaskan Malamute
+    predisposiciones:
+      - enfermedad: Anemia con condrodisplasia
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Atrofia progresiva de retina
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Condrodisplasia - Enanismo
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Deficiencia de factor IX - Hemofilia tipo B
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Deficiencia de factor VII
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Dermatitis por deficiencia de cinc
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Displasia de cadera
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Hipotiroidismo
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Hemeralopia (дневная слепота)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Miopatías ligadas al sexo
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: American Foxhound
+    predisposiciones:
+      - enfermedad: Ceguera
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Heterocromia iridal
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Microftalmía
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Osteocondrosis vertebral
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Trombopatía
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: American Staffordshire Terrier
+    predisposiciones:
+      - enfermedad: Atrofia progresiva de retina
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Distrofia muscular
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Entropión
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Miotonía
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Osteocondritis disecante
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Paladar hendido
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Australian Cattle Dog
+    predisposiciones:
+      - enfermedad: Amaurosis (слепота)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Deficiencia de factor X
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Displasia de cadera
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Epilepsia
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Luxación de cristalino
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Shunt portosistémico hepático
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Prognatismo inferior
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+  - especie: perro
+    raza: Basenji
+    predisposiciones:
+      - enfermedad: Синдром Фанкони (Fanconi Syndrome) - почечное заболевание
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Пируваткиназная недостаточность (Pyruvate Kinase Deficiency)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Колобома (Coloboma) - дефект глаза
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Персистирующая зрачковая мембрана (Persistent Pupillary Membranes, PPM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипотиреоз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Атрофия сетчатки (Progressive Retinal Atrophy, PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденный мегаэзофагус
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Basset Hound
+    predisposiciones:
+      - enfermedad: Дисплазия локтевого сустава (Elbow Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава (Hip Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Глаукома
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (Gastric Dilatation Volvulus, GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь фон Виллебранда (Von Willebrand's Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Тромбопатия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Энтропион/Эктропион (заворот/выворот века)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Аутоиммунный тиреоидит
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Beagle
+    predisposiciones:
+      - enfermedad: Эпилепсия (Beagle Pain Syndrome)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава (Hip Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипотиреоз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Глаукома
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вишневый глаз (Prolapse of the Gland of the Third Eyelid)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заболевание межпозвоночных дисков (Intervertebral Disk Disease, IVDD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дефицит фактора VII
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Церебеллярная абиотрофия (Cerebellar Abiotrophy)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Bearded Collie
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава (Hip Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипотиреоз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Аутоиммунный тиреоидит
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Аддисона (Addison's Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заболевания глаз (например, Collie Eye Anomaly)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Пузырчатка листовидная (Pemphigus Foliaceus)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Bedlington Terrier
+    predisposiciones:
+      - enfermedad: Токсикоз, связанный с медью (Copper Storage Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия сетчатки (Retinal Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Энтропион
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Наследственная нефропатия (Hereditary Nephropathy)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дистихиаз (Distichiasis)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+  - especie: perro
+    raza: Bernese Mountain Dog
+    predisposiciones:
+      - enfermedad: Гистиоцитарный саркома (Histiocytic Sarcoma) - высокозлокачественный рак
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава (Hip Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия локтевого сустава (Elbow Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Аутоиммунный тиреоидит / Гипотиреоз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь фон Виллебранда (Von Willebrand's Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (Progressive Retinal Atrophy, PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Миелопатия (Дегенеративная миелопатия)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Bichon Frise
+    predisposiciones:
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Портосистемный шунт (Portosystemic Shunt, PSS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Аллергический дерматит (Skin Allergies)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия сетчатки
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденный мегаэзофагус
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Bloodhound
+    predisposiciones:
+      - enfermedad: Дисплазия локтевого сустава (Elbow Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава (Hip Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (Gastric Dilatation Volvulus, GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эктропион / Энтропион (выворот/заворот века)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденная глухота
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заболевания сердца (например, кардиомиопатия)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Blue Tick Hound
+    predisposiciones:
+      - enfermedad: Заболевания щитовидной железы (Thyroid Disorders)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эктропион
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Border Collie
+    predisposiciones:
+      - enfermedad: Аномалия глаза колли (Collie Eye Anomaly, CEA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Лизосомальная болезнь накопления (Neuronal Ceroid Lipofuscinosis, NCL)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дефицит витамина B12 (Cobalamin Malabsorption)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава (Hip Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Остеохондроз (Osteochondritis Dissecans, OCD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+  - especie: perro
+    raza: Border Terrier
+    predisposiciones:
+      - enfermedad: Эпизодические судороги (Spike's Disease) - тип неврологического расстройства
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Нарушение свертываемости (Canine Idiopathic Thrombocytopenia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Borzoi
+    predisposiciones:
+      - enfermedad: Заворот желудка (Gastric Dilatation Volvulus, GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Атрофия сетчатки (Progressive Retinal Atrophy, PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия локтевого сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Кардиомиопатия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Чувствительность к анестезии (как у большинства борзых)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Boston Terrier
+    predisposiciones:
+      - enfermedad: Катаракта (Juvenile Cataracts)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Синдром брахицефальных дыхательных путей
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденная глухота
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вишневый глаз (Prolapse of the Gland of the Third Eyelid)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь межпозвоночных дисков (IVDD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Bouvier de Flandres
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия локтевого сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Субклапанный аортальный стеноз (Subaortic Stenosis, SAS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Boxer
+    predisposiciones:
+      - enfermedad: Аритмогенная кардиомиопатия правого желудочка (ARVC, "Боксерская кардиомиопатия")
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Субклапанный аортальный стеноз (Subaortic Stenosis, SAS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Мастоцитома (Mast Cell Tumor) - рак кожи
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Миелопатия (Дегенеративная миелопатия)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Briard
+    predisposiciones:
+      - enfermedad: Стационарная ночная слепота (Congenital Stationary Night Blindness)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденный мегаэзофагус
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: American Water Spaniel
+    predisposiciones:
+      - enfermedad: Аномалия глаза колли (Collie Eye Anomaly, CEA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Bullmastiff
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия локтевого сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Лимфома (Lymphoma)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Рак костей (Osteosarcoma)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Cairn Terrier
+    predisposiciones:
+      - enfermedad: Глобоидноклеточная лейкодистрофия (Globoid Cell Leukodystrophy, Krabbe's Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Портосистемный шунт (Portosystemic Shunt, PSS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Легга-Кальве-Пертеса
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Cavalier King Charles Spaniel
+    predisposiciones:
+      - enfermedad: Митральная регургитация (Mitral Valve Disease, MVD) - крайне высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Сирингомиелия (Syringomyelia, SM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Синдром сухого глаза и курчавой шерсти (Dry Eye and Curly Coat Syndrome, CKCSID)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эпизодический коллапс
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+  - especie: perro
+    raza: Chesapeake Bay Retriever
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Энтропион
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденный мегаэзофагус
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Chihuahua
+    predisposiciones:
+      - enfermedad: Гидроцефалия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Коллапс трахеи
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Легга-Кальве-Пертеса
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Открытый артериальный проток (Patent Ductus Arteriosus, PDA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипогликемия (особенно у щенков)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Chinese Crested Dog
+    predisposiciones:
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Первичный вывих хрусталика (Primary Lens Luxation, PLL)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Легга-Кальве-Пертеса
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденная глухота
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Chow Chow
+    predisposiciones:
+      - enfermedad: Энтропион
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия локтевого сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Глаукома
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Аутоиммунный тиреоидит / Гипотиреоз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Сахарный диабет
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Clumber Spaniel
+    predisposiciones:
+      - enfermedad: Дефицит фактора VIII - Гемофилия А
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Энтропион / Эктропион
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденная глухота
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия сетчатки
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Cocker Spaniel
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Агрессия (синдром ярости)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Атрофия сетчатки (Progressive Retinal Atrophy, PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Семейная нефропатия (Hereditary Nephropathy)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Кардиомиопатия дилатационная (DCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Первичная глаукома
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Collie
+    predisposiciones:
+      - enfermedad: Аномалия глаза колли (Collie Eye Anomaly, CEA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Чувствительность к лекарствам (MDR1 генная мутация)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Циклическая нейтропения (Cyclic Hematopoiesis)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Идиопатическая эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Пузырчатка листовидная
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Welsh Corgi (Pembroke и Cardigan)
+    predisposiciones:
+      - enfermedad: Дегенеративная миелопатия (DM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденная дисплазия сетчатки (Retinal Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь межпозвоночных дисков (IVDD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Открытый артериальный проток (PDA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Цистонурия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Curly Coated Retriever
+    predisposiciones:
+      - enfermedad: Гликогеноз (Glycogen Storage Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия сетчатки
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Энтропион
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Миопатия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Dachshund
+    predisposiciones:
+      - enfermedad: Болезнь межпозвоночных дисков (IVDD) - высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Акантоз чернеющий (Acanthosis Nigricans)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденный мегаэзофагус
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+  - especie: perro
+    raza: Dalmatian
+    predisposiciones:
+      - enfermedad: Гиперурикозурия (наследственная склонность к образованию уратных камней)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденная глухота (часто связана с цветом шерсти/глаз)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Идиопатическая эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Бронзовый синдром (Bronze Syndrome, связанный с медью)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Dandie Dinmont Terrier
+    predisposiciones:
+      - enfermedad: Болезнь межпозвоночных дисков (IVDD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Первичный вывих хрусталика (Primary Lens Luxation, PLL)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Doberman Pinscher
+    predisposiciones:
+      - enfermedad: Дилатационная кардиомиопатия (DCM) - высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь фон Виллебранда (Von Willebrand's Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Синдром Вобблера (Cervical Vertebral Instability, Wobbler Syndrome)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Нарколепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Хронический активный гепатит
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипотиреоз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: English Bulldog
+    predisposiciones:
+      - enfermedad: Синдром брахицефальных дыхательных путей (BAS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вишневый глаз (Prolapse of the Gland of the Third Eyelid)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Энтропион
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Расщепление нёба (Paladar hendido)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипоплазия трахеи
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: English Cocker Spaniel
+    predisposiciones:
+      - enfermedad: Наследственная нефропатия (Familial Nephropathy)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Идиопатическая эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дилатационная кардиомиопатия (DCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: English Setter
+    predisposiciones:
+      - enfermedad: Врожденная глухота
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия локтевого сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Наследственная атаксия (Cerebellar Ataxia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Лейкоцитарная недостаточность (Canine Leukocyte Adhesion Deficiency, CLAD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: English Springer Spaniel
+    predisposiciones:
+      - enfermedad: Фукозидоз (Fucosidosis) - лизосомальная болезнь накопления
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденная глухота
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипотиреоз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: English Toy Spaniel (King Charles Spaniel)
+    predisposiciones:
+      - enfermedad: Сирингомиелия (Syringomyelia, SM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Митральная регургитация (Mitral Valve Disease, MVD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Finnish Spitz
+    predisposiciones:
+      - enfermedad: Эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Хондродисплазия (Нарушение развития хрящей)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Flat-Coated Retriever
+    predisposiciones:
+      - enfermedad: Злокачественная гистиоцитома (Malignant Histiocytosis) - высокая предрасположенность к раку
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Глаукома
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Идиопатическая эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+  - especie: perro
+    raza: Fox Terrier
+    predisposiciones:
+      - enfermedad: Первичный вывих хрусталика (Primary Lens Luxation, PLL)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденная глухота
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Миастения (Myasthenia Gravis)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Легга-Кальве-Пертеса
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: French Bulldog
+    predisposiciones:
+      - enfermedad: Синдром брахицефальных дыхательных путей (BAS) - высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь межпозвоночных дисков (IVDD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гемопоэтическая дисплазия позвоночника (Hemivertebrae)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Атопический дерматит
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вишневый глаз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: German Shepherd Dog
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава - высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дегенеративная миелопатия (DM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия локтевого сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Экзокринная недостаточность поджелудочной железы (EPI)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Перианальная фистула (Perianal Fistula)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Giant Schnauzer
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия локтевого сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Витилиго (потеря пигментации кожи)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Glen of Imaal Terrier
+    predisposiciones:
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Портосистемный шунт (PSS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Golden Retriever
+    predisposiciones:
+      - enfermedad: Рак (особенно Гемагиосаркома и Лимфосаркома)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия локтевого сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Субклапанный аортальный стеноз (SAS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Идиопатическая эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Ихтиоз (кожное заболевание)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Пигментный увеит и вторичная глаукома
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Gordon Setter
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Церебеллярная абиотрофия (Cerebellar Abiotrophy)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Наследственная миопатия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Great Dane
+    predisposiciones:
+      - enfermedad: Заворот желудка (GDV) - чрезвычайно высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дилатационная кардиомиопатия (DCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Синдром Вобблера (Wobbler Syndrome)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипотиреоз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Остеосаркома (Рак костей)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Greyhound
+    predisposiciones:
+      - enfermedad: Заворот желудка (GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Остеосаркома (Рак костей)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Кардиомиопатия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Чувствительность к анестезии
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденная глухота
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Irish Setter
+    predisposiciones:
+      - enfermedad: Лейкоцитарная недостаточность (Canine Leukocyte Adhesion Deficiency, CLAD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Экзокринная недостаточность поджелудочной железы (EPI)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Идиопатическая эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+  - especie: perro
+    raza: Irish Terrier
+    predisposiciones:
+      - enfermedad: Катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гиперкератоз подушечек лап (Corny Feet)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Irish Wolfhound
+    predisposiciones:
+      - enfermedad: Дилатационная кардиомиопатия (DCM) - высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (Gastric Dilatation Volvulus, GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Остеосаркома (Рак костей)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь фон Виллебранда (Von Willebrand's Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Портосистемный шунт (Portosystemic Shunt, PSS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Italian Greyhound
+    predisposiciones:
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Легга-Кальве-Пертеса
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Jack Russell Terrier
+    predisposiciones:
+      - enfermedad: Первичный вывих хрусталика (Primary Lens Luxation, PLL)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Легга-Кальве-Пертеса
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Мозжечковая атаксия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденная глухота
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Japanese Chin
+    predisposiciones:
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Энтропион
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Сирингомиелия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Keeshond
+    predisposiciones:
+      - enfermedad: Первичный гиперпаратиреоз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Идиопатическая эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипотиреоз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Kerry Blue Terrier
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Первичный вывих хрусталика (Primary Lens Luxation, PLL)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Церебеллярная абиотрофия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Komondor
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Энтропион
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Kuvasz
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипотиреоз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Остеохондроз (Osteochondritis Dissecans, OCD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Labrador Retriever
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава - высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия локтевого сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Наследственная миопатия (Centronuclear Myopathy, CNM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Остеохондроз (OCD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Коллапс, вызванный физической нагрузкой (Exercise-Induced Collapse, EIC)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Аномалия глаз (Retinal Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+  - especie: perro
+    raza: Lakeland Terrier
+    predisposiciones:
+      - enfermedad: Болезнь Легга-Кальве-Пертеса
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дефект фактора VII
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Lhasa Apso
+    predisposiciones:
+      - enfermedad: Заболевание межпозвоночных дисков (IVDD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вишневый глаз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Первичный вывих хрусталика (PLL)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Наследственная нефропатия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Maltese
+    predisposiciones:
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Портосистемный шунт (Portosystemic Shunt, PSS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гидроцефалия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Синдром белого трясущегося щенка (White Shaker Dog Syndrome)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Энтропион
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Mastiff
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (Gastric Dilatation Volvulus, GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Остеосаркома (Рак костей)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эктропион
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Miniature Bull Terrier
+    predisposiciones:
+      - enfermedad: Первичный вывих хрусталика (Primary Lens Luxation, PLL)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Почечная дисплазия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденная глухота
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Акродерматит (Acrodermatitis)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Miniature Pinscher
+    predisposiciones:
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Легга-Кальве-Пертеса
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипотиреоз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Miniature Schnauzer
+    predisposiciones:
+      - enfermedad: Панкреатит (Pankreatitis) - высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гиперлипидемия (повышенный уровень жиров в крови)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Диабет (Сахарный диабет)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Уратные камни в мочевом пузыре (уролитиаз)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Синдром больного синуса (Sick Sinus Syndrome, сердечное)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Newfoundland
+    predisposiciones:
+      - enfermedad: Субклапанный аортальный стеноз (Subaortic Stenosis, SAS) - высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия локтевого сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Цистонурия (камни в почках/мочевом пузыре)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эктропион / Энтропион
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Norfolk Terrier
+    predisposiciones:
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Первичный вывих хрусталика (PLL)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Митральная регургитация (MVD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Norwegian Elkhound
+    predisposiciones:
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Почечная дисплазия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Синдром Фанкони (Fanconi Syndrome) - почечное заболевание
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Глаукома
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+  - especie: perro
+    raza: Norwich Terrier
+    predisposiciones:
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Первичный вывих хрусталика (PLL)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Митральная регургитация (MVD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Old English Sheepdog
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Катаракта (Наследственная катаракта)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденная глухота
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Чувствительность к лекарствам (MDR1 генная мутация)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Papillon
+    predisposiciones:
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь межпозвоночных дисков (IVDD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Открытый артериальный проток (Patent Ductus Arteriosus, PDA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Pekingese
+    predisposiciones:
+      - enfermedad: Синдром брахицефальных дыхательных путей (BAS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Проптоз глазного яблока (выпадение глаза)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гидроцефалия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Pomeranian
+    predisposiciones:
+      - enfermedad: Коллапс трахеи
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Легга-Кальве-Пертеса
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Алопеция X (Черная болезнь кожи)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипотиреоз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Poodle (Miniature)
+    predisposiciones:
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Легга-Кальве-Пертеса
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Poodle (Standard)
+    predisposiciones:
+      - enfermedad: Аденокарцинома поджелудочной железы (Insulinoma)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Аденокарцинома сальных желез (Sebaceous Adenitis)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Аддисона (Addison's Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденная глухота
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Poodle (Toy)
+    predisposiciones:
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Легга-Кальве-Пертеса
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гидроцефалия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Portuguese Water Dog
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Аддисона (Addison's Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Ювенильная дилатационная кардиомиопатия (JDCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь накопления (Gangliosidosis)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Pug
+    predisposiciones:
+      - enfermedad: Синдром брахицефальных дыхательных путей (BAS) - высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Некротизирующий менингоэнцефалит (Pug Dog Encephalitis, PDE)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Полупозвонки (Hemivertebrae)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Сухой глаз (Keratoconjunctivitis Sicca, KCS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+  - especie: perro
+    raza: Puli
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Первичный вывих хрусталика (Primary Lens Luxation, PLL)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Идиопатическая эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Rhodesian Ridgeback
+    predisposiciones:
+      - enfermedad: Дермоидный синус (Dermoid Sinus) - наследственный дефект кожи
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия локтевого сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Rottweiler
+    predisposiciones:
+      - enfermedad: Остеосаркома (Рак костей) - высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Субклапанный аортальный стеноз (Subaortic Stenosis, SAS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Парвовирусный энтерит (повышенная восприимчивость)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия локтевого сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Saint Bernard
+    predisposiciones:
+      - enfermedad: Заворот желудка (GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия локтевого сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эктропион / Энтропион
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Остеосаркома (Рак костей)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Saluki
+    predisposiciones:
+      - enfermedad: Кардиомиопатия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Чувствительность к анестезии
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Samoyed
+    predisposiciones:
+      - enfermedad: Гломерулопатия (наследственная болезнь почек)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Диабет (Сахарный диабет)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Стеноз легочной артерии
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Schipperke
+    predisposiciones:
+      - enfermedad: Мукополисахаридоз типа IIIB (болезнь накопления)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Легга-Кальве-Пертеса
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Scottish Deerhound
+    predisposiciones:
+      - enfermedad: Кардиомиопатия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Заворот желудка (GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Чувствительность к анестезии
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Scottish Terrier
+    predisposiciones:
+      - enfermedad: Раковые заболевания (например, рак мочевого пузыря, переходно-клеточная карцинома)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь фон Виллебранда (Von Willebrand's Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Черепно-челюстная остеопатия (Craniomandibular Osteopathy)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Скотти-крэмп (Scotty Cramp) - мышечные судороги
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Sealyham Terrier
+    predisposiciones:
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденная глухота
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Shetland Sheepdog (Sheltie)
+    predisposiciones:
+      - enfermedad: Аномалия глаза колли (Collie Eye Anomaly, CEA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Чувствительность к лекарствам (MDR1 генная мутация)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипотиреоз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дерматомиозит
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Shiba Inu
+    predisposiciones:
+      - enfermedad: Глаукома
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Аллергия (атопия)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Shih Tzu
+    predisposiciones:
+      - enfermedad: Гидроцефалия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия почечных канальцев (Renal Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Проптоз глазного яблока (выпадение глаза)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дистихиаз / Эктопические ресницы
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Siberian Husky
+    predisposiciones:
+      - enfermedad: Наследственная катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Паралич гортани
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дефицит цинка (Zinc-Responsive Dermatosis)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Хондродисплазия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Silky Terrier
+    predisposiciones:
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Легга-Кальве-Пертеса
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Портосистемный шунт (PSS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+  - especie: perro
+    raza: Skye Terrier
+    predisposiciones:
+      - enfermedad: Хронический гепатит
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Аутоиммунные заболевания кожи (Аллергии)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Soft Coated Wheaten Terrier
+    predisposiciones:
+      - enfermedad: Протеин-теряющая энтеропатия (PLE) и нефропатия (PLN)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия почек (Renal Dysplasia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Аддисона (Addison's Disease)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Staffordshire Bull Terrier
+    predisposiciones:
+      - enfermedad: Наследственная катаракта
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: L-2-гидроксиглутаровая ацидурия (наследственная болезнь мозга)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Тучноклеточные опухоли (Mast Cell Tumors)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Standard Schnauzer
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Фолликулярная дисплазия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипотиреоз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Sussex Spaniel
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь межпозвоночных дисков (IVDD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Стеноз легочной артерии (Pulmonic Stenosis)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Swedish Vallhund
+    predisposiciones:
+      - enfermedad: Дисплазия сетчатки / Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Наследственная ретинопатия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Tibetan Mastiff
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипотиреоз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Остеохондрит (Osteochondritis Dissecans, OCD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Tibetan Spaniel
+    predisposiciones:
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Портосистемный шунт (Portosystemic Shunt, PSS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Tibetan Terrier
+    predisposiciones:
+      - enfermedad: Первичный вывих хрусталика (Primary Lens Luxation, PLL)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Церебральный липофусциноз (Canine Ceroid Lipofuscinosis, CCL)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Vizsla
+    predisposiciones:
+      - enfermedad: Идиопатическая эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Аденокарцинома сальных желез (Sebaceous Adenitis)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Миозит (полимиозит)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Weimaraner
+    predisposiciones:
+      - enfermedad: Заворот желудка (Gastric Dilatation Volvulus, GDV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Энтропион
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дистихиаз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Спинальный дизрафизм
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Welsh Springer Spaniel
+    predisposiciones:
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия локтевого сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Глаукома
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Эпилепсия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: West Highland White Terrier
+    predisposiciones:
+      - enfermedad: Черепно-челюстная остеопатия (Craniomandibular Osteopathy, CMO)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Глобоидно-клеточная лейкодистрофия (Globoid Cell Leukodystrophy)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Атопический дерматит / Аллергии
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Синдром белого трясущегося щенка
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Whippet
+    predisposiciones:
+      - enfermedad: Врожденная глухота
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Митральная регургитация (MVD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Чувствительность к анестезии
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: perro
+    raza: Yorkshire Terrier
+    predisposiciones:
+      - enfermedad: Портосистемный шунт (Portosystemic Shunt, PSS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Коллапс трахеи
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Болезнь Легга-Кальве-Пертеса
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+  - especie: gato
+    raza: Abyssinian
+    predisposiciones:
+      - enfermedad: Прогрессирующая атрофия сетчатки (Progressive Retinal Atrophy, PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дефицит пируваткиназы (Pyruvate Kinase Deficiency, PK Deficiency)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Семейный амилоидоз (Familial Amyloidosis)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Миастения (Myasthenia Gravis)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: American Curl
+    predisposiciones:
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Проблемы с хрящами ушей (редко)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: American Shorthair
+    predisposiciones:
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Поликистоз почек (Polycystic Kidney Disease, PKD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: American Wirehair
+    predisposiciones:
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Нарушения структуры волос
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Bengal
+    predisposiciones:
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дефицит пируваткиназы (PK Deficiency)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA-b)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Синдром плоской грудной клетки у котят (Flat-chested kitten syndrome)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Birman
+    predisposiciones:
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Поликистоз почек (PKD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Губчатая энцефалопатия (Feline Spongiform Encephalopathy)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипомиелинизация (дрожание у котят)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Bombay
+    predisposiciones:
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Синдром брахицефальных дыхательных путей (BAS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Черепно-лицевые дефекты
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: British Shorthair
+    predisposiciones:
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM) - высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Поликистоз почек (PKD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гемофилия B
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Burmese
+    predisposiciones:
+      - enfermedad: Гипокалиемическая полимиопатия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Сахарный диабет (высокий риск)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Синдром плоской грудной клетки у котят
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Черепно-лицевые дефекты
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Chartreux
+    predisposiciones:
+      - enfermedad: Поликистоз почек (PKD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Cornish Rex
+    predisposiciones:
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипотрихоз (наследственное выпадение волос)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Devon Rex
+    predisposiciones:
+      - enfermedad: Наследственная миопатия (Devon Rex Myopathy)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Вывих надколенника (Patellar Luxation)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Egyptian Mau
+    predisposiciones:
+      - enfermedad: Уролитиаз (образование мочевых камней)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дефицит пируваткиназы (PK Deficiency)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: European Shorthair
+    predisposiciones:
+      - enfermedad: Ожирение (общее для всех пород с низкой активностью)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Тенденция к проблемам с зубами
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Exotic Shorthair
+    predisposiciones:
+      - enfermedad: Поликистоз почек (PKD) - высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Синдром брахицефальных дыхательных путей (BAS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Малокклюзия зубов
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+  - especie: gato
+    raza: Havana Brown
+    predisposiciones:
+      - enfermedad: Тенденция к проблемам с зубами (гингивит, периодонтит)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Наследственные проблемы с почками (редко)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Himalayan
+    predisposiciones:
+      - enfermedad: Поликистоз почек (Polycystic Kidney Disease, PKD) - высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Синдром брахицефальных дыхательных путей (BAS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Малокклюзия (неправильный прикус)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Japanese Bobtail
+    predisposiciones:
+      - enfermedad: Спинальные дефекты (редко)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM) (редко)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Korat
+    predisposiciones:
+      - enfermedad: Ганглиозидоз (Gangliosidosis, болезнь накопления) - тип GM1 и GM2
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дыхательные инфекции у котят
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: LaPerm
+    predisposiciones:
+      - enfermedad: Тенденция к проблемам с зубами
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Раннее облысение (редко)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Maine Coon
+    predisposiciones:
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM) - высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дисплазия тазобедренного сустава
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Спинальная мышечная атрофия (Spinal Muscular Atrophy, SMA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Поликистоз почек (PKD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Manx
+    predisposiciones:
+      - enfermedad: Синдром Мэнкса (Manx Syndrome) - спинальные дефекты
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Артрит и проблемы с суставами
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Проблемы с роговицей (Corneal Dystrophy)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Munchkin
+    predisposiciones:
+      - enfermedad: Лордоз (чрезмерный изгиб позвоночника)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Кифоз (горбатость)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Nebelung
+    predisposiciones:
+      - enfermedad: Тенденция к ожирению
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Уролитиаз (образование мочевых камней)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Norwegian Forest Cat
+    predisposiciones:
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дефицит гликоген-разветвляющего фермента (Glycogen Storage Disease Type IV, GSD IV)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Поликистоз почек (PKD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Ocicat
+    predisposiciones:
+      - enfermedad: Почечный амилоидоз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дефицит пируваткиназы (PK Deficiency)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Oriental Shorthair
+    predisposiciones:
+      - enfermedad: Амилоидоз (почечный/печеночный)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Синдром плоской грудной клетки
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Косоглазие
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Астма
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Persian
+    predisposiciones:
+      - enfermedad: Поликистоз почек (PKD) - высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Синдром брахицефальных дыхательных путей (BAS)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Энтропион
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Дерматофития
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Ragdoll
+    predisposiciones:
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM) - высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Поликистоз почек (PKD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Наследственная тромбоэмболия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Уролитиаз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Russian Blue
+    predisposiciones:
+      - enfermedad: Мочекаменная болезнь (Уролитиаз)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Тенденция к ожирению
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+  - especie: gato
+    raza: Scottish Fold
+    predisposiciones:
+      - enfermedad: Остеохондродисплазия (Osteochondrodysplasia) - дефект хряща, влияющий на уши, хвост и суставы
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Поликистоз почек (PKD)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Siamese
+    predisposiciones:
+      - enfermedad: Амилоидоз печени и почек (Familial Amyloidosis)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Астма и бронхиальные заболевания
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденное косоглазие и нистагм
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Синдром плоской грудной клетки
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Siberian
+    predisposiciones:
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Тенденция к проблемам с зубами
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Singapura
+    predisposiciones:
+      - enfermedad: Дефицит пируваткиназы (Pyruvate Kinase Deficiency, PK Deficiency)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Аномальная структура век (Entropion)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Инертность матки (Uterine inertia)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Snowshoe
+    predisposiciones:
+      - enfermedad: Проблемы с хвостом (заломы)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Косоглазие (как у Сиамских кошек)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Somali
+    predisposiciones:
+      - enfermedad: Дефицит пируваткиназы (PK Deficiency)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Прогрессирующая атрофия сетчатки (PRA)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Семейный амилоидоз
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Sphynx
+    predisposiciones:
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM) - высокая предрасположенность
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Наследственная миопатия (мышечная слабость)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Кожные проблемы (себорея, крапивница)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Унаследованная гипокалиемия
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Tonkinese
+    predisposiciones:
+      - enfermedad: Гипокалиемическая полимиопатия (как у Бурманских)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Амилоидоз (как у Сиамских)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Косоглазие
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Turkish Angora
+    predisposiciones:
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденная глухота (особенно у белых кошек с голубыми глазами)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Атаксия (у котят)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+
+  - especie: gato
+    raza: Turkish Van
+    predisposiciones:
+      - enfermedad: Гипертрофическая кардиомиопатия (HCM)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Врожденная глухота (особенно у белых кошек с голубыми глазами)
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]
+      - enfermedad: Проблемы с волосяным покровом
+        sintomas_clave: [Используйте Google или Klinicheskie_detali.yaml]
+        diagnostico_relevante: [Используйте Google или Klinicheskie_detali.yaml]

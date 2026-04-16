@@ -1,6 +1,7 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "target": "ES2021",
     "module": "Node16",
     "moduleResolution": "Node16",
@@ -12,7 +13,7 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
+    "isolatedModules": true,  
     "baseUrl": ".",
     "paths": {
       "@/*": [

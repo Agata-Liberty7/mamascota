@@ -1,35 +1,41 @@
+// ============================================
+// 🧠 mamascota-agent.mjs — стабильная версия
+// ============================================
+
 import OpenAI from "openai";
 import dotenv from "dotenv";
 import path from "path";
 import fs from "fs";
 import { buildAgentContext } from "./utils/buildAgentContext.mjs";
-import petsMod from "../utils/pets.ts";
 
 dotenv.config();
 
-// ==================================================
-// 🧩 Безопасная инициализация normalizePet
-// ==================================================
-const normalizePet =
-  typeof petsMod?.normalizePet === "function"
-    ? petsMod.normalizePet
-    : petsMod?.default?.normalizePet ||
-      ((p) => ({
-        ...p,
-        name: p?.name || "Sin nombre",
-        species: p?.species || "No especificada",
-      }));
+// --------------------------------------------
+// 🐾 normalizePet (без зависимости от фронта)
+// --------------------------------------------
+function normalizePet(p) {
+  return {
+    id: p?.id || null,
+    name: p?.name || "Sin nombre",
+    species: p?.species || "No especificada",
+    breed: p?.breed || null,          // 🆕 сохраняем породу
+    sex: p?.sex || "No indicado",
+    ageYears: p?.ageYears ?? null,
+    neutered: !!p?.neutered,
+  };
+}
 
-// ==================================================
-// 🤖 Настройки OpenAI
-// ==================================================
+
+// --------------------------------------------
+// 🤖 OPENAI
+// --------------------------------------------
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// ==================================================
-// 📘 Загрузка системного промта (один раз)
-// ==================================================
+// --------------------------------------------
+// 📘 Системный промт
+// --------------------------------------------
 const PROMPT_PATH = path.resolve("./profiles/mamascota-familiar.md");
 let SYSTEM_PROMPT = "";
 
@@ -37,86 +43,139 @@ try {
   SYSTEM_PROMPT = fs.readFileSync(PROMPT_PATH, "utf8");
   console.log(`✅ [PROMPT] Загружен (${SYSTEM_PROMPT.length} символов)`);
 } catch (err) {
-  console.error("❌ [PROMPT] Ошибка при загрузке промта:", err.message);
+  console.error("❌ [PROMPT] Ошибка загрузки:", err.message);
 }
 
-// ==================================================
-// 🧠 Основная функция обработки сообщений
-// ==================================================
+// ============================================
+// 🧠 Главная функция — processMessage
+// ============================================
 export async function processMessage(
   message,
   pet,
   symptomKeys = [],
   userLang = "en",
   conversationId = "default",
-  conversationHistory = []
+  conversationHistory = [],
+  langOverride = "en"
 ) {
   console.log("💬 Новое сообщение:", message);
-  console.log("🐾 Данные питомца:", pet);
+  console.log("🐾 Питомец:", pet);
   console.log("🧵 ID диалога:", conversationId);
 
   try {
-    // 🔹 Нормализуем данные питомца
     const petData = normalizePet(pet);
 
-    // ==================================================
-    // 🧩 Оптимизированная загрузка контекста
-    // ==================================================
-    // buildAgentContext вызываем только при первом сообщении
+    // 🔤 Выбираем рабочий язык ответов
+    const effectiveLang = langOverride || userLang || "es";
+
+    // Подставляем язык в плейсхолдер {LANG_OVERRIDE} из mamascota-familiar.md
+    const finalSystemPrompt = SYSTEM_PROMPT.replace(
+      /\{LANG_OVERRIDE\}/g,
+      effectiveLang
+    );
+
+    // ----------------------------------------------------------
+    // 🔥 Логика "реального" первого шага диалога
+    // ----------------------------------------------------------
+    const isFirstRealMessage =
+      symptomKeys?.length > 0 || // пользователь выбрал симптомы
+      conversationHistory.length === 0 ||
+      (conversationHistory.length === 1 &&
+        conversationHistory[0]?.content === ""); // техническое пустое сообщение
+
     let fullContext = "";
 
-    if (conversationHistory.length <= 1) {
-      fullContext = await buildAgentContext(petData, symptomKeys, userLang);
-      console.log("🧩 Контекст агента получен:", fullContext ? "OK" : "EMPTY");
+    if (isFirstRealMessage) {
+      console.log("🟢 Первый шаг диалога → строим полный контекст…");
+
+      fullContext = await buildAgentContext(
+        petData,
+        symptomKeys,
+        userLang,
+        "familiar"
+      );
+
+      console.log("🧩 Контекст сформирован:", fullContext ? "OK" : "EMPTY");
     } else {
-      console.log("🔁 Контекст уже сформирован ранее, пропускаем повторную загрузку YAML");
+      console.log("🔁 Контекст уже был, пропускаем загрузку YAML");
     }
 
-    // 🔹 Формируем краткое резюме пациента для GPT
+    // ----------------------------------------------------------
+    // 🧪 Защищённый JSON.parse
+    // ----------------------------------------------------------
+    let parsedContext = null;
+    if (fullContext) {
+      try {
+        parsedContext = JSON.parse(fullContext);
+      } catch (err) {
+        console.warn("⚠️ Ошибка JSON.parse(fullContext):", err);
+      }
+    }
+    if (parsedContext) {
+      console.log("🔍 [CTX] algorithms:", parsedContext.algorithms?.length || 0);
+      console.log("🔍 [CTX] senior age:", parsedContext.pet?.ageYears);
+      console.log(
+        "🔍 [CTX] clinical_details_for_species:",
+        parsedContext.clinical_details_for_species?.length || 0
+      );
+      console.log(
+        "🔍 [CTX] breed_risks_for_pet:",
+        parsedContext.breed_risks_for_pet?.length || 0
+      );
+    }
+
+    // ----------------------------------------------------------
+    // 🩺 Краткое резюме пациента
+    // ----------------------------------------------------------
     let petSummary = "";
-    try {
-      if (fullContext) {
-        const parsed = JSON.parse(fullContext);
-        if (parsed?.pet) {
-          const p = parsed.pet;
-          petSummary = `
+    if (parsedContext?.pet) {
+      const p = parsedContext.pet;
+      petSummary = `
 Данные пациента:
 - Имя: ${p.name || "не указано"}
 - Вид: ${p.species || "не указан"}
 - Возраст: ${p.ageYears ?? "нет данных"} лет
 - Стерилизован: ${p.neutered ? "да" : "нет"}
-`;
-        }
-      }
-    } catch (err) {
-      console.warn("⚠️ Не удалось распарсить контекст для резюме питомца:", err);
+      `;
     }
 
-    // ==================================================
-    // 🧠 Формирование истории для OpenAI
-    // ==================================================
+    // ----------------------------------------------------------
+    // 🧠 Формирование истории сообщений для GPT
+    // ----------------------------------------------------------
     const messages = [];
 
-    // Добавляем системное сообщение (с краткостью)
+    // 1) SYSTEM — твой большой промпт + служебная пометка
     messages.push({
       role: "system",
-      content: `${SYSTEM_PROMPT}\n\n[Инструкция]: Отвечай кратко, ясно, по существу. Не ставь диагнозов.`,
+      content:
+        `${finalSystemPrompt}\n\n` +
+        `[LANG_OVERRIDE]: ${effectiveLang}\n` +
+        `[Инструкция]: Отвечай кратко, ясно, строго по шагам и без диагнозов.`,
     });
 
-    // Если есть новый контекст (первое сообщение) — добавляем его
+    // 2) Guard-промпт по языку (дополнительная защита)
+    messages.push({
+      role: "user",
+      content: `Отвечай только на языке: ${effectiveLang}. Никогда не переходи на другой язык.`,
+    });
+
+    // 3) Контекст алгоритмов (JSON из buildAgentContext), если это первый шаг
     if (fullContext) {
       messages.push({
-        role: "user",
-        content: `${fullContext}\n\n🌐 El idioma del usuario es: ${userLang}. Por favor, responde en este idioma.`,
+        role: "system",
+        content:
+          "CLINICAL_CONTEXT_JSON (не показывай пользователю, просто используй как данные):\n" +
+          fullContext,
       });
     }
 
-    // Добавляем всю историю сообщений (если есть)
-    if (conversationHistory && conversationHistory.length > 0) {
+
+    // 4) История диалога
+    if (conversationHistory.length > 0) {
       messages.push(...conversationHistory);
     }
 
-    // Добавляем текущее сообщение пользователя (если ещё не добавлено)
+    // 5) Текущее сообщение пользователя (без дублирования)
     if (!conversationHistory.some((m) => m.content === message)) {
       messages.push({
         role: "user",
@@ -124,27 +183,28 @@ export async function processMessage(
       });
     }
 
-    // ==================================================
-    // 🤖 GPT: создаём ответ
-    // ==================================================
+    // ----------------------------------------------------------
+    // 🤖 GPT ответ
+    // ----------------------------------------------------------
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-5-mini",
       messages,
-      temperature: 0.7,
     });
 
     const reply =
       response.choices?.[0]?.message?.content ||
-      "Извини, не удалось получить ответ от агента.";
+      "Извини, не удалось получить ответ.";
+
     console.log("✅ Ответ агента:", reply);
 
     return { ok: true, reply, conversationId };
   } catch (error) {
-    console.error("❌ Ошибка в processMessage:", error.message);
+    console.error("❌ Ошибка processMessage:", error);
     return {
       ok: false,
-      error: "Ошибка при обработке сообщения GPT.",
-      details: error.message,
+      error: "Ошибка при обработке сообщения.",
+      details: String(error.message || error),
     };
   }
 }
+

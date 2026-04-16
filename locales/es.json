@@ -2,23 +2,27 @@
   "language_notice_title": "Idioma detectado",
   "language_notice_message": "El idioma de la interfaz se ha configurado automáticamente.",
   "ok_button": "Entendido",
+  "alert_title": "Atención",
+  "paywall_trial_expired": "El período de prueba ha expirado. Para continuar, por favor suscríbete al acceso.",
+  "paywall_limit_reached": "Has alcanzado el límite de uso gratuito. Para continuar, por favor suscríbete al acceso.",
+  "paywall_go_to_payment": "Passar al pago",
 
   "exit_title": "¿Deseas salir?",
-  "exit_message": "Puedes guardar tu sesión para continuar más tarde o eliminar todos los datos.",
+  "exit_message": "Puedes guardar tu sesión para continuar más tarde.",
   "exit_save": "Guardar sesión",
-  "exit_delete": "Eliminar sesión",
+  "exit_delete": "Salir y empezar de nuevo",
   "exit_button": "Salir",
 
-  "terms_title": "Términos y condiciones",
-  "terms_paragraph1": "Quiero que sepas algo importante.",
-  "terms_paragraph2": "Soy tu asistente y no reemplazo la atención veterinaria profesional. Mi orientación es solo informativa, para ayudarte a comprender mejor a tu compañero.",
-  "terms_paragraph3": "Si ves que su estado empeora, acude siempre a un veterinario.",
+  "terms_title": "Términos de uso",
+  "terms_paragraph1": "Antes de continuar, quiero aclarar algo importante.",
+  "terms_paragraph2": "Soy una asistente digital para observar el estado de tu mascota y NO sustituyo la atención veterinaria profesional.\nNO realizo diagnósticos ni prescribo tratamientos.",
+  "terms_paragraph3": "Si notas un empeoramiento del estado de tu mascota o algo te genera preocupación, es importante acudir al veterinario lo antes posible.",
   "terms_accept": "Acepto los términos",
   "terms_decline": "No acepto",
 
-  "privacy_policy": "Política de privacidad",
-  "privacy_paragraph1": "Al usarme, confirmas que comprendes estos límites y aceptas que puedo usar tus datos solo para apoyarte mejor.",
-  "privacy_paragraph2": "Si estás de acuerdo, sigamos juntos.",
+  "privacy_title": "Política de privacidad",
+  "privacy_paragraph1": "Para poder estar realmente a tu lado y ayudarte, necesito comprender tu situación y el estado de tu mascota.",
+  "privacy_paragraph2": "Uso tus datos solo para este diálogo\ny no los comparto con terceros.",
   "privacy_accept": "Aceptar",
   "privacy_decline": "Rechazar",
 
@@ -36,6 +40,9 @@
   "animal_reptile": "Reptil",
   "animal_fish": "Pez",
   "animal_exotic": "Exótico",
+  "coming_soon": "Pronto",
+  "coming_soon_message": "Agregar otros tipos de animales estará disponible en una de las próximas versiones de la app.",
+
 
   "animal_question": "¿Sobre qué animal quieres preguntar?",
   "not_in_list": "¿No está en la lista?",
@@ -44,6 +51,10 @@
   "species_placeholder": "Especie / raza",
   "age_placeholder": "Edad",
   "name_placeholder": "Nombre",
+  "breedWarning": {
+    "title": "La raza importa",
+    "message": "Con ella, el asistente puede tener en cuenta predisposiciones específicas de la raza. Sin ella, las respuestas serán más generales."
+  },
 
   "continue_without_data_title": "¿Deseas continuar sin completar los datos?",
   "continue_without_data_message": "Esta información me ayuda a ofrecerte una mejor experiencia.",
@@ -55,16 +66,16 @@
   "save": "Guardar", 
   "delete": "Eliminar",
 
-  "start_subtitle": "Cuidadora de bienestar animal",
-  "start_description": "Te ayudo a entender lo que siente",
-  "start_button": "Iniciar",
+  "start_subtitle": "Niñera digital para tu mascota",
+  "start_description": "La atención es el primer paso\nhacia la ayuda",
+  "start_button": "Empezar",
   "continue_title": "¿Continuar?",
   "continue_message": "Puedes retomar tu sesión anterior o empezar una nueva.",
   "start_new": "Empezar nueva",
   "continue_session": "Continuar sesión",
 
   "menu": {
-    "animal_selection": "Al inicio",
+    "start_consultation": "Iniciar consulta",
     "change_language": "Cambiar idioma",
     "lang_en": "Inglés",
     "lang_es": "Español",
@@ -72,6 +83,7 @@
     "lang_he": "Hebreo",
     "chat": "Chat",
     "summary": "Resumen",
+    "saved_sessions": "Sesiones guardadas",
     "settings": "Configuración",
     "about": "Acerca de",
     "open": "Menú",
@@ -79,53 +91,112 @@
   },
 
   "about": {
-    "tagline": "Cómo funciona Mamascota",
-    "p1": "Esta app ayuda a los cuidadores a observar síntomas y comportamientos, sin sustituir la atención veterinaria.",
-    "p2": "Está basada en algoritmos veterinarios y lógica de comportamiento, adaptados al nivel del usuario familiar.",
-    "p3": "No damos diagnósticos. Ayudamos a hacer las preguntas correctas y buscar ayuda a tiempo.",
-    "signature": "Creado con amor por los animales y atención a las personas.",
-    "follow": "Seguir el proyecto en Instagram"
+    "tagline": "Acerca de",
+    "p1": "Mamascota ayuda a estructurar las observaciones sobre el estado de tu mascota.",
+    "p2": "Ayuda a identificar qué signos son importantes y qué hacer a continuación.",
+    "p3": "Mamascota no realiza diagnósticos ni sustituye la atención veterinaria profesional.",
+    "signature": "Creado con cuidado por los animales y respeto por las personas.", 
+    "follow": "Seguir el proyecto en Instagram",
+    "show_onboarding_again": "Más…"
   },
 
   "symptomSelector": {
     "title": "¿Qué has notado en tu mascota?",
-    "hint": "Selecciona hasta 3 síntomas principales que hayas notado",
+    "hint": "Selecciona hasta 5 síntomas principales que hayas notado",
     "confirm": "Preguntar al asistente"
   },
 
   "symptoms": {
-    "lethargy": "Letargo",
-    "vomiting": "Vómito",
+    "lethargy": "Decaimiento",
+    "vomiting": "Vómitos",
     "diarrhea": "Diarrea",
+    "constipation": "Estreñimiento",
     "cough": "Tos",
+    "breathing_difficulty": "Dificultad para respirar",
+    "sneezing": "Estornudos / mocos",
     "appetite_loss": "Falta de apetito",
+    "weight_loss": "Pérdida de peso",
     "limping": "Cojera",
-    "drinking_too_much": "Bebe en exceso",
+    "pain_signs": "Parece que siente dolor",
+    "drinking_too_much": "Bebe mucho",
+    "urinating_too_often": "Orina muy seguido",
     "blood_in_urine": "Sangre en la orina",
+    "itching_skin": "Picores, se rasca",
+    "skin_lesions": "Problemas de piel",
+    "skin_redness": "Piel enrojecida",
+    "hair_loss": "Pérdida de pelo",
+    "wounds_or_ulcers": "Heridas / úlceras",
+
+    "ear_discharge": "Secreción en las orejas",
+    "ear_odor": "Mal olor de las orejas",
+    "ear_pain": "Dolor de oído",
+    "head_shaking": "Sacudir la cabeza / rascarse las orejas",
+
+    "eye_redness": "Ojos rojos",
+    "eye_discharge": "Secreción ocular",
+    "eye_tearing": "Ojos llorosos",
+    "eyelid_swelling": "Párpados hinchados",
+    "eye_cloudiness": "Ojos nublados",
+    "eye_pain": "Dolor ocular o malestar",
+
+    "aggression": "Comportamiento agresivo",
+    "disorientation": "Desorientación / confusión",
+
+    "pain_localized": "Dolor en un área específica",
+    "pain_general": "Dolor general / malestar",
+
+    "behavior_change": "Cambio de conducta",
+    "anxiety_stress": "Ansiedad / estrés",
     "seizures": "Convulsiones",
-    "custom": "Otro síntoma"
+    "collapse_fainting": "Desmayo / colapso",
+    "custom": "Otro"
   },
 
   "chat": {
+    "summary_hint": "Puedes guardar el resumen usando el ícono rojo en la esquina inferior izquierda, o saliendo y guardando la sesión.",
+    "phase": {
+      "intake": "Fase: Recopilando información",
+      "clarify": "Fase: Aclarando detalles",
+      "summary": "Fase: Resumiendo",
+      "ended": "Fase: Finalizado"
+    },
+    "pdf_ready": "Tu resumen en PDF está listo",
+    "pdf_not_ready": "La consulta aún no ha terminado. Complétala para generar un informe.",
+    "pdf_error": "No se pudo crear el PDF. Por favor, inténtalo de nuevo.",
+    "open_pdf": "Abrir PDF",
+    "share_pdf": "Compartir",
     "pet_default": "La mascota",
     "symptom_intro": "muestra los siguientes síntomas",
     "ask_confirmation": "Por favor confirma si es correcto o añade detalles",
     "placeholder": "Escribe tu mensaje...",
-    "invite": "¿Puedes ayudarme a entender qué podría significar esto?"
-
+    "invite": "¿Puedes ayudarme a entender qué podría significar esto?",
+    "waiting": {
+      "hint1": "Revisando la información…",
+      "hint2": "Analizando las observaciones…",
+      "hint3": "Teniendo en cuenta la edad…",
+      "hint4": "Un momento, por favor…",
+      "summary": "Espera, estoy resumiendo…"
+    }
   },
-
-  "onboarding_1_title": "¡Bienvenido!",
-  "onboarding_1_subtitle": "Mamascota te ayuda a notar lo importante y no olvidar lo esencial. Es fácil",
-  "onboarding_2_title": "Tú observas — yo te guío",
-  "onboarding_2_subtitle": "No tienes que saberlo todo. Solo cuéntame lo que ves y te diré qué puede ser relevante",
-  "onboarding_3_title": "Sin diagnósticos, pero con claridad",
-  "onboarding_3_subtitle": "La app no da diagnósticos, pero te ayuda a entender qué pasa y cuándo ir al veterinario",
-  "onboarding_4_title": "Cada animal es un mundo",
-  "onboarding_4_subtitle": "Edad, especie, carácter — todo cuenta. Me adapto a tu realidad",
-  "onboarding_skip": "Saltar",
+  "onboarding_1_title": "Mamascota está contigo",
+  "onboarding_1_subtitle": "Te ayudo a identificar [[signos importantes]] y a prepararte para la [[visita al veterinario]].",
+  "onboarding_2_subtitle": "Cuéntame con [[tus propias palabras]].\nSi necesitas pausar, puedes continuar [[más tarde]].\nHago preguntas paso a paso para no pasar por alto nada importante.",
+  "onboarding_3_subtitle": "Tú me cuentas lo que notaste, y yo te ayudo a [[destacar lo importante]] y [[organizar tus observaciones]].",
+  "onboarding_4_subtitle": "Crea un [[informe PDF]] claro y sigue el estado de tu mascota con un simple [[Diario de observación]].\nLleva el informe a tu veterinario para que pueda ver la [[imagen completa]] de inmediato.", 
+  "onboarding_2_title": "Nos comunicamos de forma sencilla",
+  "onboarding_3_title": "Tú observas — \nyo ayudo",
+  "onboarding_4_title": "Informes para tu veterinario",
+  "onboarding_skip": "Saltar",  
   "onboarding_next": "Siguiente",
   "onboarding_start": "Empezar",
+
+  "summary": {
+    "empty_title": "Tus consultas aparecerán aquí",
+    "empty_subtitle": "Inicia un nuevo chat y guárdalo al terminar. Aparecerá en esta lista.",
+    "delete_confirm": "¿Eliminar esta sesión guardada?",
+    "delete_error": "No se pudo eliminar la sesión guardada. Por favor, inténtalo de nuevo.",
+    "tools_hint": "Aquí puedes abrir un informe PDF, usar el Diario de observación o exportar CSV (en web app) para el seguimiento posterior."
+  }, 
 
   "settings": {
     "remind_in_6h": "Recordar de nuevo en 6 horas",
@@ -148,6 +219,7 @@
       "name_label": "Nombre *",
       "species_label": "Especie *",
       "breed_label": "Raza",
+      "breed_hint": "Indicar la raza ayuda a adaptar mejor la orientación para tu animal",
       "age_label": "Edad (años)"
     },
     "clear": "Borrar",
@@ -160,7 +232,52 @@
   "sex": "Sexo",
   "male": "Macho",
   "female": "Hembra",
-  "not_set": "Sin especificar",
+  "not_set": "No especificado",
   "neutered_spayed": "Esterilizado/a",
-  "animal_other": "Otro"
+  "animal_other": "Otro",
+
+  "pdf": {
+    "report_title": "Informe para la clínica de",
+    "date_label": "Fecha y hora",
+    "owner_notes_title": "Anamnesis",
+    "focus_title": "Enfoque para el veterinario",
+    "next_steps_title": "Próximos pasos",
+    "observe_title": "Observación en casa",
+    "urgent_title": "Urgente ahora si...",
+    "plan_title": "Plan de visita",
+    "generating": "Creando PDF...",
+    "preparing_language": "Preparando el informe en el idioma seleccionado...",
+    "language_title": "Elige el idioma del PDF",
+    "share_hint": "Comparte el informe con el veterinario antes de la visita o llévalo contigo — esto reducirá significativamente el tiempo de espera y la asistencia a tu mascota",
+
+    "diary_title": "Diario de observaciones",
+    "diary_intro": "Registra las observaciones diarias y los cambios en el estado de tu mascota. Estas notas ayudarán al veterinario a evaluar la situación de manera más precisa.",
+    "diary_pet": "Mascota",
+    "diary_species": "Especie",
+    "diary_start_date": "Fecha de inicio",
+
+    "diary_date": "Fecha",
+    "diary_appetite": "Apetito",
+    "diary_water_intake": "Consumo de agua",
+    "diary_activity": "Actividad",
+    "diary_symptoms": "Síntomas",
+    "diary_notes": "Notas"
+  },
+
+  "csv": {
+    "download_title": "Archivo CSV",
+    "download_hint": "Descarga el archivo y luego ábrelo en Excel, Numbers, Google Sheets o OpenOffice.",
+    "download_button": "Descargar"
+  },
+  
+  "paywall": {
+    "title": "Acceso completo",
+    "subtitle": "Desbloquea todas las posibilidades",
+    "feature_1": "Informe PDF para el veterinario",
+    "feature_2": "Seguimiento de síntomas",
+    "feature_3": "Historial de consultas",
+    "price": "1,99 € / mes",
+    "cta": "Obtener acceso",
+    "note": "Puedes cancelar en cualquier momento"
+  }
 }

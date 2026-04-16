@@ -3,7 +3,6 @@ import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
-  Dimensions,
   FlatList,
   Image,
   KeyboardAvoidingView,
@@ -16,6 +15,7 @@ import {
   View,
 } from 'react-native';
 
+
 import TermsModal from '../components/TermsModal';
 import PetForm from '../components/ui/PetForm';
 import { animals } from '../constants/animals';
@@ -23,6 +23,9 @@ import i18n from '../i18n';
 import { theme } from '../src/theme';
 import type { Pet, Species } from '../types/pet';
 import { getPets, upsertPet } from '../utils/pets';
+import { setCurrentPetId } from '../src/data/pets';
+import { warmUpAgentInBackground } from "../utils/chatWithGPT";
+
 
 export default function AnimalSelection() {
   const router = useRouter();
@@ -30,6 +33,8 @@ export default function AnimalSelection() {
   const { langKey, from } = useLocalSearchParams();
   const normalizedLangKey = Array.isArray(langKey) ? langKey[0] : langKey ?? 'default';
   const normalizedFrom = Array.isArray(from) ? from[0] : from;
+
+
 
   const [selectedAnimal, setSelectedAnimal] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -43,6 +48,10 @@ export default function AnimalSelection() {
   const [myPets, setMyPets] = useState<Pet[]>([]);
   const [editingPetId, setEditingPetId] = useState<string | null>(null);
   const [showTermsModal, setShowTermsModal] = useState(false);
+  // ✅ Разрешённые виды для MVP (только собака и кошка)
+  const enabledSpecies = new Set<Species>(["dog", "cat"]);
+  const warmedOnceRef = React.useRef(false);
+
 
   const resetFields = () => {
     setSpecies('');
@@ -56,12 +65,22 @@ export default function AnimalSelection() {
   };
 
   useEffect(() => {
+    if (warmedOnceRef.current) return;
+    warmedOnceRef.current = true;
+
+    // 🔥 прогрев — параллельно, без ожидания
+    warmUpAgentInBackground();
+  }, []);
+
+  useEffect(() => {
     const showBack =
-      normalizedFrom === 'chat' ||
-      normalizedFrom === 'summary' ||
-      normalizedFrom === 'tag-cloud';
+      normalizedFrom === "chat" ||
+      normalizedFrom === "summary" ||
+      normalizedFrom === "tag-cloud";
+
     navigation.setOptions({ headerBackVisible: showBack });
   }, [normalizedFrom, navigation]);
+
 
   const openMyPets = async () => {
     if (!petsOpen && myPets.length === 0) {
@@ -74,13 +93,21 @@ export default function AnimalSelection() {
   useEffect(() => {
     const checkTermsAccepted = async () => {
       const accepted = await AsyncStorage.getItem('acceptedTerms');
-      if (!accepted) setShowTermsModal(true);
+      const legacy = await AsyncStorage.getItem('termsAccepted');
+
+      if (accepted !== 'true' && legacy !== 'true') {
+        setShowTermsModal(true);
+      }
     };
     checkTermsAccepted();
   }, []);
 
+
   const handleAcceptTerms = async () => {
-    await AsyncStorage.setItem('acceptedTerms', 'true');
+    await AsyncStorage.multiSet([
+      ['acceptedTerms', 'true'],
+      ['termsAccepted', 'true'],
+    ]);
     setShowTermsModal(false);
   };
 
@@ -91,34 +118,127 @@ export default function AnimalSelection() {
       setSpecies(selected.id);
       setEditingPetId(null); // новая карточка
       setModalVisible(true);
+      warmUpAgentInBackground();
+
     }
   };
 
+    const showWebConfirm = async ({
+      title,
+      message,
+      buttons,
+    }: {
+      title: string;
+      message: string;
+      buttons: Array<{
+        key: string;
+        label: string;
+        destructive?: boolean;
+      }>;
+    }): Promise<string> => {
+      if (Platform.OS !== "web") return "cancel";
+
+      return await new Promise<string>((resolve) => {
+        (window as any).__MAMASCOTA_CONFIRM_RESOLVE__ = resolve;
+
+        window.dispatchEvent(
+          new CustomEvent("mamascota:confirm", {
+            detail: {
+              title,
+              message,
+              buttons,
+            },
+          })
+        );
+      });
+    };
+
   const handleContinue = async () => {
     const validSpecies: Species[] = [
-      'cat', 'dog', 'rabbit', 'ferret', 'bird', 'rodent', 'reptile', 'fish', 'exotic',
+      "cat",
+      "dog",
+      "rabbit",
+      "ferret",
+      "bird",
+      "rodent",
+      "reptile",
+      "fish",
+      "exotic",
     ];
-    const trimmedSpecies = (species || '').trim().toLowerCase() as Species;
+    const trimmedSpecies = (species || "").trim().toLowerCase() as Species;
     const normalizedSpecies: Species = validSpecies.includes(trimmedSpecies)
       ? trimmedSpecies
-      : 'exotic';
+      : "exotic";
 
+    // 🔴 1) Жёсткая проверка имени — как было
     if (!name.trim()) {
+      if (Platform.OS === "web") {
+        const choice = await showWebConfirm({
+          title: String(i18n.t("continue_without_data_title")),
+          message: String(i18n.t("continue_without_data_message")),
+          buttons: [
+            {
+              key: "back",
+              label: String(i18n.t("alert-back")),
+            },
+            {
+              key: "continue",
+              label: String(i18n.t("continue")),
+              destructive: true,
+            },
+          ],
+        });
+
+        if (choice === "continue") {
+          setModalVisible(false);
+        }
+
+        return;
+      }
+
       Alert.alert(
-        i18n.t('continue_without_data_title'),
-        i18n.t('continue_without_data_message'),
+        String(i18n.t("continue_without_data_title")),
+        String(i18n.t("continue_without_data_message")),
         [
-          { text: i18n.t('cancel'), style: 'cancel' },
           {
-            text: i18n.t('continue'),
+            text: String(i18n.t("alert-back")),
+            style: "cancel",
             onPress: () => {
-              setModalVisible(false);
-              router.push('/chat');
+              // остаёмся в модалке PetForm
             },
           },
-        ],
+          {
+            text: String(i18n.t("continue")),
+            style: "destructive",
+            onPress: () => {
+              setModalVisible(false);
+              // остаёмся на экране animal-selection
+            },
+          },
+        ]
       );
-      return;
+      return; // ⬅️ единственное блокирующее условие
+    }
+
+    // 🟡 2) МЯГКОЕ предупреждение, если порода не указана — БЕЗ return
+    if (!breed.trim()) {
+      if (Platform.OS === "web") {
+        await showWebConfirm({
+          title: String(i18n.t("breedWarning.title")),
+          message: String(i18n.t("breedWarning.message")),
+          buttons: [
+            {
+              key: "ok",
+              label: String(i18n.t("ok_button")),
+            },
+          ],
+        });
+      } else {
+        Alert.alert(
+          String(i18n.t("breedWarning.title")),
+          String(i18n.t("breedWarning.message"))
+        );
+      }
     }
 
     const candidate: Partial<Pet> = {
@@ -126,8 +246,9 @@ export default function AnimalSelection() {
       name: name.trim(),
       species: normalizedSpecies,
       ageYears: age ? parseFloat(age) : undefined,
-      breed: breed.trim() || undefined,
-      sex: sex === 'male' || sex === 'female' ? sex : undefined,
+      // 🐾 если порода не указана — сохраняем "__other"
+      breed: breed.trim() || "__other",
+      sex: sex === "male" || sex === "female" ? sex : undefined,
       neutered: !!neutered,
     };
 
@@ -135,43 +256,54 @@ export default function AnimalSelection() {
     const saved = await upsertPet(candidate);
 
     // ✅ Сразу записываем активного питомца для всех модулей
-    await AsyncStorage.setItem('activePetId', saved.id);
-    await AsyncStorage.setItem('selectedPet', JSON.stringify(saved));
-    console.log('🐾 Active pet set from AnimalSelection:', saved.name);
+    await setCurrentPetId(saved.id);
 
     resetFields();
     setModalVisible(false);
 
     // 🔄 Передаём данные в чат
     router.push({
-      pathname: '/chat',
+      pathname: "/chat",
       params: { pet: JSON.stringify(saved) },
     });
   };
 
-
-  const screenWidth = Dimensions.get('window').width;
   const numColumns = 3;
-  const spacing = 16;
-  const itemWidth = (screenWidth - spacing * (numColumns + 1)) / numColumns;
+
 
   return (
     <View key={normalizedLangKey} style={styles.container}>
       <Text style={styles.title}>{i18n.t('animal_question')}</Text>
       <FlatList
+        key="animals-3"
         data={animals}
         numColumns={numColumns}
         keyExtractor={(item) => item.id}
+        columnWrapperStyle={styles.columnWrapper}
         contentContainerStyle={styles.grid}
         ListFooterComponent={
           <View style={styles.footerContainer}>
             <Text style={styles.footerText}>{i18n.t('not_in_list')}</Text>
             <TouchableOpacity
-              onPress={() => {
-                setSelectedAnimal(null);
-                setSpecies('');
-                setEditingPetId(null);
-                setModalVisible(true);
+              onPress={async () => {
+                if (Platform.OS === "web") {
+                  await showWebConfirm({
+                    title: String(i18n.t("add_other")),
+                    message: String(i18n.t("coming_soon_message")),
+                    buttons: [
+                      {
+                        key: "ok",
+                        label: String(i18n.t("ok_button")),
+                      },
+                    ],
+                  });
+                  return;
+                }
+
+                Alert.alert(
+                  String(i18n.t("coming_soon")),
+                  String(i18n.t("not_in_list"))
+                );
               }}
               style={styles.footerButton}
             >
@@ -179,16 +311,40 @@ export default function AnimalSelection() {
             </TouchableOpacity>
           </View>
         }
-        renderItem={({ item }) => (
-          <TouchableOpacity style={[styles.card, { width: itemWidth }]} onPress={() => handleSelect(item.id)}>
-            <Image source={item.image} style={styles.image} resizeMode="contain" />
-            <Text style={styles.label}>{i18n.t(item.label)}</Text>
-          </TouchableOpacity>
-        )}
+
+        renderItem={({ item }) => {
+          const isEnabled = enabledSpecies.has(item.id as Species);
+
+          return (
+            <TouchableOpacity
+              style={[
+                styles.card,
+                Platform.OS === "web" && styles.cardWeb,
+                !isEnabled && styles.cardDisabled,
+              ]}
+              disabled={!isEnabled}
+              onPress={isEnabled ? () => handleSelect(item.id) : undefined}
+              activeOpacity={isEnabled ? 0.7 : 1}
+            >
+              <Image source={item.image} style={styles.image} resizeMode="contain" />
+              <Text style={styles.label}>{i18n.t(item.label)}</Text>
+
+              {!isEnabled && (
+                <Text style={styles.comingSoon}>
+                  {i18n.t("coming_soon")}
+                </Text>
+              )}
+            </TouchableOpacity>
+          );
+        }}
+
       />
-      <Modal visible={modalVisible} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
-          <KeyboardAvoidingView style={styles.modalContent} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      {modalVisible && Platform.OS === "web" ? (
+        <View style={styles.webModalOverlay}>
+          <KeyboardAvoidingView
+            style={styles.modalContent}
+            behavior="height"
+          >
             <ScrollView contentContainerStyle={styles.scrollContent}>
               <Text style={styles.modalTitle}>{i18n.t('animal_data')}</Text>
 
@@ -209,9 +365,16 @@ export default function AnimalSelection() {
                           setSpecies(p.species ?? '');
                           setName(p.name ?? '');
                           setAge(p.ageYears ? String(p.ageYears) : '');
+
+                          if (p.breed) {
+                            setBreed(p.breed);
+                          } else {
+                            setBreed("__other");
+                          }
+
                           if (p.sex) setSex(p.sex as any);
                           if (p.neutered != null) setNeutered(!!p.neutered);
-                          setEditingPetId(p.id ?? null); // редактируем существующего
+                          setEditingPetId(p.id ?? null);
                           setPetsOpen(false);
                         }}
                       >
@@ -242,7 +405,75 @@ export default function AnimalSelection() {
             </ScrollView>
           </KeyboardAvoidingView>
         </View>
-      </Modal>
+      ) : (
+        <Modal visible={modalVisible} transparent animationType="slide">
+          <View style={styles.modalOverlay}>
+            <KeyboardAvoidingView
+              style={styles.modalContent}
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
+              <ScrollView contentContainerStyle={styles.scrollContent}>
+                <Text style={styles.modalTitle}>{i18n.t('animal_data')}</Text>
+
+                <TouchableOpacity onPress={openMyPets} style={styles.pickerButton}>
+                  <Text style={styles.pickerButtonText}>{i18n.t('settings.pets.title')}</Text>
+                </TouchableOpacity>
+
+                {petsOpen && (
+                  <View style={styles.petsPanel}>
+                    {myPets.length === 0 ? (
+                      <Text style={styles.petsEmpty}>{i18n.t('settings.pets.empty')}</Text>
+                    ) : (
+                      myPets.map((p, index) => (
+                        <TouchableOpacity
+                          key={`${p.id ?? 'noid'}-${index}`}
+                          style={styles.petItem}
+                          onPress={() => {
+                            setSpecies(p.species ?? '');
+                            setName(p.name ?? '');
+                            setAge(p.ageYears ? String(p.ageYears) : '');
+
+                            if (p.breed) {
+                              setBreed(p.breed);
+                            } else {
+                              setBreed("__other");
+                            }
+
+                            if (p.sex) setSex(p.sex as any);
+                            if (p.neutered != null) setNeutered(!!p.neutered);
+                            setEditingPetId(p.id ?? null);
+                            setPetsOpen(false);
+                          }}
+                        >
+                          <Text style={styles.petName}>{p.name || '—'}</Text>
+                        </TouchableOpacity>
+                      ))
+                    )}
+                  </View>
+                )}
+
+                <PetForm
+                  species={species as Species}
+                  name={name}
+                  ageYears={age}
+                  breed={breed}
+                  sex={sex}
+                  neutered={neutered}
+                  onNameChange={setName}
+                  onAgeChange={setAge}
+                  onBreedChange={setBreed}
+                  onSexChange={setSex}
+                  onNeuteredChange={setNeutered}
+                />
+
+                <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
+                  <Text style={styles.continueText}>{i18n.t('continue')}</Text>
+                </TouchableOpacity>
+              </ScrollView>
+            </KeyboardAvoidingView>
+          </View>
+        </Modal>
+      )}
 
       <TermsModal visible={showTermsModal} onAccept={handleAcceptTerms} onDecline={() => setShowTermsModal(false)} />
     </View>
@@ -250,13 +481,71 @@ export default function AnimalSelection() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingTop: 16, backgroundColor: theme.colors.background },
-  title: { fontSize: 18, fontWeight: '600', marginBottom: 16, textAlign: 'center' },
-  grid: { paddingHorizontal: 16, paddingBottom: 32 },
-  card: { borderRadius: 12, paddingVertical: 8, margin: 8, alignItems: 'center' },
-  image: { width: 100, height: 100 },
-  label: { marginTop: 8, fontSize: 14, textAlign: 'center' },
-  modalOverlay: { flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.5)' },
+  container: {
+    flex: 1,
+    paddingTop: 16,
+    backgroundColor: theme.colors.background,
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 16,
+    textAlign: 'center',
+    width: "100%",
+    maxWidth: 980,
+    paddingHorizontal: 16,
+  },
+  grid: {
+    width: "100%",
+    maxWidth: 980,
+    paddingHorizontal: 16,
+    paddingBottom: 32,
+    alignSelf: "center",
+  },
+  columnWrapper: {
+    justifyContent: "center",
+    gap: 16,
+  },
+  // 🟦 Карточка-животное как кнопка
+  card: {
+    borderRadius: 16,
+    paddingVertical: 10,
+    marginBottom: 16,
+    alignItems: "center",
+    backgroundColor: "#F5F7FB",
+  },
+  cardWeb: {
+    flexBasis: "31%",
+    maxWidth: 240,
+    flexGrow: 0,
+    flexShrink: 1,
+  },
+
+  // 🔒 Для заблокированных видов
+  cardDisabled: {
+    opacity: 0.4,
+  },
+  image: { width: 100, height: 80
+   },
+  label: {
+    marginTop: 8,
+    fontSize: 14,
+    textAlign: "center",
+  },
+    comingSoon: {
+    marginTop: 4,
+    fontSize: 11,
+    color: "#999",
+  },
+    modalOverlay: { flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.5)' },
+  webModalOverlay: {
+    position: "absolute",
+    inset: 0,
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(0,0,0,0.5)",
+    zIndex: 10,
+  },
   modalContent: { backgroundColor: theme.colors.background, borderTopLeftRadius: 16, borderTopRightRadius: 16, padding: 20, minHeight: '50%' },
   modalTitle: { fontSize: 18, fontWeight: '600', marginBottom: 12, textAlign: 'center' },
   continueButton: { backgroundColor: theme.colors.buttonPrimaryBg, paddingVertical: 12, borderRadius: 8, marginTop: 12 },

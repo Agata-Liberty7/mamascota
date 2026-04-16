@@ -32,14 +32,49 @@ export async function loadKnowledgeBase() {
     }
 
     console.log("✅ Модуль knowledgeBase.ts импортирован успешно");
-    const result = await mod.loadKnowledgeBase();
+
+    const raw = await mod.loadKnowledgeBase();
+
+    // Нормализуем результат: всегда объект с тремя массивами
+    let normalized;
+
+    if (Array.isArray(raw)) {
+      // старый вариант: модуль возвращает просто список алгоритмов
+      normalized = {
+        algorithms: raw,
+        clinicalDetails: [],
+        breedRisks: [],
+      };
+    } else {
+      normalized = {
+        algorithms: raw?.algorithms || [],
+        clinicalDetails: raw?.clinicalDetails || [],
+        breedRisks: raw?.breedRisks || [],
+      };
+    }
+
     console.log(
       "📘 YAML algorithms loaded OK:",
-      Array.isArray(result) ? result.length : "unknown"
+      normalized.algorithms.length
     );
-    return result;
+    console.log(
+      "📘 Clinical details loaded:",
+      normalized.clinicalDetails.length
+    );
+    console.log(
+      "📘 Breed risks loaded:",
+      normalized.breedRisks.length
+    );
+
+    return normalized;
+
   } catch (err) {
     console.error("❌ Ошибка при загрузке knowledgeBase.ts:", err);
-    return [];
+    return {
+      algorithms: [],
+      clinicalDetails: [],
+      breedRisks: [],
+    };
   }
 }
+
