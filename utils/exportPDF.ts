@@ -27,6 +27,33 @@ function normalizePdfText(input: any): string {
   return s;
 }
 
+function buildStaticHtml(content: string): string {
+  return `
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Report</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 24px;
+      line-height: 1.5;
+      color: #000;
+      background: #fff;
+    }
+    h1, h2, h3 {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+${content}
+</body>
+</html>
+`;
+}
+
 function escapeHtml(text: any): string {
   if (text === null || text === undefined) return "";
   return String(text)
@@ -35,27 +62,132 @@ function escapeHtml(text: any): string {
     .replace(/>/g, "&gt;");
 }
 
+function openWebPdfPreview(
+  html: string,
+  title: string,
+  previewWindow?: Window | null
+) {
+  const preview = previewWindow ?? window.open("", "_blank");
+
+  if (!preview) {
+    throw new Error("WebPreviewWindowBlocked");
+  }
+
+  const escapedTitle = escapeHtml(normalizePdfText(title));
+
+  preview.document.open();
+  preview.document.write(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${escapedTitle}</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f3f4f6;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 12px 16px;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .toolbar button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      cursor: pointer;
+      background: #2f6fed;
+      color: #ffffff;
+    }
+
+    .toolbar button.secondary {
+      background: #6b7280;
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 24px auto;
+      background: #ffffff;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    @media print {
+      .toolbar {
+        display: none;
+      }
+
+      .page {
+        max-width: none;
+        margin: 0;
+        box-shadow: none;
+      }
+
+      body {
+        background: #ffffff;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <button type="button" onclick="window.print()">Print / Save PDF</button>
+    <button type="button" class="secondary" onclick="window.close()">Close</button>
+  </div>
+
+  <div class="page">${html}</div>
+</body>
+</html>
+  `);
+  preview.document.close();
+}
+
 function buildOwnerNotesFromChatRaw(chatRaw: string | null): string {
   if (!chatRaw) return "";
 
-  try {
-    const chat = JSON.parse(chatRaw);
-    if (!Array.isArray(chat)) return "";
+  // 1. удаляем служебные маркеры полностью
+  const cleaned = chatRaw
+    .replace(/__MAMASCOTA_[^_]+__/g, "")
+    .replace(/\n{2,}/g, "\n");
 
-    const userMessages = chat
-      .filter((m: any) => m && m.role === "user")
-      .map((m: any) =>
-        typeof m.content === "string" ? m.content.trim() : ""
-      )
-      .filter((s: string) => s.length > 0);
+  // 2. разбиваем на строки
+  const lines = cleaned
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean);
 
-    if (!userMessages.length) return "";
+  // 3. берём только фактические наблюдения пользователя
+  // (убираем системные/агентные блоки)
+  const facts = lines.filter((line) => {
+    const lower = line.toLowerCase();
 
-    const MAX_MESSAGES = 8;
-    return userMessages.slice(0, MAX_MESSAGES).join("\n\n");
-  } catch {
-    return "";
-  }
+    return (
+      !lower.includes("mamascota") &&
+      !lower.includes("decision") &&
+      !lower.includes("finalize") &&
+      !lower.includes("observación") &&
+      !lower.includes("plan") &&
+      !lower.includes("steps")
+    );
+  });
+
+  // 4. ограничиваем размер (чтобы не было “простыней”)
+  const limited = facts.slice(0, 6);
+
+  // 5. превращаем в буллеты (без интерпретаций)
+  return limited.map((l) => `• ${escapeHtml(normalizePdfText(l))}`).join("\n");
 }
 
 async function findPetByName(name: string | null) {
@@ -77,6 +209,10 @@ function getDecisionTreeCacheKey(sessionId: string, locale: string) {
   return `pdfDecisionTree:${sessionId}:${locale}`;
 }
 
+function getPdfReportCacheKey(sessionId: string, locale: string) {
+  return `pdfReport:${sessionId}:${locale}`;
+}
+
 async function getChatLengthForSession(sessionId: string): Promise<number> {
   try {
     const raw =
@@ -91,42 +227,146 @@ async function getChatLengthForSession(sessionId: string): Promise<number> {
   }
 }
 
-async function getWorkerDecisionTreeFromChatCache(
+async function getCachedPdfReport(
   sessionId: string,
-  locale: string
+  locale: string,
+  currentMessagesCount: number
 ) {
   try {
-    const key = `decisionTree:${sessionId}:${locale}`;
-    const raw = await AsyncStorage.getItem(key);
+    const raw = await AsyncStorage.getItem(getPdfReportCacheKey(sessionId, locale));
     if (!raw) return null;
 
     const parsed = JSON.parse(raw);
-    const dt = parsed?.decisionTree;
+    const savedMessagesCount =
+      typeof parsed?.messagesCount === "number" ? parsed.messagesCount : -1;
 
-    const isNonEmptyObject =
-      dt &&
-      typeof dt === "object" &&
-      !Array.isArray(dt) &&
-      Object.keys(dt).length > 0;
+    if (savedMessagesCount !== currentMessagesCount) {
+      return null;
+    }
 
-    return isNonEmptyObject ? dt : null;
+    if (
+      typeof parsed?.html !== "string" ||
+      !parsed.html.trim() ||
+      typeof parsed?.title !== "string"
+    ) {
+      return null;
+    }
+
+    return parsed;
   } catch {
     return null;
   }
 }
 
-function bulletsFromStringArray(arr: any): string {
-  return Array.isArray(arr)
-    ? arr
-        .map((x) => (typeof x === "string" ? x.trim() : ""))
-        .filter(Boolean)
-        .map((s) => `• ${s}`)
-        .join("\n")
-    : "";
+async function saveCachedPdfReport(
+  sessionId: string,
+  locale: string,
+  payload: {
+    messagesCount: number;
+    title: string;
+    html: string;
+    fileName: string;
+  }
+) {
+  try {
+    await AsyncStorage.setItem(
+      getPdfReportCacheKey(sessionId, locale),
+      JSON.stringify({
+        createdAt: new Date().toISOString(),
+        locale,
+        messagesCount: payload.messagesCount,
+        title: payload.title,
+        html: payload.html,
+        fileName: payload.fileName,
+      })
+    );
+  } catch {}
+}
+
+async function getWorkerDecisionTreeFromChatCache(
+  sessionId: string,
+  locale: string
+) {
+  try {
+    const exactKey = `decisionTree:${sessionId}:${locale}`;
+    const exactRaw = await AsyncStorage.getItem(exactKey);
+
+    const parseDecisionTree = (raw: string | null) => {
+      if (!raw) return null;
+
+      const parsed = JSON.parse(raw);
+      const dt = parsed?.decisionTree;
+
+      const isNonEmptyObject =
+        dt &&
+        typeof dt === "object" &&
+        !Array.isArray(dt) &&
+        Object.keys(dt).length > 0;
+
+      return isNonEmptyObject ? dt : null;
+    };
+
+    const exactDt = parseDecisionTree(exactRaw);
+    if (exactDt) return exactDt;
+
+    const keyBase = `decisionTree:${sessionId}:`;
+    const keys = await AsyncStorage.getAllKeys();
+
+    const fallbackKey = keys.find((k) => k.startsWith(keyBase));
+    if (!fallbackKey) return null;
+
+    const fallbackRaw = await AsyncStorage.getItem(fallbackKey);
+    return parseDecisionTree(fallbackRaw);
+  } catch {
+    return null;
+  }
+}
+
+function bulletsFromStringArray(value: any): string {
+  if (Array.isArray(value)) {
+    return value
+      .map((x) => (typeof x === "string" ? x.trim() : ""))
+      .filter(Boolean)
+      .map((s) => `• ${s}`)
+      .join("\n");
+  }
+
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (!trimmed) return "";
+
+    const lines = trimmed
+      .split(/\n|•|-/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    return lines.map((s) => `• ${s}`).join("\n");
+  }
+
+  return "";
 }
 
 function normalizeNextSteps(dt: any) {
-  return dt?.next_steps ?? dt?.nextSteps ?? {};
+  const ns = dt?.next_steps ?? dt?.nextSteps ?? {};
+
+  return {
+    observe_at_home:
+      ns?.observe_at_home ??
+      ns?.observeAtHome ??
+      ns?.observation_at_home ??
+      ns?.home_observation ??
+      "",
+    urgent_now:
+      ns?.urgent_now ??
+      ns?.urgentNow ??
+      ns?.urgent ??
+      "",
+    plan_visit:
+      ns?.plan_visit ??
+      ns?.planVisit ??
+      ns?.visit_plan ??
+      "",
+  };
 }
 
 function mapDecisionTreeToPdfSections(dt: any) {
@@ -134,18 +374,15 @@ function mapDecisionTreeToPdfSections(dt: any) {
 
   return {
     anamnesisShort: bulletsFromStringArray(
-      dt?.anamnesis_short ?? dt?.anamnesisShort ?? []
+      dt?.anamnesis_short ??
+        dt?.anamnesisShort ??
+        dt?.anamnesis ??
+        ""
     ),
     nextSteps: {
-      observe_at_home: bulletsFromStringArray(
-        ns?.observe_at_home ?? ns?.observeAtHome ?? []
-      ),
-      urgent_now: bulletsFromStringArray(
-        ns?.urgent_now ?? ns?.urgentNow ?? []
-      ),
-      plan_visit: bulletsFromStringArray(
-        ns?.plan_visit ?? ns?.planVisit ?? []
-      ),
+      observe_at_home: bulletsFromStringArray(ns?.observe_at_home),
+      urgent_now: bulletsFromStringArray(ns?.urgent_now),
+      plan_visit: bulletsFromStringArray(ns?.plan_visit),
     },
   };
 }
@@ -301,6 +538,7 @@ ${combined}
 async function getDecisionTreeCached(sessionId: string, locale: string) {
   try {
     const workerDt = await getWorkerDecisionTreeFromChatCache(sessionId, locale);
+    console.log("DT DEBUG >>>", JSON.stringify(workerDt, null, 2));
 
     if (!workerDt) {
       return null;
@@ -317,7 +555,10 @@ async function getDecisionTreeCached(sessionId: string, locale: string) {
   }
 }
 
-export async function exportSummaryPDF(sessionId: string) {
+export async function exportSummaryPDF(
+  sessionId: string,
+  previewWindow?: Window | null
+) {
   try {
     const chatRaw =
       (await AsyncStorage.getItem(`chatHistory:${sessionId}`)) ??
@@ -345,7 +586,51 @@ export async function exportSummaryPDF(sessionId: string) {
       i18n.locale ||
       "en";
 
-      
+    const currentMessagesCount = await getChatLengthForSession(sessionId);
+    const cachedReport = await getCachedPdfReport(
+      sessionId,
+      locale,
+      currentMessagesCount
+    );
+
+    if (cachedReport) {
+      if (Platform.OS === "web") {
+        openWebPdfPreview(cachedReport.html, cachedReport.title, previewWindow);
+        return;
+      }
+
+      const { uri } = await Print.printToFileAsync({ html: cachedReport.html });
+      const newPath = FileSystem.documentDirectory + cachedReport.fileName;
+
+      await FileSystem.moveAsync({
+        from: uri,
+        to: newPath,
+      });
+
+      if (Platform.OS === "android") {
+        const cUri = await FileSystem.getContentUriAsync(newPath);
+
+        await IntentLauncher.startActivityAsync("android.intent.action.VIEW", {
+          data: cUri,
+          flags: 1,
+          type: "application/pdf",
+        });
+
+        await Sharing.shareAsync(newPath, {
+          mimeType: "application/pdf",
+          dialogTitle: cachedReport.fileName,
+        });
+      } else {
+        await Sharing.shareAsync(newPath, {
+          mimeType: "application/pdf",
+          dialogTitle: cachedReport.fileName,
+          UTI: "com.adobe.pdf",
+        });
+      }
+
+      return;
+    }
+
     const dtKey = `decisionTree:${sessionId}:${locale}`;
     const dtRaw = await AsyncStorage.getItem(dtKey);
 
@@ -681,19 +966,15 @@ h3 {
 
     const fileName = `mamascota_${safePetName}_${yyyy}-${mm}-${dd}_${hh}-${min}.pdf`;
 
+    await saveCachedPdfReport(sessionId, locale, {
+      messagesCount: currentMessagesCount,
+      title,
+      html,
+      fileName,
+    });
+
     if (Platform.OS === "web") {
-      const blob = new Blob([html], { type: "text/html" });
-      const url = URL.createObjectURL(blob);
-
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = fileName.replace(".pdf", ".html");
-
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      URL.revokeObjectURL(url);
+      openWebPdfPreview(html, title, previewWindow);
       return;
     }
 

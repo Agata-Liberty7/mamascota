@@ -1050,10 +1050,8 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
                     setCurrentPdfLang(langCode);
                     setPdfLangModalVisible(false);
 
-                    setTimeout(async () => {
-                      setPdfTextKey("pdf.preparing_language");
-                      await handlePdfNowActual();
-                    }, 600);
+                    setPdfTextKey("pdf.preparing_language");
+                    await handlePdfNowActual();
                   }}
                 >
                   <Text

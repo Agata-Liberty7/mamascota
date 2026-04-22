@@ -82,36 +82,55 @@ async function ensureDecisionTreeCachedForSummary(
     i18n.locale ||
     "en";
 
-    const dtKey = `decisionTree:${conversationId}:${locale}`;
-    const raw = await AsyncStorage.getItem(dtKey);
+  const dtKey = `decisionTree:${conversationId}:${locale}`;
 
-    if (raw) {
-      try {
-        const currentHistoryRaw =
-          (await AsyncStorage.getItem(`chatHistory:${conversationId}`)) ||
-          (await AsyncStorage.getItem(`chat:history:${conversationId}`)) ||
-          "[]";
+  const parseDecisionTreeEntry = (raw: string | null) => {
+    if (!raw) return null;
 
-        let currentMessagesCount = 0;
-        try {
-          const parsedHistory = JSON.parse(currentHistoryRaw);
-          currentMessagesCount = Array.isArray(parsedHistory) ? parsedHistory.length : 0;
-        } catch {}
+    try {
+      const parsed = JSON.parse(raw);
+      const dt = parsed?.decisionTree;
 
-        const parsedDt = JSON.parse(raw);
-        const savedMessagesCount =
-          typeof parsedDt?.messagesCount === "number" ? parsedDt.messagesCount : -1;
+      const isNonEmptyObject =
+        dt &&
+        typeof dt === "object" &&
+        !Array.isArray(dt) &&
+        Object.keys(dt).length > 0;
 
-        const hasNewMessages =
-          savedMessagesCount >= 0 && currentMessagesCount > savedMessagesCount;
+      if (!isNonEmptyObject) return null;
 
-        if (!hasNewMessages) {
-          return;
-        }
-      } catch {
-        // если кэш битый или не удалось сравнить — пересобираем
-      }
+      return {
+        raw,
+        parsed,
+        messagesCount:
+          typeof parsed?.messagesCount === "number" ? parsed.messagesCount : -1,
+      };
+    } catch {
+      return null;
     }
+  };
+
+  const currentHistoryRaw =
+    (await AsyncStorage.getItem(`chatHistory:${conversationId}`)) ||
+    (await AsyncStorage.getItem(`chat:history:${conversationId}`)) ||
+    "[]";
+
+  let currentMessagesCount = 0;
+  try {
+    const parsedHistory = JSON.parse(currentHistoryRaw);
+    currentMessagesCount = Array.isArray(parsedHistory) ? parsedHistory.length : 0;
+  } catch {}
+
+  const exactEntry = parseDecisionTreeEntry(await AsyncStorage.getItem(dtKey));
+
+  if (
+    exactEntry &&
+    exactEntry.messagesCount >= 0 &&
+    exactEntry.messagesCount >= currentMessagesCount
+  ) {
+    return;
+  }
+
 
   const conversationHistory = await buildConversationHistoryTail(conversationId, 20);
   const pet = await getPetByName(petName);
@@ -133,22 +152,11 @@ async function ensureDecisionTreeCachedForSummary(
 
   const decisionTree = (dtRes as any).decisionTree ?? null;
 
-  const currentHistory =
-    (await AsyncStorage.getItem(`chatHistory:${conversationId}`)) ||
-    (await AsyncStorage.getItem(`chat:history:${conversationId}`)) ||
-    "[]";
-
-  let messagesCount = 0;
-  try {
-    const parsedHistory = JSON.parse(currentHistory);
-    messagesCount = Array.isArray(parsedHistory) ? parsedHistory.length : 0;
-  } catch {}
-
   await AsyncStorage.setItem(
     dtKey,
     JSON.stringify({
       createdAt: new Date().toISOString(),
-      messagesCount,
+      messagesCount: currentMessagesCount,
       decisionTree,
     })
   );
