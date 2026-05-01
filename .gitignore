@@ -16,7 +16,7 @@ web-build/
 
 # Environment files
 .env
-.env.*.local
+.env.*
 
 # Build artifacts
 android/

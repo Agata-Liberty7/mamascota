@@ -567,16 +567,14 @@ export async function exportSummaryPDF(
     const summaryRaw = await AsyncStorage.getItem("chatSummary");
 
     if (!chatRaw || !summaryRaw) {
-      alert(i18n.t("settings.clear_done_message"));
-      return;
+      throw new Error("SummaryNotFound");
     }
 
     const allSummaries = JSON.parse(summaryRaw);
     const summary = allSummaries.find((s: any) => s.id === sessionId);
 
     if (!summary) {
-      alert(i18n.t("settings.clear_done_message"));
-      return;
+      throw new Error("SummaryNotFound");
     }
 
     const ownerNotesFallback = buildOwnerNotesFromChatRaw(chatRaw);
@@ -635,13 +633,7 @@ export async function exportSummaryPDF(
     const dtRaw = await AsyncStorage.getItem(dtKey);
 
     if (!dtRaw) {
-      alert(
-        i18n.t("chat.pdf_not_ready", {
-          defaultValue:
-            "The consultation is not finished yet. Complete it to generate a report.",
-        })
-      );
-      return;
+      throw new Error("DecisionTreeMissing");
     }
 
     const isHebrew = locale.startsWith("he");
@@ -878,7 +870,16 @@ h3 {
       species
         ? `<div class="row"><span class="label">${escapeHtml(
             normalizePdfText(speciesLabel)
-          )}:</span> ${escapeHtml(normalizePdfText(species))}</div>`
+          )}:</span> ${escapeHtml(
+            normalizePdfText(
+              pet?.sex
+                ? `${species} (${i18n.t(pet.sex, {
+                    locale,
+                    defaultValue: String(pet.sex),
+                  })})`
+                : species
+            )
+          )}</div>`
         : ""
     }
     ${
@@ -1009,14 +1010,9 @@ h3 {
     }
 
   } catch (err: any) {
-  // do not change app UI language in PDF error flow
-
+    // do not change app UI language in PDF error flow
     console.error("❌ exportSummaryPDF error:", err);
-    alert(
-      i18n.t("chat.pdf_error", {
-        defaultValue: "Не удалось создать PDF. Попробуйте еще раз.",
-      })
-    );
+    throw err; // пробрасываем наверх — summary.tsx покажет нормальный UI
   }
 }
 

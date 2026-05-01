@@ -13,11 +13,12 @@ import {
   Linking,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router";
+import { useRouter, type Href } from "expo-router";
 import { chatWithGPT, restoreSession } from "../utils/chatWithGPT";
 import i18n from "../i18n";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ThemedText } from "../components/ThemedText";
+import { createPdfPreviewPlaceholderHtml } from "../utils/pdfPreviewPlaceholder";
 
 // PDF util
 import {
@@ -390,11 +391,20 @@ export default function SummaryScreen() {
   // =========================
   // PDF EXPORT
   // =========================
-  const handleExportPDF = async (id: string, petName: string) => {
+
+  // previewWindow передаётся снаружи — он должен быть открыт СИНХРОННО
+  // прямо в обработчике клика пользователя, до любого await.
+  // Иначе браузер блокирует window.open как popup.
+  const handleExportPDF = async (
+    id: string,
+    petName: string,
+    previewWindow?: Window | null
+  ) => {
     try {
       const allowed = await isSessionPdfAllowed(id);
 
       if (!allowed) {
+        previewWindow?.close();
         if (Platform.OS === "web") {
           await showWebConfirm({
             title: String(t("alert_title", "Attention")),
@@ -423,6 +433,7 @@ export default function SummaryScreen() {
       const accessAllowed = await canGeneratePdf(selectedLang);
 
       if (!accessAllowed) {
+        previewWindow?.close();
         if (Platform.OS === "web") {
           const result = await showWebConfirm({
             title: String(t("alert_title", "Attention")),
@@ -448,7 +459,7 @@ export default function SummaryScreen() {
           });
 
           if (result === "pay") {
-            router.push("/paywall");
+            router.push("/paywall" as Href);
           }
         } else {
           Alert.alert(
@@ -466,7 +477,7 @@ export default function SummaryScreen() {
                   })
                 ),
                 onPress: () => {
-                  router.push("/paywall");
+                  router.push("/paywall" as Href);
                 },
               },
               {
@@ -485,11 +496,21 @@ export default function SummaryScreen() {
       await ensureDecisionTreeCachedForSummary(id, petName);
 
       setPdfTextKey("pdf.generating");
-      await exportSummaryPDF(id);
+      await exportSummaryPDF(id, previewWindow); // передаём уже открытое окно
 
-      await addPdfLanguage(selectedLang);     
-    } catch (err) {
+      await addPdfLanguage(selectedLang);
+    } catch (err: any) {
+      previewWindow?.close();
       console.error("PDF export error:", err);
+
+      const message =
+        err?.message === "SummaryNotFound"
+          ? String(i18n.t("settings.clear_done_message", { defaultValue: "Session data not found." }))
+          : err?.message === "DecisionTreeMissing"
+          ? String(i18n.t("chat.pdf_not_ready", { defaultValue: "The consultation is not finished yet." }))
+          : String(i18n.t("chat.pdf_error", { defaultValue: "Failed to create PDF. Please try again." }));
+
+      Alert.alert(String(t("alert_title", "Attention")), message);
     } finally {
       setPdfLoading(false);
     }
@@ -673,6 +694,26 @@ export default function SummaryScreen() {
                     key={langCode}
                     style={styles.pdfLangChip}
                     onPress={async () => {
+                      // ✅ Открываем окно ЗДЕСЬ — мы ещё в синхронном
+                      // обработчике клика. setTimeout и любой await после
+                      // него уже не дадут открыть окно без блокировки.
+                      const previewWindow: Window | null =
+                        pendingPdfType === "summary" && Platform.OS === "web"
+                          ? window.open("", "_blank")
+                          : null;
+
+                      if (previewWindow) {
+                        previewWindow.document.open();
+                        previewWindow.document.write(
+                          createPdfPreviewPlaceholderHtml(
+                            i18n.t("pdf.preparing_language", {
+                              defaultValue: "Preparing report in selected language…",
+                            })
+                          )
+                        );
+                        previewWindow.document.close();
+                      }
+
                       await AsyncStorage.setItem("pdfLanguage", langCode);
                       setCurrentPdfLang(langCode);
                       setPdfLangModalVisible(false);
@@ -684,7 +725,8 @@ export default function SummaryScreen() {
                           setPdfTextKey("pdf.preparing_language");
                           await handleExportPDF(
                             pendingPdfItem.id,
-                            pendingPdfItem.petName
+                            pendingPdfItem.petName,
+                            previewWindow  // передаём уже открытое окно
                           );
                           return;
                         }
@@ -787,7 +829,7 @@ export default function SummaryScreen() {
         </Modal>
 
       {/* 🔥 МОДАЛКА ЗАГРУЗКИ PDF */}
-      <LoadingPDF visible={pdfLoading} textKey={pdfTextKey} />
+      <LoadingPDF visible={Platform.OS !== "web" && pdfLoading} textKey={pdfTextKey} />
     </View>
   );
 }

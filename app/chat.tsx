@@ -1,9 +1,10 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import LoadingPDF from "../components/ui/LoadingPDF";
+import { createPdfPreviewPlaceholderHtml } from "../utils/pdfPreviewPlaceholder";
 
 // @ts-ignore
 import { useHeaderHeight } from "@react-navigation/elements";
-import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
+import { useLocalSearchParams, useNavigation, useRouter, type Href } from "expo-router";
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
@@ -799,7 +800,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
     }
   }
 
-  const handlePdfNowActual = async () => {
+  const handlePdfNowActual = async (previewWindow?: Window | null) => {
     if (pdfGenerating) return;
 
     try {
@@ -844,7 +845,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
           });
 
           if (result === "pay") {
-            router.push("/paywall");
+            router.push("/paywall" as Href);
           }
         } else {
           Alert.alert(
@@ -862,7 +863,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
                   })
                 ),
                 onPress: () => {
-                  router.push("/paywall");
+                  router.push("/paywall" as Href);
                 },
               },
               {
@@ -924,21 +925,18 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
       console.log("📄 PDF step 6: after saveSessionSilently");
 
       console.log("📄 PDF step 7: before exportSummaryPDF");
-      await exportSummaryPDF(id);
+      await exportSummaryPDF(id, previewWindow);
 
       await addPdfLanguage(selectedLang);
 
       await refreshPdfReadyState(id);
       console.log("📄 PDF step 9: done");
     } catch (e) {
+      previewWindow?.close();
       console.error("❌ PDF now error:", e);
       Alert.alert(
         String(i18n.t("alert_title", { defaultValue: "Attention" })),
-        String(
-          i18n.t("chat.pdf_error", {
-            defaultValue: "Could not generate PDF.",
-          })
-        )
+        String(i18n.t("chat.pdf_error", { defaultValue: "Could not generate PDF." }))
       );
     } finally {
       setPdfGenerating(false);
@@ -1018,7 +1016,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
         behavior="padding"
         keyboardVerticalOffset={headerHeight}
       >
-        <LoadingPDF visible={pdfGenerating} textKey={pdfTextKey} />
+        <LoadingPDF visible={Platform.OS !== "web" && pdfGenerating} textKey={pdfTextKey} />
         
         <Modal transparent animationType="fade" visible={finalizing}>
           <View style={styles.overlay}>
@@ -1046,12 +1044,29 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
                   key={langCode}
                   style={styles.pdfLangChip}
                   onPress={async () => {
+                    // ✅ Открываем окно СИНХРОННО — до любого await,
+                    // пока браузер считает это реакцией на клик пользователя
+                    const previewWindow: Window | null =
+                      Platform.OS === "web" ? window.open("", "_blank") : null;
+
+                    if (previewWindow) {
+                      previewWindow.document.open();
+                      previewWindow.document.write(
+                        createPdfPreviewPlaceholderHtml(
+                          i18n.t("pdf.preparing_language", {
+                            defaultValue: "Preparing report in selected language…",
+                          })
+                        )
+                      );
+                      previewWindow.document.close();
+                    }
+
                     await AsyncStorage.setItem("pdfLanguage", langCode);
                     setCurrentPdfLang(langCode);
                     setPdfLangModalVisible(false);
 
                     setPdfTextKey("pdf.preparing_language");
-                    await handlePdfNowActual();
+                    await handlePdfNowActual(previewWindow);
                   }}
                 >
                   <Text
