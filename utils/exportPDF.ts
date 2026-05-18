@@ -210,7 +210,12 @@ function getDecisionTreeCacheKey(sessionId: string, locale: string) {
 }
 
 function getPdfReportCacheKey(sessionId: string, locale: string) {
-  return `pdfReport:${sessionId}:${locale}`;
+  const normalizedLang = String(locale || "en")
+    .toLowerCase()
+    .split("-")[0]
+    .trim();
+
+  return `pdfReport:${sessionId}:${normalizedLang}`;
 }
 
 async function getChatLengthForSession(sessionId: string): Promise<number> {
@@ -322,29 +327,34 @@ async function getWorkerDecisionTreeFromChatCache(
   }
 }
 
-function bulletsFromStringArray(value: any): string {
-  if (Array.isArray(value)) {
-    return value
-      .map((x) => (typeof x === "string" ? x.trim() : ""))
-      .filter(Boolean)
-      .map((s) => `• ${s}`)
-      .join("\n");
-  }
+function normalizePdfBulletItems(value: any): string[] {
+  const rawItems = Array.isArray(value)
+    ? value
+    : typeof value === "string"
+    ? value.split(/\n|•/)
+    : [];
 
-  if (typeof value === "string") {
-    const trimmed = value.trim();
-    if (!trimmed) return "";
-
-    const lines = trimmed
-      .split(/\n|•|-/)
-      .map((s) => s.trim())
-      .filter(Boolean);
-
-    return lines.map((s) => `• ${s}`).join("\n");
-  }
-
-  return "";
+  return rawItems
+    .map((x) => normalizePdfText(x).trim())
+    .filter(Boolean)
+    .map((s) => s.replace(/^[-–—•\s]+/, "").trim())
+    .filter(Boolean);
 }
+
+function factualBullets(value: any): string {
+  return normalizePdfBulletItems(value)
+    .filter((s) => s.length <= 220)
+    .map((s) => `• ${s}`)
+    .join("\n");
+}
+
+function bulletsFromStringArray(value: any): string {
+  return normalizePdfBulletItems(value)
+    .map((s) => `• ${s}`)
+    .join("\n");
+}
+
+
 
 function normalizeNextSteps(dt: any) {
   const ns = dt?.next_steps ?? dt?.nextSteps ?? {};
@@ -373,7 +383,7 @@ function mapDecisionTreeToPdfSections(dt: any) {
   const ns = normalizeNextSteps(dt);
 
   return {
-    anamnesisShort: bulletsFromStringArray(
+    anamnesisShort: factualBullets(
       dt?.anamnesis_short ??
         dt?.anamnesisShort ??
         dt?.anamnesis ??
@@ -579,10 +589,23 @@ export async function exportSummaryPDF(
 
     const ownerNotesFallback = buildOwnerNotesFromChatRaw(chatRaw);
 
-    const locale =
+    const locale = String(
       (await AsyncStorage.getItem("pdfLanguage")) ||
-      i18n.locale ||
-      "en";
+        i18n.locale ||
+        "en"
+    )
+      .toLowerCase()
+      .split("-")[0]
+      .trim();
+
+    const chatLocale = String(
+      (await AsyncStorage.getItem("chatLocale")) ||
+        i18n.locale ||
+        "en"
+    )
+      .toLowerCase()
+      .split("-")[0]
+      .trim();
 
     const currentMessagesCount = await getChatLengthForSession(sessionId);
     const cachedReport = await getCachedPdfReport(
@@ -629,7 +652,7 @@ export async function exportSummaryPDF(
       return;
     }
 
-    const dtKey = `decisionTree:${sessionId}:${locale}`;
+    const dtKey = `decisionTree:${sessionId}:${chatLocale}`;
     const dtRaw = await AsyncStorage.getItem(dtKey);
 
     if (!dtRaw) {
@@ -652,7 +675,7 @@ export async function exportSummaryPDF(
     let nextSteps: any = {};
 
     try {
-      const workerDt = await getWorkerDecisionTreeFromChatCache(sessionId, locale);
+      const workerDt = await getWorkerDecisionTreeFromChatCache(sessionId, chatLocale);
       if (workerDt) {
         const mapped = mapDecisionTreeToPdfSections(workerDt);
         anamnesisShort = mapped.anamnesisShort;

@@ -267,13 +267,15 @@
   },
   
   "paywall": {
-    "title": "Vollständiger Zugriff",
-    "subtitle": "Entsperre alle Funktionen",
+    "title": "Unterstützen Sie Mamascota",
+    "subtitle": "Ihre Unterstützung hilft, das Projekt weiterzuentwickeln und bietet Zugriff auf PDF-Berichte und neue Funktionen.",
     "feature_1": "PDF-Bericht für den Tierarzt",
-    "feature_2": "Symptomverfolgung",
-    "feature_3": "Konsultationshistorie",
-    "price": "1,99 € / Monat",
-    "cta": "Vollständigen Zugriff erhalten",
-    "note": "Sie können jederzeit kündigen"
+    "feature_2": "Speichern von Beratungen",
+    "feature_3": "Unterstützung der Projektdurchführung",
+    "price": "1,99 €",
+    "cta": "Unterstützen Sie den Projekt",
+    "note": "Einmalige Zahlung, keine Subscription.",
+    "privacy_note": "Zu diesem Zeitpunkt erfordert Mamascota keine Registrierung und sammelt keine persönlichen Benutzerkonten ein.",
+    "support_note": "Indem Sie das Projekt jetzt unterstützen, können Sie die neuen Funktionen und Möglichkeiten der App während ihrer Entwicklung nutzen."
   }
 }

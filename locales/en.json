@@ -150,7 +150,7 @@
   },
 
   "chat": {
-    "summary_hint": "You can save the summary using the red icon at the bottom left, or by exiting and saving the session.",
+    "summary_hint": "You can view the summary using the red icon at the bottom left, or by exiting and saving the session.",
     "phase": {
       "intake": "Phase: Gathering information",
       "clarify": "Phase: Clarifying details",
@@ -268,13 +268,15 @@
   },
   
   "paywall": {
-    "title": "Full access",
-    "subtitle": "Unlock all features",
+    "title": "Support Mamascota",
+    "subtitle": "Your contribution helps develop the project and provides access to PDF reports and new features.",
     "feature_1": "PDF report for the veterinarian",
-    "feature_2": "Symptom tracking",
-    "feature_3": "Consultation history",
-    "price": "1,99 € / month",
-    "cta": "Get full access",
-    "note": "You can cancel at any time"
+    "feature_2": "Consultation saving",
+    "feature_3": "Project development support",
+    "price": "1,99 €",
+    "cta": "Support the project",
+    "note": "One-time payment, no subscription.",
+    "privacy_note": "At this stage, Mamascota does not require registration and does not collect personal user accounts.",
+    "support_note": "By supporting the project now, you will be able to use the new features and capabilities of the app during its development."
   }
 }

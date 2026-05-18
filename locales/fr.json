@@ -150,7 +150,7 @@
     "custom": "Autre"
   },
   "chat": {
-    "summary_hint": "Vous pouvez enregistrer le résumé en utilisant l’icône rouge en bas à gauche, ou en quittant et enregistrant la session.",
+    "summary_hint": "Vous pouvez visualiser le résumé en utilisant l’icône rouge en bas à gauche, ou en quittant et enregistrant la session.",
     "phase": {
       "intake": "Étape: Collecte d’informations",
       "clarify": "Étape: Clarification des détails",
@@ -269,13 +269,15 @@
   },
   
   "paywall": {
-    "title": "Plein accès",
-    "subtitle": "Débloquez toutes les fonctionnalités",
+    "title": "Soutenez Mamascota",
+    "subtitle": "Votre contribution aide à développer le projet et à obtenir l'accès aux rapports PDF et aux nouvelles fonctionnalités de l'application.",
     "feature_1": "Rapport PDF pour le vétérinaire",
-    "feature_2": "Suivi des symptômes",
-    "feature_3": "Historique des consultations",
-    "price": "1,99 € / mois",
-    "cta": "Obtenez l'accès",
-    "note": "Vous pouvez annuler à tout moment"
+    "feature_2": "Sauvegarde des consultations",
+    "feature_3": "Support du développement du projet",
+    "price": "1,99 €",
+    "cta": "Soutenir le projet",
+    "note": "Paiement unique, pas d'abonnement.",
+    "privacy_note": "À l'heure actuelle, Mamascota ne requiert pas d'enregistrement et ne collecte pas de comptes personnels des utilisateurs.",
+    "support_note": "En soutenant le projet maintenant, vous pourrez utiliser les nouvelles fonctionnalités et les possibilités de l'application pendant son développement."
   }
 }

@@ -47,34 +47,54 @@ export default function PaywallScreen() {
           </Text>
 
           <View style={styles.features}>
-            <Text style={[styles.feature, isRTL && styles.textRTL]}>
-              {`• ${i18n.t("paywall.feature_1", {
-                defaultValue: "PDF report for your vet",
-              })}`}
+            <Text style={styles.feature}>
+              • {i18n.t("paywall.feature_1", {
+                defaultValue: "PDF report for the veterinarian",
+              })}
             </Text>
 
-            <Text style={[styles.feature, isRTL && styles.textRTL]}>
-              {`• ${i18n.t("paywall.feature_2", {
-                defaultValue: "Track symptoms over time",
-              })}`}
+            <Text style={styles.feature}>
+              • {i18n.t("paywall.feature_2", {
+                defaultValue: "Saved consultations",
+              })}
             </Text>
 
-            <Text style={[styles.feature, isRTL && styles.textRTL]}>
-              {`• ${i18n.t("paywall.feature_3", {
-                defaultValue: "Consultation history",
-              })}`}
+            <Text style={styles.feature}>
+              • {i18n.t("paywall.feature_3", {
+                defaultValue: "Support project development",
+              })}
+            </Text>
+
+            <Text style={styles.note}>
+              {i18n.t("paywall.note", {
+                defaultValue: "One-time payment, not a subscription.",
+              })}
+            </Text>
+
+            <Text style={styles.note}>
+              {i18n.t("paywall.privacy_note", {
+                defaultValue:
+                  "Mamascota currently does not require registration and does not collect personal user accounts.",
+              })}
+            </Text>
+
+            <Text style={styles.note}>
+              {i18n.t("paywall.support_note", {
+                defaultValue:
+                  "Supporting the project now gives access to future features and improvements during development.",
+              })}
             </Text>
           </View>
 
           <Text style={[styles.price, isRTL && styles.textRTL]}>
             {i18n.t("paywall.price", {
-              defaultValue: "€1.99 / month",
+              defaultValue: "€1.99",
             })}
           </Text>
 
           <Text style={[styles.note, isRTL && styles.textRTL]}>
             {i18n.t("paywall.note", {
-              defaultValue: "Cancel anytime",
+              defaultValue: "One-time payment, not a subscription.",
             })}
           </Text>
 

@@ -208,7 +208,10 @@ export default function ChatScreen() {
 
         setShowSelector(false);
         setIsPostSummaryUpdateMode(false);
-        await refreshPdfReadyState(id);
+
+        const allowed = await isSessionPdfAllowed(id);
+        setPdfConversationId(allowed ? id : null);
+        await refreshPdfReadyState(allowed ? id : null);
 
       } else {
         // если истории нет — начинаем новый диалог
@@ -505,6 +508,22 @@ useEffect(() => {
           await refreshPdfReadyState(cid);
         } else {
           // обычное продолжение текущего кейса: PDF можно обновлять отдельно по кнопке
+          const cid =
+            pdfConversationId ??
+            (typeof result === "object" ? result?.conversationId : null) ??
+            (await AsyncStorage.getItem("conversationId"));
+
+          if (cid) {
+            const keys = await AsyncStorage.getAllKeys();
+            const pdfKeys = keys.filter((key) =>
+              key.startsWith(`pdfReport:${cid}:`)
+            );
+
+            if (pdfKeys.length > 0) {
+              await AsyncStorage.multiRemove(pdfKeys);
+            }
+          }
+
           setIsDecisionTreeStale(true);
           setIsPdfReady(false);
         }
@@ -806,10 +825,53 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
     try {
       console.log("📄 PDF step 1: start");
 
-      const selectedLang = currentPdfLang || i18n.locale || "en";
-      const accessAllowed = await canGeneratePdf(selectedLang);
+      const id =
+        pdfConversationId ??
+        (await AsyncStorage.getItem("conversationId")) ??
+        null;
+
+      if (!id) {
+        previewWindow?.close();
+        return;
+      }
+
+      const selectedLang =
+        (await AsyncStorage.getItem("pdfLanguage")) ||
+        currentPdfLang ||
+        i18n.locale ||
+        "en";
+
+      const normalizedLang = String(selectedLang)
+        .toLowerCase()
+        .split("-")[0]
+        .trim();
+
+      const cachedPdfKey = `pdfReport:${id}:${normalizedLang}`;
+      const cachedPdf = await AsyncStorage.getItem(cachedPdfKey);
+
+      // Уже существует PDF для этой сессии и языка.
+      // Не проверяем paywall повторно.
+      console.log("PDF CACHE CHECK", {
+        hasCachedPdf: !!cachedPdf,
+        isDecisionTreeStale,
+      });
+
+      if (cachedPdf && !isDecisionTreeStale) {
+        console.log("📄 PDF step 1b: cached PDF reuse");
+
+        setPdfTextKey("pdf.generating");
+        setPdfGenerating(true);
+
+        await exportSummaryPDF(id, previewWindow);
+
+        return;
+      }
+
+      const accessAllowed = await canGeneratePdf(normalizedLang);
 
       if (!accessAllowed) {
+        previewWindow?.close();
+
         if (Platform.OS === "web") {
           const result = await new Promise<string>((resolve) => {
             (window as any).__MAMASCOTA_CONFIRM_RESOLVE__ = resolve;
@@ -876,11 +938,6 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
         return;
       }
 
-      const id =
-        pdfConversationId ??
-        (await AsyncStorage.getItem("conversationId")) ??
-        null;
-
       console.log("📄 PDF step 2: conversationId =", id);
 
       if (!id) {
@@ -916,18 +973,20 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
 
       setPdfGenerating(true);
 
-      console.log("📄 PDF step 3: before refreshDecisionTreeIfStale");
-      await refreshDecisionTreeIfStale(id);
-      console.log("📄 PDF step 4: after refreshDecisionTreeIfStale");
+      if (isDecisionTreeStale) {
+        console.log("📄 PDF step 3: before refreshDecisionTreeIfStale");
+          await refreshDecisionTreeIfStale(id);
+          console.log("📄 PDF step 4: after refreshDecisionTreeIfStale");
 
-      console.log("📄 PDF step 5: before saveSessionSilently");
-      await saveSessionSilently(id);
-      console.log("📄 PDF step 6: after saveSessionSilently");
+          console.log("📄 PDF step 5: before saveSessionSilently");
+          await saveSessionSilently(id);
+          console.log("📄 PDF step 6: after saveSessionSilently");
+        }
 
-      console.log("📄 PDF step 7: before exportSummaryPDF");
-      await exportSummaryPDF(id, previewWindow);
+        console.log("📄 PDF step 7: before exportSummaryPDF");
+        await exportSummaryPDF(id, previewWindow);
 
-      await addPdfLanguage(selectedLang);
+      await addPdfLanguage(normalizedLang);
 
       await refreshPdfReadyState(id);
       console.log("📄 PDF step 9: done");

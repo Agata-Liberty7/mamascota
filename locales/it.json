@@ -150,7 +150,7 @@
     "custom": "Altro"
   },
   "chat": {
-    "summary_hint": "Puoi salvare il riepilogo usando l’icona rossa in basso a sinistra, oppure uscendo e salvando la sessione.",
+    "summary_hint": "Puoi visualizzare il riepilogo usando l’icona rossa in basso a sinistra, oppure uscendo e salvando la sessione.",
     "phase": {
       "intake": "Fase: Raccolta informazioni",
       "clarify": "Fase: Chiarimento dettagli",
@@ -270,13 +270,15 @@
   },
   
   "paywall": {
-    "title": "Sblocca tutte le funzionalità",
-    "subtitle": "Sottoscrivi l’accesso per ottenere il massimo da Mamascota",
-    "feature_1": "Rapporti PDF dettagliati",
-    "feature_2": "Tracciamento dei sintomi",
-    "feature_3": "Cronologia delle consulenze",
-    "price": "1,99 € / mese",
-    "cta": "Ottieni l'accesso",
-    "note": "Puoi annullare in qualsiasi momento"
+    "title": "Sostieni Mamascota",
+    "subtitle": "Il tuo contributo aiuta a sviluppare il progetto e a ottenere l'accesso ai rapporti PDF e alle nuove funzionalità dell'app.",
+    "feature_1": "Rapporto PDF per il veterinario",
+    "feature_2": "Salvataggio delle consulenze",
+    "feature_3": "Supporto allo sviluppo del progetto",
+    "price": "1,99 €",
+    "cta": "Sostenere il progetto",
+    "note": "Pagamento unico, nessuna sottoscrizione.",
+    "privacy_note": "Al momento, Mamascota non richiede la registrazione e non raccoglie account personali degli utenti.",
+    "support_note": "Sostenendo il progetto ora, potrai utilizzare le nuove funzionalità e le possibilità dell'app durante lo sviluppo."
   }
 }

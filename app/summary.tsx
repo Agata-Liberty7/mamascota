@@ -429,8 +429,31 @@ export default function SummaryScreen() {
         return;
       }
 
-      const selectedLang = currentPdfLang || i18n.locale || "en";
-      const accessAllowed = await canGeneratePdf(selectedLang);
+      const selectedLang =
+        (await AsyncStorage.getItem("pdfLanguage")) ||
+        currentPdfLang ||
+        i18n.locale ||
+        "en";
+      const normalizedLang = String(selectedLang)
+        .toLowerCase()
+        .split("-")[0]
+        .trim();
+
+      const cachedPdfKey = `pdfReport:${id}:${normalizedLang}`;
+      const cachedPdf = await AsyncStorage.getItem(cachedPdfKey);
+
+      // Уже существует PDF для этой сессии и языка.
+      // Не проверяем paywall повторно.
+      if (cachedPdf) {
+        setPdfTextKey("pdf.generating");
+        setPdfLoading(true);
+
+        await exportSummaryPDF(id, previewWindow);
+
+        return;
+      }
+
+      const accessAllowed = await canGeneratePdf(normalizedLang);
 
       if (!accessAllowed) {
         previewWindow?.close();
@@ -490,15 +513,12 @@ export default function SummaryScreen() {
         return;
       }
 
-      setPdfTextKey("pdf.preparing_language");
+      setPdfTextKey("pdf.generating");
       setPdfLoading(true);
 
-      await ensureDecisionTreeCachedForSummary(id, petName);
+      await exportSummaryPDF(id, previewWindow);
 
-      setPdfTextKey("pdf.generating");
-      await exportSummaryPDF(id, previewWindow); // передаём уже открытое окно
-
-      await addPdfLanguage(selectedLang);
+      await addPdfLanguage(normalizedLang);
     } catch (err: any) {
       previewWindow?.close();
       console.error("PDF export error:", err);
