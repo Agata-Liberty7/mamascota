@@ -218,6 +218,29 @@ function getPdfReportCacheKey(sessionId: string, locale: string) {
   return `pdfReport:${sessionId}:${normalizedLang}`;
 }
 
+export async function invalidatePdfReportsForSession(
+  sessionId: string
+) {
+  try {
+    const prefix = `pdfReport:${sessionId}:`;
+
+    const keys = await AsyncStorage.getAllKeys();
+
+    const pdfKeys = keys.filter((k) => k.startsWith(prefix));
+
+    if (pdfKeys.length > 0) {
+      await AsyncStorage.multiRemove(pdfKeys);
+    }
+
+    console.log("PDF CACHE INVALIDATED", {
+      sessionId,
+      removed: pdfKeys,
+    });
+  } catch (e) {
+    console.log("PDF CACHE INVALIDATION ERROR", e);
+  }
+}
+
 async function getChatLengthForSession(sessionId: string): Promise<number> {
   try {
     const raw =
@@ -654,6 +677,13 @@ export async function exportSummaryPDF(
 
     const dtKey = `decisionTree:${sessionId}:${chatLocale}`;
     const dtRaw = await AsyncStorage.getItem(dtKey);
+
+    console.log("PDF DT CHECK", {
+      dtKey,
+      hasDtRaw: !!dtRaw,
+      currentMessagesCount,
+      dtRawLength: dtRaw?.length ?? 0,
+    });
 
     if (!dtRaw) {
       throw new Error("DecisionTreeMissing");

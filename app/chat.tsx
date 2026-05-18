@@ -27,7 +27,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import SymptomSelector from "../components/SymptomSelector";
 import i18n from "../i18n";
-import { exportSummaryPDF } from "../utils/exportPDF";
+import {
+  exportSummaryPDF,
+  invalidatePdfReportsForSession,
+} from "../utils/exportPDF";
 import type { Pet } from "../types/pet";
 import { chatWithGPT } from "../utils/chatWithGPT";
 import { getActivePetId, getPets } from "../utils/pets";
@@ -498,7 +501,16 @@ useEffect(() => {
           // Это уже другой клинический путь:
           // старый PDF не обновляем как продолжение текущего кейса.
           await refreshPdfReadyState(pdfConversationId ?? result.conversationId ?? null);
-          setIsDecisionTreeStale(false);
+
+          // После post-summary update PDF обязан пересобраться.
+          setIsDecisionTreeStale(true);
+
+          const invalidateId =
+            pdfConversationId ?? result.conversationId ?? null;
+
+          if (invalidateId) {
+            await invalidatePdfReportsForSession(invalidateId);
+          }
         } else if (typeof result === "object" && result?.sessionEnded) {
           const cid = result.conversationId ?? null;
           if (cid) {
@@ -514,14 +526,7 @@ useEffect(() => {
             (await AsyncStorage.getItem("conversationId"));
 
           if (cid) {
-            const keys = await AsyncStorage.getAllKeys();
-            const pdfKeys = keys.filter((key) =>
-              key.startsWith(`pdfReport:${cid}:`)
-            );
-
-            if (pdfKeys.length > 0) {
-              await AsyncStorage.multiRemove(pdfKeys);
-            }
+            await invalidatePdfReportsForSession(cid);
           }
 
           setIsDecisionTreeStale(true);
@@ -849,14 +854,40 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
       const cachedPdfKey = `pdfReport:${id}:${normalizedLang}`;
       const cachedPdf = await AsyncStorage.getItem(cachedPdfKey);
 
-      // Уже существует PDF для этой сессии и языка.
+      const currentHistoryRaw =
+        (await AsyncStorage.getItem(`chatHistory:${id}`)) ||
+        (await AsyncStorage.getItem(`chat:history:${id}`)) ||
+        "[]";
+
+      let currentMessagesCount = 0;
+      try {
+        const parsedHistory = JSON.parse(currentHistoryRaw);
+        currentMessagesCount = Array.isArray(parsedHistory) ? parsedHistory.length : 0;
+      } catch {}
+
+      let cachedMessagesCount = -1;
+      try {
+        const parsedCachedPdf = cachedPdf ? JSON.parse(cachedPdf) : null;
+        cachedMessagesCount =
+          typeof parsedCachedPdf?.messagesCount === "number"
+            ? parsedCachedPdf.messagesCount
+            : -1;
+      } catch {}
+
+      const isCachedPdfFresh =
+        !!cachedPdf && cachedMessagesCount === currentMessagesCount;
+
+      // Уже существует актуальный PDF для этой сессии и языка.
       // Не проверяем paywall повторно.
       console.log("PDF CACHE CHECK", {
         hasCachedPdf: !!cachedPdf,
         isDecisionTreeStale,
+        cachedMessagesCount,
+        currentMessagesCount,
+        isCachedPdfFresh,
       });
 
-      if (cachedPdf && !isDecisionTreeStale) {
+      if (isCachedPdfFresh && !isDecisionTreeStale) {
         console.log("📄 PDF step 1b: cached PDF reuse");
 
         setPdfTextKey("pdf.generating");
