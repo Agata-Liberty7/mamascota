@@ -11,10 +11,16 @@ export default function PaymentSuccessScreen() {
         await setPaid(true);
       } catch {}
 
-      router.replace("/chat");
+      router.replace("/");
     };
 
     applyAccess();
+
+    const timeout = setTimeout(() => {
+      router.replace("/");
+    }, 2500);
+
+    return () => clearTimeout(timeout);
   }, []);
 
   return (

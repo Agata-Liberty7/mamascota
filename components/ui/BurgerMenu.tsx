@@ -17,7 +17,6 @@ import * as Animatable from "react-native-animatable";
 import i18n from "../../i18n";
 import { clearConversationId } from "../../utils/chatWithGPT";
 import { handleActiveSessionDecision } from "../../utils/handleActiveSessionDecision";
-import { isPaid, isTrialActive } from "../../utils/access";
 
 interface Props {
   visible: boolean;
@@ -145,70 +144,6 @@ export default function BurgerMenu({ visible, onClose }: Props) {
       // выбор животного доступен только после согласия с условиями
       enabled: termsAccepted,
       action: async () => {
-        const paid = await isPaid();
-        const trialActive = await isTrialActive();
-
-        if (!paid && !trialActive) {
-          onClose();
-
-          setTimeout(async () => {
-            if (Platform.OS === "web") {
-              const result = await showWebConfirm({
-                title: String(i18n.t("alert_title", { defaultValue: "Attention" })),
-                message: String(
-                  i18n.t("paywall_trial_expired", {
-                    defaultValue: "Trial expired. Please upgrade to continue.",
-                  })
-                ),
-                buttons: [
-                  {
-                    key: "pay",
-                    label: String(
-                      i18n.t("paywall_go_to_payment", {
-                        defaultValue: "Upgrade",
-                      })
-                    ),
-                  },
-                  {
-                    key: "cancel",
-                    label: String(i18n.t("cancel")),
-                  },
-                ],
-              });
-
-              if (result === "pay") {
-                window.location.href = "https://mamascota.com";
-              }
-            } else {
-              Alert.alert(
-                String(i18n.t("alert_title", { defaultValue: "Attention" })),
-                String(
-                  i18n.t("paywall_trial_expired", {
-                    defaultValue: "Trial expired. Please upgrade to continue.",
-                  })
-                ),
-                [
-                  {
-                    text: String(
-                      i18n.t("paywall_go_to_payment", {
-                        defaultValue: "Upgrade",
-                      })
-                    ),
-                    onPress: () => {
-                      router.push("https://mamascota.com");
-                    },
-                  },
-                  {
-                    text: String(i18n.t("cancel")),
-                    style: "cancel",
-                  },
-                ]
-              );
-            }
-          }, 180);
-
-          return;
-        }
 
         onClose();
 

@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 import * as WebBrowser from "expo-web-browser";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import i18n from "../i18n";
 
@@ -22,6 +23,22 @@ export default function PaywallScreen() {
     const url = baseUrl ? `${baseUrl}?from=app` : null;
     if (!url) {
       return;
+    }
+
+    try {
+      const currentConversationId =
+        (await AsyncStorage.getItem("conversationId")) || "";
+
+      const currentPdfConversationId =
+        (await AsyncStorage.getItem("pdfConversationId")) || "";
+
+      await AsyncStorage.multiSet([
+        ["paymentReturnRoute", "/chat"],
+        ["paymentReturnConversationId", currentConversationId],
+        ["paymentReturnPdfConversationId", currentPdfConversationId],
+      ]);
+    } catch (e) {
+      console.log("PAYMENT RETURN SAVE ERROR", e);
     }
 
     if (Platform.OS === "web") {

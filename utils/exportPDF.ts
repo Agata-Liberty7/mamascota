@@ -420,6 +420,100 @@ function mapDecisionTreeToPdfSections(dt: any) {
   };
 }
 
+async function translatePdfSectionsIfNeeded(
+  sections: {
+    anamnesisShort: string;
+    nextSteps: {
+      observe_at_home: string;
+      urgent_now: string;
+      plan_visit: string;
+    };
+  },
+  fromLocale: string,
+  toLocale: string,
+  sessionId: string
+) {
+  if (!toLocale || fromLocale === toLocale) {
+    return sections;
+  }
+
+  const request = `
+Translate the veterinary PDF sections below into "${toLocale}".
+
+Return STRICT JSON only:
+{
+  "anamnesisShort": "...",
+  "nextSteps": {
+    "observe_at_home": "...",
+    "urgent_now": "...",
+    "plan_visit": "..."
+  }
+}
+
+Rules:
+- Translate only text values.
+- Preserve bullets and line breaks.
+- Do not add new clinical facts.
+- Do not remove clinical facts.
+- Do not change structure.
+- Do not include explanations.
+- Mamascota speaks as a woman.
+- Never identify Mamascota as a doctor, veterinarian, clinician or medical professional.
+- Never write phrases like:
+  "the doctor noted",
+  "the veterinarian observed",
+  "clinical assessment showed".
+- Do not diagnose; keep visit-preparation/navigation tone.
+
+SOURCE LANGUAGE: ${fromLocale}
+TARGET LANGUAGE: ${toLocale}
+
+SECTIONS:
+${JSON.stringify(sections, null, 2)}
+`.trim();
+
+  const res = await chatWithGPT({
+    message: request,
+    userLang: toLocale,
+    conversationId: `pdf-translate-${sessionId}-${toLocale}`,
+  });
+
+  const replyText = String((res as any)?.reply || "").trim();
+
+  try {
+    const parsed = JSON.parse(replyText);
+
+    return {
+      anamnesisShort:
+        typeof parsed?.anamnesisShort === "string"
+          ? parsed.anamnesisShort
+          : sections.anamnesisShort,
+      nextSteps: {
+        observe_at_home:
+          typeof parsed?.nextSteps?.observe_at_home === "string"
+            ? parsed.nextSteps.observe_at_home
+            : sections.nextSteps.observe_at_home,
+        urgent_now:
+          typeof parsed?.nextSteps?.urgent_now === "string"
+            ? parsed.nextSteps.urgent_now
+            : sections.nextSteps.urgent_now,
+        plan_visit:
+          typeof parsed?.nextSteps?.plan_visit === "string"
+            ? parsed.nextSteps.plan_visit
+            : sections.nextSteps.plan_visit,
+      },
+    };
+  } catch {
+    console.log("PDF TRANSLATION PARSE ERROR", {
+      fromLocale,
+      toLocale,
+      replyText,
+    });
+
+    return sections;
+  }
+}
+
 function localizeSpecies(species: string, sex: string, locale?: string): string {
   const s = species?.toLowerCase() || "";
   const sx = sex?.toLowerCase() || "";
