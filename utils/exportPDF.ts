@@ -606,36 +606,38 @@ async function buildDecisionTree(conversationId: string, locale: string) {
 Требования:
 - Язык строго: ${locale}.
 - Ничего ДО или ПОСЛЕ JSON.
-- 3–6 пунктов максимум в "anamnesis_short".
-- В "next_steps":
-  - observe_at_home: 1–3 коротких пункта
-  - urgent_now: 3–6 чётких признаков
-  - plan_visit: 1–2 пункта (зачем очно), без протоколов
-- Не использовать слова: "диагноз", "патология", "эндокринный", "метаболический".
+- Учитывай ВСЮ сессию целиком, включая последние сообщения.
+- Не меняй смысл уже известных фактов при новом обновлении.
+- Новые значимые наблюдения добавляй как дополнительные факты, а не переписывай весь анамнез.
+- "anamnesis_short" = только факты от владельца и наблюдаемое состояние животного.
+- В "anamnesis_short" НЕ включать рекомендации, выводы, маршрутизацию, срочность, план визита.
+- Не использовать слова и роли: "врач", "ветеринар", "консультант", "клиницист", "специалист".
+- Не писать фразы: "врач отметил", "ветеринар рекомендовал", "консультант оценил", "консультант заявил".
+- Не писать "диагноз", "патология", "эндокринный", "метаболический".
 - Не писать "менее вероятно", "исключено" и подобное.
 - Не перечислять конкретные анализы, исследования, протоколы.
 - Не выдумывать факты: только из диалога.
-- Учитывай ВСЮ сессию целиком, включая последние сообщения.
+- В "anamnesis_short" включай все клинически значимые факты из диалога, без искусственного ограничения по количеству.
+- Не дублируй одинаковые факты.
+- Группируй близкие факты, если это не скрывает важные детали.
+- Не сокращай анамнез ценой потери значимых наблюдений владельца.
+- В "next_steps":
+  - observe_at_home: 1–3 коротких пункта
+  - urgent_now: 3–6 чётких признаков/условий
+  - plan_visit: 1–3 пункта, зачем очно, без протоколов
 
 === СЕССИЯ ===
 ${combined}
 `.trim();
 
   const res = await chatWithGPT({
-    message: request,
+    message: "__MAMASCOTA_DECISION_TREE__",
     userLang: locale,
-    conversationId: `summary-${conversationId}`,
+    conversationId,
+    conversationHistory: chat,
   });
 
-  const replyText = (res as any)?.reply || "";
-  let dt: any = (res as any)?.decisionTree;
-
-  if (!dt && typeof replyText === "string") {
-    try {
-      const parsed = JSON.parse(replyText);
-      dt = parsed?.decisionTree ?? parsed;
-    } catch {}
-  }
+  let dt: any = (res as any)?.decisionTree ?? null;
 
   const bullets = (arr: any) =>
     Array.isArray(arr)
@@ -769,10 +771,21 @@ export async function exportSummaryPDF(
       return;
     }
 
-    const dtKey = `decisionTree:${sessionId}:${chatLocale}`;
-    const dtRaw = await AsyncStorage.getItem(dtKey);
+    const preferredDtKey = `decisionTree:${sessionId}:${locale}`;
+    const fallbackDtKey = `decisionTree:${sessionId}:${chatLocale}`;
+
+    const preferredDtRaw = await AsyncStorage.getItem(preferredDtKey);
+    const fallbackDtRaw =
+      preferredDtKey === fallbackDtKey
+        ? null
+        : await AsyncStorage.getItem(fallbackDtKey);
+
+    const dtKey = preferredDtRaw ? preferredDtKey : fallbackDtKey;
+    const dtRaw = preferredDtRaw || fallbackDtRaw;
 
     console.log("PDF DT CHECK", {
+      preferredDtKey,
+      fallbackDtKey,
       dtKey,
       hasDtRaw: !!dtRaw,
       currentMessagesCount,
@@ -799,13 +812,15 @@ export async function exportSummaryPDF(
     let nextSteps: any = {};
 
     try {
-      const workerDt = await getWorkerDecisionTreeFromChatCache(sessionId, chatLocale);
+      const workerDt = await getWorkerDecisionTreeFromChatCache(sessionId, locale);
       if (workerDt) {
         const mapped = mapDecisionTreeToPdfSections(workerDt);
         anamnesisShort = mapped.anamnesisShort;
         nextSteps = mapped.nextSteps;
       }
-    } catch {}
+    } catch (e) {
+      console.log("PDF decisionTree cache read error", e);
+    }
 
     const symptomKeys: string[] = summary.symptomKeys || [];
 

@@ -622,7 +622,37 @@ async function ensureDecisionTreeCached(conversationId: string) {
 
   // если есть кэш и он не помечен как stale — ничего не делаем
   const raw = await AsyncStorage.getItem(dtKey);
-  if (raw && !isDecisionTreeStale) return;
+
+  let savedMessagesCount = -1;
+  if (raw) {
+    try {
+      const parsedDt = JSON.parse(raw);
+      savedMessagesCount =
+        typeof parsedDt?.messagesCount === "number" ? parsedDt.messagesCount : -1;
+    } catch {}
+  }
+
+  const historyRawA = await AsyncStorage.getItem(`chatHistory:${conversationId}`);
+  const historyRawB = await AsyncStorage.getItem(`chat:history:${conversationId}`);
+
+  let currentMessagesCount = 0;
+  try {
+    const parsedA = historyRawA ? JSON.parse(historyRawA) : [];
+    const parsedB = historyRawB ? JSON.parse(historyRawB) : [];
+
+    currentMessagesCount = Math.max(
+      Array.isArray(parsedA) ? parsedA.length : 0,
+      Array.isArray(parsedB) ? parsedB.length : 0
+    );
+  } catch {}
+
+  if (
+    raw &&
+    !isDecisionTreeStale &&
+    savedMessagesCount >= currentMessagesCount
+  ) {
+    return;
+  }
 
   const conversationHistory = buildConversationHistoryTail(20);
 
@@ -643,22 +673,11 @@ async function ensureDecisionTreeCached(conversationId: string) {
 
   const decisionTree = (dtRes as any).decisionTree ?? null;
 
-  const currentHistory =
-    (await AsyncStorage.getItem(`chatHistory:${conversationId}`)) ||
-    (await AsyncStorage.getItem(`chat:history:${conversationId}`)) ||
-    "[]";
-
-  let messagesCount = 0;
-  try {
-    const parsedHistory = JSON.parse(currentHistory);
-    messagesCount = Array.isArray(parsedHistory) ? parsedHistory.length : 0;
-  } catch {}
-
   await AsyncStorage.setItem(
     dtKey,
     JSON.stringify({
       createdAt: new Date().toISOString(),
-      messagesCount,
+      messagesCount: currentMessagesCount,
       decisionTree,
     })
   );
@@ -675,15 +694,24 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
   const dtKey = `decisionTree:${conversationId}:${locale}`;
   const raw = await AsyncStorage.getItem(dtKey);
 
-  const currentHistoryRaw =
-    (await AsyncStorage.getItem(`chatHistory:${conversationId}`)) ||
-    (await AsyncStorage.getItem(`chat:history:${conversationId}`)) ||
-    "[]";
+  const historyRawA = await AsyncStorage.getItem(`chatHistory:${conversationId}`);
+  const historyRawB = await AsyncStorage.getItem(`chat:history:${conversationId}`);
 
   let currentMessagesCount = 0;
   try {
-    const parsedHistory = JSON.parse(currentHistoryRaw);
-    currentMessagesCount = Array.isArray(parsedHistory) ? parsedHistory.length : 0;
+    const parsedA = historyRawA ? JSON.parse(historyRawA) : [];
+    const parsedB = historyRawB ? JSON.parse(historyRawB) : [];
+
+    const countA = Array.isArray(parsedA) ? parsedA.length : 0;
+    const countB = Array.isArray(parsedB) ? parsedB.length : 0;
+
+    currentMessagesCount = Math.max(countA, countB);
+
+    console.log("DT HISTORY COUNT CHECK", {
+      countA,
+      countB,
+      currentMessagesCount,
+    });
   } catch {}
 
   let savedMessagesCount = -1;
@@ -854,15 +882,24 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
       const cachedPdfKey = `pdfReport:${id}:${normalizedLang}`;
       const cachedPdf = await AsyncStorage.getItem(cachedPdfKey);
 
-      const currentHistoryRaw =
-        (await AsyncStorage.getItem(`chatHistory:${id}`)) ||
-        (await AsyncStorage.getItem(`chat:history:${id}`)) ||
-        "[]";
+      const historyRawA = await AsyncStorage.getItem(`chatHistory:${id}`);
+      const historyRawB = await AsyncStorage.getItem(`chat:history:${id}`);
 
       let currentMessagesCount = 0;
       try {
-        const parsedHistory = JSON.parse(currentHistoryRaw);
-        currentMessagesCount = Array.isArray(parsedHistory) ? parsedHistory.length : 0;
+        const parsedA = historyRawA ? JSON.parse(historyRawA) : [];
+        const parsedB = historyRawB ? JSON.parse(historyRawB) : [];
+
+        const countA = Array.isArray(parsedA) ? parsedA.length : 0;
+        const countB = Array.isArray(parsedB) ? parsedB.length : 0;
+
+        currentMessagesCount = Math.max(countA, countB);
+
+        console.log("PDF HISTORY COUNT CHECK", {
+          countA,
+          countB,
+          currentMessagesCount,
+        });
       } catch {}
 
       let cachedMessagesCount = -1;
@@ -1004,18 +1041,16 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
 
       setPdfGenerating(true);
 
-      if (isDecisionTreeStale) {
-        console.log("📄 PDF step 3: before refreshDecisionTreeIfStale");
-          await refreshDecisionTreeIfStale(id);
-          console.log("📄 PDF step 4: after refreshDecisionTreeIfStale");
+      console.log("📄 PDF step 3: before refreshDecisionTreeIfStale");
+      await refreshDecisionTreeIfStale(id);
+      console.log("📄 PDF step 4: after refreshDecisionTreeIfStale");
 
-          console.log("📄 PDF step 5: before saveSessionSilently");
-          await saveSessionSilently(id);
-          console.log("📄 PDF step 6: after saveSessionSilently");
-        }
+      console.log("📄 PDF step 5: before saveSessionSilently");
+      await saveSessionSilently(id);
+      console.log("📄 PDF step 6: after saveSessionSilently");
 
-        console.log("📄 PDF step 7: before exportSummaryPDF");
-        await exportSummaryPDF(id, previewWindow);
+      console.log("📄 PDF step 7: before exportSummaryPDF");
+      await exportSummaryPDF(id, previewWindow);
 
       await addPdfLanguage(normalizedLang);
 

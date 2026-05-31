@@ -419,11 +419,17 @@ Section rules:
   - do not merge several separate facts into one vague sentence;
   - do not repeat pet identity/profile facts already covered elsewhere
     (name, species, breed, sex, age), unless they are clinically relevant.
+  - do not put the same sentence or same fact into more than one section.
+  - if a fact belongs to anamnesis, do not copy it into urgent_now unless it is rewritten as an escalation condition.   
 - "observe_at_home":
   - 2-5 practical points;
   - no medications, no treatment instructions.
 - "urgent_now":
-  - 3-6 clear red flags or reasons for urgent care.
+  - list ONLY warning signs or escalation conditions that mean urgent veterinary care is needed;
+  - do NOT repeat anamnesis facts as plain observations;
+  - each item must be phrased as a condition for urgent care, for example: "if breathing with open mouth continues at rest";
+  - include only conditions supported by the dialogue;
+  - 3-6 clear items.
 - "plan_visit":
   - 1-3 short practical points explaining why an in-person visit is needed.
 

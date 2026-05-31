@@ -286,6 +286,8 @@ export async function chatWithGPT(params: {
         // ✅ сохраняем строго по ensuredConversationId, чтобы не терять историю
         const targetConversationId = serverConversationId || ensuredConversationId;
 
+        let savedHistoryLength: number | null = null;
+
         if (targetConversationId && !isSummaryConversation && !isDecisionTreeRequest) {
           await setConversationId(targetConversationId);
 
@@ -342,6 +344,9 @@ export async function chatWithGPT(params: {
               targetConversationId,
               ")"
             );
+
+            savedHistoryLength = updated.length;
+
           } catch (err) {
             console.warn("⚠️ Не удалось сохранить историю чата:", err);
           }
@@ -362,16 +367,19 @@ export async function chatWithGPT(params: {
           try {
             const dtKey = `decisionTree:${serverConversationId}:${effectiveLang}`;
 
-            const rawHistory =
-              (await AsyncStorage.getItem(`chatHistory:${serverConversationId}`)) ||
-              (await AsyncStorage.getItem(`chat:history:${serverConversationId}`)) ||
-              "[]";
+            let messagesCount = savedHistoryLength ?? 0;
 
-            let messagesCount = 0;
-            try {
-              const parsedHistory = JSON.parse(rawHistory);
-              messagesCount = Array.isArray(parsedHistory) ? parsedHistory.length : 0;
-            } catch {}
+            if (!savedHistoryLength) {
+              const rawHistory =
+                (await AsyncStorage.getItem(`chatHistory:${serverConversationId}`)) ||
+                (await AsyncStorage.getItem(`chat:history:${serverConversationId}`)) ||
+                "[]";
+
+              try {
+                const parsedHistory = JSON.parse(rawHistory);
+                messagesCount = Array.isArray(parsedHistory) ? parsedHistory.length : 0;
+              } catch {}
+            }
 
             await AsyncStorage.setItem(
               dtKey,
