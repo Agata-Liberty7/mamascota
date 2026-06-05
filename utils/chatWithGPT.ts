@@ -95,13 +95,18 @@ async function getSelectedSymptomKeysFromStorage(): Promise<string[]> {
 // --------------------------------------------------
 export async function chatWithGPT(params: {
   message: string;
-  internalCommand?: "__MAMASCOTA_FINALIZE__" | "__MAMASCOTA_DECISION_TREE__";
+  internalCommand?:
+    | "__MAMASCOTA_FINALIZE__"
+    | "__MAMASCOTA_DECISION_TREE__"
+    | "__MAMASCOTA_PDF_TRANSLATE__";
   pet?: any;
   symptomKeys?: string[];
   userLang?: string;
   conversationId?: string; // можно явно задать (например, summary-…)
   conversationHistory?: Array<{ role: "user" | "assistant" | "system"; content: string }>;
   postSummaryUpdateMode?: boolean;
+  sections?: any;
+  fromLocale?: string;
 }): Promise<ChatResult> {
     const {
     message,
@@ -111,6 +116,8 @@ export async function chatWithGPT(params: {
     userLang,
     conversationId,
     postSummaryUpdateMode,
+    sections,
+    fromLocale,
   } = params || {};
 
   if (!AGENT_URL) {
@@ -157,10 +164,16 @@ export async function chatWithGPT(params: {
   // Служебный запрос для PDF: worker должен видеть историю,
   // но мы НЕ должны сохранять это как часть диалога
   const isDecisionTreeRequest =
-    effectiveInternalCommand === "__MAMASCOTA_DECISION_TREE__";
+    effectiveInternalCommand === "__MAMASCOTA_DECISION_TREE__" ||
+    effectiveMessage.trim() === "__MAMASCOTA_DECISION_TREE__";
 
   const isFinalizeRequest =
-    effectiveInternalCommand === "__MAMASCOTA_FINALIZE__";
+    effectiveInternalCommand === "__MAMASCOTA_FINALIZE__" ||
+    effectiveMessage.trim() === "__MAMASCOTA_FINALIZE__";
+
+  const isPdfTranslateRequest =
+    effectiveInternalCommand === "__MAMASCOTA_PDF_TRANSLATE__" ||
+    effectiveMessage.trim() === "__MAMASCOTA_PDF_TRANSLATE__";
 
   try {
     const existingId = await AsyncStorage.getItem("conversationId");
@@ -223,6 +236,8 @@ export async function chatWithGPT(params: {
       conversationId: ensuredConversationId,
       conversationHistory: effectiveConversationHistory,
       postSummaryUpdateMode: !!postSummaryUpdateMode,
+      sections,
+      fromLocale,
     };
 
     // Отладка входных параметров
@@ -288,7 +303,17 @@ export async function chatWithGPT(params: {
 
         let savedHistoryLength: number | null = null;
 
-        if (targetConversationId && !isSummaryConversation && !isDecisionTreeRequest) {
+        const isPdfTranslateConversation =
+          String(targetConversationId || "").startsWith("pdf-translate-");
+
+        if (
+          targetConversationId &&
+          !isSummaryConversation &&
+          !isDecisionTreeRequest &&
+          !isFinalizeRequest &&
+          !isPdfTranslateRequest &&
+          !isPdfTranslateConversation
+        ) {
           await setConversationId(targetConversationId);
 
           try {
@@ -350,8 +375,11 @@ export async function chatWithGPT(params: {
           } catch (err) {
             console.warn("⚠️ Не удалось сохранить историю чата:", err);
           }
-        } else if (isSummaryConversation) {
-          console.log("ℹ️ Summary-конверсация, историю и conversationId не трогаем.");
+        } else if (
+          isSummaryConversation ||
+          isPdfTranslateConversation
+        ) {
+          console.log("ℹ️ Служебная конверсация, историю и conversationId не трогаем.");
         }
 
         const phase =

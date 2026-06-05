@@ -48,6 +48,7 @@ type BrainArgs = {
 const END_MARK = "[SESSION_ENDED]";
 const DECISION_TREE_CMD = "__MAMASCOTA_DECISION_TREE__";
 const FINALIZE_CMD = "__MAMASCOTA_FINALIZE__";
+const PDF_TRANSLATE_CMD = "__MAMASCOTA_PDF_TRANSLATE__";
 
 const PROMPT_VERSION = "2026-02-21-perf-first-light";
 
@@ -533,9 +534,100 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
   // ---- command switch: decisionTree on-demand
   const isDecisionTreeRequest = trimmedMessage === DECISION_TREE_CMD;
   const isFinalizeRequest = trimmedMessage === FINALIZE_CMD;
+  const isPdfTranslateRequest = trimmedMessage === PDF_TRANSLATE_CMD;
 
   try {
     const petData = normalizePet(args.pet);
+
+    // =========================================================
+    // 0) PDF translation request (fast path, no chat reply)
+    // =========================================================
+    if (isPdfTranslateRequest) {
+      const payload = args as any;
+      const sections = payload.sections || {};
+      const fromLocale = isNonEmptyString(payload.fromLocale)
+        ? payload.fromLocale
+        : "ru";
+      const toLocale = effectiveLang;
+
+      const translationPrompt = `
+Translate the veterinary PDF sections below from "${fromLocale}" into "${toLocale}".
+
+Return STRICT JSON only:
+{
+  "anamnesisShort": "...",
+  "nextSteps": {
+    "observe_at_home": "...",
+    "urgent_now": "...",
+    "plan_visit": "..."
+  }
+}
+
+Rules:
+- Translate only text values.
+- Preserve bullets and line breaks.
+- Do not add new clinical facts.
+- Do not remove clinical facts.
+- Do not change structure.
+- Do not include explanations.
+- Mamascota speaks as a woman.
+- Never identify Mamascota as a doctor, veterinarian, clinician or medical professional.
+- Never write phrases like "the doctor noted", "the veterinarian observed", "clinical assessment showed".
+- Do not diagnose; keep visit-preparation/navigation tone.
+
+SECTIONS:
+${JSON.stringify(sections, null, 2)}
+`.trim();
+
+      const translateMessages: Array<{
+        role: "system" | "user";
+        content: string;
+      }> = [
+        {
+          role: "system",
+          content:
+            "You are a strict JSON translation engine. Return only valid JSON. No prose, no markdown.",
+        },
+        {
+          role: "user",
+          content: translationPrompt,
+        },
+      ];
+
+      const completion = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model,
+          messages: translateMessages,
+          temperature: 0,
+          response_format: { type: "json_object" },
+        }),
+      });
+
+      if (!completion.ok) {
+        const text = await completion.text();
+        return {
+          ok: false,
+          conversationId,
+          error: `PDF_TRANSLATE_FAILED: ${text}`,
+        };
+      }
+
+      const data = await completion.json<any>();
+      const reply = String(data?.choices?.[0]?.message?.content || "").trim();
+
+      return {
+        ok: true,
+        conversationId,
+        reply,
+        sessionEnded: false,
+        phase: "summary",
+      };
+    }
 
     // =========================================================
     // 0) decisionTree request (fast path, no chat reply)
@@ -709,8 +801,12 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
           "FINALIZE_MODE:",
           "- Produce the final summary now.",
           "- Do NOT ask questions.",
-          "- Return 2 to 4 short standalone blocks.",
+          "- Return exactly 3 short standalone blocks.",
+          "- Block 1 title: ЧТО МЫ НАБЛЮДАЕМ",
+          "- Block 2 title: ЧТО ДЕЛАТЬ СЕЙЧАС",
+          "- Block 3 title: КУДА И КОГДА ОБРАЩАТЬСЯ",
           "- Insert [CHUNK] on its own line between every block.",
+          "- Do NOT add a fourth block.",
           "- Do NOT merge all sections into one continuous paragraph.",
           `- End your message with ${END_MARK} exactly once.`,
         ].join("\n"),

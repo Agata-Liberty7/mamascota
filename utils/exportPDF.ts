@@ -473,9 +473,11 @@ ${JSON.stringify(sections, null, 2)}
 `.trim();
 
   const res = await chatWithGPT({
-    message: request,
+    message: "__MAMASCOTA_PDF_TRANSLATE__",
     userLang: toLocale,
     conversationId: `pdf-translate-${sessionId}-${toLocale}`,
+    sections,
+    fromLocale,
   });
 
   const replyText = String((res as any)?.reply || "").trim();
@@ -667,7 +669,6 @@ ${combined}
 async function getDecisionTreeCached(sessionId: string, locale: string) {
   try {
     const workerDt = await getWorkerDecisionTreeFromChatCache(sessionId, locale);
-    console.log("DT DEBUG >>>", JSON.stringify(workerDt, null, 2));
 
     if (!workerDt) {
       return null;
@@ -814,9 +815,18 @@ export async function exportSummaryPDF(
     try {
       const workerDt = await getWorkerDecisionTreeFromChatCache(sessionId, locale);
       if (workerDt) {
+
         const mapped = mapDecisionTreeToPdfSections(workerDt);
-        anamnesisShort = mapped.anamnesisShort;
-        nextSteps = mapped.nextSteps;
+
+        const translated = await translatePdfSectionsIfNeeded(
+          mapped,
+          chatLocale,
+          locale,
+          sessionId
+        );
+
+        anamnesisShort = translated.anamnesisShort;
+        nextSteps = translated.nextSteps;
       }
     } catch (e) {
       console.log("PDF decisionTree cache read error", e);
