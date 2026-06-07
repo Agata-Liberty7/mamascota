@@ -666,10 +666,10 @@ export async function handleExitAction(
     }
 
     try {
-      router.replace("/summary");
-      console.log("↩️ Переход в Summary после сохранения");
+      router.replace("/");
+      console.log("↩️ Переход на главный экран после сохранения");
     } catch (err) {
-      console.warn("⚠️ Не удалось перейти в Summary:", err);
+      console.warn("⚠️ Не удалось перейти на главный экран:", err);
     }
     return;
   }

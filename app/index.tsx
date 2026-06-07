@@ -3,9 +3,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useState, useEffect } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import { clearConversationId } from "../utils/chatWithGPT";
 import { handleActiveSessionDecision } from "../utils/handleActiveSessionDecision";
 import LanguageNotice from "../components/ui/LanguageNotice";
+import LanguageSelector from "../components/ui/LanguageSelector";
 import { detectAndSetInitialLanguage } from "../utils/detectLanguage";
 import i18n from '../i18n';
 import { theme } from '../src/theme';
@@ -18,6 +20,7 @@ export default function StartScreen() {
 
   const [onboardingSeen, setOnboardingSeen] = useState<boolean>(false);
   const [currentLanguage, setCurrentLanguage] = useState<string | null>(null);
+  const [languageOpen, setLanguageOpen] = useState(false);
   const [checking, setChecking] = useState(true);
   const { isWeb, isDesktopLike, isTabletLike } = useDeviceClass();
   const heroWeb = require('../assets/images/Mamascota_2_web.png');
@@ -27,7 +30,11 @@ export default function StartScreen() {
       const saved = await AsyncStorage.getItem("selectedLanguage");
       if (!saved) {
         const lang = await detectAndSetInitialLanguage();
+        setCurrentLanguage(lang);
         console.log("🌍 Автоязык установлен:", lang);
+      } else {
+        i18n.locale = saved;
+        setCurrentLanguage(saved);
       }
     })();
   }, []);
@@ -99,6 +106,13 @@ export default function StartScreen() {
     // cancel — ничего не делаем
   };
 
+  const applyLanguage = async (lang: string) => {
+    i18n.locale = lang;
+    setCurrentLanguage(lang);
+    await AsyncStorage.setItem("selectedLanguage", lang);
+    setLanguageOpen(false);
+  }; 
+  
   const stylesMobile = StyleSheet.create({
     container: {
       flex: 1,
@@ -158,6 +172,29 @@ export default function StartScreen() {
       color: theme.colors.buttonPrimaryText,
       fontSize: 16,
       fontWeight: 'bold',
+    },
+    languageButton: {
+      position: 'absolute',
+      top: 18,
+      right: 18,
+      width: 42,
+      height: 42,
+      borderRadius: 21,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#FFFFFF',
+    },
+    languageButtonText: {
+      fontSize: 22,
+    },
+    languagePanel: {
+      position: 'absolute',
+      top: 66,
+      right: 18,
+      zIndex: 20,
+      backgroundColor: '#FFFFFF',
+      borderRadius: theme.radius.lg,
+      padding: 12,
     },
   });
 
@@ -238,6 +275,29 @@ export default function StartScreen() {
       fontSize: 18,
       fontWeight: 'bold',
     },
+    languageButton: {
+      position: 'absolute',
+      top: 18,
+      right: 18,
+      width: 42,
+      height: 42,
+      borderRadius: 21,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#FFFFFF',
+    },
+    languageButtonText: {
+      fontSize: 22,
+    },
+    languagePanel: {
+      position: 'absolute',
+      top: 66,
+      right: 18,
+      zIndex: 20,
+      backgroundColor: '#FFFFFF',
+      borderRadius: theme.radius.lg,
+      padding: 12,
+    },
   });
 
   const styles = isWeb ? stylesWeb : stylesMobile;
@@ -250,6 +310,23 @@ export default function StartScreen() {
       <LanguageNotice />
 
       <View style={styles.container}>
+        <TouchableOpacity
+          style={styles.languageButton}
+          onPress={() => setLanguageOpen((v) => !v)}
+          accessibilityLabel={String(i18n.t("menu.change_language"))}
+        >
+          <Text style={styles.languageButtonText}>🌐</Text>
+        </TouchableOpacity>
+
+        {languageOpen && (
+          <View style={styles.languagePanel}>
+            <LanguageSelector
+              selected={currentLanguage || i18n.locale}
+              onSelect={applyLanguage}
+            />
+          </View>
+        )}
+
         {isWeb ? (
           <View style={styles.content}>
             <View style={styles.topBlock}>

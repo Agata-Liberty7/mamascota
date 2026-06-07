@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ACCESS_FLAGS = {
-  pdfLimitEnabled: true,
+  pdfLimitEnabled: false,
 };
 
 const PAID_KEY = "access.isPaid";

@@ -17,6 +17,7 @@ import * as Animatable from "react-native-animatable";
 import i18n from "../../i18n";
 import { clearConversationId } from "../../utils/chatWithGPT";
 import { handleActiveSessionDecision } from "../../utils/handleActiveSessionDecision";
+import { isPaid } from "../../utils/access";
 
 interface Props {
   visible: boolean;
@@ -67,6 +68,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [animalProfile, setAnimalProfile] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
+  const [hasSavedSessions, setHasSavedSessions] = useState(false);
 
   useEffect(() => {
     const loadFlags = async () => {
@@ -75,6 +77,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
       const acceptedTerms = await AsyncStorage.getItem("acceptedTerms");
       const profile = await AsyncStorage.getItem("animalProfile");
       const cid = await AsyncStorage.getItem("conversationId");
+      const paid = await isPaid();
 
       // согласие с условиями: если хотя бы один флаг true
       const isAccepted =
@@ -85,6 +88,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
       setTermsAccepted(isAccepted);
       setAnimalProfile(!!profile);
       setConversationId(cid || null);
+      setHasSavedSessions(paid);
     };
 
     if (visible) {
@@ -180,10 +184,19 @@ export default function BurgerMenu({ visible, onClose }: Props) {
     {
       label: String(i18n.t("menu.saved_sessions")),
       icon: "list",
-      enabled: true,   // ← вместо hasSummary
+      enabled: hasSavedSessions,
       action: () => {
         onClose();
-        setTimeout(() => router.replace("/summary"), 120);
+        setTimeout(async () => {
+          const paid = await isPaid();
+
+          if (paid) {
+            router.replace("/summary");
+            return;
+          }
+
+          router.replace("/paywall");
+        }, 120);
       },
     },
 
