@@ -71,6 +71,8 @@
   "continue_message": "Puoi riprendere la sessione precedente o iniziarne una nuova.",
   "start_new": "Nuova sessione",
   "continue_session": "Riprendi sessione",
+  "start_new_warning_title": "Una nuova consulenza eliminerà quella attuale",
+  "start_new_warning_message": "Nella versione gratuita, Mamascota conserva solo una consulenza attiva. Se ne inizi una nuova, la chat attuale e i relativi report verranno eliminati. Prima puoi tornare alla chat e salvare il report PDF sul tuo dispositivo. L’accesso completo a 1,99 € ti permette di conservare lo storico delle consulenze e tornarci più tardi.",
 
   "menu": {
     "start_consultation": "Inizia consulenza",

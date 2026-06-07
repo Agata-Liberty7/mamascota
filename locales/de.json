@@ -71,6 +71,8 @@
   "continue_message": "Sie können Ihre vorherige Sitzung fortsetzen oder eine neue beginnen.",
   "start_new": "Neu starten",
   "continue_session": "Sitzung fortsetzen",
+  "start_new_warning_title": "Eine neue Beratung löscht die aktuelle",
+  "start_new_warning_message": "In der kostenlosen Version speichert Mamascota nur eine aktive Beratung. Wenn du eine neue startest, werden der aktuelle Chat und die dazugehörigen Berichte gelöscht. Vorher kannst du zum Chat zurückkehren und den PDF-Bericht auf deinem Gerät speichern. Der Vollzugang für 1,99 € ermöglicht es dir, deine Beratungshistorie zu speichern und später darauf zurückzukommen.",
 
   "menu": {
     "start_consultation": "Beratung starten",

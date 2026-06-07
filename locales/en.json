@@ -71,6 +71,8 @@
   "continue_message": "You can resume your previous session or start a new one.",
   "start_new": "Start new",
   "continue_session": "Continue session",
+  "start_new_warning_title": "A new consultation will delete the current one",
+  "start_new_warning_message": "In the free version, Mamascota keeps only one active consultation. If you start a new one, the current chat and its reports will be deleted. Before that, you can return to the chat and save the PDF report to your device. Full Access for €1.99 lets you keep your consultation history and return to it later.",
 
   "menu": {
     "start_consultation": "Start consultation",

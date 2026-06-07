@@ -71,6 +71,8 @@
   "continue_message": "Vous pouvez reprendre votre session précédente ou en commencer une nouvelle.",
   "start_new": "Nouveau départ",
   "continue_session": "Reprendre la session",
+  "start_new_warning_title": "Une nouvelle consultation supprimera l’actuelle",
+  "start_new_warning_message": "Dans la version gratuite, Mamascota conserve une seule consultation active. Si vous en commencez une nouvelle, le chat actuel et ses rapports seront supprimés. Avant cela, vous pouvez revenir au chat et enregistrer le rapport PDF sur votre appareil. L’accès complet à 1,99 € vous permet de conserver l’historique des consultations et d’y revenir plus tard.",
 
   "menu": {
     "start_consultation": "Commencer la consultation",
