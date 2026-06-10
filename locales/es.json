@@ -70,7 +70,7 @@
   "start_description": "La atención es el primer paso\nhacia la ayuda",
   "start_button": "Empezar",
   "continue_title": "¿Continuar?",
-  "continue_message": "Puedes retomar tu sesión anterior o empezar una nueva.",
+  "continue_message": "Puedes continuar la consulta actual o empezar una nueva. En la versión gratuita, Mamascota conserva solo una consulta activa: si empiezas una nueva, el chat actual y sus informes se eliminarán.",
   "start_new": "Empezar nueva",
   "continue_session": "Continuar sesión",
   "start_new_warning_title": "Una nueva consulta eliminará la actual",
@@ -193,11 +193,11 @@
   "onboarding_start": "Empezar",
 
   "summary": {
-    "empty_title": "Tus consultas aparecerán aquí",
-    "empty_subtitle": "Inicia un nuevo chat y guárdalo al terminar. Aparecerá en esta lista.",
+    "empty_title": "El historial de salud de tu mascota",
+    "empty_subtitle": "Guarda tus consultas y vuelve a consultarlas en cualquier momento para seguir el estado de tu mascota a lo largo del tiempo.",
     "delete_confirm": "¿Eliminar esta sesión guardada?",
     "delete_error": "No se pudo eliminar la sesión guardada. Por favor, inténtalo de nuevo.",
-    "tools_hint": "Aquí puedes abrir un informe PDF, usar el Diario de observación o exportar CSV (en web app) para el seguimiento posterior."
+    "tools_hint": "Aquí puedes encontrar el historial de tus consultas, los informes PDF y otros materiales que te ayudarán a seguir el estado de tu mascota."
   }, 
 
   "settings": {
@@ -279,6 +279,8 @@
     "feature_2": "Guardado de consultas",
     "feature_3": "Soporte al desarrollo del proyecto",
     "price": "1,99 €",
+    "choose_amount": "Elige el importe de apoyo",
+    "custom_amount": "Otro importe",
     "cta": "Apoyar el proyecto",
     "note": "Pago único, sin suscripción.",
     "privacy_note": "En la actualidad, Mamascota no requiere registro y no recopila cuentas personales de usuarios.",

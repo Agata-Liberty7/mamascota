@@ -68,7 +68,7 @@
   "start_description": "Attention is the first step\ntoward help",
   "start_button": "Get started",
   "continue_title": "Continue?",
-  "continue_message": "You can resume your previous session or start a new one.",
+  "continue_message": "You can continue the current consultation or start a new one. In the free version, Mamascota keeps only one active consultation: if you start a new one, the current chat and its reports will be deleted.",
   "start_new": "Start new",
   "continue_session": "Continue session",
   "start_new_warning_title": "A new consultation will delete the current one",
@@ -191,11 +191,11 @@
   "onboarding_start": "Start",
 
   "summary": {
-    "empty_title": "Your consultations will appear here",
-    "empty_subtitle": "Start a new chat and save it when you finish – it will show up in this list.",
+    "empty_title": "The health history of your pet",
+    "empty_subtitle": "Save your consultations and return to them at any time to track your pet’s condition over time.",
     "delete_confirm": "Delete this saved session?",
     "delete_error": "Could not delete the saved session. Please try again.",
-    "tools_hint": "Here you can open a PDF report, use the Observation Diary, or export CSV (en web app) for follow-up tracking."
+    "tools_hint": "Here you can find the history of your consultations, PDF reports, and other materials that will help you track your pet’s condition."
   },
   
   "settings": {
@@ -276,6 +276,8 @@
     "feature_2": "Consultation saving",
     "feature_3": "Project development support",
     "price": "1,99 €",
+    "choose_amount": "Choose your support amount",
+    "custom_amount": "Other amount",  
     "cta": "Support the project",
     "note": "One-time payment, no subscription.",
     "privacy_note": "At this stage, Mamascota does not require registration and does not collect personal user accounts.",

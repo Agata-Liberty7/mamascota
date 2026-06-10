@@ -68,7 +68,7 @@
   "start_description": "L’attention est la première étape\nvers l’aide",
   "start_button": "Commencer",
   "continue_title": "Continuer ?",
-  "continue_message": "Vous pouvez reprendre votre session précédente ou en commencer une nouvelle.",
+  "continue_message": "Vous pouvez continuer la consultation actuelle ou en commencer une nouvelle. Dans la version gratuite, Mamascota ne conserve qu'une seule consultation active : si vous en commencez une nouvelle, le chat actuel et ses rapports seront supprimés.",
   "start_new": "Nouveau départ",
   "continue_session": "Reprendre la session",
   "start_new_warning_title": "Une nouvelle consultation supprimera l’actuelle",
@@ -192,11 +192,11 @@
   "onboarding_start": "Commencer",
 
   "summary": {
-    "empty_title": "Vos consultations apparaîtront ici",
-    "empty_subtitle": "Démarrez une nouvelle conversation et enregistrez-la une fois terminée; elle apparaîtra dans cette liste.",
+    "empty_title": "L’historique de santé de votre animal",
+    "empty_subtitle": "Enregistrez vos consultations et revenez les consulter à tout moment pour suivre l’état de votre animal au fil du temps.",
     "delete_confirm": "Supprimer cette session enregistrée ?",
     "delete_error": "Impossible de supprimer la session enregistrée. Veuillez réessayer.",
-    "tools_hint": "Ici, vous pouvez ouvrir un rapport PDF, utiliser le Journal des observations ou exporter un CSV (en web app) pour le suivi."
+    "tools_hint": "Ici, vous trouverez l’historique de vos consultations, les rapports PDF et d’autres matériaux qui vous aideront à suivre l’état de votre animal."
   }, 
   
   "settings": {
@@ -277,6 +277,8 @@
     "feature_2": "Sauvegarde des consultations",
     "feature_3": "Support du développement du projet",
     "price": "1,99 €",
+    "choose_amount": "Choisissez le montant de votre soutien",
+    "custom_amount": "Autre montant",
     "cta": "Soutenir le projet",
     "note": "Paiement unique, pas d'abonnement.",
     "privacy_note": "À l'heure actuelle, Mamascota ne requiert pas d'enregistrement et ne collecte pas de comptes personnels des utilisateurs.",

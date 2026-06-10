@@ -68,7 +68,7 @@
   "start_description": "L’attenzione è il primo passo\nverso l’aiuto",
   "start_button": "Inizia",
   "continue_title": "Continuare?",
-  "continue_message": "Puoi riprendere la sessione precedente o iniziarne una nuova.",
+  "continue_message": "Puoi continuare la consulenza attuale o iniziare una nuova. Nella versione gratuita, Mamascota conserva solo una consulenza attiva: se ne inizi una nuova, la chat attuale e i relativi report verranno eliminati.",
   "start_new": "Nuova sessione",
   "continue_session": "Riprendi sessione",
   "start_new_warning_title": "Una nuova consulenza eliminerà quella attuale",
@@ -192,11 +192,11 @@
   "onboarding_start": "Avvia",
 
   "summary": {
-    "empty_title": "Le tue consulenze appariranno qui",
-    "empty_subtitle": "Avvia una nuova chat e salvala al termine: apparirà in questo elenco.",
+    "empty_title": "La storia della salute del tuo animale",
+    "empty_subtitle": "Salva le tue consulenze e torna a controllarle in qualsiasi momento.",
     "delete_confirm": "Eliminare questa sessione salvata?",
     "delete_error": "Impossibile eliminare la sessione salvata. Riprova.",
-    "tools_hint": "Qui puoi aprire un rapporto PDF, usare il Diario di osservazione o esportare CSV (nella web app) per il monitoraggio successivo."
+    "tools_hint": "Qui puoi trovare i rapporti PDF e altri materiali che ti aiuteranno a monitorare lo stato del tuo animale."
   },  
 
   
@@ -278,6 +278,8 @@
     "feature_2": "Salvataggio delle consulenze",
     "feature_3": "Supporto allo sviluppo del progetto",
     "price": "1,99 €",
+    "choose_amount": "Scegli l’importo del tuo sostegno",
+    "custom_amount": "Altro importo",
     "cta": "Sostenere il progetto",
     "note": "Pagamento unico, nessuna sottoscrizione.",
     "privacy_note": "Al momento, Mamascota non richiede la registrazione e non raccoglie account personali degli utenti.",

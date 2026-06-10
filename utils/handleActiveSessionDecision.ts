@@ -86,33 +86,7 @@ export async function handleActiveSessionDecision(): Promise<ActiveSessionDecisi
       );
     });
 
-    if (choice !== "start_new") {
-      return choice as ActiveSessionDecision;
-    }
-
-    const confirmDelete = await new Promise<string>((resolve) => {
-      (window as any).__MAMASCOTA_CONFIRM_RESOLVE__ = resolve;
-
-      window.dispatchEvent(
-        new CustomEvent("mamascota:confirm", {
-          detail: {
-            title: String(i18n.t("start_new_warning_title")),
-            message: String(i18n.t("start_new_warning_message")),
-            buttons: [
-              { key: "resume", label: String(i18n.t("continue_session")) },
-              {
-                key: "start_new",
-                label: String(i18n.t("start_new")),
-                destructive: true,
-              },
-              { key: "cancel", label: String(i18n.t("cancel")) },
-            ],
-          },
-        })
-      );
-    });
-
-    return confirmDelete as ActiveSessionDecision;
+    return choice as ActiveSessionDecision;
   }
 
 // 📱 Mobile → остаётся Alert
@@ -128,28 +102,7 @@ return await new Promise<ActiveSessionDecision>((resolve) => {
       {
         text: String(i18n.t("start_new")),
         style: "destructive",
-        onPress: () => {
-          Alert.alert(
-            String(i18n.t("start_new_warning_title")),
-            String(i18n.t("start_new_warning_message")),
-            [
-              {
-                text: String(i18n.t("continue_session")),
-                onPress: () => resolve("resume"),
-              },
-              {
-                text: String(i18n.t("start_new")),
-                style: "destructive",
-                onPress: () => resolve("start_new"),
-              },
-              {
-                text: String(i18n.t("cancel")),
-                style: "cancel",
-                onPress: () => resolve("cancel"),
-              },
-            ]
-          );
-        },
+        onPress: () => resolve("start_new"),
       },
       {
         text: String(i18n.t("cancel")),

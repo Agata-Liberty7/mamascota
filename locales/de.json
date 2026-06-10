@@ -68,7 +68,7 @@
   "start_description": "Aufmerksamkeit ist der erste Schritt\nzur Hilfe",
   "start_button": "Starten",
   "continue_title": "Fortfahren?",
-  "continue_message": "Sie können Ihre vorherige Sitzung fortsetzen oder eine neue beginnen.",
+  "continue_message": "Sie können Ihre aktuelle Sitzung fortsetzen oder eine neue starten. In der kostenlosen Version speichert Mamascota nur eine aktive Sitzung: wenn Sie eine neue starten, wird die aktuelle Sitzung und ihre Berichte gelöscht.",
   "start_new": "Neu starten",
   "continue_session": "Sitzung fortsetzen",
   "start_new_warning_title": "Eine neue Beratung löscht die aktuelle",
@@ -190,11 +190,11 @@
   "onboarding_start": "Start",
 
   "summary": {
-    "empty_title": "Ihre Beratungsgespräche werden hier angezeigt",
-    "empty_subtitle": "Starten Sie einen neuen Chat und speichern Sie ihn nach Beendigung – er wird dann in dieser Liste erscheinen.",
+    "empty_title": "Das Gesundheitsprotokoll Ihres Haustiers",
+    "empty_subtitle": "Speichern Sie Ihre Beratungen und rufen Sie sie jederzeit wieder auf, um den Zustand Ihres Haustiers im Laufe der Zeit zu verfolgen.",
     "delete_confirm": "Diese gespeicherte Sitzung löschen?",
     "delete_error": "Konnte die gespeicherte Sitzung nicht löschen. Bitte versuchen Sie es erneut.",
-    "tools_hint": "Hier können Sie einen PDF-Bericht öffnen, das Beobachtungstagebuch nutzen oder CSV (in der Web-App) für die weitere Verlaufskontrolle exportieren."
+    "tools_hint": "Hier finden Sie die Historie Ihrer Beratungen, PDF-Berichte und andere Materialien, die Ihnen helfen, den Zustand Ihres Haustiers zu verfolgen."
   },
   
   "settings": {
@@ -275,6 +275,8 @@
     "feature_2": "Speichern von Beratungen",
     "feature_3": "Unterstützung der Projektdurchführung",
     "price": "1,99 €",
+    "choose_amount": "Wählen Sie Ihren Unterstützungsbetrag",
+    "custom_amount": "Anderer Betrag",
     "cta": "Unterstützen Sie den Projekt",
     "note": "Einmalige Zahlung, keine Subscription.",
     "privacy_note": "Zu diesem Zeitpunkt erfordert Mamascota keine Registrierung und sammelt keine persönlichen Benutzerkonten ein.",

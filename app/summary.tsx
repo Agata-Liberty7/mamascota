@@ -28,7 +28,7 @@ import {
 } from "../utils/exportPDF";
 // modal
 import LoadingPDF from "../components/ui/LoadingPDF";
-import { canGeneratePdf, addPdfLanguage } from "../utils/access";
+import { canGeneratePdf, addPdfLanguage, isPaid } from "../utils/access";
 
 type SummaryItem = {
   id: string;
@@ -591,7 +591,16 @@ export default function SummaryScreen() {
 
         <View style={styles.actions}>
           <TouchableOpacity
-            onPress={() => handleResume(item)}
+            onPress={async () => {
+              const paid = await isPaid();
+
+              if (!paid) {
+                router.push("/paywall" as Href);
+                return;
+              }
+
+              handleResume(item);
+            }}
             style={styles.iconButton}
           >
             <MaterialIcons
@@ -691,6 +700,27 @@ export default function SummaryScreen() {
           <Text style={styles.emptyText}>
             {i18n.t("summary.empty_subtitle")}
           </Text>
+            <TouchableOpacity
+              style={{
+                marginTop: 20,
+                backgroundColor: "#43A047",
+                borderRadius: 10,
+                paddingHorizontal: 20,
+                paddingVertical: 12,
+              }}
+              onPress={() => router.push("/paywall" as Href)}
+            >
+              <Text
+                style={{
+                  color: "#fff",
+                  fontSize: 16,
+                  fontWeight: "600",
+                  textAlign: "center",
+                }}
+              >
+                {i18n.t("paywall.cta")}
+              </Text>
+            </TouchableOpacity>
         </View>
       ) : (
         <FlatList

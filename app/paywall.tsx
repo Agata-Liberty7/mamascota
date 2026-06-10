@@ -13,17 +13,39 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import i18n from "../i18n";
 
+const SUPPORT_PAYMENT_LINKS = [
+  {
+    key: "support_199",
+    label: "1,99 €",
+    url: "https://buy.stripe.com/aFa8wPfAAg0M31d0I41ZS02",
+  },
+  {
+    key: "support_499",
+    label: "4,99 €",
+    url: "https://buy.stripe.com/dRm8wPagg8ykcBNbmI1ZS03",
+  },
+  {
+    key: "support_999",
+    label: "9,99 €",
+    url: "https://buy.stripe.com/9B65kDdsseWI8lx1M81ZS04",
+  },
+  {
+    key: "support_1999",
+    label: "19,99 €",
+    url: "https://buy.stripe.com/5kQ5kDagg29W8lxduQ1ZS05",
+  },
+];
+
+const CUSTOM_SUPPORT_PAYMENT_URL =
+  "https://buy.stripe.com/fZueVdewwcOA45h4Yk1ZS06";
+
 export default function PaywallScreen() {
   const router = useRouter();
   const lang = (i18n.locale || "").split("-")[0];
   const isRTL = lang === "he";
 
-  const handleOpenPayment = async () => {
-    const baseUrl = process.env.EXPO_PUBLIC_PAYMENT_URL;
-    const url = baseUrl ? `${baseUrl}?from=app` : null;
-    if (!url) {
-      return;
-    }
+  const handleOpenPayment = async (paymentUrl: string) => {
+  const url = paymentUrl;
 
     try {
       const currentConversationId =
@@ -104,21 +126,30 @@ export default function PaywallScreen() {
           </View>
 
           <Text style={[styles.price, isRTL && styles.textRTL]}>
-            {i18n.t("paywall.price", {
-              defaultValue: "€1.99",
+            {i18n.t("paywall.choose_amount", {
+              defaultValue: "Choose your support amount",
             })}
           </Text>
 
-          <Text style={[styles.note, isRTL && styles.textRTL]}>
-            {i18n.t("paywall.note", {
-              defaultValue: "One-time payment, not a subscription.",
-            })}
-          </Text>
+          <View style={styles.amountGrid}>
+            {SUPPORT_PAYMENT_LINKS.map((item) => (
+              <TouchableOpacity
+                key={item.key}
+                style={styles.amountButton}
+                onPress={() => handleOpenPayment(item.url)}
+              >
+                <Text style={styles.amountButtonText}>{item.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
 
-          <TouchableOpacity style={styles.primaryButton} onPress={handleOpenPayment}>
+          <TouchableOpacity
+            style={styles.primaryButton}
+            onPress={() => handleOpenPayment(CUSTOM_SUPPORT_PAYMENT_URL)}
+          >
             <Text style={styles.primaryButtonText}>
-              {i18n.t("paywall.cta", {
-                defaultValue: "Unlock full access",
+              {i18n.t("paywall.custom_amount", {
+                defaultValue: "Other amount",
               })}
             </Text>
           </TouchableOpacity>
@@ -192,6 +223,26 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: "700",
     color: "#222",
+    textAlign: "center",
+  },
+  amountGrid: {
+    marginTop: 16,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    justifyContent: "center",
+  },
+  amountButton: {
+    minWidth: 110,
+    backgroundColor: "#43A047",
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+  },
+  amountButtonText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#fff",
     textAlign: "center",
   },
   note: {

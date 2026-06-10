@@ -184,18 +184,11 @@ export default function BurgerMenu({ visible, onClose }: Props) {
     {
       label: String(i18n.t("menu.saved_sessions")),
       icon: "list",
-      enabled: hasSavedSessions,
+      enabled: true,
       action: () => {
         onClose();
-        setTimeout(async () => {
-          const paid = await isPaid();
-
-          if (paid) {
-            router.replace("/summary");
-            return;
-          }
-
-          router.replace("/paywall");
+        setTimeout(() => {
+          router.replace("/summary");
         }, 120);
       },
     },
