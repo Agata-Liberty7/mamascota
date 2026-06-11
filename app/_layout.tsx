@@ -8,6 +8,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import AppModal from "../components/ui/AppModal";
 import LocalizedExitButton from "../components/ui/LocalizedExitButton";
 import MenuButton from "../components/ui/MenuButton";
+import SupportHeartButton from "../components/ui/SupportHeartButton";
 import i18n from "../i18n";
 import { theme } from "../src/theme";
 import { UiSettingsProvider } from "../src/context/UiSettings";
@@ -88,6 +89,7 @@ export default function AppLayout() {
               headerBackTitle: "",
               headerBackVisible: true,
               headerBackButtonDisplayMode: "minimal",
+              headerLeft: () => <SupportHeartButton />,
               headerRight: () => <MenuButton />,
               animation: "fade",
               animationDuration: 200,

@@ -1,6 +1,6 @@
 // app/index.tsx
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect, useRouter } from 'expo-router';
+import { useFocusEffect, useRouter, type Href } from "expo-router";
 import React, { useCallback, useState, useEffect } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -173,6 +173,17 @@ export default function StartScreen() {
       fontSize: 16,
       fontWeight: 'bold',
     },
+    supportButton: {
+      position: 'absolute',
+      top: 18,
+      left: 18,
+      width: 42,
+      height: 42,
+      borderRadius: 21,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#FFFFFF',
+    },
     languageButton: {
       position: 'absolute',
       top: 18,
@@ -275,6 +286,17 @@ export default function StartScreen() {
       fontSize: 18,
       fontWeight: 'bold',
     },
+    supportButton: {
+      position: 'absolute',
+      top: 18,
+      left: 18,
+      width: 42,
+      height: 42,
+      borderRadius: 21,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#FFFFFF',
+    },
     languageButton: {
       position: 'absolute',
       top: 18,
@@ -310,6 +332,13 @@ export default function StartScreen() {
       <LanguageNotice />
 
       <View style={styles.container}>
+        <TouchableOpacity
+          style={styles.supportButton}
+          onPress={() => router.push("/paywall" as Href)}
+          accessibilityLabel={String(i18n.t("menu.support_mamascota"))}
+        >
+          <MaterialIcons name="favorite" size={24} color="#42A5F5" />
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.languageButton}
           onPress={() => setLanguageOpen((v) => !v)}
