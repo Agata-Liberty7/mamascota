@@ -15,7 +15,7 @@ import {
 import * as Animatable from "react-native-animatable";
 
 import i18n from "../../i18n";
-import { clearConversationId } from "../../utils/chatWithGPT";
+import { clearActiveConversationData, clearConversationId } from "../../utils/chatWithGPT";
 import { handleActiveSessionDecision } from "../../utils/handleActiveSessionDecision";
 import { isPaid } from "../../utils/access";
 
@@ -142,6 +142,13 @@ export default function BurgerMenu({ visible, onClose }: Props) {
           }
 
           if (decision === "start_new") {
+            const activeId = await AsyncStorage.getItem("conversationId");
+            const paid = await isPaid();
+
+            if (activeId && !paid) {
+              await clearActiveConversationData(activeId);
+            }
+
             await clearConversationId();
             router.replace("/animal-selection");
             return;

@@ -601,6 +601,37 @@ export async function clearConversationId(): Promise<void> {
   console.log("🧹 conversationId удалён.");
 }
 
+export async function clearActiveConversationData(
+  conversationId: string
+): Promise<void> {
+  try {
+    const stored = (await AsyncStorage.getItem("chatSummary")) || "[]";
+    const parsed = JSON.parse(stored);
+    const filtered = Array.isArray(parsed)
+      ? parsed.filter((rec: any) => rec?.id !== conversationId)
+      : [];
+
+    await AsyncStorage.setItem("chatSummary", JSON.stringify(filtered));
+
+    const allKeys = await AsyncStorage.getAllKeys();
+    const scopedKeys = allKeys.filter(
+      (key) =>
+        key === `chatHistory:${conversationId}` ||
+        key === `chat:history:${conversationId}` ||
+        key === `pdfAllowed:${conversationId}` ||
+        key.startsWith(`decisionTree:${conversationId}:`) ||
+        key.startsWith(`pdfReport:${conversationId}:`)
+    );
+
+    if (scopedKeys.length > 0) {
+      await AsyncStorage.multiRemove(scopedKeys);
+    }
+
+    console.log("🧹 Активная консультация полностью удалена:", conversationId);
+  } catch (e) {
+    console.warn("⚠️ Не удалось полностью удалить активную консультацию:", e);
+  }
+}
 export async function setConversationId(id: string): Promise<void> {
   await AsyncStorage.setItem("conversationId", id);
   console.log("💬 Установлен conversationId:", id);

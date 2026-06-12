@@ -110,6 +110,13 @@ export default function AppLayout() {
             <Stack.Screen name="summary" />
             <Stack.Screen name="settings" />
             <Stack.Screen name="about" />
+
+            <Stack.Screen
+              name="paywall"
+              options={{
+                headerLeft: () => <View />,
+              }}
+            />
             <Stack.Screen name="onboarding" options={{ headerShown: false }} />
             <Stack.Screen name="terms-screen" options={{ headerShown: false }} />
           </Stack>

@@ -4,8 +4,9 @@ import { useFocusEffect, useRouter, type Href } from "expo-router";
 import React, { useCallback, useState, useEffect } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { clearConversationId } from "../utils/chatWithGPT";
+import { clearActiveConversationData, clearConversationId } from "../utils/chatWithGPT";
 import { handleActiveSessionDecision } from "../utils/handleActiveSessionDecision";
+import { isPaid } from "../utils/access";
 import LanguageNotice from "../components/ui/LanguageNotice";
 import LanguageSelector from "../components/ui/LanguageSelector";
 import { detectAndSetInitialLanguage } from "../utils/detectLanguage";
@@ -91,7 +92,13 @@ export default function StartScreen() {
     }
 
     if (decision === "start_new") {
-      // мягко начинаем новую: сбрасываем только активный conversationId
+      const activeId = await AsyncStorage.getItem("conversationId");
+      const paid = await isPaid();
+
+      if (activeId && !paid) {
+        await clearActiveConversationData(activeId);
+      }
+
       await clearConversationId();
       console.log("🗑️ Активная сессия сброшена, начинаем заново.");
       await ensureEntryFlow();
