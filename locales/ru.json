@@ -87,13 +87,17 @@
       "lang_es": "Испанский",
       "lang_ru": "Русский",
       "lang_he": "Иврит",
-    "chat": "Чат",
+    "chat": "Продолжить консультацию",
     "summary": "Резюме",
-    "saved_sessions": "Cохраненные сессии",
+    "saved_sessions": "Сохранённые консультации",
     "settings": "Настройки",
     "about": "О приложении",
     "open": "Меню",
-    "close": "Закрыть"
+    "close": "Закрыть",
+    "support_mamascota": "Поддержать Mamascota",
+    "observation_journal": "Дневник наблюдений",
+    "vet_clinics": "Ветеринарные клиники",
+    "health_history": "История здоровья"
   },
 
   "about": {

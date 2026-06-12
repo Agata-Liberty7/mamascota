@@ -81,13 +81,17 @@
     "lang_es": "Spanisch",
     "lang_ru": "Russisch",
     "lang_he": "Hebräisch",
-    "chat": "Chat",
+    "chat": "Beratung fortsetzen",
     "summary": "Zusammenfassung",
-    "saved_sessions": "Gespeicherte Sitzungen",
+    "saved_sessions": "Gespeicherte Beratungen",
     "settings": "Einstellungen",
     "about": "Über",
     "open": "Menü",
-    "close": "Schließen"
+    "close": "Schließen",
+    "support_mamascota": "Mamascota unterstützen",
+    "observation_journal": "Beobachtungstagebuch",
+    "vet_clinics": "Tierkliniken",
+    "health_history": "Gesundheitsverlauf"
   },
 
   "about": {

@@ -124,25 +124,6 @@ export default function BurgerMenu({ visible, onClose }: Props) {
 
   const menuItems = [
     {
-      label: String(i18n.t("menu.about")),
-      icon: "info",
-      enabled: true,
-      action: () => {
-        onClose();
-        setTimeout(() => router.replace("/about"), 120);
-      },
-    },
-    {
-      label: String(i18n.t("menu.settings")),
-      icon: "settings",
-      // язык и базовые настройки — всегда доступны
-      enabled: true,
-      action: () => {
-        onClose();
-        setTimeout(() => router.replace("/settings"), 120);
-      },
-    },
-    {
     label: String(i18n.t("menu.start_consultation")),
       icon: "pets",
       // выбор животного доступен только после согласия с условиями
@@ -192,7 +173,84 @@ export default function BurgerMenu({ visible, onClose }: Props) {
         }, 120);
       },
     },
-
+    {
+      divider: true,
+    },
+    {
+      label: String(
+        i18n.t("menu.support_mamascota", {
+          defaultValue: "Support Mamascota",
+        })
+      ),
+      icon: "favorite",
+      enabled: true,
+      accent: true,
+      action: () => {
+        onClose();
+        setTimeout(() => router.push("/paywall"), 120);
+      },
+    },
+    {
+      label: `${String(
+        i18n.t("menu.observation_journal", {
+          defaultValue: "Observation journal",
+        })
+      )} · ${String(
+        i18n.t("coming_soon", {
+          defaultValue: "Coming soon",
+        })
+      )}`,
+      icon: "book",
+      enabled: false,
+    },
+    {
+      label: `${String(
+        i18n.t("menu.vet_clinics", {
+          defaultValue: "Veterinary clinics",
+        })
+      )} · ${String(
+        i18n.t("coming_soon", {
+          defaultValue: "Coming soon",
+        })
+      )}`,
+      icon: "local-hospital",
+      enabled: false,
+    },
+    {
+      label: `${String(
+        i18n.t("menu.health_history", {
+          defaultValue: "Health history",
+        })
+      )} · ${String(
+        i18n.t("coming_soon", {
+          defaultValue: "Coming soon",
+        })
+      )}`,
+      icon: "timeline",
+      enabled: false,
+    },
+    {
+      divider: true,
+    },
+        {
+      label: String(i18n.t("menu.about")),
+      icon: "info",
+      enabled: true,
+      action: () => {
+        onClose();
+        setTimeout(() => router.replace("/about"), 120);
+      },
+    },
+    {
+      label: String(i18n.t("menu.settings")),
+      icon: "settings",
+      // язык и базовые настройки — всегда доступны
+      enabled: true,
+      action: () => {
+        onClose();
+        setTimeout(() => router.replace("/settings"), 120);
+      },
+    },
   ];
 
   return (
@@ -208,23 +266,38 @@ export default function BurgerMenu({ visible, onClose }: Props) {
           duration={300}
           style={styles.menuContainer}
         >
-          {menuItems.map((item, index) => {
-            const { label, icon, enabled, action } = item;
+          {menuItems.map((item: any, index) => {
+
+            if (item.divider) {
+              return <View key={`divider-${index}`} style={styles.divider} />;
+            }
+
+            const { label, icon, enabled, action, accent } = item;
 
             if (enabled) {
               return (
                 <TouchableOpacity
                   key={index}
-                  style={styles.menuItem}
+                  style={[
+                    styles.menuItem,
+                    accent && styles.menuItemAccent,
+                  ]}
                   onPress={action}
                 >
                   <MaterialIcons
                     name={icon as any}
                     size={22}
-                    color="#666"
+                    color={accent ? "#43A7F7" : "#666"}
                     style={styles.icon}
                   />
-                  <Text style={styles.menuText}>{label}</Text>
+                  <Text
+                    style={[
+                      styles.menuText,
+                      accent && styles.menuTextAccent,
+                    ]}
+                  >
+                    {label}
+                  </Text>
                 </TouchableOpacity>
               );
             }
@@ -309,5 +382,18 @@ const styles = StyleSheet.create({
   closeButton: {
     alignSelf: "center",
     marginTop: 20,
+  },
+  divider: {
+    width: "100%",
+    height: 1,
+    backgroundColor: "#eee",
+    marginVertical: 8,
+  },
+  menuItemAccent: {
+    borderRadius: 10,
+  },
+  menuTextAccent: {
+    color: "#43A7F7",
+    fontWeight: "700",
   },
 });

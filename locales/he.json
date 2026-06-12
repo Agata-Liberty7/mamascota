@@ -81,13 +81,17 @@
       "lang_es": "סְפָרַדִית",
       "lang_ru": "רוּסִי",
       "lang_he": "עִברִית",
-    "chat": "צ'אט",
+    "chat": "צ׳אט",
     "summary": "סיכום",
-    "saved_sessions": "הפעלות שמורות",
+    "saved_sessions": "התייעצויות שמורות",
     "settings": "הגדרות",
     "about": "אודות",
     "open": "תפריט",
-    "close": "סגור"
+    "close": "סגור",
+    "support_mamascota": "תמיכה ב־Mamascota",
+    "observation_journal": "יומן תצפיות",
+    "vet_clinics": "מרפאות וטרינריות",
+    "health_history": "היסטוריית בריאות"
   },
 
   "about": {

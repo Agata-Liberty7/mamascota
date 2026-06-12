@@ -83,13 +83,17 @@
     "lang_es": "Español",
     "lang_ru": "Ruso",
     "lang_he": "Hebreo",
-    "chat": "Chat",
+    "chat": "Continuar consulta",
     "summary": "Resumen",
-    "saved_sessions": "Sesiones guardadas",
+    "saved_sessions": "Consultas guardadas",
     "settings": "Configuración",
     "about": "Acerca de",
     "open": "Menú",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "support_mamascota": "Apoyar Mamascota",
+    "observation_journal": "Diario de observación",
+    "vet_clinics": "Clínicas veterinarias",
+    "health_history": "Historial de salud"
   },
 
   "about": {
