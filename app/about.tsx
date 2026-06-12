@@ -9,6 +9,7 @@ import {
   View,
   Image,
   Platform,
+  ScrollView,
 } from "react-native";
 import i18n from "../i18n";
 
@@ -28,9 +29,13 @@ export default function AboutScreen() {
 
   return (
     <View style={styles.screen}>
-      <View
+      <ScrollView
         key={normalizedLangKey}
-        style={[styles.container, isWeb && styles.containerWeb]}
+        style={styles.scroll}
+        contentContainerStyle={[
+          styles.container,
+          isWeb && styles.containerWeb,
+        ]}
       >
         <View style={[styles.headerBlock, isWeb && styles.headerBlockWeb]}>
           <Text style={[styles.title, isWeb && styles.titleWeb]}>
@@ -84,7 +89,7 @@ export default function AboutScreen() {
             <Feather name="instagram" size={28} color="#E1306C" />
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -94,22 +99,26 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-  container: {
+  scroll: {
     flex: 1,
+    backgroundColor: "#fff",
+  },
+  container: {
+    flexGrow: 1,
     paddingHorizontal: 24,
     paddingTop: 20,
     paddingBottom: 18,
     justifyContent: "flex-start",
   },
   containerWeb: {
-    flex: 1,
+    flexGrow: 1,
     width: "100%",
     maxWidth: 920,
     alignSelf: "center",
     paddingHorizontal: 28,
     paddingTop: 12,
     paddingBottom: 20,
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
   },
 
   headerBlock: {
@@ -121,13 +130,11 @@ const styles = StyleSheet.create({
   },
 
   imageBlock: {
-    flex: 1,
-    marginBottom: 4,
+    marginBottom: 8,
     alignItems: "center",
   },
 
   imageBlockWeb: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -154,9 +161,10 @@ const styles = StyleSheet.create({
 
   heroImage: {
     width: "100%",
-    aspectRatio: 1,
+    maxWidth: 360,
+    aspectRatio: 1.45,
     height: undefined,
-    marginBottom: 20,
+    marginBottom: 8,
   },
 
   heroImageWeb: {
@@ -170,7 +178,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: "600",
-    marginBottom: 8,
+    marginBottom: 4,
     textAlign: "center",
   },
 

@@ -35,10 +35,9 @@ export default function LanguageSelector({
 
 const styles = StyleSheet.create({
   row: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    // Если где-то gap не поддерживается — можно убрать и дать marginHorizontal детям
-    gap: 16,
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 10,
   },
   item: {
     fontSize: 16,

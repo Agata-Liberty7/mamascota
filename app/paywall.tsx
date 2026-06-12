@@ -1,14 +1,15 @@
 import React from "react";
 import {
-    Alert,
+  Alert,
   Platform,
-  SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import * as WebBrowser from "expo-web-browser";
+import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import i18n from "../i18n";
@@ -73,7 +74,11 @@ export default function PaywallScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.card}>
           <Text style={[styles.title, isRTL && styles.textRTL]}>
             {i18n.t("paywall.title", { defaultValue: "Full access" })}
@@ -173,7 +178,7 @@ export default function PaywallScreen() {
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -183,11 +188,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-  container: {
+  scroll: {
     flex: 1,
-    justifyContent: "center",
-    paddingHorizontal: 20,
     backgroundColor: "#fff",
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 20,
+    paddingTop: 24,
+    paddingBottom: 96,
+    justifyContent: "flex-start",
   },
   card: {
     borderWidth: 1,
