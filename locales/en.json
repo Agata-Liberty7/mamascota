@@ -95,13 +95,30 @@
   },
 
   "about": {
-    "tagline": "About",
-    "p1": "Mamascota helps structure observations about your pet’s condition.",
-    "p2": "It helps identify which signs are important and what to do next.",
-    "p3": "Mamascota does not provide diagnoses or replace professional veterinary care.",
-    "signature": "Created with care for animals and respect for people.",
+    "tagline": "Why Mamascota?",
+
+    "faq_1_q": "Why do I need Mamascota if I see my pet every day?",
+    "faq_1_a": "Pets cannot tell us when something hurts. They often hide discomfort until a problem becomes serious. Mamascota helps you notice changes that are easy to miss and understand what deserves attention now and what can probably wait until a routine veterinary visit.",
+
+    "faq_2_q": "Who created Mamascota and why should I trust it?",
+    "faq_2_a": "I worked for years as a veterinary assistant and kept seeing the same situation. People truly love their pets, but animals cannot explain how they feel. Families often notice that something is wrong only when the signs become obvious. Mamascota was created to help bridge that gap.",
+
+    "faq_3_q": "Why not just ask any other AI?",
+    "faq_3_a": "A regular AI chat usually answers the question it is given. Mamascota works differently. It asks follow-up questions and helps build a fuller picture of what is happening. When did it start? How often does it happen? Has anything changed? Step by step, it helps organize observations into a report you can share with your veterinarian.",
+
+    "faq_4_q": "Why does Mamascota ask so many questions?",
+    "faq_4_a": "Because 'my dog is vomiting' is only part of the story. Was it once or several times? Did it start today or last week? Details matter. Mamascota takes time to gather the information that may be important before jumping to conclusions.",
+
+    "faq_5_q": "What do I get after a consultation?",
+    "faq_5_a": "You receive a structured report that summarizes your observations, when they started, and what may deserve closer attention. You can save it, return to it later, or share it with your veterinarian. Over time, it can become a useful health history for your pet.",
+
+    "faq_6_q": "Will Mamascota tell me what illness my pet has?",
+    "faq_6_a": "No — and no responsible service should promise that. Even veterinarians cannot diagnose every condition from a description alone. Mamascota's role is to help you notice important details, stay organized, and prepare for a more informed conversation with your veterinarian. Sometimes that helps reduce worry. Sometimes it helps make sure something important is not overlooked.",
+    "signature": "Created with care for animals and respect for the people who care for them.",
     "follow": "Follow the project on Instagram",
-    "show_onboarding_again": "More..."
+    "still_have_questions": "Still have questions?",
+    "faq_link": "See answers to frequently asked questions",
+    "show_onboarding_again": "Learn more"
   },
 
   "symptomSelector": {

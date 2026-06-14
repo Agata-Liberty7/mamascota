@@ -20,6 +20,7 @@ export default function StartScreen() {
   const router = useRouter();
 
   const [onboardingSeen, setOnboardingSeen] = useState<boolean>(false);
+  const [termsAccepted, setTermsAccepted] = useState<boolean>(false);
   const [currentLanguage, setCurrentLanguage] = useState<string | null>(null);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [checking, setChecking] = useState(true);
@@ -43,9 +44,14 @@ export default function StartScreen() {
   useFocusEffect(
     useCallback(() => {
       const init = async () => {
-        const onboarding = await AsyncStorage.getItem('seenOnboarding');
+        const [onboarding, accepted, legacy] = await Promise.all([
+          AsyncStorage.getItem('seenOnboarding'),
+          AsyncStorage.getItem('acceptedTerms'),
+          AsyncStorage.getItem('termsAccepted'),
+        ]);
 
         setOnboardingSeen(onboarding === 'true');
+        setTermsAccepted(accepted === "true" || legacy === "true");
 
         setChecking(false);
       };
@@ -118,8 +124,12 @@ export default function StartScreen() {
     setCurrentLanguage(lang);
     await AsyncStorage.setItem("selectedLanguage", lang);
     setLanguageOpen(false);
-  }; 
-  
+  };
+
+  const handleAboutPress = () => {
+    router.push("/about?source=home" as Href);
+  };
+
   const stylesMobile = StyleSheet.create({
     container: {
       flex: 1,
@@ -176,9 +186,15 @@ export default function StartScreen() {
       alignItems: 'center',
     },
     buttonText: {
-      color: theme.colors.buttonPrimaryText,
+      color: "#FFFFFF",
       fontSize: 16,
-      fontWeight: 'bold',
+      fontWeight: "700",
+    },
+
+    aboutLink: {
+      fontSize: 14,
+      fontWeight: "600",
+      textDecorationLine: "underline",
     },
     supportButton: {
       position: 'absolute',
@@ -191,6 +207,10 @@ export default function StartScreen() {
       justifyContent: 'center',
       backgroundColor: '#FFFFFF',
     },
+    supportButtonDisabled: {
+
+    },
+
     languageButton: {
       position: 'absolute',
       top: 18,
@@ -289,9 +309,16 @@ export default function StartScreen() {
       justifyContent: 'center',
     },
     buttonText: {
-      color: theme.colors.buttonPrimaryText,
-      fontSize: 18,
-      fontWeight: 'bold',
+      color: "#FFFFFF",
+      fontSize: 16,
+      fontWeight: "700",
+    },
+
+    aboutLink: {
+      marginTop: 14,
+      fontSize: 14,
+      fontWeight: "600",
+      textDecorationLine: "underline",
     },
     supportButton: {
       position: 'absolute',
@@ -303,6 +330,8 @@ export default function StartScreen() {
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: '#FFFFFF',
+    },
+    supportButtonDisabled: {
     },
     languageButton: {
       position: 'absolute',
@@ -340,11 +369,19 @@ export default function StartScreen() {
 
       <View style={styles.container}>
         <TouchableOpacity
-          style={styles.supportButton}
-          onPress={() => router.push("/paywall" as Href)}
+          style={[styles.supportButton, !termsAccepted && styles.supportButtonDisabled]}
+          onPress={() => {
+            if (!termsAccepted) return;
+            router.push("/paywall" as Href);
+          }}
+          disabled={!termsAccepted}
           accessibilityLabel={String(i18n.t("menu.support_mamascota"))}
         >
-          <MaterialIcons name="favorite" size={24} color="#42A5F5" />
+          <MaterialIcons
+            name="favorite"
+            size={24}
+            color={termsAccepted ? "#42A5F5" : "#9E9E9E"}
+          />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.languageButton}
@@ -359,6 +396,7 @@ export default function StartScreen() {
             <LanguageSelector
               selected={currentLanguage || i18n.locale}
               onSelect={applyLanguage}
+              vertical
             />
           </View>
         )}
@@ -384,6 +422,12 @@ export default function StartScreen() {
               <TouchableOpacity style={styles.button} onPress={handleStart}>
                 <Text style={styles.buttonText}>{i18n.t('start_button')}</Text>
               </TouchableOpacity>
+
+              <TouchableOpacity onPress={handleAboutPress}>
+                <Text style={styles.aboutLink}>
+                  {i18n.t("about.tagline")}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         ) : (
@@ -401,6 +445,12 @@ export default function StartScreen() {
 
             <TouchableOpacity style={styles.button} onPress={handleStart}>
               <Text style={styles.buttonText}>{i18n.t('start_button')}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={handleAboutPress}>
+              <Text style={styles.aboutLink}>
+                {i18n.t("about.tagline")}
+              </Text>
             </TouchableOpacity>
           </View>
         )}

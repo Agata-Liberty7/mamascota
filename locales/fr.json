@@ -95,13 +95,30 @@
   },
 
   "about": {
-    "tagline": "À propos",
-    "p1": "Mamascota aide à structurer les observations sur l’état de votre animal.",
-    "p2": "Elle aide à identifier les signes importants et à savoir quoi faire ensuite.",
-    "p3": "Mamascota ne pose pas de diagnostics et ne remplace pas un vétérinaire.",
-    "signature": "Créé avec soin pour les animaux et respect pour les personnes.",
+    "tagline": "Pourquoi Mamascota ?",
+
+    "faq_1_q": "Pourquoi ai-je besoin de Mamascota si je vois mon animal tous les jours ?",
+    "faq_1_a": "Les animaux ne peuvent pas nous dire quand quelque chose ne va pas. Ils cachent souvent leur inconfort jusqu'à ce qu'un problème devienne sérieux. Mamascota vous aide à remarquer des changements faciles à manquer et à mieux comprendre ce qui mérite une attention rapide et ce qui peut probablement attendre une visite vétérinaire prévue.",
+
+    "faq_2_q": "Qui a créé Mamascota et pourquoi lui faire confiance ?",
+    "faq_2_a": "J'ai travaillé pendant plusieurs années comme auxiliaire vétérinaire et j'ai vu la même situation se répéter encore et encore. Les familles aiment profondément leurs animaux, mais ceux-ci ne peuvent pas expliquer ce qu'ils ressentent. Bien souvent, les problèmes ne deviennent visibles que lorsqu'ils sont déjà évidents. C'est de cette expérience qu'est née Mamascota.",
+
+    "faq_3_q": "Pourquoi ne pas simplement demander à une autre IA ?",
+    "faq_3_a": "Un assistant IA classique répond généralement à la question qu'on lui pose. Mamascota fonctionne autrement. Elle pose des questions complémentaires et aide à reconstituer une vision plus complète de la situation. Quand cela a-t-il commencé ? À quelle fréquence cela se produit-il ? Y a-t-il eu d'autres changements ? Étape par étape, elle aide à organiser les observations dans un rapport que vous pouvez partager avec votre vétérinaire.",
+
+    "faq_4_q": "Pourquoi Mamascota pose-t-elle autant de questions ?",
+    "faq_4_a": "Parce que « mon chien vomit » n'est qu'une partie de l'histoire. Est-ce arrivé une seule fois ou plusieurs fois ? Aujourd'hui ou depuis une semaine ? Les détails comptent. Mamascota prend le temps de recueillir les informations importantes avant de tirer des conclusions.",
+
+    "faq_5_q": "Que vais-je recevoir après la consultation ?",
+    "faq_5_a": "Vous recevrez un rapport structuré qui résume vos observations, leur évolution dans le temps et les points qui méritent une attention particulière. Vous pouvez le conserver, y revenir plus tard ou le montrer à votre vétérinaire. Avec le temps, il peut devenir un historique précieux de la santé de votre animal.",
+
+    "faq_6_q": "Mamascota va-t-elle me dire de quelle maladie souffre mon animal ?",
+    "faq_6_a": "Non, et aucun service sérieux ne devrait le promettre. Même un vétérinaire ne peut pas établir un diagnostic fiable à partir d'une simple description. Le rôle de Mamascota est de vous aider à remarquer les informations importantes et à mieux préparer votre échange avec votre vétérinaire. Parfois cela rassure. Parfois cela permet surtout de ne pas passer à côté d'un élément important.",
+    "signature": "Créé avec soin pour les animaux et avec respect pour les personnes qui s'en occupent.",
     "follow": "Suivre le projet sur Instagram",
-    "show_onboarding_again": "Plus…"
+    "still_have_questions": "Vous avez encore des questions ?",
+    "faq_link": "Voir les réponses aux questions fréquentes",
+    "show_onboarding_again": "En savoir plus"
   },
 
   "symptomSelector": {
@@ -146,8 +163,8 @@
     "aggression": "Comportement agressif",
     "disorientation": "Désorientation / confusion",
 
-    "pain_localized": "Dolor en un área específica",
-    "pain_general": "Dolor general / malestar",
+    "pain_localized": "Douleur localisée",
+    "pain_general": "Douleur générale / malaise",
 
     "behavior_change": "Comportement changé",
     "anxiety_stress": "Anxiété / stress",

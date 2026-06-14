@@ -23,10 +23,10 @@ export const theme = {
   },
   images: {
     onboarding: {
-      step1: require('../assets/images/on7.png'),
-      step2: require('../assets/images/on4.png'),
-      step3: require('../assets/images/on1.png'),
-      step4: require('../assets/images/on3.png'),
+      step1: require('../assets/images/onboard1.png'),
+      step2: require('../assets/images/onboard2.png'),
+      step3: require('../assets/images/onboard3.png'),
+      step4: require('../assets/images/onboard4.png'),
     },
     start: {
       hero: require('../assets/images/Mamascota_2.png'),

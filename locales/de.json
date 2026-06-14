@@ -95,13 +95,30 @@
   },
 
   "about": {
-    "tagline": "Über die App",
-    "p1": "Mamascota hilft, Beobachtungen zum Zustand Ihres Haustiers zu strukturieren.",
-    "p2": "Sie hilft zu erkennen, welche Anzeichen wichtig sind und was als Nächstes zu tun ist.",
-    "p3": "Mamascota stellt keine Diagnosen und ersetzt keine tierärztliche Behandlung.",
-    "signature": "Mit Fürsorge für Tiere und Respekt für Menschen entwickelt.",
+    "tagline": "Warum Mamascota?",
+
+    "faq_1_q": "Warum brauche ich Mamascota, wenn ich mein Haustier jeden Tag sehe?",
+    "faq_1_a": "Tiere können uns nicht sagen, wenn etwas nicht stimmt. Oft verbergen sie Beschwerden, bis ein Problem ernst wird. Mamascota hilft dabei, Veränderungen wahrzunehmen, die leicht übersehen werden können, und besser einzuschätzen, was Aufmerksamkeit verdient und was wahrscheinlich bis zum nächsten Tierarztbesuch warten kann.",
+
+    "faq_2_q": "Wer hat Mamascota entwickelt und warum kann ich ihr vertrauen?",
+    "faq_2_a": "Ich habe viele Jahre als Tierarztassistentin gearbeitet und dabei immer wieder dieselbe Situation erlebt. Menschen kümmern sich liebevoll um ihre Tiere, doch Tiere können nicht erklären, wie sie sich fühlen. Oft werden Probleme erst bemerkt, wenn die Anzeichen bereits deutlich sichtbar sind. Aus dieser Erfahrung heraus entstand Mamascota.",
+
+    "faq_3_q": "Warum sollte ich nicht einfach eine andere KI fragen?",
+    "faq_3_a": "Ein allgemeiner KI-Chat beantwortet meist die Frage, die gestellt wird. Mamascota arbeitet anders. Sie stellt Rückfragen und hilft dabei, ein vollständigeres Bild der Situation zu erstellen. Wann hat es begonnen? Wie häufig tritt es auf? Hat sich etwas verändert? Schritt für Schritt werden Beobachtungen gesammelt und in einem Bericht zusammengefasst, den Sie Ihrem Tierarzt zeigen können.",
+
+    "faq_4_q": "Warum stellt Mamascota so viele Fragen?",
+    "faq_4_a": "Weil „mein Hund erbricht“ nur ein Teil der Information ist. Ist es einmal passiert oder mehrfach? Heute oder schon seit einer Woche? Solche Details sind wichtig. Mamascota sammelt zunächst relevante Informationen, bevor sie Zusammenhänge einordnet.",
+
+    "faq_5_q": "Was erhalte ich nach der Beratung?",
+    "faq_5_a": "Sie erhalten einen strukturierten Bericht mit Ihren Beobachtungen, dem zeitlichen Verlauf und Punkten, die besondere Aufmerksamkeit verdienen könnten. Der Bericht kann gespeichert, später erneut aufgerufen oder mit dem Tierarzt geteilt werden. Mit der Zeit entsteht daraus eine hilfreiche Gesundheitschronik Ihres Tieres.",
+
+    "faq_6_q": "Wird Mamascota mir sagen, welche Krankheit mein Tier hat?",
+    "faq_6_a": "Nein – und kein verantwortungsvoller Dienst sollte das versprechen. Selbst Tierärzte können nicht jede Erkrankung allein anhand einer Beschreibung diagnostizieren. Mamascota soll Ihnen helfen, wichtige Informationen zu erkennen und sich besser auf das Gespräch mit Ihrem Tierarzt vorzubereiten. Manchmal beruhigt das. Manchmal hilft es dabei, etwas Wichtiges nicht zu übersehen.",
+    "signature": "Mit Fürsorge für Tiere und Respekt für die Menschen geschaffen, die sich um sie kümmern.",
     "follow": "Projekt auf Instagram verfolgen",
-    "show_onboarding_again": "Mehr…"
+    "still_have_questions": "Noch Fragen?",
+    "faq_link": "Antworten auf häufig gestellte Fragen ansehen",
+    "show_onboarding_again": "Mehr erfahren"
   },
 
   "symptomSelector": {

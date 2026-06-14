@@ -5,18 +5,20 @@ import { theme } from '../../src/theme';
 type LanguageCode = 'de' | 'en' | 'es' | 'fr' | 'he' | 'it' | 'ru' ;
 
 type Props = {
-  selected: string;                       // текущий язык
-  onSelect: (lang: LanguageCode) => void; // обработчик смены
-  languages?: LanguageCode[];             // по умолчанию четыре языка
-};
+  selected: string;
+  onSelect: (lang: LanguageCode) => void;
+  languages?: LanguageCode[];
+  vertical?: boolean;
+};  
 
 export default function LanguageSelector({
   selected,
   onSelect,
   languages = ['de', 'en', 'es', 'fr', 'he', 'it', 'ru'],
+  vertical = false,
 }: Props) {
   return (
-    <View style={styles.row}>
+    <View style={vertical ? styles.column : styles.row}>
       {languages.map((lang) => (
         <TouchableOpacity key={lang} onPress={() => onSelect(lang)}>
           <Text
@@ -35,6 +37,11 @@ export default function LanguageSelector({
 
 const styles = StyleSheet.create({
   row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 16,
+  },
+  column: {
     flexDirection: 'column',
     alignItems: 'center',
     gap: 10,

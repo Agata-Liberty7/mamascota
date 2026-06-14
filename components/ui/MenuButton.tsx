@@ -3,19 +3,26 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import i18n from "../../i18n";
 import BurgerMenu from "./BurgerMenu";
 
-export default function MenuButton() {
+export default function MenuButton({
+  disabled = false,
+}: {
+  disabled?: boolean;
+}) {
   const [menuVisible, setMenuVisible] = useState(false);
 
   return (
     <View>
       <TouchableOpacity
-        onPress={() => setMenuVisible(true)}
+        onPress={disabled ? undefined : () => setMenuVisible(true)}
         style={styles.button}
         accessibilityRole="button"
         accessibilityLabel={String(i18n.t("menu.open"))}
+        disabled={disabled}
       >
-        <Text style={styles.icon}>☰</Text>
-        <Text style={styles.label}>{i18n.t("menu.open")}</Text>
+        <Text style={[styles.icon, disabled && styles.disabledText]}>☰</Text>
+        <Text style={[styles.label, disabled && styles.disabledText]}>
+          {i18n.t("menu.open")}
+        </Text>
       </TouchableOpacity>
 
       <BurgerMenu visible={menuVisible} onClose={() => setMenuVisible(false)} />
@@ -38,5 +45,11 @@ const styles = StyleSheet.create({
     marginLeft: 6,
     fontSize: 14,
     color: "#333",
+  },
+  disabled: {
+    opacity: 0.55,
+  },
+  disabledText: {
+    color: "#9E9E9E",
   },
 });
