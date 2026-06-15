@@ -145,6 +145,8 @@ export default function StartScreen() {
     topBlock: {
       width: '100%',
       alignItems: 'center',
+      paddingTop: 4,
+      pointerEvents: 'none',
     },
     heroBlock: {
       width: '100%',
@@ -197,9 +199,6 @@ export default function StartScreen() {
       textDecorationLine: "underline",
     },
     supportButton: {
-      position: 'absolute',
-      top: 18,
-      left: 18,
       width: 42,
       height: 42,
       borderRadius: 21,
@@ -212,9 +211,6 @@ export default function StartScreen() {
     },
 
     languageButton: {
-      position: 'absolute',
-      top: 18,
-      right: 18,
       width: 42,
       height: 42,
       borderRadius: 21,
@@ -233,6 +229,18 @@ export default function StartScreen() {
       backgroundColor: '#FFFFFF',
       borderRadius: theme.radius.lg,
       padding: 12,
+    },
+    headerControls: {
+      width: '100%',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      position: 'absolute',
+      top: 18,
+      left: 0,
+      right: 0,
+      paddingHorizontal: 18,
+      zIndex: 50,
     },
   });
 
@@ -257,6 +265,7 @@ export default function StartScreen() {
       width: '100%',
       alignItems: 'center',
       paddingTop: 4,
+      pointerEvents: 'none',
     },
     heroBlock: {
       width: '100%',
@@ -321,9 +330,6 @@ export default function StartScreen() {
       textDecorationLine: "underline",
     },
     supportButton: {
-      position: 'absolute',
-      top: 18,
-      left: 18,
       width: 42,
       height: 42,
       borderRadius: 21,
@@ -334,9 +340,6 @@ export default function StartScreen() {
     supportButtonDisabled: {
     },
     languageButton: {
-      position: 'absolute',
-      top: 18,
-      right: 18,
       width: 42,
       height: 42,
       borderRadius: 21,
@@ -356,6 +359,18 @@ export default function StartScreen() {
       borderRadius: theme.radius.lg,
       padding: 12,
     },
+    headerControls: {
+      width: '100%',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      position: 'absolute',
+      top: 18,
+      left: 0,
+      right: 0,
+      paddingHorizontal: 18,
+      zIndex: 50,
+    },
   });
 
   const styles = isWeb ? stylesWeb : stylesMobile;
@@ -368,8 +383,9 @@ export default function StartScreen() {
       <LanguageNotice />
 
       <View style={styles.container}>
-        <TouchableOpacity
-          style={[styles.supportButton, !termsAccepted && styles.supportButtonDisabled]}
+        <View style={styles.headerControls}>
+          <TouchableOpacity
+            style={[styles.supportButton, !termsAccepted && styles.supportButtonDisabled]}
           onPress={() => {
             if (!termsAccepted) return;
             router.push("/paywall" as Href);
@@ -390,8 +406,9 @@ export default function StartScreen() {
         >
           <Text style={styles.languageButtonText}>🌐</Text>
         </TouchableOpacity>
+      </View>
 
-        {languageOpen && (
+      {languageOpen && (
           <View style={styles.languagePanel}>
             <LanguageSelector
               selected={currentLanguage || i18n.locale}
