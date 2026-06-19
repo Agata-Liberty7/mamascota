@@ -97,23 +97,29 @@
   "about": {
     "tagline": "Why Mamascota?",
 
-    "faq_1_q": "Why do I need Mamascota if I see my pet every day?",
-    "faq_1_a": "Pets cannot tell us when something hurts. They often hide discomfort until a problem becomes serious. Mamascota helps you notice changes that are easy to miss and understand what deserves attention now and what can probably wait until a routine veterinary visit.",
+    "faq_1_q": "Why would I need Mamascota if I see my pet every day?",
+
+    "faq_1_a": "You see your pet every day — and that is exactly why gradual changes can be easy to miss. Mamascota helps you observe, notice, and evaluate changes: what is important, what can wait until a routine visit, and what should be shown to a veterinarian as soon as possible.",
 
     "faq_2_q": "Who created Mamascota and why should I trust it?",
-    "faq_2_a": "I worked for years as a veterinary assistant and kept seeing the same situation. People truly love their pets, but animals cannot explain how they feel. Families often notice that something is wrong only when the signs become obvious. Mamascota was created to help bridge that gap.",
 
-    "faq_3_q": "Why not just ask any other AI?",
-    "faq_3_a": "A regular AI chat usually answers the question it is given. Mamascota works differently. It asks follow-up questions and helps build a fuller picture of what is happening. When did it start? How often does it happen? Has anything changed? Step by step, it helps organize observations into a report you can share with your veterinarian.",
+    "faq_2_a": "I am a veterinary assistant. Mamascota is not an AI experiment — it grew out of real-life experience with animals and the people who care for them. That is why you will find fewer quick answers here and more of the right questions.",
 
-    "faq_4_q": "Why does Mamascota ask so many questions?",
-    "faq_4_a": "Because 'my dog is vomiting' is only part of the story. Was it once or several times? Did it start today or last week? Details matter. Mamascota takes time to gather the information that may be important before jumping to conclusions.",
+    "faq_3_q": "How is this different from a regular AI — and why so many questions?",
 
-    "faq_5_q": "What do I get after a consultation?",
-    "faq_5_a": "You receive a structured report that summarizes your observations, when they started, and what may deserve closer attention. You can save it, return to it later, or share it with your veterinarian. Over time, it can become a useful health history for your pet.",
+    "faq_3_a": "A regular AI answers a question. Mamascota conducts a consultation. It does not guess — it asks. When did it start? How often does it happen? What else has changed? Because 'my dog is vomiting' is only half of the picture. Details matter. Those details become a report you can share with your veterinarian.",
 
-    "faq_6_q": "Will Mamascota tell me what illness my pet has?",
-    "faq_6_a": "No — and no responsible service should promise that. Even veterinarians cannot diagnose every condition from a description alone. Mamascota's role is to help you notice important details, stay organized, and prepare for a more informed conversation with your veterinarian. Sometimes that helps reduce worry. Sometimes it helps make sure something important is not overlooked.",
+    "faq_4_q": "What will I get after the consultation? Will Mamascota diagnose my pet?",
+
+    "faq_4_a": "No — and no responsible service should promise that. Even a veterinarian cannot make a diagnosis without an examination. You will receive a structured report: what you noticed, when it started, and what deserves attention. You can save it, revisit it later, or share it with your veterinarian. Sometimes it helps reduce anxiety. Sometimes it helps you notice something important in time.",
+
+    "faq_5_q": "Do you collect my data?",
+
+    "faq_5_a": "Only information related to your pet and your observations: species, breed, age, symptoms, and anything else you choose to share during the consultation. No registration and no personal owner information are required.",
+
+    "faq_6_q": "How much does it cost?",
+
+    "faq_6_a": "The consultation and PDF report are free. Consultation history, multiple pet profiles, and additional Mamascota Plus features are available through a subscription. If you do not need a subscription, you can support the project with a one-time contribution.",
     "signature": "Created with care for animals and respect for the people who care for them.",
     "follow": "Follow the project on Instagram",
     "still_have_questions": "Still have questions?",
@@ -203,7 +209,7 @@
   "onboarding_1_subtitle": "I help identify [[important signs]] and prepare for a [[veterinary visit]].",
   "onboarding_2_subtitle": "Tell me in [[your own words]].\nIf you need to pause, you can continue [[later]].\nI ask questions step by step so nothing important is missed.",
   "onboarding_3_subtitle": "You tell me what you noticed, and I help [[highlight what matters]] and [[organize your observations]].",
-  "onboarding_4_subtitle": "Create a clear [[PDF report]] and track your pet’s condition with an [[Observation Diary]].\nBring the report to your vet so they can see the [[full picture]] right away.",
+  "onboarding_4_subtitle": "Speak with the veterinarian [[on the same page]].\n[[Mamascota]] helps you prepare for the visit and create a clear report, even if the vet speaks another language.",
   "onboarding_2_title": "We keep it simple",
   "onboarding_3_title": "You observe — \nI help",
   "onboarding_4_title": "Reports for your vet",
@@ -291,17 +297,27 @@
   },
   
   "paywall": {
-    "title": "Support Mamascota",
-    "subtitle": "Your contribution helps develop the project and provides access to PDF reports and new features.",
-    "feature_1": "PDF report for the veterinarian",
-    "feature_2": "Consultation saving",
-    "feature_3": "Project development support",
-    "price": "1,99 €",
-    "choose_amount": "Choose your support amount",
-    "custom_amount": "Other amount",  
+    "title": "Mamascota Plus",
+    "support_text": "[[Mamascota]] is an [[independent project]].\nIf the consultation was useful, you can [[support]] its development.",
+    "feature_1": "Consultation history",
+    "feature_2": "Multiple pets",
+    "feature_3": "Health observations",
+    "price": "1.99 €",
+    "choose_amount": "You can also support the project with a one-time contribution",
+    "custom_amount": "Other amount",
     "cta": "Support the project",
-    "note": "One-time payment, no subscription.",
-    "privacy_note": "At this stage, Mamascota does not require registration and does not collect personal user accounts.",
-    "support_note": "By supporting the project now, you will be able to use the new features and capabilities of the app during its development."
+    "note": "Your subscription helps Mamascota grow and unlocks more tools for ongoing care.",
+    "privacy_note": "Mamascota does not require registration and does not collect personal user accounts.",
+    "support_note": "Your support helps make Mamascota more useful for animal families and veterinary clinics.",
+    "subscription_badge": "For regular use",
+    "subscription_title": "Mamascota Plus",
+    "subscription_description": "Keep consultations, observations and data for multiple pets in one place.",
+    "subscription_price": "1.99 € / month",
+    "subscription_cta": "Subscribe",
+    "or": "or",
+    "skip": "Skip",
+    "thank_you_title": "Thank you for choosing Mamascota",
+    "thank_you_message": "Your support helps make Mamascota more useful for animal families and veterinary clinics.",
+    "support_project": "Support the project"
   }
 }

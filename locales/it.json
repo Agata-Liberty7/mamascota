@@ -97,23 +97,29 @@
   "about": {
     "tagline": "Perché Mamascota?",
 
-    "faq_1_q": "Perché ho bisogno di Mamascota se vedo il mio animale ogni giorno?",
-    "faq_1_a": "Gli animali non possono dirci quando qualcosa non va. Spesso nascondono il loro disagio finché il problema non diventa serio. Mamascota ti aiuta a notare cambiamenti che possono passare inosservati e a capire meglio cosa merita attenzione e cosa probabilmente può aspettare una visita veterinaria programmata.",
+    "faq_1_q": "Perché dovrei usare Mamascota se vedo il mio animale ogni giorno?",
+
+    "faq_1_a": "Vedi il tuo animale ogni giorno — ed è proprio per questo che i cambiamenti graduali possono passare inosservati. Mamascota ti aiuta a osservare, notare e valutare i cambiamenti: cosa è importante, cosa può aspettare una visita di controllo e cosa dovrebbe essere mostrato al veterinario il prima possibile.",
 
     "faq_2_q": "Chi ha creato Mamascota e perché dovrei fidarmi?",
-    "faq_2_a": "Ho lavorato per anni come assistente veterinaria e ho visto la stessa situazione ripetersi continuamente. Le famiglie amano profondamente i loro animali, ma gli animali non possono spiegare come si sentono. Molto spesso i problemi diventano evidenti solo quando sono già difficili da ignorare. Da questa esperienza è nata Mamascota.",
 
-    "faq_3_q": "Perché non chiedere semplicemente a qualsiasi altra IA?",
-    "faq_3_a": "Un normale assistente AI di solito risponde alla domanda che riceve. Mamascota funziona in modo diverso. Fa domande aggiuntive e aiuta a costruire un quadro più completo della situazione. Quando è iniziato? Quanto spesso succede? È cambiato qualcosa? Passo dopo passo organizza le osservazioni in un report che puoi condividere con il tuo veterinario.",
+    "faq_2_a": "Sono un'assistente veterinaria. Mamascota non è un esperimento di intelligenza artificiale: nasce dall'esperienza reale con gli animali e con le persone che si prendono cura di loro. Per questo qui troverai meno risposte rapide e più domande giuste.",
 
-    "faq_4_q": "Perché Mamascota fa così tante domande?",
-    "faq_4_a": "Perché 'il mio cane vomita' è solo una parte della storia. È successo una volta sola o più volte? È iniziato oggi o la settimana scorsa? I dettagli contano. Mamascota cerca prima di raccogliere le informazioni importanti e solo dopo di interpretarle.",
+    "faq_3_q": "In cosa è diversa da una normale IA e perché fa così tante domande?",
 
-    "faq_5_q": "Cosa riceverò dopo la consulenza?",
-    "faq_5_a": "Riceverai un report strutturato che riassume ciò che hai osservato, quando è iniziato e quali aspetti possono meritare maggiore attenzione. Puoi salvarlo, consultarlo in seguito o mostrarlo al tuo veterinario. Con il tempo può diventare una preziosa cronologia della salute del tuo animale.",
+    "faq_3_a": "Una normale IA risponde a una domanda. Mamascota conduce una consulenza. Non indovina: chiede. Quando è iniziato? Con quale frequenza accade? Cos'altro è cambiato? Perché «il mio cane vomita» è solo metà della storia. I dettagli contano. E da questi dettagli nasce un rapporto che puoi mostrare al veterinario.",
 
-    "faq_6_q": "Mamascota mi dirà quale malattia ha il mio animale?",
-    "faq_6_a": "No, e nessun servizio responsabile dovrebbe prometterlo. Nemmeno un veterinario può formulare una diagnosi affidabile basandosi soltanto su una descrizione. Il ruolo di Mamascota è aiutarti a individuare le informazioni importanti e prepararti a una conversazione più utile con il tuo veterinario. A volte questo riduce le preoccupazioni. Altre volte aiuta a non trascurare qualcosa di importante.",
+    "faq_4_q": "Cosa riceverò dopo la consulenza? Mamascota farà una diagnosi al mio animale?",
+
+    "faq_4_a": "No — e nessun servizio responsabile dovrebbe prometterlo. Nemmeno un veterinario può formulare una diagnosi senza una visita. Riceverai un rapporto strutturato: cosa hai osservato, quando è iniziato e a cosa vale la pena prestare attenzione. Potrai salvarlo, consultarlo più tardi o condividerlo con il veterinario. A volte aiuta a ridurre l'ansia. Altre volte aiuta a non perdere segnali importanti.",
+
+    "faq_5_q": "Raccogliete i miei dati?",
+
+    "faq_5_a": "Solo le informazioni relative al tuo animale e alle tue osservazioni: specie, razza, età, sintomi e qualsiasi altra informazione che deciderai di condividere durante la consulenza. Non è richiesta alcuna registrazione né alcun dato personale del proprietario.",
+
+    "faq_6_q": "Quanto costa?",
+
+    "faq_6_a": "La consulenza e il rapporto PDF sono gratuiti. Lo storico delle consulenze, più profili di animali e le funzionalità aggiuntive di Mamascota Plus sono disponibili tramite abbonamento. Se non hai bisogno di un abbonamento, puoi sostenere il progetto con un contributo una tantum.",
     "signature": "Creata con cura per gli animali e rispetto per le persone che si prendono cura di loro.",
     "follow": "Segui il progetto su Instagram",
     "still_have_questions": "Hai ancora domande?",
@@ -202,12 +208,13 @@
   "onboarding_1_subtitle": "Ti aiuto a individuare i [[segnali importanti]] e a prepararti alla [[visita dal veterinario]].",
   "onboarding_2_subtitle": "Racconta con [[le tue parole]].\nSe devi interrompere, puoi continuare [[più tardi]].\nFaccio domande passo dopo passo per non tralasciare nulla di importante.",
   "onboarding_3_subtitle": "Mi racconti ciò che hai notato, e io ti aiuto a mettere in [[evidenza l’essenziale]] e a [[organizzare le osservazioni]].",
-  "onboarding_4_subtitle": "Crea un [[rapporto PDF]] chiaro e segui lo stato del tuo animale con un semplice [[Diario di osservazione]].\nPorta il rapporto al tuo veterinario in modo che possa vedere [[l’intera situazione]] immediatamente.",
-  "onboarding_2_title": "Comunichiamo in modo semplice",
+  
 
   "onboarding_3_title": "Tu osservi — \nio aiuto",
 
   "onboarding_4_title": "Rapporti per il tuo veterinario",
+  "onboarding_4_subtitle": "Parla con il veterinario [[con più chiarezza]].\n[[Mamascota]] ti aiuta a preparare la visita e creare un report chiaro, anche se il veterinario parla un’altra lingua.",
+  "onboarding_2_title": "Comunichiamo in modo semplice",
   "onboarding_skip": "Saltare",
   "onboarding_next": "Avanti",
   "onboarding_start": "Avvia",
@@ -293,17 +300,26 @@
   },
   
   "paywall": {
-    "title": "Sostieni Mamascota",
-    "subtitle": "Il tuo contributo aiuta a sviluppare il progetto e a ottenere l'accesso ai rapporti PDF e alle nuove funzionalità dell'app.",
-    "feature_1": "Rapporto PDF per il veterinario",
-    "feature_2": "Salvataggio delle consulenze",
-    "feature_3": "Supporto allo sviluppo del progetto",
+    "title": "Mamascota Plus",
+    "support_text": "[[Mamascota]] è un [[progetto indipendente]].\nSe la consulenza ti è stata utile, puoi [[sostenere]] il suo sviluppo.",    "feature_1": "Storico delle consulenze",
+    "feature_2": "Più animali",
+    "feature_3": "Osservazioni sulla salute",
     "price": "1,99 €",
-    "choose_amount": "Scegli l’importo del tuo sostegno",
+    "choose_amount": "Puoi anche sostenere il progetto con un contributo una tantum",
     "custom_amount": "Altro importo",
-    "cta": "Sostenere il progetto",
-    "note": "Pagamento unico, nessuna sottoscrizione.",
-    "privacy_note": "Al momento, Mamascota non richiede la registrazione e non raccoglie account personali degli utenti.",
-    "support_note": "Sostenendo il progetto ora, potrai utilizzare le nuove funzionalità e le possibilità dell'app durante lo sviluppo."
+    "cta": "Sostieni il progetto",
+    "note": "Il tuo abbonamento aiuta Mamascota a crescere e sblocca più strumenti per il monitoraggio nel tempo.",
+    "privacy_note": "Mamascota non richiede registrazione e non raccoglie account personali degli utenti.",
+    "support_note": "Il tuo sostegno aiuta a rendere Mamascota più utile per le famiglie degli animali e le cliniche veterinarie.",
+    "subscription_badge": "Per un uso regolare",
+    "subscription_title": "Mamascota Plus",
+    "subscription_description": "Conserva consulenze, osservazioni e dati di più animali in un unico posto.",
+    "subscription_price": "1,99 € / mese",
+    "subscription_cta": "Abbonati",
+    "or": "oppure",
+    "skip": "Salta",
+    "thank_you_title": "Grazie per aver scelto Mamascota",
+    "thank_you_message": "Il tuo sostegno aiuta a rendere Mamascota più utile per le famiglie degli animali e le cliniche veterinarie.",
+    "support_project": "Sostieni il progetto"
   }
 }

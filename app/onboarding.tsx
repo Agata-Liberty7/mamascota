@@ -21,31 +21,38 @@ const stylesMobile = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
+  slideContent: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingTop: 24,
+  },
   onbTitle: {
     fontSize: 22,
     fontWeight: '600',
     textAlign: 'center',
     color: theme.colors.textPrimary,
-    marginTop: 24,
+    marginTop: 8,
     marginHorizontal: 24,
   },
   onbSubtitle: {
-    fontSize: 15,
+    fontSize: 16,
     textAlign: 'center',
     color: theme.colors.textSecondary,
-    marginTop: 12,
+    marginTop: 8,
     marginHorizontal: 28,
-    lineHeight: 22,
+    lineHeight: 23,
   },
   onbSubtitleAccent: {
     fontWeight: '700',
     color: theme.colors.buttonPrimaryBg,
   },
   onbImage: {
-    width: '100%',
+    width: '74%',
     height: undefined,
     aspectRatio: 2,
-    marginTop: 12,
+    marginTop: 28,
+    alignSelf: 'center',
   },
   floatingWrap: {
     position: 'absolute',
@@ -73,6 +80,11 @@ const stylesWeb = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
+  slideContent: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
   onbTitle: {
     fontSize: 28,
     fontWeight: '600',
@@ -98,10 +110,26 @@ const stylesWeb = StyleSheet.create({
     color: theme.colors.buttonPrimaryBg,
   },
   onbImage: {
-    width: '100%',
-    maxWidth: 480,
+    width: '55%',
+    maxWidth: 260,
+    height: 'auto',
+    aspectRatio: 1,
+    marginTop: 20,
+    alignSelf: 'center',
+  },
+  onbImageLarge: {
+    width: '62%',
+    maxWidth: 300,
     height: undefined,
-    aspectRatio: 2,
+    aspectRatio: 1,
+    marginTop: 14,
+    alignSelf: 'center',
+  },
+  onbImageMedium: {
+    width: '52%',
+    maxWidth: 240,
+    height: undefined,
+    aspectRatio: 1,
     marginTop: 12,
     alignSelf: 'center',
   },
@@ -128,17 +156,14 @@ const stylesWeb = StyleSheet.create({
   contentWeb: {
     flex: 1,
     width: '100%',
+    height: '100%',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingTop: 20,
-    paddingBottom: 18,
+    justifyContent: 'flex-start',
+    paddingTop: 24,
+    paddingBottom: 24,
     paddingHorizontal: 24,
   },
-  topBlockWeb: {
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 6,
-  },
+
   heroBlockWeb: {
     width: '90%',
     flex: 1,
@@ -148,7 +173,7 @@ const stylesWeb = StyleSheet.create({
   bottomBlockWeb: {
     width: '100%',
     alignItems: 'center',
-    marginTop: 12,
+    paddingBottom: 8,
   },
   paginationWeb: {
     flexDirection: 'row',
@@ -205,15 +230,17 @@ function Slide({
   styles: any;
 }) {
   return (
-    <>
+    <View style={styles.slideContent}>
       <Text style={styles.onbTitle}>{i18n.t(titleKey)}</Text>
-      <Image source={imgSource} style={styles.onbImage} resizeMode="contain" />
+
       {renderHighlightedText(
         String(i18n.t(subtitleKey)),
         styles.onbSubtitle,
         styles.onbSubtitleAccent
       )}
-    </>
+
+      <Image source={imgSource} style={styles.onbImage} resizeMode="contain" />
+    </View>
   );
 }
 
@@ -341,24 +368,20 @@ export default function OnboardingScreen() {
     <View style={styles.root}>
       {isWeb ? (
         <View style={stylesWeb.contentWeb}>
-          <View style={stylesWeb.topBlockWeb}>
+          <View style={stylesWeb.slideContent}>
             <Text style={stylesWeb.onbTitle}>{currentWebSlide.title}</Text>
-          </View>
 
-          <View style={stylesWeb.heroBlockWeb}>
-            <Image
-              source={currentWebSlide.image}
-              style={stylesWeb.onbImage}
-              resizeMode="contain"
-            />
-          </View>
-
-          <View style={stylesWeb.bottomBlockWeb}>
             {renderHighlightedText(
               String(currentWebSlide.subtitle),
               stylesWeb.onbSubtitle,
               stylesWeb.onbSubtitleAccent
             )}
+
+            <Image
+              source={currentWebSlide.image}
+              style={stylesWeb.onbImage}
+              resizeMode="contain"
+            />
 
             <TouchableOpacity
               onPress={handleArrowPress}

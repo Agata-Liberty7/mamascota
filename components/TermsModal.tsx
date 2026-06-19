@@ -17,16 +17,20 @@ interface TermsModalProps {
   visible: boolean;
   onAccept: () => void;
   onDecline: () => void;
+  mode?: "consent" | "terms" | "privacy";
 }
 
 export default function TermsModal({
   visible,
   onAccept,
   onDecline,
+  mode = "consent",
 }: TermsModalProps) {
   const lang = (i18n.locale || "").split("-")[0];
   const isRTL = lang === "he";
   const isWeb = Platform.OS === "web";
+  const isReadOnly = mode !== "consent";
+  const titleKey = mode === "privacy" ? "privacy_title" : "terms_title";
 
   return (
     <Modal
@@ -51,27 +55,35 @@ export default function TermsModal({
               resizeMode="contain"
             />
 
-            <Text style={styles.title}>{i18n.t("terms_title")}</Text>
+            <Text style={styles.title}>{i18n.t(titleKey)}</Text>
 
-            <Text style={[styles.paragraph, isRTL && styles.paragraphRTL]}>
-              {i18n.t("terms_paragraph1")}
-            </Text>
+            {mode !== "privacy" && (
+              <>
+                <Text style={[styles.paragraph, isRTL && styles.paragraphRTL]}>
+                  {i18n.t("terms_paragraph1")}
+                </Text>
 
-            <Text style={[styles.paragraph, isRTL && styles.paragraphRTL]}>
-              {i18n.t("terms_paragraph2")}
-            </Text>
+                <Text style={[styles.paragraph, isRTL && styles.paragraphRTL]}>
+                  {i18n.t("terms_paragraph2")}
+                </Text>
 
-            <Text style={[styles.paragraph, isRTL && styles.paragraphRTL]}>
-              {i18n.t("terms_paragraph3")}
-            </Text>
+                <Text style={[styles.paragraph, isRTL && styles.paragraphRTL]}>
+                  {i18n.t("terms_paragraph3")}
+                </Text>
+              </>
+            )}
 
-            <Text style={[styles.paragraph, isRTL && styles.paragraphRTL]}>
-              {i18n.t("privacy_paragraph1")}
-            </Text>
+            {mode !== "terms" && (
+              <>
+                <Text style={[styles.paragraph, isRTL && styles.paragraphRTL]}>
+                  {i18n.t("privacy_paragraph1")}
+                </Text>
 
-            <Text style={[styles.paragraph, isRTL && styles.paragraphRTL]}>
-              {i18n.t("privacy_paragraph2")}
-            </Text>
+                <Text style={[styles.paragraph, isRTL && styles.paragraphRTL]}>
+                  {i18n.t("privacy_paragraph2")}
+                </Text>
+              </>
+            )}
           </ScrollView>
 
           <View style={[styles.buttonsContainer, isWeb && styles.buttonsContainerWeb]}>
@@ -79,15 +91,19 @@ export default function TermsModal({
               style={[styles.acceptButton, isWeb && styles.acceptButtonWeb]}
               onPress={onAccept}
             >
-              <Text style={styles.acceptText}>{i18n.t("terms_accept")}</Text>
+              <Text style={styles.acceptText}>
+                {i18n.t(isReadOnly ? "ok_button" : "terms_accept")}
+              </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.declineButton, isWeb && styles.declineButtonWeb]}
-              onPress={onDecline}
-            >
-              <Text style={styles.declineText}>{i18n.t("terms_decline")}</Text>
-            </TouchableOpacity>
+            {!isReadOnly && (
+              <TouchableOpacity
+                style={[styles.declineButton, isWeb && styles.declineButtonWeb]}
+                onPress={onDecline}
+              >
+                <Text style={styles.declineText}>{i18n.t("terms_decline")}</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </View>

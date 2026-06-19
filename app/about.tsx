@@ -15,6 +15,8 @@ import i18n from "../i18n";
 import { theme } from "../src/theme";
 import MenuButton from "../components/ui/MenuButton";
 import SupportHeartButton from "../components/ui/SupportHeartButton";
+import TermsModal from "../components/TermsModal";
+
 
 export default function AboutScreen() {
   const router = useRouter();
@@ -37,6 +39,7 @@ export default function AboutScreen() {
   const isWeb = Platform.OS === "web";
   const styles = isWeb ? stylesWeb : stylesMobile;
   const [openItem, setOpenItem] = useState<number | null>(1);
+  const [legalMode, setLegalMode] = useState<"terms" | "privacy" | null>(null);
   const faqItems = [1, 2, 3, 4, 5, 6];
 
   const handleInstagramPress = () => {
@@ -106,7 +109,23 @@ export default function AboutScreen() {
           })}
         </View>
 
-      {isPreTerms ? (
+        <View style={styles.legalLinks}>
+          <TouchableOpacity onPress={() => setLegalMode("terms")}>
+            <Text style={styles.legalLinkText}>
+              {i18n.t("terms_title")}
+            </Text>
+          </TouchableOpacity>
+
+          <Text style={styles.legalSeparator}>•</Text>
+
+          <TouchableOpacity onPress={() => setLegalMode("privacy")}>
+            <Text style={styles.legalLinkText}>
+              {i18n.t("privacy_title")}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {isPreTerms ? (
         <>
           <View style={styles.footerActions}>
             <TouchableOpacity
@@ -167,6 +186,13 @@ export default function AboutScreen() {
           </TouchableOpacity>
         )}
       </ScrollView>
+
+      <TermsModal
+        visible={legalMode !== null}
+        mode={legalMode ?? "terms"}
+        onAccept={() => setLegalMode(null)}
+        onDecline={() => setLegalMode(null)}
+      />
     </View>
   );
 }
@@ -244,6 +270,25 @@ const stylesMobile = StyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     color: theme.colors.textSecondary,
+  },
+  legalLinks: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 8,
+    marginBottom: 14,
+    flexWrap: "wrap",
+  },
+  legalSeparator: {
+    marginHorizontal: 8,
+    color: theme.colors.textSecondary,
+  },
+
+  legalLinkText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: theme.colors.buttonPrimaryBg,
+    textAlign: "center",
   },
   secondaryButton: {
     alignSelf: "center",
@@ -380,6 +425,24 @@ const stylesWeb = StyleSheet.create({
     fontSize: 15,
     lineHeight: 24,
     color: theme.colors.textSecondary,
+  },
+  legalLinks: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 8,
+    marginBottom: 14,
+  },
+  legalSeparator: {
+    marginHorizontal: 8,
+    color: theme.colors.textSecondary,
+  },
+
+  legalLinkText: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: theme.colors.buttonPrimaryBg,
+    textAlign: "center",
   },
   
   secondaryButton: {
