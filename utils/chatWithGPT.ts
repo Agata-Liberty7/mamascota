@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { showExitConfirmation } from "./showExitConfirmation";
 import { getLocalizedSpeciesLabel } from "./getLocalizedSpeciesLabel";
+import { isPaid } from "./access";
 
 // Тип ответа, который ожидает чат и другие вызовы
 export type ChatResult = {
@@ -697,10 +698,15 @@ export async function handleExitAction(
     }
 
     try {
-      router.replace("/");
-      console.log("↩️ Переход на главный экран после сохранения");
+      const paid = await isPaid();
+      router.replace(paid ? "/summary" : "/");
+      console.log(
+        paid
+          ? "↩️ Переход в сохранённые консультации после сохранения"
+          : "↩️ Переход на главный экран после сохранения"
+      );
     } catch (err) {
-      console.warn("⚠️ Не удалось перейти на главный экран:", err);
+      console.warn("⚠️ Не удалось перейти после сохранения:", err);
     }
     return;
   }
