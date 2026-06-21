@@ -98,28 +98,22 @@
     "tagline": "Warum Mamascota?",
 
     "faq_1_q": "Warum brauche ich Mamascota, wenn ich mein Haustier jeden Tag sehe?",
-
-    "faq_1_a": "Sie sehen Ihr Haustier jeden Tag – und genau deshalb können schleichende Veränderungen leicht unbemerkt bleiben. Mamascota hilft Ihnen, Veränderungen zu beobachten, wahrzunehmen und einzuordnen: Was wichtig ist, was bis zum nächsten regulären Tierarztbesuch warten kann und was möglichst bald einem Tierarzt gezeigt werden sollte.",
+    "faq_1_a": "Wer sein Haustier täglich sieht, bemerkt schleichende Veränderungen oft gerade deshalb nicht. Mamascota hilft dabei, Veränderungen zu beobachten, wahrzunehmen und einzuordnen: Was wichtig ist, was bis zum nächsten Termin warten kann und was möglichst bald einem Tierarzt gezeigt werden sollte.",
 
     "faq_2_q": "Wer hat Mamascota entwickelt und warum kann ich ihr vertrauen?",
+    "faq_2_a": "Ich bin eine digitale tierärztliche Assistentin. Mamascota ist kein KI-Experiment, sondern basiert auf praktischer Erfahrung mit Tieren und den Menschen, die sich um sie kümmern. Deshalb geht es hier nicht um schnelle Antworten, sondern um die richtigen Fragen.",
 
-    "faq_2_a": "Ich bin tiermedizinische Fachangestellte. Mamascota ist kein KI-Experiment – sie entstand aus echter Erfahrung mit Tieren und den Menschen, die sich um sie kümmern. Deshalb gibt es hier weniger schnelle Antworten und mehr die richtigen Fragen.",
+    "faq_3_q": "Was unterscheidet Mamascota von einer normalen KI und warum stellt sie so viele Fragen?",
+    "faq_3_a": "Eine gewöhnliche KI beantwortet Fragen. Mamascota stellt sie. Denn sie untersucht die Situation. Wann hat es begonnen? Wie oft tritt es auf? Was hat sich noch verändert? 'Mein Hund erbricht' beschreibt nur das Offensichtliche. Erst die Details ergeben das Gesamtbild und liefern hilfreiche Informationen für den Tierarzt.",
 
-    "faq_3_q": "Worin unterscheidet sich das von einer normalen KI – und warum so viele Fragen?",
+    "faq_4_q": "Was erhalte ich nach der Beratung? Stellt Mamascota eine Diagnose?",
+    "faq_4_a": "Nein – und ein seriöser Dienst sollte das auch nicht versprechen. Selbst Tierärzte stellen ohne Untersuchung keine Diagnose. Sie erhalten einen übersichtlichen Bericht mit Ihren Beobachtungen, dem zeitlichen Verlauf und wichtigen Hinweisen.",
 
-    "faq_3_a": "Eine gewöhnliche KI beantwortet eine Frage. Mamascota führt eine Beratung durch. Sie rät nicht – sie fragt. Wann hat es begonnen? Wie oft passiert es? Was hat sich noch verändert? Denn „mein Hund erbricht“ ist nur die halbe Geschichte. Details sind entscheidend. Aus diesen Details entsteht ein Bericht, den Sie Ihrem Tierarzt zeigen können.",
-
-    "faq_4_q": "Was bekomme ich nach der Beratung? Stellt Mamascota eine Diagnose?",
-
-    "faq_4_a": "Nein – und kein verantwortungsvoller Dienst sollte das versprechen. Selbst ein Tierarzt kann ohne Untersuchung keine Diagnose stellen. Sie erhalten einen strukturierten Bericht: Was Sie beobachtet haben, wann es begonnen hat und worauf geachtet werden sollte. Sie können ihn speichern, später erneut ansehen oder mit Ihrem Tierarzt teilen. Manchmal beruhigt das. Und manchmal hilft es, etwas Wichtiges rechtzeitig zu erkennen.",
-
-    "faq_5_q": "Sammelt ihr meine Daten?",
-
-    "faq_5_a": "Nur Informationen über Ihr Haustier und Ihre Beobachtungen: Tierart, Rasse, Alter, Symptome und alle weiteren Informationen, die Sie während der Beratung teilen möchten. Es sind weder eine Registrierung noch persönliche Daten des Tierhalters erforderlich.",
+    "faq_5_q": "Werden meine Daten gespeichert?",
+    "faq_5_a": "Nur Informationen über Ihr Haustier und Ihre Beobachtungen: Tierart, Rasse, Alter, Symptome und alles, was Sie während der Beratung mitteilen möchten. Für die Nutzung von Mamascota sind weder Registrierung noch persönliche Daten des Halters erforderlich.",
 
     "faq_6_q": "Was kostet das?",
-
-    "faq_6_a": "Die Beratung und der PDF-Bericht sind kostenlos. Beratungsverlauf, mehrere Haustierprofile und zusätzliche Funktionen von Mamascota Plus sind über ein Abonnement verfügbar. Wenn Sie kein Abonnement benötigen, können Sie das Projekt mit einem einmaligen Beitrag unterstützen.",
+    "faq_6_a": "Die Beratung und der Bericht in jeder Sprache sind kostenlos. Beratungsverlauf, mehrere Tierprofile und zusätzliche Funktionen von Mamascota Plus sind per Abonnement verfügbar. Alternativ können Sie das Projekt freiwillig unterstützen.",
     "follow": "Projekt auf Instagram verfolgen",
     "still_have_questions": "Noch Fragen?",
     "faq_link": "Antworten auf häufig gestellte Fragen ansehen",
@@ -216,7 +210,7 @@
   "onboarding_start": "Start",
 
   "summary": {
-    "empty_title": "Das Gesundheitsprotokoll Ihres Haustiers",
+    "empty_title": "Erweiterte Funktionen von Mamascota Plus",
     "empty_subtitle": "Speichern Sie Ihre Beratungen und rufen Sie sie jederzeit wieder auf, um den Zustand Ihres Haustiers im Laufe der Zeit zu verfolgen.",
     "delete_confirm": "Diese gespeicherte Sitzung löschen?",
     "delete_error": "Konnte die gespeicherte Sitzung nicht löschen. Bitte versuchen Sie es erneut.",
@@ -315,6 +309,33 @@
     "skip": "Überspringen",
     "thank_you_title": "Vielen Dank, dass Sie Mamascota gewählt haben",
     "thank_you_message": "Ihre Unterstützung hilft, Mamascota für Tierfamilien und Tierkliniken nützlicher zu machen.",
-    "support_project": "Projekt unterstützen"
+    "support_project": "Projekt unterstützen",
+    "support_success_title": "Vielen Dank für deine Unterstützung",
+    "support_success_text": "Dein Beitrag hilft Mamascota zu wachsen und für Tierfamilien nützlich zu bleiben.",
+    "support_success_continue": "Zur App zurückkehren"
+  },
+  "plus": {
+    "title": "Mamascota Plus",
+    "headline_1": "Mehrere Haustiere?",
+    "headline_2": "Chronische Krankheiten?",
+    "headline_3": "Hohes Alter?",
+    "subtitle": "Wenn es mehr als eine Frage gibt, ist es wichtig, die ganze Geschichte zu behalten.",
+    "feature_1": "Die ganze Geschichte an einem Ort",
+    "feature_1_desc": "Beratungen, Berichte und Notizen zusammen.",
+    "feature_2": "Veränderungen leicht verfolgen",
+    "feature_2_desc": "Vergleichen Sie Symptome und Beobachtungen.",
+    "feature_3": "PDF-Berichte",
+    "feature_3_desc": "Speichern und mit der Tierärztin oder dem Tierarzt teilen.",
+    "feature_4": "Beobachtungstagebuch",
+    "feature_4_desc": "Erstellen Sie ein langfristiges Bild der Gesundheit Ihres Haustiers.",
+    "feature_5": "Zukünftige Plus-Funktionen",
+    "feature_5_desc": "Neue Werkzeuge und Updates sind in der Mitgliedschaft enthalten.",
+    "monthly": "Monatlich",
+    "yearly": "Jährlich",
+    "price_monthly": "1,99 € / Monat",
+    "price_yearly": "19,99 € / Jahr",
+    "cancel_note": "Jederzeit kündbar.",
+    "cta": "Mamascota Plus aktivieren",
+    "continue_free": "Kostenlos fortfahren"
   }
 }

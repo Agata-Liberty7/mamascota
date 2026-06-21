@@ -91,7 +91,7 @@ export default function PaywallScreen() {
         (await AsyncStorage.getItem("pdfConversationId")) || "";
 
       await AsyncStorage.multiSet([
-        ["paymentReturnRoute", "/chat"],
+        ["paymentReturnRoute", "/support-success"],
         ["paymentReturnConversationId", currentConversationId],
         ["paymentReturnPdfConversationId", currentPdfConversationId],
       ]);

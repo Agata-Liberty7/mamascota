@@ -99,29 +99,29 @@
   "about": {
     "tagline": "¿Por qué Mamascota?",
 
-    "faq_1_q": "¿Por qué necesitaría Mamascota si veo a mi mascota todos los días?",
+    "faq_1_q": "¿Por qué necesito Mamascota si veo a mi mascota todos los días?",
 
-    "faq_1_a": "Ves a tu mascota todos los días, y precisamente por eso es fácil no notar cómo algo cambia poco a poco. Mamascota te ayuda a observar, detectar y valorar los cambios: qué es importante, qué puede esperar hasta una visita rutinaria y qué debería mostrarse al veterinario cuanto antes.",
+    "faq_1_a": "Precisamente porque ves a tu mascota cada día, algunos cambios pueden pasar desapercibidos. Mamascota te ayuda a observar, detectar y valorar esos cambios: cuáles son importantes, cuáles pueden esperar hasta la próxima visita y cuáles merecen atención veterinaria cuanto antes.",
 
-    "faq_2_q": "¿Quién creó Mamascota y por qué debería confiar en ella?",
+    "faq_2_q": "¿Quién creó Mamascota y por qué puedo confiar en ella?",
 
-    "faq_2_a": "Soy asistente veterinaria. Mamascota no es un experimento de inteligencia artificial: nació de la experiencia real con animales y con las personas que los cuidan. Por eso aquí encontrarás menos respuestas rápidas y más preguntas importantes.",
+    "faq_2_a": "Soy una asistente veterinaria digital. Mamascota no es un experimento con inteligencia artificial: nació de la experiencia real con animales y con las personas que los cuidan. Por eso aquí no encontrarás respuestas rápidas, sino las preguntas adecuadas.",
 
     "faq_3_q": "¿En qué se diferencia de una IA común y por qué hace tantas preguntas?",
 
-    "faq_3_a": "Una IA común responde preguntas. Mamascota realiza una consulta. No adivina: pregunta. ¿Cuándo empezó? ¿Con qué frecuencia ocurre? ¿Qué más ha cambiado? Porque decir 'mi perro está vomitando' es solo una parte de la historia. Los detalles importan. Y esos detalles se convierten en un informe que puedes compartir con tu veterinario.",
+    "faq_3_a": "Una IA convencional responde preguntas. Mamascota las hace. Porque investiga. ¿Cuándo empezó? ¿Con qué frecuencia ocurre? ¿Qué más ha cambiado? Decir 'mi perro está vomitando' es solo la parte visible. Los detalles ayudan a comprender la situación completa y a crear un informe útil para el veterinario.",
 
-    "faq_4_q": "¿Qué recibiré después de la consulta? ¿Mamascota diagnosticará a mi mascota?",
+    "faq_4_q": "¿Qué recibiré después de la consulta? ¿Mamascota dará un diagnóstico?",
 
-    "faq_4_a": "No, y ningún servicio responsable debería prometerlo. Incluso un veterinario no puede establecer un diagnóstico sin examinar al animal. Recibirás un informe estructurado: qué observaste, cuándo comenzó y qué merece atención. Puedes guardarlo, revisarlo más tarde o compartirlo con tu veterinario. A veces ayuda a reducir la preocupación. Otras veces ayuda a detectar algo importante a tiempo.",
+    "faq_4_a": "No, y ningún servicio responsable debería prometerlo. Ni siquiera un veterinario puede diagnosticar sin una exploración. Recibirás un informe organizado con tus observaciones, cuándo comenzaron y qué conviene vigilar. Podrás guardarlo, retomarlo más adelante o compartirlo con tu veterinario. A veces aporta tranquilidad. Otras veces ayuda a detectar algo importante a tiempo.",
 
     "faq_5_q": "¿Recopilan mis datos?",
 
-    "faq_5_a": "Solo la información relacionada con tu mascota y tus observaciones: especie, raza, edad, síntomas y cualquier otro dato que decidas compartir durante la consulta. No se requiere registro ni información personal del propietario.",
+    "faq_5_a": "Solo la información relacionada con tu mascota y tus observaciones: especie, raza, edad, síntomas y cualquier dato que decidas compartir durante la consulta. No se requiere registro ni datos personales del propietario para utilizar Mamascota.",
 
     "faq_6_q": "¿Cuánto cuesta?",
 
-    "faq_6_a": "La consulta y el informe PDF son gratuitos. El historial de consultas, varios perfiles de mascotas y las funciones adicionales de Mamascota Plus están disponibles mediante suscripción. Si no necesitas una suscripción, puedes apoyar el proyecto con una contribución única.",
+    "faq_6_a": "La consulta y el informe en cualquier idioma son gratuitos. El historial de consultas, varios perfiles de mascotas y las funciones adicionales de Mamascota Plus están disponibles mediante suscripción. Si no necesitas una suscripción, también puedes apoyar el proyecto de forma voluntaria.",
     "follow": "Seguir el proyecto en Instagram",
     "still_have_questions": "¿Aún tienes preguntas?",
     "faq_link": "Ver respuestas a preguntas frecuentes",
@@ -219,7 +219,7 @@
   "onboarding_start": "Empezar",
 
   "summary": {
-    "empty_title": "El historial de salud de tu mascota",
+    "empty_title": "Funciones avanzadas de Mamascopa Plus",
     "empty_subtitle": "Guarda tus consultas y vuelve a consultarlas en cualquier momento para seguir el estado de tu mascota a lo largo del tiempo.",
     "delete_confirm": "¿Eliminar esta sesión guardada?",
     "delete_error": "No se pudo eliminar la sesión guardada. Por favor, inténtalo de nuevo.",
@@ -320,6 +320,33 @@
     "skip": "Saltar",
     "thank_you_title": "Gracias por elegir Mamascota",
     "thank_you_message": "Tu apoyo ayuda a que Mamascota sea más útil para las familias de animales y las clínicas veterinarias.",
-    "support_project": "Apoyar el proyecto"
+    "support_project": "Apoyar el proyecto",
+    "support_success_title": "Gracias por tu apoyo",
+    "support_success_text": "Tu contribución ayuda a Mamascota a crecer y seguir siendo útil para las familias de mascotas.",
+    "support_success_continue": "Volver a la aplicación"
+  },
+  "plus": {
+    "title": "Mamascota Plus",
+    "headline_1": "¿Varias mascotas?",
+    "headline_2": "¿Enfermedades crónicas?",
+    "headline_3": "¿Edad avanzada?",
+    "subtitle": "Cuando hay más de una pregunta, es importante recordar toda la historia.",
+    "feature_1": "Toda la historia en un solo lugar",
+    "feature_1_desc": "Consultas, informes y notas juntos.",
+    "feature_2": "Sigue los cambios fácilmente",
+    "feature_2_desc": "Compara síntomas y observaciones.",
+    "feature_3": "Informes PDF",
+    "feature_3_desc": "Guárdalos y compártelos con tu veterinario.",
+    "feature_4": "Diario de observación",
+    "feature_4_desc": "Construye una visión a largo plazo de la salud de tu mascota.",
+    "feature_5": "Futuras funciones Plus",
+    "feature_5_desc": "Nuevas herramientas y actualizaciones incluidas en la suscripción.",
+    "monthly": "Mensual",
+    "yearly": "Anual",
+    "price_monthly": "1,99 € / mes",
+    "price_yearly": "19,99 € / año",
+    "cancel_note": "Puedes cancelar en cualquier momento.",
+    "cta": "Activar Mamascota Plus",
+    "continue_free": "Continuar gratis"
   }
 }

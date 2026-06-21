@@ -99,27 +99,28 @@
 
     "faq_1_q": "Why would I need Mamascota if I see my pet every day?",
 
-    "faq_1_a": "You see your pet every day — and that is exactly why gradual changes can be easy to miss. Mamascota helps you observe, notice, and evaluate changes: what is important, what can wait until a routine visit, and what should be shown to a veterinarian as soon as possible.",
+    "faq_1_a": "Seeing your pet every day can make gradual changes surprisingly easy to miss. Mamascota helps you observe, notice and evaluate those changes: what matters, what can wait until a routine visit, and what should be discussed with a veterinarian sooner.",
 
     "faq_2_q": "Who created Mamascota and why should I trust it?",
 
-    "faq_2_a": "I am a veterinary assistant. Mamascota is not an AI experiment — it grew out of real-life experience with animals and the people who care for them. That is why you will find fewer quick answers here and more of the right questions.",
+    "faq_2_a": "I'm a veterinary assistant. Mamascota isn't an AI experiment. It grew out of real experience with animals and the people who care for them. That's why you'll find thoughtful questions here rather than quick answers.",
 
-    "faq_3_q": "How is this different from a regular AI — and why so many questions?",
+    "faq_3_q": "How is this different from a regular AI, and why so many questions?",
 
-    "faq_3_a": "A regular AI answers a question. Mamascota conducts a consultation. It does not guess — it asks. When did it start? How often does it happen? What else has changed? Because 'my dog is vomiting' is only half of the picture. Details matter. Those details become a report you can share with your veterinarian.",
+    "faq_3_a": "A typical AI answers questions. Mamascota asks them. Because it investigates. When did it start? How often does it happen? What else has changed? Saying 'my dog is vomiting' is only the obvious part. The details help build the bigger picture and create useful information you can share with your veterinarian.",
 
-    "faq_4_q": "What will I get after the consultation? Will Mamascota diagnose my pet?",
+    "faq_4_q": "What will I get after a consultation? Will Mamascota diagnose my pet?",
 
-    "faq_4_a": "No — and no responsible service should promise that. Even a veterinarian cannot make a diagnosis without an examination. You will receive a structured report: what you noticed, when it started, and what deserves attention. You can save it, revisit it later, or share it with your veterinarian. Sometimes it helps reduce anxiety. Sometimes it helps you notice something important in time.",
+    "faq_4_a": "No—and a responsible service shouldn't promise that. Even veterinarians don't make diagnoses without an examination. You'll receive a clear report summarizing your observations, when they started, and what may deserve attention. You can save it, return to it later, or share it with your veterinarian. Sometimes it brings reassurance. Sometimes it helps you notice something important before it's too late.",
 
     "faq_5_q": "Do you collect my data?",
 
-    "faq_5_a": "Only information related to your pet and your observations: species, breed, age, symptoms, and anything else you choose to share during the consultation. No registration and no personal owner information are required.",
+    "faq_5_a": "Only information related to your pet and your observations: species, breed, age, symptoms, and anything else you choose to share during the consultation. No registration and no personal owner information are required to use Mamascota.",
 
     "faq_6_q": "How much does it cost?",
 
-    "faq_6_a": "The consultation and PDF report are free. Consultation history, multiple pet profiles, and additional Mamascota Plus features are available through a subscription. If you do not need a subscription, you can support the project with a one-time contribution.",
+    "faq_6_a": "The consultation and report in any language are free. Consultation history, multiple pet profiles, and additional Mamascota Plus features are available through a subscription. If a subscription isn't for you, you're welcome to support the project with a voluntary contribution.", 
+
     "signature": "Created with care for animals and respect for the people who care for them.",
     "follow": "Follow the project on Instagram",
     "still_have_questions": "Still have questions?",
@@ -218,7 +219,7 @@
   "onboarding_start": "Start",
 
   "summary": {
-    "empty_title": "The health history of your pet",
+    "empty_title": "Advanced Features of Mamascota Plus",
     "empty_subtitle": "Save your consultations and return to them at any time to track your pet’s condition over time.",
     "delete_confirm": "Delete this saved session?",
     "delete_error": "Could not delete the saved session. Please try again.",
@@ -318,6 +319,45 @@
     "skip": "Skip",
     "thank_you_title": "Thank you for choosing Mamascota",
     "thank_you_message": "Your support helps make Mamascota more useful for animal families and veterinary clinics.",
-    "support_project": "Support the project"
+    "support_project": "Support the project",
+    "support_success_title": "Thank you for your support",
+    "support_success_text": "Your contribution helps Mamascota grow and stay useful for pet families.",
+    "support_success_continue": "Return to the app"
+  },
+  "plus": {
+    "title": "Mamascota Plus",
+
+    "headline_1": "Multiple pets?",
+    "headline_2": "Chronic conditions?",
+    "headline_3": "Senior pet?",
+
+    "subtitle": "When there is more than one question, it helps to remember the whole story.",
+
+    "feature_1": "Everything in one place",
+    "feature_1_desc": "Consultations, reports and notes together.",
+
+    "feature_2": "Track changes over time",
+    "feature_2_desc": "Compare symptoms and observations.",
+
+    "feature_3": "PDF reports",
+    "feature_3_desc": "Keep and share reports with your veterinarian.",
+
+    "feature_4": "Observation journal",
+    "feature_4_desc": "Build a long-term picture of your pet's health.",
+
+    "feature_5": "Future Plus features",
+    "feature_5_desc": "New tools and updates included with your subscription.",
+
+    "price": "€X / month",
+
+    "cancel_note": "Cancel anytime.",
+
+    "cta": "Get Mamascota Plus",
+
+    "continue_free": "Continue for free",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "price_monthly": "€1.99 / month",
+    "price_yearly": "€19.99 / year"
   }
 }

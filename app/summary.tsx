@@ -688,7 +688,7 @@ export default function SummaryScreen() {
       {sessions.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Image
-            source={require("../assets/images/on1.png")} // ← твоя картинка
+            source={require("../assets/images/on1_1.png")} // ← твоя картинка
             style={styles.emptyImage}
             resizeMode="contain"
           />
@@ -700,27 +700,27 @@ export default function SummaryScreen() {
           <Text style={styles.emptyText}>
             {i18n.t("summary.empty_subtitle")}
           </Text>
-            <TouchableOpacity
+          <TouchableOpacity
+            style={{
+              marginTop: 20,
+              backgroundColor: "#14B8A6",
+              borderRadius: 10,
+              paddingHorizontal: 20,
+              paddingVertical: 12,
+            }}
+            onPress={() => router.push("/plus" as Href)}
+          >
+            <Text
               style={{
-                marginTop: 20,
-                backgroundColor: "#43A047",
-                borderRadius: 10,
-                paddingHorizontal: 20,
-                paddingVertical: 12,
+                color: "#fff",
+                fontSize: 16,
+                fontWeight: "600",
+                textAlign: "center",
               }}
-              onPress={() => router.push("/paywall" as Href)}
             >
-              <Text
-                style={{
-                  color: "#fff",
-                  fontSize: 16,
-                  fontWeight: "600",
-                  textAlign: "center",
-                }}
-              >
-                {i18n.t("paywall.cta")}
-              </Text>
-            </TouchableOpacity>
+              {i18n.t("plus.cta")}
+            </Text>
+          </TouchableOpacity>
         </View>
       ) : (
         <FlatList
