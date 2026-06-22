@@ -318,7 +318,7 @@
     "subscription_cta": "Suscribirse",
     "or": "o",
     "skip": "Saltar",
-    "thank_you_title": "Gracias por elegir Mamascota",
+    "thank_you_title": "¿Te gustó Mamascota?",
     "thank_you_message": "Tu apoyo ayuda a que Mamascota sea más útil para las familias de animales y las clínicas veterinarias.",
     "support_project": "Apoyar el proyecto",
     "support_success_title": "Gracias por tu apoyo",
@@ -346,7 +346,7 @@
     "price_monthly": "1,99 € / mes",
     "price_yearly": "19,99 € / año",
     "cancel_note": "Puedes cancelar en cualquier momento.",
-    "cta": "Activar Mamascota Plus",
+    "cta": "Conocer Mamascota Plus",
     "continue_free": "Continuar gratis"
   }
 }

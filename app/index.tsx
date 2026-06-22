@@ -96,6 +96,10 @@ export default function StartScreen() {
       router.replace("/chat");
       return;
     }
+    if (decision === "plus") {
+      router.push("/plus");
+      return;
+    }
 
     if (decision === "start_new") {
       const activeId = await AsyncStorage.getItem("conversationId");

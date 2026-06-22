@@ -325,7 +325,7 @@
     "subscription_cta": "Оформить",
     "or": "или",
     "skip": "Пропустить",
-    "thank_you_title": "Спасибо, что выбрали Mamascota",
+    "thank_you_title": "Понравилась Mamascota?",
     "support_text": "[[Mamascota]] — [[независимый проект]].\nЕсли консультация оказалась полезной, вы можете [[поддержать]] его развитие.",
     "support_project": "Поддержать",
     "support_success_title": "Спасибо за поддержку",
@@ -354,7 +354,7 @@
     "price_monthly": "1,99 € / месяц",
     "price_yearly": "19,99 € / год",
     "cancel_note": "Отменить можно в любой момент.",
-    "cta": "Оформить Mamascota Plus",
+    "cta": "Узнать о Mamascota Plus",
     "continue_free": "Продолжить бесплатно"
   },
   

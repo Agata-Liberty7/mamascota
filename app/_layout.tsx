@@ -175,7 +175,9 @@ export default function AppLayout() {
                   <Pressable
                     key={btn.key}
                     style={
-                      btn.key === "cancel"
+                      btn.variant === "plus"
+                        ? styles.plusBtn
+                        : btn.key === "cancel"
                         ? styles.secondaryBtn
                         : btn.destructive
                         ? styles.dangerBtn
@@ -185,7 +187,9 @@ export default function AppLayout() {
                   >
                     <Text
                       style={
-                        btn.key === "cancel"
+                        btn.variant === "plus"
+                          ? styles.plusBtnText
+                          : btn.key === "cancel"
                           ? styles.secondaryBtnText
                           : btn.destructive
                           ? styles.dangerBtnText
@@ -241,6 +245,22 @@ const styles = StyleSheet.create({
     color: "#C62828",
     fontSize: 15,
     fontWeight: "600",
+  },
+  plusBtn: {
+    minHeight: 44,
+    borderRadius: 10,
+    borderWidth: 3,
+    borderColor: "#14B8A6",
+    backgroundColor: "#FFFFFF",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 16,
+  },
+
+  plusBtnText: {
+    color: "#14B8A6",
+    fontSize: 15,
+    fontWeight: "800",
   },
   secondaryBtn: {
     minHeight: 44,

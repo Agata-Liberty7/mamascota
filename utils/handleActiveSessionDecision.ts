@@ -2,8 +2,14 @@
 import { Alert, Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import i18n from "../i18n";
+import { isPaid } from "./access";
 
-export type ActiveSessionDecision = "resume" | "start_new" | "cancel" | "no_active";
+export type ActiveSessionDecision =
+  | "resume"
+  | "start_new"
+  | "plus"
+  | "cancel"
+  | "no_active";
 
 function isInternalCommand(text: unknown): boolean {
   if (typeof text !== "string") return false;
@@ -68,6 +74,8 @@ export async function handleActiveSessionDecision(): Promise<ActiveSessionDecisi
 
   // 🌐 Web → отдельный confirm (НЕ exit)
   if (Platform.OS === "web") {
+    const paid = await isPaid();
+
     const choice = await new Promise<string>((resolve) => {
       (window as any).__MAMASCOTA_CONFIRM_RESOLVE__ = resolve;
 
@@ -79,7 +87,16 @@ export async function handleActiveSessionDecision(): Promise<ActiveSessionDecisi
             buttons: [
               { key: "resume", label: String(i18n.t("continue_session")) },
               { key: "start_new", label: String(i18n.t("start_new")), destructive: true },
-              { key: "cancel", label: String(i18n.t("cancel")) },
+              ...(!paid
+                ? [
+                    {
+                      key: "plus",
+                      label: String(i18n.t("plus.cta")),
+                      variant: "plus",
+                    },
+                  ]
+                : []),
+             // { key: "cancel", label: String(i18n.t("cancel")) },
             ],
           },
         })

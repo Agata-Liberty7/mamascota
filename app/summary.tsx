@@ -183,6 +183,7 @@ export default function SummaryScreen() {
   const [pendingCsvItem, setPendingCsvItem] = useState<SummaryItem | null>(null);
   const [shouldStartCsvExport, setShouldStartCsvExport] = useState(false);
   const [currentPdfLang, setCurrentPdfLang] = useState<string>("en");
+  const [hasPlusAccess, setHasPlusAccess] = useState(false);
   const router = useRouter();
 
   const showWebConfirm = async ({
@@ -246,7 +247,10 @@ export default function SummaryScreen() {
           }))
           .reverse();
 
-        setSessions(normalized);
+      setSessions(normalized);
+
+      const paid = await isPaid();
+      setHasPlusAccess(paid);
 
       } catch (err) {
         console.error("❌ Ошибка загрузки chatSummary:", err);
@@ -693,34 +697,43 @@ export default function SummaryScreen() {
             resizeMode="contain"
           />
 
-          <Text style={styles.emptyTitle}>
-            {i18n.t("summary.empty_title")}
-          </Text>
+          {!hasPlusAccess && (
+            <>
+              <Text style={styles.emptyTitle}>
+                {i18n.t("summary.empty_title")}
+              </Text>
 
-          <Text style={styles.emptyText}>
-            {i18n.t("summary.empty_subtitle")}
-          </Text>
-          <TouchableOpacity
-            style={{
-              marginTop: 20,
-              backgroundColor: "#14B8A6",
-              borderRadius: 10,
-              paddingHorizontal: 20,
-              paddingVertical: 12,
-            }}
-            onPress={() => router.push("/plus" as Href)}
-          >
-            <Text
+              <Text style={styles.emptyText}>
+                {i18n.t("summary.empty_subtitle")}
+              </Text>
+            </>
+          )}
+
+          {!hasPlusAccess ? (
+            <TouchableOpacity
               style={{
-                color: "#fff",
-                fontSize: 16,
-                fontWeight: "600",
-                textAlign: "center",
+                marginTop: 20,
+                backgroundColor: "#FFFFFF",
+                borderRadius: 10,
+                borderWidth: 3,
+                borderColor: "#14B8A6",
+                paddingHorizontal: 20,
+                paddingVertical: 12,
               }}
+              onPress={() => router.push("/plus" as Href)}
             >
-              {i18n.t("plus.cta")}
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={{
+                  color: "#14B8A6",
+                  fontSize: 16,
+                  fontWeight: "800",
+                  textAlign: "center",
+                }}
+              >
+                {i18n.t("plus.cta")}
+              </Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       ) : (
         <FlatList
