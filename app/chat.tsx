@@ -87,6 +87,18 @@ function splitAssistantReplyIntoBubbles(reply: string): string[] {
     .filter(Boolean);
 }
 
+const finalizationBubblesKey = (conversationId: string) =>
+  `finalizationBubbles:${conversationId}`;
+
+async function hasAnyPdfReportForSession(conversationId: string) {
+  try {
+    const keys = await AsyncStorage.getAllKeys();
+    return keys.some((key) => key.startsWith(`pdfReport:${conversationId}:`));
+  } catch {
+    return false;
+  }
+}
+
 function isInternalCommand(text: unknown): boolean {
   if (typeof text !== "string") return false;
   const t = text.trim();
@@ -203,7 +215,31 @@ export default function ChatScreen() {
               })
             : [];
 
-          setChat(normalized);
+          const hasPdf = await hasAnyPdfReportForSession(id);
+          const finalizationRaw = hasPdf
+            ? null
+            : await AsyncStorage.getItem(finalizationBubblesKey(id));
+
+          let finalizationBubbles: ChatMessage[] = [];
+
+          try {
+            const parsedFinalization = finalizationRaw
+              ? JSON.parse(finalizationRaw)
+              : [];
+
+            finalizationBubbles = Array.isArray(parsedFinalization)
+              ? parsedFinalization.filter(
+                  (m: any) =>
+                    m?.role === "assistant" &&
+                    typeof m?.content === "string" &&
+                    m.content.trim()
+                )
+              : [];
+          } catch {
+            finalizationBubbles = [];
+          }
+
+          setChat([...normalized, ...finalizationBubbles]);
 
         } catch {
           setChat([]);
@@ -481,14 +517,24 @@ useEffect(() => {
         const parts = splitAssistantReplyIntoBubbles(String(assistantText));
         const now = Date.now();
 
-        setChat((prev) => [
-          ...prev,
-          ...parts.map((content, idx) => ({
-            role: "assistant" as const,
-            content,
-            ts: now + idx,
-          })),
-        ]);
+        const assistantBubbles = parts.map((content, idx) => ({
+          role: "assistant" as const,
+          content,
+          ts: now + idx,
+        }));
+
+        setChat((prev) => [...prev, ...assistantBubbles]);
+
+        if (
+          typeof result === "object" &&
+          (result as any)?.sessionEnded &&
+          (result as any)?.conversationId
+        ) {
+          await AsyncStorage.setItem(
+            finalizationBubblesKey((result as any).conversationId),
+            JSON.stringify(assistantBubbles)
+          );
+        }
 
         // 6) Phase: обновляем только если пришло валидное значение
         const p = typeof result === "object" ? (result as any)?.phase : null;
@@ -982,6 +1028,8 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
 
       console.log("📄 PDF step 7: before exportSummaryPDF");
       await exportSummaryPDF(id, previewWindow);
+
+      await AsyncStorage.removeItem(finalizationBubblesKey(id));
 
       await addPdfLanguage(normalizedLang);
 
