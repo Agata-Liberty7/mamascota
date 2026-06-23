@@ -111,7 +111,8 @@ export default function StartScreen() {
 
       await clearConversationId();
       console.log("🗑️ Активная сессия сброшена, начинаем заново.");
-      await ensureEntryFlow();
+
+      router.replace("/animal-selection");
       return;
     }
 

@@ -143,10 +143,6 @@ export default function PlusScreen() {
         </Pressable>
         </View>
 
-        <Text style={styles.cancelText}>
-        {String(i18n.t("plus.cancel_note"))}
-        </Text>
-
           <Pressable style={styles.primaryButton} onPress={handleSubscribe}>
             <Text style={styles.primaryButtonText}>
               {String(i18n.t("plus.cta"))}
