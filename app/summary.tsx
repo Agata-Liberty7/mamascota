@@ -457,10 +457,10 @@ export default function SummaryScreen() {
         return;
       }
 
-      const accessAllowed = true;
-
       setPdfTextKey("pdf.generating");
       setPdfLoading(true);
+
+      await ensureDecisionTreeCachedForSummary(id, petName);
 
       await exportSummaryPDF(id, previewWindow);
 
