@@ -117,6 +117,12 @@ export default function AppLayout() {
                 headerLeft: () => <View />,
               }}
             />
+            <Stack.Screen
+              name="plus"
+              options={{
+                headerLeft: () => <View />,
+              }}
+            />
             <Stack.Screen name="onboarding" options={{ headerShown: false }} />
             <Stack.Screen name="terms-screen" options={{ headerShown: false }} />
           </Stack>

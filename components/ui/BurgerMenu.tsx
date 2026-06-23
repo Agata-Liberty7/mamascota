@@ -184,17 +184,13 @@ export default function BurgerMenu({ visible, onClose }: Props) {
       divider: true,
     },
     {
-      label: String(
-        i18n.t("menu.support_mamascota", {
-          defaultValue: "Support Mamascota",
-        })
-      ),
-      icon: "favorite",
+      label: String(i18n.t("plus.title")),
+      icon: "add-circle",
       enabled: true,
-      accent: true,
+      plus: true,
       action: () => {
         onClose();
-        setTimeout(() => router.push("/paywall"), 120);
+        setTimeout(() => router.push("/plus"), 120);
       },
     },
     {
@@ -239,7 +235,21 @@ export default function BurgerMenu({ visible, onClose }: Props) {
     {
       divider: true,
     },
-        {
+    {
+      label: String(
+        i18n.t("menu.support_mamascota", {
+          defaultValue: "Support Mamascota",
+        })
+      ),
+      icon: "favorite",
+      enabled: true,
+      accent: true,
+      action: () => {
+        onClose();
+        setTimeout(() => router.push("/paywall"), 120);
+      },
+    },
+    {
       label: String(i18n.t("menu.about")),
       icon: "info",
       enabled: true,
@@ -279,7 +289,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
               return <View key={`divider-${index}`} style={styles.divider} />;
             }
 
-            const { label, icon, enabled, action, accent } = item;
+            const { label, icon, enabled, action, accent, plus } = item;
 
             if (enabled) {
               return (
@@ -294,13 +304,20 @@ export default function BurgerMenu({ visible, onClose }: Props) {
                   <MaterialIcons
                     name={icon as any}
                     size={22}
-                    color={accent ? "#43A7F7" : "#666"}
+                    color={
+                      plus
+                        ? "#14B8A6"
+                        : accent
+                        ? "#43A7F7"
+                        : "#666"
+                    }
                     style={styles.icon}
                   />
                   <Text
                     style={[
                       styles.menuText,
                       accent && styles.menuTextAccent,
+                      plus && { color: "#14B8A6", fontWeight: "700" },
                     ]}
                   >
                     {label}

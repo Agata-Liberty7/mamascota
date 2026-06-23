@@ -457,65 +457,7 @@ export default function SummaryScreen() {
         return;
       }
 
-      const accessAllowed = await canGeneratePdf(normalizedLang);
-
-      if (!accessAllowed) {
-        previewWindow?.close();
-        if (Platform.OS === "web") {
-          const result = await showWebConfirm({
-            title: String(t("alert_title", "Attention")),
-            message: String(
-              i18n.t("paywall_limit_reached", {
-                defaultValue: "Free limit reached. Upgrade to continue.",
-              })
-            ),
-            buttons: [
-              {
-                key: "pay",
-                label: String(
-                  i18n.t("paywall_go_to_payment", {
-                    defaultValue: "Upgrade",
-                  })
-                ),
-              },
-              {
-                key: "cancel",
-                label: String(i18n.t("cancel")),
-              },
-            ],
-          });
-
-          if (result === "pay") {
-            router.push("/paywall" as Href);
-          }
-        } else {
-          Alert.alert(
-            String(t("alert_title", "Attention")),
-            String(
-              i18n.t("paywall_limit_reached", {
-                defaultValue: "Free limit reached. Upgrade to continue.",
-              })
-            ),
-            [
-              {
-                text: String(
-                  i18n.t("paywall_go_to_payment", {
-                    defaultValue: "Upgrade",
-                  })
-                ),
-                onPress: () => {
-                  router.push("/paywall" as Href);
-                },
-              },
-              {
-                text: String(i18n.t("cancel")),
-                style: "cancel",
-              },
-            ]
-          );
-        }
-        return;
-      }
+      const accessAllowed = true;
 
       setPdfTextKey("pdf.generating");
       setPdfLoading(true);
@@ -599,7 +541,7 @@ export default function SummaryScreen() {
               const paid = await isPaid();
 
               if (!paid) {
-                router.push("/paywall" as Href);
+                router.push("/plus" as Href);
                 return;
               }
 
