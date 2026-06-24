@@ -358,6 +358,8 @@
     "monthly": "Monthly",
     "yearly": "Yearly",
     "price_monthly": "€1.99 / month",
-    "price_yearly": "€19.99 / year"
+    "price_yearly": "€19.99 / year",
+    "subscribe_cta": "Subscribe",
+    "active_status": "Mamascota Plus is active"
   }
 }

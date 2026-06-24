@@ -345,7 +345,9 @@
     "price_yearly": "19,99 € / an",
     "cancel_note": "Vous pouvez annuler à tout moment.",
     "cta": "Découvrir Mamascota Plus",
-    "continue_free": "Continuer gratuitement"
+    "continue_free": "Continuer gratuitement",
+    "subscribe_cta": "S’abonner",
+    "active_status": "Mamascota Plus est actif"
   }
 
 }

@@ -355,7 +355,9 @@
     "price_yearly": "19,99 € / год",
     "cancel_note": "Отменить можно в любой момент.",
     "cta": "Узнать о Mamascota Plus",
-    "continue_free": "Продолжить бесплатно"
+    "continue_free": "Продолжить бесплатно",
+    "subscribe_cta": "Оформить подписку",
+    "active_status": "Mamascota Plus активна"
   },
   
   "landing": {

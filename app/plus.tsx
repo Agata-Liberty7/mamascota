@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   View,
@@ -12,6 +12,7 @@ import { useRouter } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import i18n from "@/i18n";
+import { isPaid } from "@/utils/access";
 
 const PLUS_GREEN = "#14B8A6";
 const PLUS_DARK = "#0F766E";
@@ -27,6 +28,22 @@ const features = [
 export default function PlusScreen() {
   const router = useRouter();
     const [selectedPlan, setSelectedPlan] = useState<"monthly" | "yearly">("yearly");
+    const [isPlusActive, setIsPlusActive] = useState(false);
+
+    useEffect(() => {
+      let alive = true;
+
+      (async () => {
+        const paid = await isPaid();
+        if (alive) {
+          setIsPlusActive(paid);
+        }
+      })();
+
+      return () => {
+        alive = false;
+      };
+    }, []);
 
     const handleSubscribe = () => {
     const url =
@@ -60,6 +77,19 @@ export default function PlusScreen() {
         </Pressable>
 
         <Text style={styles.title}>{String(i18n.t("plus.title"))}</Text>
+
+        {isPlusActive && (
+          <View style={styles.activeBadge}>
+            <MaterialCommunityIcons
+              name="check-circle"
+              size={16}
+              color={PLUS_DARK}
+            />
+            <Text style={styles.activeBadgeText}>
+              {String(i18n.t("plus.active_status"))}
+            </Text>
+          </View>
+        )}
 
         <Text style={styles.headline}>
           {String(i18n.t("plus.headline_1"))}
@@ -145,7 +175,7 @@ export default function PlusScreen() {
 
           <Pressable style={styles.primaryButton} onPress={handleSubscribe}>
             <Text style={styles.primaryButtonText}>
-              {String(i18n.t("plus.cta"))}
+              {String(i18n.t("plus.subscribe_cta"))}
             </Text>
           </Pressable>
         </View>
@@ -192,20 +222,38 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
 
-title: {
-  alignSelf: "center",
-  color: "#FFFFFF",
-  fontSize: 17,
-  lineHeight: 22,
-  fontWeight: "800",
-  textAlign: "center",
-  marginTop: 4,
-  marginBottom: 10,
-  paddingHorizontal: 18,
-  paddingVertical: 5,
-  borderRadius: 999,
-  backgroundColor: "rgba(255, 255, 255, 0.16)",
-},
+  title: {
+    alignSelf: "center",
+    color: "#FFFFFF",
+    fontSize: 17,
+    lineHeight: 22,
+    fontWeight: "800",
+    textAlign: "center",
+    marginTop: 4,
+    marginBottom: 10,
+    paddingHorizontal: 18,
+    paddingVertical: 5,
+    borderRadius: 999,
+    backgroundColor: "rgba(255, 255, 255, 0.16)",
+  },
+
+  activeBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: 999,
+    backgroundColor: "#DFFCF6",
+    marginTop: -4,
+    marginBottom: 10,
+  },
+
+  activeBadgeText: {
+    color: PLUS_DARK,
+    fontSize: 13,
+    fontWeight: "800",
+  },
 
   headline: {
     color: "#FFFFFF",
