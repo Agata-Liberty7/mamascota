@@ -8,8 +8,8 @@
   "paywall_go_to_payment": "Zur Zahlung gehen",
 
   "exit_title": "Möchten Sie beenden?",
-  "exit_message": "Sie können Ihre Sitzung speichern, um später fortzufahren.",
-  "exit_save": "Sitzung speichern",
+  "exit_message": "Sie können Ihre Beratung speichern, um später fortzufahren.",
+  "exit_save": "Beratung speichern",
   "exit_delete": "Beenden und neu starten",
   "exit_button": "Beenden",
 
@@ -68,9 +68,9 @@
   "start_description": "Aufmerksamkeit ist der erste Schritt\nzur Hilfe",
   "start_button": "Starten",
   "continue_title": "Fortfahren?",
-  "continue_message": "Sie können Ihre aktuelle Sitzung fortsetzen oder eine neue starten. In der kostenlosen Version speichert Mamascota nur eine aktive Sitzung: wenn Sie eine neue starten, wird die aktuelle Sitzung und ihre Berichte gelöscht.",
+  "continue_message": "Sie können Ihre aktuelle Beratung fortsetzen oder eine neue starten. In der kostenlosen Version speichert Mamascota nur eine aktive Sitzung: wenn Sie eine neue starten, wird die aktuelle Sitzung und ihre Berichte gelöscht.",
   "start_new": "Neu starten",
-  "continue_session": "Sitzung fortsetzen",
+  "continue_session": "Beratung fortsetzen",
   "start_new_warning_title": "Eine neue Beratung löscht die aktuelle",
   "start_new_warning_message": "In der kostenlosen Version speichert Mamascota nur eine aktive Beratung. Wenn du eine neue startest, werden der aktuelle Chat und die dazugehörigen Berichte gelöscht. Vorher kannst du zum Chat zurückkehren und den PDF-Bericht auf deinem Gerät speichern. Der Vollzugang für 1,99 € ermöglicht es dir, deine Beratungshistorie zu speichern und später darauf zurückzukommen.",
 

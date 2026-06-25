@@ -8,8 +8,8 @@
   "paywall_go_to_payment": "Passar al pago",
 
   "exit_title": "¿Deseas salir?",
-  "exit_message": "Puedes guardar tu sesión para continuar más tarde.",
-  "exit_save": "Guardar sesión",
+  "exit_message": "Puedes guardar tu consulta para continuar más tarde.",
+  "exit_save": "Guardar consulta",
   "exit_delete": "Salir y empezar de nuevo",
   "exit_button": "Salir",
 
@@ -232,7 +232,7 @@
     "max_symptoms": "Límite de síntomas",
     "max_symptoms_hint": "Elige cuántos síntomas se pueden seleccionar (3 o 5).",
     "clear_data": "Borrar datos guardados",
-    "clear_hint": "Esto eliminará las sesiones guardadas y los datos en caché.",
+    "clear_hint": "Esto eliminará las consultas guardadas y los datos en caché.",
     "text_size": "Texto más grande",
     "text_size_hint": "Aumenta el tamaño del texto de la app (sin cambiar el tamaño del sistema).",
     "text_size_system": "Sistema",
@@ -252,7 +252,7 @@
     },
     "clear": "Borrar",
     "clear_data_title": "¿Borrar datos?",
-    "clear_data_message": "Se eliminarán todas las sesiones guardadas y la caché. ¿Continuar?",
+    "clear_data_message": "Se eliminarán todas las consultas guardadas y la caché. ¿Continuar?",
     "clear_done_title": "Datos borrados",
     "clear_done_message": "Todos los datos guardados se han eliminado."
   },

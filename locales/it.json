@@ -8,8 +8,8 @@
   "paywall_go_to_payment": "Passa al pagamento",
 
   "exit_title": "Vuoi uscire?",
-  "exit_message": "Puoi salvare la sessione per continuare più tardi.",
-  "exit_save": "Salva sessione",
+  "exit_message": "Puoi salvare la consulenza per continuare più tardi.",
+  "exit_save": "Salva consulenza",
   "exit_delete": "Esci e ricomincia",
   "exit_button": "Esci",
 
@@ -69,8 +69,8 @@
   "start_button": "Inizia",
   "continue_title": "Continuare?",
   "continue_message": "Puoi continuare la consulenza attuale o iniziare una nuova. Nella versione gratuita, Mamascota conserva solo una consulenza attiva: se ne inizi una nuova, la chat attuale e i relativi report verranno eliminati.",
-  "start_new": "Nuova sessione",
-  "continue_session": "Riprendi sessione",
+  "start_new": "Nuova consulenza",
+  "continue_session": "Riprendi consulenza",
   "start_new_warning_title": "Una nuova consulenza eliminerà quella attuale",
   "start_new_warning_message": "Nella versione gratuita, Mamascota conserva solo una consulenza attiva. Se ne inizi una nuova, la chat attuale e i relativi report verranno eliminati. Prima puoi tornare alla chat e salvare il report PDF sul tuo dispositivo. L’accesso completo a 1,99 € ti permette di conservare lo storico delle consulenze e tornarci più tardi.",
 
@@ -173,7 +173,7 @@
     "custom": "Altro"
   },
   "chat": {
-    "summary_hint": "Puoi visualizzare il riepilogo usando l’icona rossa in basso a sinistra, oppure uscendo e salvando la sessione.",
+    "summary_hint": "Puoi visualizzare il riepilogo usando l’icona rossa in basso a sinistra, oppure uscendo e salvando la consulenza.",
     "phase": {
       "intake": "Fase: Raccolta informazioni",
       "clarify": "Fase: Chiarimento dettagli",
@@ -216,8 +216,8 @@
   "summary": {
     "empty_title": "Funzionalità avanzate di Mamascota Plus",
     "empty_subtitle": "Salva le tue consulenze e torna a controllarle in qualsiasi momento.",
-    "delete_confirm": "Eliminare questa sessione salvata?",
-    "delete_error": "Impossibile eliminare la sessione salvata. Riprova.",
+    "delete_confirm": "Eliminare questa consulenza salvata?",
+    "delete_error": "Impossibile eliminare la consulenza salvata. Riprova.",
     "tools_hint": "Qui puoi trovare i rapporti PDF e altri materiali che ti aiuteranno a monitorare lo stato del tuo animale."
   },  
 
@@ -228,7 +228,7 @@
     "max_symptoms": "Limite dei sintomi",
     "max_symptoms_hint": "Scegli quanti sintomi si possono selezionare (3 o 5).",
     "clear_data": "Cancella i dati salvati",
-    "clear_hint": "Questo rimuoverà le sessioni salvate e i dati in cache.",
+    "clear_hint": "Questo rimuoverà le consulenze salvate e i dati in cache.",
     "text_size": "Testo più grande",
     "text_size_hint": "Aumenta la dimensione del testo dell’app (senza modificare quella di sistema).",
     "text_size_system": "Sistema",
@@ -248,7 +248,7 @@
     },
     "clear": "Cancella",
     "clear_data_title": "Cancellare i dati?",
-    "clear_data_message": "Tutte le sessioni salvate e la cache verranno rimosse. Continuare?",
+    "clear_data_message": "Tutte le consulenze salvate e la cache verranno rimosse. Continuare?",
     "clear_done_title": "Dati cancellati",
     "clear_done_message": "Tutti i dati salvati sono stati rimossi."
   },

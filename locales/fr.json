@@ -8,8 +8,8 @@
   "paywall_go_to_payment": "Passer au paiement",
   
   "exit_title": "Voulez-vous quitter ?",
-  "exit_message": "Vous pouvez enregistrer votre session pour continuer plus tard.",
-  "exit_save": "Enregistrer la session",
+  "exit_message": "Vous pouvez enregistrer votre consultation pour continuer plus tard.",
+  "exit_save": "Enregistrer la consultation",
   "exit_delete": "Abandonnez et recommencez.",
   "exit_button": "Quitter",
 
@@ -70,7 +70,7 @@
   "continue_title": "Continuer ?",
   "continue_message": "Vous pouvez continuer la consultation actuelle ou en commencer une nouvelle. Dans la version gratuite, Mamascota ne conserve qu'une seule consultation active : si vous en commencez une nouvelle, le chat actuel et ses rapports seront supprimés.",
   "start_new": "Nouveau départ",
-  "continue_session": "Reprendre la session",
+  "continue_session": "Reprendre la consultation",
   "start_new_warning_title": "Une nouvelle consultation supprimera l’actuelle",
   "start_new_warning_message": "Dans la version gratuite, Mamascota conserve une seule consultation active. Si vous en commencez une nouvelle, le chat actuel et ses rapports seront supprimés. Avant cela, vous pouvez revenir au chat et enregistrer le rapport PDF sur votre appareil. L’accès complet à 1,99 € vous permet de conserver l’historique des consultations et d’y revenir plus tard.",
 
@@ -83,7 +83,7 @@
     "lang_he": "Hébreu",
     "chat": "Continuer la consultation",
     "summary": "Résumé",
-    "saved_sessions": "Consulter sauvegardées",
+    "saved_sessions": "Consultations enregistrées",
     "settings": "Paramètres",
     "about": "À propos",
     "open": "Menu",
@@ -179,7 +179,7 @@
     "custom": "Autre"
   },
   "chat": {
-    "summary_hint": "Vous pouvez visualiser le résumé en utilisant l’icône rouge en bas à gauche, ou en quittant et enregistrant la session.",
+    "summary_hint": "Vous pouvez visualiser le résumé en utilisant l’icône rouge en bas à gauche, ou en quittant et enregistrant la consultation.",
     "phase": {
       "intake": "Étape: Collecte d’informations",
       "clarify": "Étape: Clarification des détails",
@@ -221,8 +221,8 @@
   "summary": {
     "empty_title": "Fonctionnalités avancées de Mamascota Plus",
     "empty_subtitle": "Enregistrez vos consultations et revenez les consulter à tout moment pour suivre l’état de votre animal au fil du temps.",
-    "delete_confirm": "Supprimer cette session enregistrée ?",
-    "delete_error": "Impossible de supprimer la session enregistrée. Veuillez réessayer.",
+    "delete_confirm": "Supprimer cette consultation enregistrée ?",
+    "delete_error": "Impossible de supprimer la consultation enregistrée. Veuillez réessayer.",
     "tools_hint": "Ici, vous trouverez l’historique de vos consultations, les rapports PDF et d’autres matériaux qui vous aideront à suivre l’état de votre animal."
   }, 
   
@@ -232,7 +232,7 @@
     "max_symptoms": "Limite de symptômes",
     "max_symptoms_hint": "Choisissez combien de symptômes peuvent être sélectionnés (3 ou 5).",
     "clear_data": "Effacer les données enregistrées",
-    "clear_hint": "Cela supprimera les sessions enregistrées et le cache.",
+    "clear_hint": "Cela supprimera les consultations enregistrées et le cache.",
     "text_size": "Texte plus grand",
     "text_size_hint": "Augmenter la taille du texte de l’app (sans changer celle du système).",
     "text_size_system": "Système",
@@ -252,7 +252,7 @@
     },
     "clear": "Effacer",
     "clear_data_title": "Effacer les données ?",
-    "clear_data_message": "Toutes les sessions enregistrées et le cache seront supprimés. Continuer ?",
+    "clear_data_message": "Toutes les consultations enregistrées et le cache seront supprimés. Continuer ?",
     "clear_done_title": "Données effacées",
     "clear_done_message": "Toutes les données enregistrées ont été supprimées."
   },

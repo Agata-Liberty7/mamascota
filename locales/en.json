@@ -8,8 +8,8 @@
   "paywall_go_to_payment": "Go to Payment",
 
   "exit_title": "Do you want to exit?",
-  "exit_message": "You can save your session to continue later.",
-  "exit_save": "Save session",
+  "exit_message": "You can save your consultation to continue later.",
+  "exit_save": "Save consultation",
   "exit_delete": "Exit and start again",
   "exit_button": "Exit",
 
@@ -70,7 +70,7 @@
   "continue_title": "Continue?",
   "continue_message": "You can continue the current consultation or start a new one. In the free version, Mamascota keeps only one active consultation: if you start a new one, the current chat and its reports will be deleted.",
   "start_new": "Start new",
-  "continue_session": "Continue session",
+  "continue_session": "Continue consultation",
   "start_new_warning_title": "A new consultation will delete the current one",
   "start_new_warning_message": "In the free version, Mamascota keeps only one active consultation. If you start a new one, the current chat and its reports will be deleted. Before that, you can return to the chat and save the PDF report to your device. Full Access for €1.99 lets you keep your consultation history and return to it later.",
 
@@ -180,7 +180,7 @@
   },
 
   "chat": {
-    "summary_hint": "You can view the summary using the red icon at the bottom left, or by exiting and saving the session.",
+    "summary_hint": "You can view the summary using the red icon at the bottom left, or by exiting and saving the consultation.",
     "phase": {
       "intake": "Phase: Gathering information",
       "clarify": "Phase: Clarifying details",
@@ -221,8 +221,8 @@
   "summary": {
     "empty_title": "Advanced Features of Mamascota Plus",
     "empty_subtitle": "Save your consultations and return to them at any time to track your pet’s condition over time.",
-    "delete_confirm": "Delete this saved session?",
-    "delete_error": "Could not delete the saved session. Please try again.",
+    "delete_confirm": "Delete this saved consultation?",
+    "delete_error": "Could not delete the saved consultation. Please try again.",
     "tools_hint": "Here you can find the history of your consultations, PDF reports, and other materials that will help you track your pet’s condition."
   },
   
@@ -232,7 +232,7 @@
     "max_symptoms": "Symptom limit",
     "max_symptoms_hint": "Choose how many symptoms can be selected (3 or 5).",
     "clear_data": "Clear saved data",
-    "clear_hint": "This will remove saved sessions and cached data.",
+    "clear_hint": "This will remove saved consultations and cached data.",
     "text_size": "Larger text",
     "text_size_hint": "Increase app text size (without changing system size).",
     "text_size_system": "System",
@@ -252,7 +252,7 @@
     },
     "clear": "Clear",
     "clear_data_title": "Clear data?",
-    "clear_data_message": "All saved sessions and cache will be removed. Continue?",
+    "clear_data_message": "All saved consultations and cache will be removed. Continue?",
     "clear_done_title": "Data cleared",
     "clear_done_message": "All saved data has been removed."
   },
