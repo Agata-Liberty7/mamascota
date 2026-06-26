@@ -133,33 +133,17 @@ export default function BurgerMenu({ visible, onClose }: Props) {
         onClose();
 
         setTimeout(async () => {
-          const decision = await handleActiveSessionDecision();
+          const activeId = await AsyncStorage.getItem("conversationId");
 
-          if (decision === "resume") {
+          if (activeId) {
             await AsyncStorage.setItem("restoreFromSummary", "1");
+            await AsyncStorage.setItem("decisionTreeStale", "1");
+
             router.replace("/chat");
             return;
           }
 
-          if (decision === "start_new") {
-            const activeId = await AsyncStorage.getItem("conversationId");
-            const paid = await isPaid();
-
-            if (activeId && !paid) {
-              await clearActiveConversationData(activeId);
-            }
-
-            await clearConversationId();
-            router.replace("/animal-selection");
-            return;
-          }
-
-          if (decision === "no_active") {
-            router.replace("/animal-selection");
-            return;
-          }
-
-          // cancel — ничего не делаем
+          router.replace("/animal-selection");
         }, 180);
       },
     },
@@ -172,7 +156,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
     {
       label: String(i18n.t("menu.saved_sessions")),
       icon: "list",
-      enabled: true,
+      enabled: hasSavedSessions,
       action: () => {
         onClose();
         setTimeout(() => {

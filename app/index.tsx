@@ -84,44 +84,17 @@ export default function StartScreen() {
   };
 
   const handleStart = async () => {
-    const decision = await handleActiveSessionDecision();
+    const activeId = await AsyncStorage.getItem("conversationId");
 
-    if (decision === "resume") {
-      // восстановление активной сессии = просто идём в чат
+    if (activeId) {
       await AsyncStorage.setItem("restoreFromSummary", "1");
-
-      // помечаем decisionTree устаревшим
       await AsyncStorage.setItem("decisionTreeStale", "1");
 
       router.replace("/chat");
       return;
     }
-    if (decision === "plus") {
-      router.push("/plus");
-      return;
-    }
 
-    if (decision === "start_new") {
-      const activeId = await AsyncStorage.getItem("conversationId");
-      const paid = await isPaid();
-
-      if (activeId && !paid) {
-        await clearActiveConversationData(activeId);
-      }
-
-      await clearConversationId();
-      console.log("🗑️ Активная сессия сброшена, начинаем заново.");
-
-      router.replace("/animal-selection");
-      return;
-    }
-
-    if (decision === "no_active") {
-      await ensureEntryFlow();
-      return;
-    }
-
-    // cancel — ничего не делаем
+    await ensureEntryFlow();
   };
 
   const applyLanguage = async (lang: string) => {
