@@ -15,7 +15,7 @@ import {
 import * as Animatable from "react-native-animatable";
 
 import i18n from "../../i18n";
-import { clearActiveConversationData, clearConversationId } from "../../utils/chatWithGPT";
+import { clearConversationId } from "../../utils/chatWithGPT";
 import { handleActiveSessionDecision } from "../../utils/handleActiveSessionDecision";
 import { isPaid } from "../../utils/access";
 
@@ -123,30 +123,54 @@ export default function BurgerMenu({ visible, onClose }: Props) {
   };
 
   const menuItems = [
-    {
-    label: String(i18n.t("menu.start_consultation")),
-      icon: "pets",
-      // выбор животного доступен только после согласия с условиями
-      enabled: termsAccepted,
-      action: async () => {
+      {
+        label: String(i18n.t("menu.start_consultation")),
+        icon: "pets",
+        // выбор животного доступен только после согласия с условиями
+        enabled: termsAccepted,
+        action: async () => {
+          onClose();
 
-        onClose();
+          setTimeout(async () => {
+            const activeId = await AsyncStorage.getItem("conversationId");
+            const paid = await isPaid();
 
-        setTimeout(async () => {
-          const activeId = await AsyncStorage.getItem("conversationId");
+            if (!paid) {
+              if (activeId) {
+                await AsyncStorage.setItem("restoreFromSummary", "1");
+                await AsyncStorage.setItem("decisionTreeStale", "1");
+                router.replace("/chat");
+                return;
+              }
 
-          if (activeId) {
-            await AsyncStorage.setItem("restoreFromSummary", "1");
-            await AsyncStorage.setItem("decisionTreeStale", "1");
+              router.replace("/animal-selection");
+              return;
+            }
 
-            router.replace("/chat");
-            return;
-          }
+            if (!activeId) {
+              router.replace("/animal-selection");
+              return;
+            }
 
-          router.replace("/animal-selection");
-        }, 180);
+            const decision = await handleActiveSessionDecision();
+
+            if (decision === "resume") {
+              await AsyncStorage.setItem("restoreFromSummary", "1");
+              await AsyncStorage.setItem("decisionTreeStale", "1");
+              router.replace("/chat");
+              return;
+            }
+
+            if (decision === "start_new") {
+              await clearConversationId();
+              router.replace("/animal-selection");
+              return;
+            }
+
+            // cancel — ничего не делаем
+          }, 180);
+        },
       },
-    },
     {
       label: String(i18n.t("menu.chat")),
       icon: "chat",
