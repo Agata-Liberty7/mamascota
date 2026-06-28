@@ -4,6 +4,12 @@ const ACCESS_FLAGS = {
   pdfLimitEnabled: false,
 };
 
+export const DEV_ACCOUNT = {
+  enabled: __DEV__,
+  paid: true,
+  plan: "yearly" as "monthly" | "yearly",
+};
+
 const PAID_KEY = "access.isPaid";
 const PDF_LANG_SET_KEY = "access.pdfLangSet";
 
@@ -50,6 +56,10 @@ export async function getPdfCount(): Promise<number> {
 }
 
 export async function isPaid(): Promise<boolean> {
+  if (DEV_ACCOUNT.enabled && DEV_ACCOUNT.paid) {
+    return true;
+  }
+
   const raw = await AsyncStorage.getItem(PAID_KEY);
   return raw === "true";
 }

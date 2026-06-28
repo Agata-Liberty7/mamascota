@@ -107,7 +107,7 @@
 
     "faq_3_q": "How is this different from a regular AI, and why so many questions?",
 
-    "faq_3_a": "A typical AI answers questions. Mamascota asks them. Because it investigates. When did it start? How often does it happen? What else has changed? Saying 'my dog is vomiting' is only the obvious part. The details help build the bigger picture and create useful information you can share with your veterinarian.",
+    "faq_3_a": "General-purpose AI systems are trained on texts from many different fields. Mamascota is different. Its foundation is a specialized veterinary knowledge base designed specifically to help prepare for a veterinary visit. It draws on veterinary guidelines, textbooks, clinical decision-making algorithms, and other professional veterinary references. Even the best recommendations are of little value without accurate information about a particular pet. That is why Mamascota asks questions step by step: when the symptoms began, how they have changed, what is happening now, and which important signs are absent. From these answers, Mamascota prepares a structured description of the pet's condition and a report that can be shared with a veterinarian. Mamascota does not make diagnoses—it helps you prepare for the visit and organize information that can help the veterinarian assess the situation more efficiently.",
 
     "faq_4_q": "What will I get after a consultation? Will Mamascota diagnose my pet?",
 

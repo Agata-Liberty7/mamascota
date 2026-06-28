@@ -153,17 +153,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
       enabled: !!conversationId,
       action: enterChat,
     },
-    {
-      label: String(i18n.t("menu.saved_sessions")),
-      icon: "list",
-      enabled: hasSavedSessions,
-      action: () => {
-        onClose();
-        setTimeout(() => {
-          router.replace("/summary");
-        }, 120);
-      },
-    },
+
     {
       divider: true,
     },
@@ -177,6 +167,19 @@ export default function BurgerMenu({ visible, onClose }: Props) {
         setTimeout(() => router.push("/plus"), 120);
       },
     },
+
+    {
+      label: String(i18n.t("menu.saved_sessions")),
+      icon: "list",
+      enabled: hasSavedSessions,
+      action: () => {
+        onClose();
+        setTimeout(() => {
+          router.replace("/summary");
+        }, 120);
+      },
+    },
+
     {
       label: `${String(
         i18n.t("menu.observation_journal", {

@@ -107,7 +107,7 @@
 
     "faq_3_q": "Quelle est la différence avec une IA classique et pourquoi autant de questions ?",
 
-    "faq_3_a": "Une IA classique répond aux questions. Mamascota les pose. Parce qu'elle enquête. Quand cela a-t-il commencé ? À quelle fréquence ? Qu'est-ce qui a changé d'autre ? Dire « mon chien vomit » n'est qu'une partie de l'histoire. Les détails permettent de comprendre la situation dans son ensemble et de préparer un rapport utile pour le vétérinaire.",
+    "faq_3_a": "Les assistants d'IA généralistes sont entraînés à partir de textes issus de nombreux domaines. Mamascota fonctionne différemment. Elle s'appuie sur une base de connaissances vétérinaires spécialisée, conçue pour aider à préparer une consultation vétérinaire. Elle utilise des recommandations vétérinaires, des ouvrages de référence, des algorithmes d'aide à la décision clinique et d'autres ressources professionnelles. Même les meilleures recommandations sont peu utiles sans des informations précises sur un animal en particulier. C'est pourquoi Mamascota pose ses questions étape par étape : quand les symptômes sont apparus, comment ils ont évolué, ce qui se passe actuellement et quels signes importants sont absents. À partir de ces réponses, Mamascota prépare une description structurée de l'état de l'animal ainsi qu'un rapport pouvant être présenté au vétérinaire. Mamascota ne pose pas de diagnostic : elle aide à préparer la consultation et à organiser les informations afin de faciliter l'évaluation du vétérinaire.",
 
     "faq_4_q": "Que vais-je recevoir après la consultation ? Mamascota pose-t-elle un diagnostic ?",
 

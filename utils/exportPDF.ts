@@ -474,6 +474,7 @@ ${JSON.stringify(sections, null, 2)}
 
   const res = await chatWithGPT({
     message: "__MAMASCOTA_PDF_TRANSLATE__",
+    internalCommand: "__MAMASCOTA_PDF_TRANSLATE__",
     userLang: toLocale,
     conversationId: `pdf-translate-${sessionId}-${toLocale}`,
     sections,

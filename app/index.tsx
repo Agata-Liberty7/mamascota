@@ -105,7 +105,9 @@ export default function StartScreen() {
   };
 
   const handleAboutPress = () => {
-    router.push("/about?source=home" as Href);
+    router.push(
+      (termsAccepted ? "/about?source=home" : "/about?source=first_entry") as Href
+    );
   };
 
   const stylesMobile = StyleSheet.create({
@@ -414,14 +416,8 @@ export default function StartScreen() {
             <View style={styles.bottomBlock}>
               <Text style={styles.description}>{i18n.t('start_description')}</Text>
 
-              <TouchableOpacity style={styles.button} onPress={handleStart}>
-                <Text style={styles.buttonText}>{i18n.t('start_button')}</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={handleAboutPress}>
-                <Text style={styles.aboutLink}>
-                  {i18n.t("about.tagline")}
-                </Text>
+              <TouchableOpacity style={styles.button} onPress={termsAccepted ? handleStart : handleAboutPress}>
+                <Text style={styles.buttonText}>{termsAccepted ? i18n.t('start_button') : i18n.t('about.tagline')}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -438,14 +434,8 @@ export default function StartScreen() {
 
             <Text style={styles.description}>{i18n.t('start_description')}</Text>
 
-            <TouchableOpacity style={styles.button} onPress={handleStart}>
-              <Text style={styles.buttonText}>{i18n.t('start_button')}</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={handleAboutPress}>
-              <Text style={styles.aboutLink}>
-                {i18n.t("about.tagline")}
-              </Text>
+            <TouchableOpacity style={styles.button} onPress={termsAccepted ? handleStart : handleAboutPress}>
+              <Text style={styles.buttonText}>{termsAccepted ? i18n.t('start_button') : i18n.t('about.tagline')}</Text>
             </TouchableOpacity>
           </View>
         )}

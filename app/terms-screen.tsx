@@ -14,7 +14,7 @@ export default function TermsScreen() {
       ['termsAccepted', 'true'],
     ]);
     setVisible(false);
-    router.replace('/onboarding'); // теперь после Условий всегда идём в онбординг
+    router.replace("/about?source=first_entry" as any); // после Условий показываем FAQ/About
   };
 
 

@@ -47,11 +47,16 @@ const stylesMobile = StyleSheet.create({
     fontWeight: '700',
     color: theme.colors.buttonPrimaryBg,
   },
+  onbImageFrame: {
+    width: '100%',
+    height: 250,
+    marginTop: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   onbImage: {
     width: '74%',
-    height: undefined,
-    aspectRatio: 2,
-    marginTop: 28,
+    height: '100%',
     alignSelf: 'center',
   },
   floatingWrap: {
@@ -109,12 +114,17 @@ const stylesWeb = StyleSheet.create({
     fontWeight: '700',
     color: theme.colors.buttonPrimaryBg,
   },
-  onbImage: {
-    width: '55%',
-    maxWidth: 260,
-    height: 'auto',
-    aspectRatio: 1,
+  onbImageFrame: {
+    width: '100%',
+    height: 260,
     marginTop: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  onbImage: {
+    width: '58%',
+    maxWidth: 260,
+    height: '100%',
     alignSelf: 'center',
   },
   onbImageLarge: {
@@ -239,7 +249,9 @@ function Slide({
         styles.onbSubtitleAccent
       )}
 
-      <Image source={imgSource} style={styles.onbImage} resizeMode="contain" />
+      <View style={styles.onbImageFrame}>
+        <Image source={imgSource} style={styles.onbImage} resizeMode="contain" />
+      </View>
     </View>
   );
 }
@@ -377,11 +389,13 @@ export default function OnboardingScreen() {
               stylesWeb.onbSubtitleAccent
             )}
 
-            <Image
-              source={currentWebSlide.image}
-              style={stylesWeb.onbImage}
-              resizeMode="contain"
-            />
+            <View style={stylesWeb.onbImageFrame}>
+              <Image
+                source={currentWebSlide.image}
+                style={stylesWeb.onbImage}
+                resizeMode="contain"
+              />
+            </View>
 
             <TouchableOpacity
               onPress={handleArrowPress}

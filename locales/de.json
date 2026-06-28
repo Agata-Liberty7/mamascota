@@ -104,9 +104,7 @@
     "faq_2_a": "Ich bin eine digitale tierärztliche Assistentin. Mamascota ist kein KI-Experiment, sondern basiert auf praktischer Erfahrung mit Tieren und den Menschen, die sich um sie kümmern. Deshalb geht es hier nicht um schnelle Antworten, sondern um die richtigen Fragen.",
 
     "faq_3_q": "Was unterscheidet Mamascota von einer normalen KI und warum stellt sie so viele Fragen?",
-    "faq_3_a": "Eine gewöhnliche KI beantwortet Fragen. Mamascota stellt sie. Denn sie untersucht die Situation. Wann hat es begonnen? Wie oft tritt es auf? Was hat sich noch verändert? 'Mein Hund erbricht' beschreibt nur das Offensichtliche. Erst die Details ergeben das Gesamtbild und liefern hilfreiche Informationen für den Tierarzt.",
-
-    "faq_4_q": "Was erhalte ich nach der Beratung? Stellt Mamascota eine Diagnose?",
+    "faq_3_a": "Allgemeine KI-Systeme werden mit Texten aus vielen unterschiedlichen Fachgebieten trainiert. Mamascota arbeitet anders. Sie basiert auf spezialisiertem veterinärmedizinischem Wissen, das eigens zur Vorbereitung auf einen Tierarztbesuch zusammengestellt wurde. Dabei nutzt sie veterinärmedizinische Leitlinien, Fachbücher, klinische Entscheidungsalgorithmen und weitere professionelle Quellen. Selbst die besten Empfehlungen sind ohne genaue Informationen über ein bestimmtes Tier nur begrenzt hilfreich. Deshalb stellt Mamascota ihre Fragen Schritt für Schritt: Wann haben die Symptome begonnen? Wie haben sie sich verändert? Was passiert im Moment? Welche wichtigen Anzeichen fehlen? Aus den Antworten erstellt Mamascota eine strukturierte Beschreibung des Zustands des Tieres sowie einen Bericht, der dem Tierarzt vorgelegt werden kann. Mamascota stellt keine Diagnosen – sie hilft dabei, den Tierarztbesuch vorzubereiten und die Informationen übersichtlich zusammenzustellen.",
     "faq_4_a": "Nein – und ein seriöser Dienst sollte das auch nicht versprechen. Selbst Tierärzte stellen ohne Untersuchung keine Diagnose. Sie erhalten einen übersichtlichen Bericht mit Ihren Beobachtungen, dem zeitlichen Verlauf und wichtigen Hinweisen.",
 
     "faq_5_q": "Werden meine Daten gespeichert?",

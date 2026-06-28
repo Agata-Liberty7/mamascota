@@ -78,19 +78,6 @@ export default function PlusScreen() {
 
         <Text style={styles.title}>{String(i18n.t("plus.title"))}</Text>
 
-        {isPlusActive && (
-          <View style={styles.activeBadge}>
-            <MaterialCommunityIcons
-              name="check-circle"
-              size={16}
-              color={PLUS_DARK}
-            />
-            <Text style={styles.activeBadgeText}>
-              {String(i18n.t("plus.active_status"))}
-            </Text>
-          </View>
-        )}
-
         <Text style={styles.headline}>
           {String(i18n.t("plus.headline_1"))}
           {"\n"}
@@ -173,18 +160,36 @@ export default function PlusScreen() {
         </Pressable>
         </View>
 
-          <Pressable style={styles.primaryButton} onPress={handleSubscribe}>
-            <Text style={styles.primaryButtonText}>
-              {String(i18n.t("plus.subscribe_cta"))}
-            </Text>
-          </Pressable>
+          {isPlusActive ? (
+            <View style={styles.activePlanBox}>
+              <MaterialCommunityIcons
+                name="check-circle"
+                size={20}
+                color={PLUS_DARK}
+              />
+              <Text style={styles.activePlanText}>
+                {String(i18n.t("plus.active_status"))}
+              </Text>
+            </View>
+          ) : (
+            <Pressable style={styles.primaryButton} onPress={handleSubscribe}>
+              <Text style={styles.primaryButtonText}>
+                {String(i18n.t("plus.subscribe_cta"))}
+              </Text>
+            </Pressable>
+          )}
         </View>
 
-        <Pressable style={styles.secondaryButton} onPress={handleClose}>
-        <Text style={styles.secondaryButtonText}>
-            {String(i18n.t("plus.continue_free"))}
-        </Text>
-        </Pressable>
+        {!isPlusActive && (
+          <Pressable
+            style={styles.secondaryButton}
+            onPress={handleClose}
+          >
+            <Text style={styles.secondaryButtonText}>
+              {String(i18n.t("plus.continue_free"))}
+            </Text>
+          </Pressable>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -235,24 +240,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 999,
     backgroundColor: "rgba(255, 255, 255, 0.16)",
-  },
-
-  activeBadge: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: 999,
-    backgroundColor: "#DFFCF6",
-    marginTop: -4,
-    marginBottom: 10,
-  },
-
-  activeBadgeText: {
-    color: PLUS_DARK,
-    fontSize: 13,
-    fontWeight: "800",
   },
 
   headline: {
@@ -370,6 +357,25 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     textAlign: "center",
     fontSize: 17,
+    fontWeight: "800",
+  },
+
+  activePlanBox: {
+    width: "100%",
+    borderRadius: 13,
+    paddingVertical: 11,
+    paddingHorizontal: 18,
+    backgroundColor: "#DFFCF6",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+  },
+
+  activePlanText: {
+    color: PLUS_DARK,
+    textAlign: "center",
+    fontSize: 16,
     fontWeight: "800",
   },
 

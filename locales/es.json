@@ -109,7 +109,7 @@
 
     "faq_3_q": "¿En qué se diferencia de una IA común y por qué hace tantas preguntas?",
 
-    "faq_3_a": "Una IA convencional responde preguntas. Mamascota las hace. Porque investiga. ¿Cuándo empezó? ¿Con qué frecuencia ocurre? ¿Qué más ha cambiado? Decir 'mi perro está vomitando' es solo la parte visible. Los detalles ayudan a comprender la situación completa y a crear un informe útil para el veterinario.",
+    "faq_3_a": "Los asistentes de IA de uso general se entrenan con textos de muchos ámbitos diferentes. Mamascota funciona de otra manera. Su base es un conocimiento veterinario especializado, preparado específicamente para ayudar antes de una consulta veterinaria. Se apoya en guías veterinarias, libros de texto, algoritmos de toma de decisiones clínicas y otras fuentes profesionales. Incluso las mejores recomendaciones son poco útiles sin información precisa sobre un animal concreto. Por eso Mamascota hace preguntas de forma progresiva: cuándo comenzaron los síntomas, cómo han evolucionado, qué está ocurriendo ahora y qué signos importantes no están presentes. A partir de estas respuestas, Mamascota elabora una descripción estructurada del estado del animal y un informe que puede compartirse con el veterinario. Mamascota no realiza diagnósticos: ayuda a preparar la visita y a organizar la información para facilitar la valoración del veterinario.",
 
     "faq_4_q": "¿Qué recibiré después de la consulta? ¿Mamascota dará un diagnóstico?",
 
