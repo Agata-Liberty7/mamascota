@@ -6,26 +6,22 @@
   "paywall_trial_expired": "La période d'essai est terminée. Pour continuer, veuillez souscrire à l'accès.",
   "paywall_limit_reached": "La limite d'utilisation gratuite a été atteinte. Pour continuer, veuillez souscrire à l'accès.",
   "paywall_go_to_payment": "Passer au paiement",
-  
   "exit_title": "Voulez-vous quitter ?",
   "exit_message": "Vous pouvez enregistrer votre consultation pour continuer plus tard.",
   "exit_save": "Enregistrer la consultation",
   "exit_delete": "Abandonnez et recommencez.",
   "exit_button": "Quitter",
-
   "terms_title": "Conditions d’utilisation",
   "terms_paragraph1": "Avant de continuer, je souhaite préciser un point important.",
   "terms_paragraph2": "Je suis une assistante numérique pour observer l’état de votre animal et je NE remplace PAS les soins vétérinaires professionnels.\nJe NE pose PAS de diagnostic et NE prescris PAS de traitement.",
   "terms_paragraph3": "Si vous remarquez une dégradation de l’état de votre animal ou quelque chose d’inquiétant, il est important de consulter un vétérinaire dès que possible.",
   "terms_accept": "J’accepte les conditions",
   "terms_decline": "Je refuse",
-
   "privacy_title": "Confidentialité",
   "privacy_paragraph1": "Pour pouvoir vous accompagner, j’ai besoin de comprendre votre situation et l’état de votre animal.",
   "privacy_paragraph2": "J’utilise vos données uniquement pour ce dialogue\net ne les transmets pas à des tiers.",
   "privacy_accept": "Accepter",
   "privacy_decline": "Refuser",
-
   "animal_cat": "chat",
   "animal_dog": "chien",
   "animal_cat_male": "chat",
@@ -41,7 +37,6 @@
   "animal_exotic": "Exotique",
   "coming_soon": "Bientôt",
   "coming_soon_message": "L’ajout d’autres types d’animaux sera disponible dans l’une des prochaines versions de l’application.",
-
   "animal_question": "De quel animal voulez-vous parler ?",
   "not_in_list": "Pas dans la liste ?",
   "add_other": "Ajouter",
@@ -53,19 +48,16 @@
     "title": "La race est importante",
     "message": "Avec cette information, l’assistant peut mieux prendre en compte les prédispositions liées à la race. Sans elle, les réponses seront plus générales."
   },
-
   "continue_without_data_title": "Voulez-vous continuer sans remplir les informations ?",
   "continue_without_data_message": "Ces informations m’aident à vous offrir une meilleure expérience.",
-
   "back": "Retour",
   "alert-back": "Retour",
   "continue": "Continuer",
   "cancel": "Annuler",
-  "save": "Enregistrer", 
+  "save": "Enregistrer",
   "delete": "Supprimer",
-
-  "start_subtitle": "Nounou numérique pour votre animal",
-  "start_description": "L’attention est la première étape\nvers l’aide",
+  "start_subtitle": "Préparez la visite — je vous aiderai à tout expliquer au vétérinaire",
+  "start_description": "Même si le vétérinaire parle une autre langue.",
   "start_button": "Commencer",
   "continue_title": "Continuer ?",
   "continue_message": "Vous pouvez continuer la consultation actuelle ou en commencer une nouvelle. Dans la version gratuite, Mamascota ne conserve qu'une seule consultation active : si vous en commencez une nouvelle, le chat actuel et ses rapports seront supprimés.",
@@ -73,7 +65,6 @@
   "continue_session": "Reprendre la consultation",
   "start_new_warning_title": "Une nouvelle consultation supprimera l’actuelle",
   "start_new_warning_message": "Dans la version gratuite, Mamascota conserve une seule consultation active. Si vous en commencez une nouvelle, le chat actuel et ses rapports seront supprimés. Avant cela, vous pouvez revenir au chat et enregistrer le rapport PDF sur votre appareil. L’accès complet à 1,99 € vous permet de conserver l’historique des consultations et d’y revenir plus tard.",
-
   "menu": {
     "start_consultation": "Commencer la consultation",
     "change_language": "Changer de langue",
@@ -86,6 +77,7 @@
     "saved_sessions": "Consultations enregistrées",
     "settings": "Paramètres",
     "about": "À propos",
+    "contact": "Contact",
     "open": "Menu",
     "close": "Fermer",
     "support_mamascota": "Soutenir Mamascota",
@@ -93,32 +85,19 @@
     "vet_clinics": "Cliniques vétérinaires",
     "health_history": "Historique de santé"
   },
-
   "about": {
     "tagline": "Pourquoi Mamascota ?",
-
     "faq_1_q": "Pourquoi aurais-je besoin de Mamascota alors que je vois mon animal tous les jours ?",
-
     "faq_1_a": "Voir son animal chaque jour rend parfois les changements progressifs difficiles à remarquer. Mamascota vous aide à observer, repérer et évaluer ces évolutions : ce qui est important, ce qui peut attendre une visite de routine et ce qui mérite une attention vétérinaire plus rapide.",
-
     "faq_2_q": "Qui a créé Mamascota et pourquoi lui faire confiance ?",
-
     "faq_2_a": "Je suis une assistante vétérinaire numérique. Mamascota n'est pas une expérience d'intelligence artificielle : elle est née d'une expérience réelle auprès des animaux et des personnes qui prennent soin d'eux. C'est pourquoi vous y trouverez les bonnes questions plutôt que des réponses toutes faites.",
-
     "faq_3_q": "Quelle est la différence avec une IA classique et pourquoi autant de questions ?",
-
     "faq_3_a": "Les assistants d'IA généralistes sont entraînés à partir de textes issus de nombreux domaines. Mamascota fonctionne différemment. Elle s'appuie sur une base de connaissances vétérinaires spécialisée, conçue pour aider à préparer une consultation vétérinaire. Elle utilise des recommandations vétérinaires, des ouvrages de référence, des algorithmes d'aide à la décision clinique et d'autres ressources professionnelles. Même les meilleures recommandations sont peu utiles sans des informations précises sur un animal en particulier. C'est pourquoi Mamascota pose ses questions étape par étape : quand les symptômes sont apparus, comment ils ont évolué, ce qui se passe actuellement et quels signes importants sont absents. À partir de ces réponses, Mamascota prépare une description structurée de l'état de l'animal ainsi qu'un rapport pouvant être présenté au vétérinaire. Mamascota ne pose pas de diagnostic : elle aide à préparer la consultation et à organiser les informations afin de faciliter l'évaluation du vétérinaire.",
-
     "faq_4_q": "Que vais-je recevoir après la consultation ? Mamascota pose-t-elle un diagnostic ?",
-
     "faq_4_a": "Non, et aucun service sérieux ne devrait le promettre. Même un vétérinaire ne pose pas de diagnostic sans examen. Vous recevrez un rapport clair reprenant vos observations, leur évolution et les points à surveiller. Vous pourrez le conserver, y revenir plus tard ou le montrer à votre vétérinaire.",
-
     "faq_5_q": "Collectez-vous mes données ?",
-
     "faq_5_a": "Uniquement les informations concernant votre animal et vos observations : espèce, race, âge, symptômes et tout autre élément que vous choisissez de partager pendant la consultation. Aucune inscription ni donnée personnelle du propriétaire ne sont nécessaires.",
-
     "faq_6_q": "Combien cela coûte-t-il ?",
-
     "faq_6_a": "La consultation et le rapport dans n'importe quelle langue sont gratuits. L'historique des consultations, plusieurs profils d'animaux et les fonctionnalités supplémentaires de Mamascota Plus sont disponibles par abonnement. Vous pouvez également soutenir le projet librement si vous le souhaitez.",
     "signature": "Créé avec soin pour les animaux et avec respect pour les personnes qui s'en occupent.",
     "follow": "Suivre le projet sur Instagram",
@@ -126,13 +105,11 @@
     "faq_link": "Voir les réponses aux questions fréquentes",
     "show_onboarding_again": "En savoir plus"
   },
-
   "symptomSelector": {
     "title": "Qu’avez-vous remarqué chez votre animal ?",
     "hint": "Sélectionnez jusqu’à 5 symptômes principaux que vous avez observés",
     "confirm": "Demander à l’assistant"
   },
-
   "symptoms": {
     "lethargy": "Léthargie",
     "vomiting": "Vomissements",
@@ -153,25 +130,20 @@
     "skin_redness": "Rougeur de la peau",
     "hair_loss": "Perte de poils",
     "wounds_or_ulcers": "Plaies ou ulcères",
-
     "ear_discharge": "Secrétaire des oreilles",
     "ear_odor": "Mauvaise odeur des oreilles",
     "ear_pain": "Douleur d'oreille",
     "head_shaking": "Secouage de la tête / grattage des oreilles",
-
     "eye_redness": "Yeux rouges",
     "eye_discharge": "Secrétaire oculaire",
     "eye_tearing": "Yeux larmoyants",
     "eyelid_swelling": "Paupières gonflées",
     "eye_cloudiness": "Yeux troubles",
     "eye_pain": "Douleur oculaire ou inconfort",
-
     "aggression": "Comportement agressif",
     "disorientation": "Désorientation / confusion",
-
     "pain_localized": "Douleur localisée",
     "pain_general": "Douleur générale / malaise",
-
     "behavior_change": "Comportement changé",
     "anxiety_stress": "Anxiété / stress",
     "seizures": "Crises / convulsions",
@@ -210,22 +182,18 @@
   "onboarding_3_subtitle": "Vous me dites ce que vous avez remarqué, et je vous aide à [[mettre en évidence l’essentiel]] et à [[organiser vos observations]].",
   "onboarding_4_subtitle": "Parlez avec le vétérinaire [[plus clairement]].\n[[Mamascota]] vous aide à préparer la visite et à créer un rapport clair, même si le vétérinaire parle une autre langue.",
   "onboarding_2_title": "Nous communiquons simplement",
-
   "onboarding_3_title": "Vous observez — \nje vous aide",
-
   "onboarding_4_title": "Rapports pour votre vétérinaire",
   "onboarding_skip": "Sauter",
   "onboarding_next": "Suivant",
   "onboarding_start": "Commencer",
-
   "summary": {
     "empty_title": "Fonctionnalités avancées de Mamascota Plus",
     "empty_subtitle": "Enregistrez vos consultations et revenez les consulter à tout moment pour suivre l’état de votre animal au fil du temps.",
     "delete_confirm": "Supprimer cette consultation enregistrée ?",
     "delete_error": "Impossible de supprimer la consultation enregistrée. Veuillez réessayer.",
     "tools_hint": "Ici, vous trouverez l’historique de vos consultations, les rapports PDF et d’autres matériaux qui vous aideront à suivre l’état de votre animal."
-  }, 
-  
+  },
   "settings": {
     "remind_in_6h": "Rappeler dans 6 heures",
     "remind_hint": "Nous programmerons un rappel pour vérifier l’animal plus tard aujourd’hui.",
@@ -262,7 +230,6 @@
   "not_set": "Non spécifié",
   "neutered_spayed": "Stérilisé(e)",
   "animal_other": "Autre",
-
   "pdf": {
     "report_title": "Rapport pour la clinique de",
     "date_label": "Date et heure",
@@ -276,13 +243,11 @@
     "preparing_language": "Préparation du rapport dans la langue sélectionnée...",
     "language_title": "Choisissez la langue du PDF",
     "share_hint": "Partagez le rapport avec le vétérinaire avant la visite ou emportez-le avec vous — cela réduira considérablement le temps d’attente et l’assistance à votre animal",
-
     "diary_title": "Journal des observations",
     "diary_intro": "Enregistrez les observations quotidiennes et les changements de l’état de votre animal. Ces enregistrements aideront le vétérinaire à faire une évaluation plus précise de la situation.",
     "diary_pet": "Animal",
     "diary_species": "Espèce",
     "diary_start_date": "Date de début",
-
     "diary_date": "Date",
     "diary_appetite": "Appétit",
     "diary_water_intake": "Consommation d’eau",
@@ -290,16 +255,15 @@
     "diary_symptoms": "Symptômes",
     "diary_notes": "Notes"
   },
-
   "csv": {
     "download_title": "Fichier CSV",
     "download_hint": "Téléchargez le fichier, puis ouvrez-le dans Excel, Numbers, Google Sheets ou OpenOffice.",
     "download_button": "Télécharger"
   },
-  
   "paywall": {
     "title": "Mamascota Plus",
-    "support_text": "[[Mamascota]] est un [[projet indépendant]].\nSi la consultation vous a été utile, vous pouvez [[soutenir]] son développement.",    "feature_1": "Historique des consultations",
+    "support_text": "[[Mamascota]] est un [[projet indépendant]].\nSi la consultation vous a été utile, vous pouvez [[soutenir]] son développement.",
+    "feature_1": "Historique des consultations",
     "feature_2": "Plusieurs animaux",
     "feature_3": "Observations de santé",
     "price": "1,99 €",
@@ -351,6 +315,26 @@
     "free_label": "Free",
     "plus_label": "Plus",
     "open_plus": "Ouvrir Mamascota Plus"
+  },
+  "contact_page": {
+    "title": "Contact",
+    "subtitle": "Contacter l’équipe Mamascota",
+    "description": "Pour toute question sur le projet, les partenariats ou vos suggestions, vous pouvez nous écrire ici.",
+    "instagram": "Instagram",
+    "whatsapp": "WhatsApp",
+    "linkedin": "LinkedIn"
+  },
+  "free_page": {
+    "title": "Mamascota Free",
+    "subtitle": "Tout ce qu’il faut pour une première consultation et préparer la visite vétérinaire.",
+    "continue": "Continuer gratuitement",
+    "benefits": {
+      "consultation": "Consultation avec Mamascota",
+      "pdf_report": "Rapport PDF pour le vétérinaire",
+      "pdf_languages": "PDF en 7 langues",
+      "continue_consultation": "Vous pouvez continuer la consultation en cours",
+      "no_registration": "Sans inscription",
+      "no_diagnosis": "Sans diagnostic ni automédication — uniquement une préparation à la visite vétérinaire"
+    }
   }
-
 }

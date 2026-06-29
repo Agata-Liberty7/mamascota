@@ -270,6 +270,15 @@ export default function BurgerMenu({ visible, onClose }: Props) {
       },
     },
     {
+      label: String(i18n.t("menu.contact")),
+      icon: "contact-support",
+      enabled: true,
+      action: () => {
+        onClose();
+        setTimeout(() => router.replace("/contact"), 120);
+      },
+    },
+    {
       label: String(i18n.t("menu.settings")),
       icon: "settings",
       // язык и базовые настройки — всегда доступны

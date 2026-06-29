@@ -28,17 +28,26 @@ export default function PlanHeaderStatus() {
     };
   }, []);
 
+  const goToFree = () => {
+    router.push("/free" as Href);
+  };
+
   const goToPlus = () => {
     router.push("/plus" as Href);
   };
 
   return (
     <View style={styles.wrap}>
-      <View style={[styles.pill, !paid && styles.freeActive]}>
+      <TouchableOpacity
+        style={[styles.pill, !paid && styles.freeActive]}
+        onPress={goToFree}
+        accessibilityRole="button"
+        accessibilityLabel={String(i18n.t("free_page.title"))}
+      >
         <Text style={[styles.text, !paid && styles.freeText]}>
           {paid ? i18n.t("plus.free_label") : `✓ ${i18n.t("plus.free_label")}`}
         </Text>
-      </View>
+      </TouchableOpacity>
 
       <TouchableOpacity
         style={[styles.pill, paid ? styles.plusActive : styles.plusInactive]}

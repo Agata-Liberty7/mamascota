@@ -6,26 +6,22 @@
   "paywall_trial_expired": "Ihr Testzeitraum ist abgelaufen. Um fortzufahren, bitte abonnieren Sie den Zugang.",
   "paywall_limit_reached": "Sie haben das Limit für kostenlose Nutzung erreicht. Um fortzufahren, bitte abonnieren Sie den Zugang.",
   "paywall_go_to_payment": "Zur Zahlung gehen",
-
   "exit_title": "Möchten Sie beenden?",
   "exit_message": "Sie können Ihre Beratung speichern, um später fortzufahren.",
   "exit_save": "Beratung speichern",
   "exit_delete": "Beenden und neu starten",
   "exit_button": "Beenden",
-
   "terms_title": "Nutzungsbedingungen",
   "terms_paragraph1": "Bevor wir fortfahren, möchte ich eine wichtige Sache klarstellen.",
   "terms_paragraph2": "Ich bin eine digitale Assistenz zur Beobachtung des Zustands Ihres Haustiers und ersetze KEINE professionelle tierärztliche Betreuung.\nIch stelle KEINE Diagnosen und verschreibe KEINE Behandlung.",
   "terms_paragraph3": "Wenn du eine Verschlechterung bemerkst oder etwas dir Sorgen bereitet, ist es wichtig, so bald wie möglich eine Tierärztin oder einen Tierarzt aufzusuchen.",
   "terms_accept": "Ich akzeptiere die Bedingungen",
   "terms_decline": "Ich lehne ab",
-
   "privacy_title": "Datenschutz",
   "privacy_paragraph1": "Damit ich dich gut begleiten kann, ist es wichtig, deine Situation und den Zustand deines Tieres zu verstehen.",
   "privacy_paragraph2": "Ich nutze deine Daten nur für diesen Dialog\nund gebe sie nicht weiter.",
   "privacy_accept": "Akzeptieren",
   "privacy_decline": "Ablehnen",
-
   "animal_cat": "Katze",
   "animal_dog": "Hund",
   "animal_cat_male": "Kater",
@@ -41,7 +37,6 @@
   "animal_exotic": "Exotisch",
   "coming_soon": "Bald",
   "coming_soon_message": "Das Hinzufügen weiterer Tierarten wird in einer der kommenden Versionen der App verfügbar sein.",
-
   "animal_question": "Über welches Tier möchten Sie fragen?",
   "not_in_list": "Nicht in der Liste?",
   "add_other": "Hinzufügen",
@@ -53,19 +48,16 @@
     "title": "Die Rasse ist wichtig",
     "message": "Damit kann der Assistent rassespezifische Veranlagungen besser berücksichtigen. Ohne diese Angabe bleiben die Antworten allgemeiner."
   },
-
   "continue_without_data_title": "Ohne Angaben fortfahren?",
   "continue_without_data_message": "Diese Informationen helfen mir, Ihnen ein besseres Erlebnis zu bieten.",
-
   "back": "Zurück",
   "alert-back": "Zurück",
   "continue": "Weiter",
   "cancel": "Abbrechen",
-  "save": "Speichern", 
+  "save": "Speichern",
   "delete": "Löschen",
-
-  "start_subtitle": "Digitale Nanny für Ihr Haustier",
-  "start_description": "Aufmerksamkeit ist der erste Schritt\nzur Hilfe",
+  "start_subtitle": "Bereiten Sie den Besuch vor — ich helfe Ihnen, dem Tierarzt alles zu erklären",
+  "start_description": "Auch wenn der Tierarzt eine andere Sprache spricht.",
   "start_button": "Starten",
   "continue_title": "Fortfahren?",
   "continue_message": "Sie können Ihre aktuelle Beratung fortsetzen oder eine neue starten. In der kostenlosen Version speichert Mamascota nur eine aktive Sitzung: wenn Sie eine neue starten, wird die aktuelle Sitzung und ihre Berichte gelöscht.",
@@ -73,7 +65,6 @@
   "continue_session": "Beratung fortsetzen",
   "start_new_warning_title": "Eine neue Beratung löscht die aktuelle",
   "start_new_warning_message": "In der kostenlosen Version speichert Mamascota nur eine aktive Beratung. Wenn du eine neue startest, werden der aktuelle Chat und die dazugehörigen Berichte gelöscht. Vorher kannst du zum Chat zurückkehren und den PDF-Bericht auf deinem Gerät speichern. Der Vollzugang für 1,99 € ermöglicht es dir, deine Beratungshistorie zu speichern und später darauf zurückzukommen.",
-
   "menu": {
     "start_consultation": "Beratung starten",
     "change_language": "Sprache ändern",
@@ -86,6 +77,7 @@
     "saved_sessions": "Gespeicherte Beratungen",
     "settings": "Einstellungen",
     "about": "Über",
+    "contact": "Kontakt",
     "open": "Menü",
     "close": "Schließen",
     "support_mamascota": "Mamascota unterstützen",
@@ -93,23 +85,17 @@
     "vet_clinics": "Tierkliniken",
     "health_history": "Gesundheitsverlauf"
   },
-
   "about": {
     "tagline": "Warum Mamascota?",
-
     "faq_1_q": "Warum brauche ich Mamascota, wenn ich mein Haustier jeden Tag sehe?",
     "faq_1_a": "Wer sein Haustier täglich sieht, bemerkt schleichende Veränderungen oft gerade deshalb nicht. Mamascota hilft dabei, Veränderungen zu beobachten, wahrzunehmen und einzuordnen: Was wichtig ist, was bis zum nächsten Termin warten kann und was möglichst bald einem Tierarzt gezeigt werden sollte.",
-
     "faq_2_q": "Wer hat Mamascota entwickelt und warum kann ich ihr vertrauen?",
     "faq_2_a": "Ich bin eine digitale tierärztliche Assistentin. Mamascota ist kein KI-Experiment, sondern basiert auf praktischer Erfahrung mit Tieren und den Menschen, die sich um sie kümmern. Deshalb geht es hier nicht um schnelle Antworten, sondern um die richtigen Fragen.",
-
     "faq_3_q": "Was unterscheidet Mamascota von einer normalen KI und warum stellt sie so viele Fragen?",
     "faq_3_a": "Allgemeine KI-Systeme werden mit Texten aus vielen unterschiedlichen Fachgebieten trainiert. Mamascota arbeitet anders. Sie basiert auf spezialisiertem veterinärmedizinischem Wissen, das eigens zur Vorbereitung auf einen Tierarztbesuch zusammengestellt wurde. Dabei nutzt sie veterinärmedizinische Leitlinien, Fachbücher, klinische Entscheidungsalgorithmen und weitere professionelle Quellen. Selbst die besten Empfehlungen sind ohne genaue Informationen über ein bestimmtes Tier nur begrenzt hilfreich. Deshalb stellt Mamascota ihre Fragen Schritt für Schritt: Wann haben die Symptome begonnen? Wie haben sie sich verändert? Was passiert im Moment? Welche wichtigen Anzeichen fehlen? Aus den Antworten erstellt Mamascota eine strukturierte Beschreibung des Zustands des Tieres sowie einen Bericht, der dem Tierarzt vorgelegt werden kann. Mamascota stellt keine Diagnosen – sie hilft dabei, den Tierarztbesuch vorzubereiten und die Informationen übersichtlich zusammenzustellen.",
     "faq_4_a": "Nein – und ein seriöser Dienst sollte das auch nicht versprechen. Selbst Tierärzte stellen ohne Untersuchung keine Diagnose. Sie erhalten einen übersichtlichen Bericht mit Ihren Beobachtungen, dem zeitlichen Verlauf und wichtigen Hinweisen.",
-
     "faq_5_q": "Werden meine Daten gespeichert?",
     "faq_5_a": "Nur Informationen über Ihr Haustier und Ihre Beobachtungen: Tierart, Rasse, Alter, Symptome und alles, was Sie während der Beratung mitteilen möchten. Für die Nutzung von Mamascota sind weder Registrierung noch persönliche Daten des Halters erforderlich.",
-
     "faq_6_q": "Was kostet das?",
     "faq_6_a": "Die Beratung und der Bericht in jeder Sprache sind kostenlos. Beratungsverlauf, mehrere Tierprofile und zusätzliche Funktionen von Mamascota Plus sind per Abonnement verfügbar. Alternativ können Sie das Projekt freiwillig unterstützen.",
     "follow": "Projekt auf Instagram verfolgen",
@@ -117,13 +103,11 @@
     "faq_link": "Antworten auf häufig gestellte Fragen ansehen",
     "show_onboarding_again": "Mehr erfahren"
   },
-
   "symptomSelector": {
     "title": "Was haben Sie bei Ihrem Tier bemerkt?",
     "hint": "Wählen Sie bis zu 5 Hauptsymptome aus, die Sie beobachtet haben",
     "confirm": "Den Assistenten fragen"
   },
-
   "symptoms": {
     "lethargy": "Müde, teilnahmslos",
     "vomiting": "Erbrechen",
@@ -144,22 +128,18 @@
     "skin_redness": "Rötung der Haut",
     "hair_loss": "Haarausfall",
     "wounds_or_ulcers": "Wunden / Geschwüre",
-
     "ear_discharge": "Ohrensekret",
     "ear_odor": "Schlechter Geruch aus den Ohren",
     "ear_pain": "Ohrenschmerzen",
     "head_shaking": "Kopfschütteln / Ohrenkratzen",
-
     "eye_redness": "Rote Augen",
     "eye_discharge": "Augensekret",
     "eye_tearing": "Tränen",
     "eyelid_swelling": "Geschwollene Lidder",
     "eye_cloudiness": "Trübheit der Augen",
     "eye_pain": "Augenschmerzen oder Unbehagen",
-
     "aggression": "Aggressives Verhalten",
     "disorientation": "Desorientierung / Verwirrung",
-
     "pain_localized": "Schmerzen in einer bestimmten Region",
     "pain_general": "Allgemeine Schmerzen / Unbehagen",
     "behavior_change": "Verhaltensänderung",
@@ -194,7 +174,6 @@
       "summary": "Bitte warten, ich bereite die Zusammenfassung vor…"
     }
   },
-  
   "onboarding_1_title": "Mamascota ist für Sie da",
   "onboarding_1_subtitle": "Ich helfe, [[wichtige Anzeichen]] zu erkennen und mich auf den [[Tierarztbesuch]] vorzubereiten.",
   "onboarding_2_subtitle": "Beschreiben Sie es in [[Ihren eigenen Worten]].\nWenn Sie pausieren möchten, können Sie [[später fortfahren]].\nIch stelle Fragen Schritt für Schritt, damit nichts Wichtiges übersehen wird.",
@@ -206,7 +185,6 @@
   "onboarding_skip": "Überspringen",
   "onboarding_next": "Weiter",
   "onboarding_start": "Start",
-
   "summary": {
     "empty_title": "Erweiterte Funktionen von Mamascota Plus",
     "empty_subtitle": "Speichern Sie Ihre Beratungen und rufen Sie sie jederzeit wieder auf, um den Zustand Ihres Haustiers im Laufe der Zeit zu verfolgen.",
@@ -214,7 +192,6 @@
     "delete_error": "Konnte die gespeicherte Sitzung nicht löschen. Bitte versuchen Sie es erneut.",
     "tools_hint": "Hier finden Sie die Historie Ihrer Beratungen, PDF-Berichte und andere Materialien, die Ihnen helfen, den Zustand Ihres Haustiers zu verfolgen."
   },
-  
   "settings": {
     "remind_in_6h": "In 6 Stunden erneut erinnern",
     "remind_hint": "Wir richten eine Erinnerung ein, das Tier später heute zu prüfen.",
@@ -251,7 +228,6 @@
   "not_set": "Nicht angegeben",
   "neutered_spayed": "Kastriert/Sterilisiert",
   "animal_other": "Andere",
-
   "pdf": {
     "report_title": "Bericht für die Praxis von",
     "date_label": "Datum und Uhrzeit",
@@ -265,13 +241,11 @@
     "preparing_language": "Bericht in ausgewählter Sprache wird vorbereitet...",
     "language_title": "PDF-Sprache wählen",
     "share_hint": "Teile den Bericht mit deinem Tierarzt vor dem Besuch oder nimm ihn mit – dies reduziert erheblich die Wartezeit und Unterstützung für deinen Haustier",
-
     "diary_title": "Beobachtungstagebuch",
     "diary_intro": "Hier können Sie ein Tagebuch Ihres Haustiers führen und Symptome sowie Veränderungen in seinem Zustand dokumentieren. Diese Aufzeichnungen helfen dem Tierarzt, die Situation genauer einzuschätzen.",
     "diary_pet": "Haustier",
     "diary_species": "Art",
     "diary_start_date": "Start Date",
-
     "diary_date": "Date",
     "diary_appetite": "Appetite",
     "diary_water_intake": "Water Intake",
@@ -279,16 +253,15 @@
     "diary_symptoms": "Symptoms",
     "diary_notes": "Notes"
   },
-
   "csv": {
     "download_title": "CSV-Datei",
     "download_hint": "Laden Sie die Datei herunter und öffnen Sie sie dann in Excel, Numbers, Google Sheets oder OpenOffice.",
     "download_button": "Herunterladen"
   },
-  
   "paywall": {
     "title": "Mamascota Plus",
-    "support_text": "[[Mamascota]] ist ein [[unabhängiges Projekt]].\nWenn die Beratung hilfreich war, können Sie die Entwicklung [[unterstützen]].",    "feature_1": "Beratungsverlauf",
+    "support_text": "[[Mamascota]] ist ein [[unabhängiges Projekt]].\nWenn die Beratung hilfreich war, können Sie die Entwicklung [[unterstützen]].",
+    "feature_1": "Beratungsverlauf",
     "feature_2": "Mehrere Tiere",
     "feature_3": "Gesundheitsbeobachtungen",
     "price": "1,99 €",
@@ -340,5 +313,26 @@
     "free_label": "Free",
     "plus_label": "Plus",
     "open_plus": "Öffne Mamascota Plus"
+  },
+  "contact_page": {
+    "title": "Kontakt",
+    "subtitle": "Kontakt mit dem Mamascota-Team",
+    "description": "Bei Fragen zum Projekt, zu Partnerschaften oder Vorschlägen können Sie uns hier erreichen.",
+    "instagram": "Instagram",
+    "whatsapp": "WhatsApp",
+    "linkedin": "LinkedIn"
+  },
+  "free_page": {
+    "title": "Mamascota Free",
+    "subtitle": "Alles, was Sie für eine erste Beratung und die Vorbereitung auf den Tierarztbesuch brauchen.",
+    "continue": "Kostenlos fortfahren",
+    "benefits": {
+      "consultation": "Beratung mit Mamascota",
+      "pdf_report": "PDF-Bericht für die Tierärztin oder den Tierarzt",
+      "pdf_languages": "PDF in 7 Sprachen",
+      "continue_consultation": "Sie können die aktuelle Beratung fortsetzen",
+      "no_registration": "Ohne Registrierung",
+      "no_diagnosis": "Keine Diagnose und keine Selbstbehandlung — nur Vorbereitung auf den Tierarztbesuch"
+    }
   }
 }
