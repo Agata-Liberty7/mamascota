@@ -347,7 +347,10 @@
     "cta": "Découvrir Mamascota Plus",
     "continue_free": "Continuer gratuitement",
     "subscribe_cta": "S’abonner",
-    "active_status": "Mamascota Plus est actif"
+    "active_status": "Mamascota Plus est actif",
+    "free_label": "Free",
+    "plus_label": "Plus",
+    "open_plus": "Ouvrir Mamascota Plus"
   }
 
 }

@@ -8,6 +8,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import AppModal from "../components/ui/AppModal";
 import LocalizedExitButton from "../components/ui/LocalizedExitButton";
 import MenuButton from "../components/ui/MenuButton";
+import PlanHeaderStatus from "../components/ui/PlanHeaderStatus";
 import SupportHeartButton from "../components/ui/SupportHeartButton";
 import i18n from "../i18n";
 import { theme } from "../src/theme";
@@ -90,6 +91,8 @@ export default function AppLayout() {
               headerBackVisible: true,
               headerBackButtonDisplayMode: "minimal",
               headerLeft: () => <SupportHeartButton />,
+              headerTitle: () => (Platform.OS === "web" ? <PlanHeaderStatus /> : null),
+              headerTitleAlign: "center",
               headerRight: () => <MenuButton />,
               animation: "fade",
               animationDuration: 200,
@@ -104,6 +107,7 @@ export default function AppLayout() {
                 headerRight: () => <LocalizedExitButton />,
                 headerBackVisible: false,
                 headerLeft: () => null,
+                headerTitle: () => null,
               }}
             />
 
@@ -115,12 +119,14 @@ export default function AppLayout() {
               name="paywall"
               options={{
                 headerLeft: () => <View />,
+                headerTitle: () => null,
               }}
             />
             <Stack.Screen
               name="plus"
               options={{
                 headerLeft: () => <View />,
+                headerTitle: () => null,
               }}
             />
             <Stack.Screen name="onboarding" options={{ headerShown: false }} />

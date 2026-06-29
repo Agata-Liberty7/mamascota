@@ -357,7 +357,10 @@
     "cta": "Узнать о Mamascota Plus",
     "continue_free": "Продолжить бесплатно",
     "subscribe_cta": "Оформить подписку",
-    "active_status": "Mamascota Plus активна"
+    "active_status": "Mamascota Plus активна",
+    "free_label": "Free",
+    "plus_label": "Plus",
+    "open_plus": "Открыть Mamascota Plus"
   },
   
   "landing": {

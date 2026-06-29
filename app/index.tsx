@@ -9,6 +9,7 @@ import { handleActiveSessionDecision } from "../utils/handleActiveSessionDecisio
 import { isPaid } from "../utils/access";
 import LanguageNotice from "../components/ui/LanguageNotice";
 import LanguageSelector from "../components/ui/LanguageSelector";
+import PlanHeaderStatus from "../components/ui/PlanHeaderStatus";
 import { detectAndSetInitialLanguage } from "../utils/detectLanguage";
 import i18n from '../i18n';
 import { theme } from '../src/theme';
@@ -244,7 +245,7 @@ export default function StartScreen() {
     topBlock: {
       width: '100%',
       alignItems: 'center',
-      paddingTop: 4,
+      paddingTop: 42,
       pointerEvents: 'none',
     },
     heroBlock: {
@@ -252,7 +253,7 @@ export default function StartScreen() {
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      minHeight: '50%',
+      minHeight: '42%',
     },
     bottomBlock: {
       width: '100%',
@@ -274,8 +275,8 @@ export default function StartScreen() {
       marginBottom: 0,
     },
     image: {
-      width: '80%',
-      maxWidth: 400,
+      width: '78%',
+      maxWidth: 390,
       height: undefined,
       aspectRatio: 0.95,
     },
@@ -366,27 +367,30 @@ export default function StartScreen() {
         <View style={styles.headerControls}>
           <TouchableOpacity
             style={[styles.supportButton, !termsAccepted && styles.supportButtonDisabled]}
-          onPress={() => {
-            if (!termsAccepted) return;
-            router.push("/paywall" as Href);
-          }}
-          disabled={!termsAccepted}
-          accessibilityLabel={String(i18n.t("menu.support_mamascota"))}
-        >
-          <MaterialIcons
-            name="favorite"
-            size={24}
-            color={termsAccepted ? "#42A5F5" : "#9E9E9E"}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.languageButton}
-          onPress={() => setLanguageOpen((v) => !v)}
-          accessibilityLabel={String(i18n.t("menu.change_language"))}
-        >
-          <Text style={styles.languageButtonText}>🌐</Text>
-        </TouchableOpacity>
-      </View>
+            onPress={() => {
+              if (!termsAccepted) return;
+              router.push("/paywall" as Href);
+            }}
+            disabled={!termsAccepted}
+            accessibilityLabel={String(i18n.t("menu.support_mamascota"))}
+          >
+            <MaterialIcons
+              name="favorite"
+              size={24}
+              color={termsAccepted ? "#42A5F5" : "#9E9E9E"}
+            />
+          </TouchableOpacity>
+
+          <PlanHeaderStatus />
+
+          <TouchableOpacity
+            style={styles.languageButton}
+            onPress={() => setLanguageOpen((v) => !v)}
+            accessibilityLabel={String(i18n.t("menu.change_language"))}
+          >
+            <Text style={styles.languageButtonText}>🌐</Text>
+          </TouchableOpacity>
+        </View>
 
       {languageOpen && (
           <View style={styles.languagePanel}>
