@@ -138,10 +138,12 @@ export default function StartScreen() {
       alignItems: 'center',
     },
     image: {
-      width: '85%',
+      width: '76%',
+      maxWidth: 320,
       height: undefined,
       aspectRatio: 0.95,
-      marginVertical: 10,
+      marginTop: 24,
+      marginBottom: 18,
     },
     title: {
       fontSize: 34,
@@ -157,9 +159,10 @@ export default function StartScreen() {
     },
     description: {
       fontSize: 18,
+      lineHeight: 22,
       textAlign: 'center',
       color: theme.colors.textSecondary,
-      marginBottom: 20,
+      marginBottom: 14,
     },
     button: {
       backgroundColor: theme.colors.buttonPrimaryBg,
@@ -239,7 +242,7 @@ export default function StartScreen() {
       width: '100%',
       maxWidth: 960,
       alignItems: 'center',
-      justifyContent: 'space-between',
+      justifyContent: 'flex-start',
       alignSelf: 'center',
     },
     topBlock: {
@@ -250,16 +253,16 @@ export default function StartScreen() {
     },
     heroBlock: {
       width: '100%',
-      flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      minHeight: '42%',
+      marginTop: 26,
+      marginBottom: 18,
     },
     bottomBlock: {
       width: '100%',
       alignItems: 'center',
-      paddingBottom: 16,
-      marginTop: 16,
+      paddingBottom: 0,
+      marginTop: 0,
     },
     title: {
       fontSize: 36,
@@ -276,9 +279,8 @@ export default function StartScreen() {
     },
     image: {
       width: '78%',
-      maxWidth: 390,
-      height: undefined,
-      aspectRatio: 0.95,
+      maxWidth: 330,
+      height: 330,
     },
     description: {
       fontSize: 18,
