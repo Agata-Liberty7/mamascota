@@ -1865,7 +1865,7 @@ algoritmos:
 reglas_metodologicas:
   - id: sintoma_centrada
     descripcion: >
-      Todos los algoritmos clínico-terapéuticos están construidos desde síntomas observables por el propietario (nivel familiar), y no desde nombres de enfermedades, capítulos, diagnósticos ni estructuras académicas.
+      Todos los algoritmos clínico-terapéuticos están construidos desde síntomas observables por el tutor (nivel familiar), y no desde nombres de enfermedades, capítulos, diagnósticos ni estructuras académicas.
       La lógica de cada árbol se basa en cómo se inicia la observación y en los pasos que el asistente puede seguir junto al usuario desde ese punto de partida.
 
   - id: uso_pagina

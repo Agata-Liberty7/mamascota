@@ -1224,10 +1224,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
                 >
                   <Text style={[styles.msgText, isRTL ? styles.msgTextRTL : undefined]}>
                     {formatAssistantBubbleContent(item.content, {
-                      uppercaseTitle:
-                        item.role === "assistant" &&
-                        typeof item.content === "string" &&
-                        item.content.includes("\n"),
+                      uppercaseTitle: false,
                     })}
                   </Text>
 
