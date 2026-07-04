@@ -473,6 +473,8 @@ useEffect(() => {
         setLoading(true);
 
         // 3) Запрос к агенту
+        let wasFinalizationRequest = false;
+
         let result = await chatWithGPT({
           message: messageToSend,
           pet: pet || undefined,
@@ -492,6 +494,8 @@ useEffect(() => {
             (result as any)?.conversationId ??
             (await AsyncStorage.getItem("conversationId")) ??
             null;
+
+          wasFinalizationRequest = true;
 
           const finalized = await chatWithGPT({
             message: "__MAMASCOTA_FINALIZE__",
@@ -517,7 +521,9 @@ useEffect(() => {
         const parts = splitAssistantReplyIntoBubbles(String(assistantText));
         const now = Date.now();
         const isFinalizationReply =
-          typeof result === "object" && (result as any)?.sessionEnded === true;
+          wasFinalizationRequest ||
+          (typeof result === "object" &&
+            ((result as any)?.sessionEnded === true || (result as any)?.phase === "ended"));
 
         const assistantBubbles = parts.map((content, idx) => ({
           role: "assistant" as const,
