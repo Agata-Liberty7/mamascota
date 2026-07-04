@@ -516,11 +516,14 @@ useEffect(() => {
 
         const parts = splitAssistantReplyIntoBubbles(String(assistantText));
         const now = Date.now();
+        const isFinalizationReply =
+          typeof result === "object" && (result as any)?.sessionEnded === true;
 
         const assistantBubbles = parts.map((content, idx) => ({
           role: "assistant" as const,
           content,
           ts: now + idx,
+          isFinalization: isFinalizationReply,
         }));
 
         setChat((prev) => [...prev, ...assistantBubbles]);
@@ -1224,7 +1227,11 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
                 >
                   <Text style={[styles.msgText, isRTL ? styles.msgTextRTL : undefined]}>
                     {formatAssistantBubbleContent(item.content, {
-                      uppercaseTitle: false,
+                      uppercaseTitle:
+                        item.role === "assistant" &&
+                        (item as any).isFinalization === true &&
+                        typeof item.content === "string" &&
+                        item.content.includes("\n"),
                     })}
                   </Text>
 
