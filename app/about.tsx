@@ -29,12 +29,15 @@ export default function AboutScreen() {
 
   const normalizedSource = Array.isArray(source) ? source[0] : source;
   const isPreTerms = normalizedSource === "home";
+  const isFirstEntry = normalizedSource === "first_entry";
+  const isOnboardingLocked = isPreTerms || isFirstEntry;
+
   useEffect(() => {
   navigation.setOptions({
-    headerLeft: () => <SupportHeartButton disabled={isPreTerms} />,
-    headerRight: () => <MenuButton disabled={isPreTerms} />,
+    headerLeft: () => <SupportHeartButton disabled={isOnboardingLocked} />,
+    headerRight: () => <MenuButton disabled={isOnboardingLocked} />,
   });
-}, [navigation, isPreTerms]);
+}, [navigation, isOnboardingLocked]);
 
   const isWeb = Platform.OS === "web";
   const styles = isWeb ? stylesWeb : stylesMobile;
