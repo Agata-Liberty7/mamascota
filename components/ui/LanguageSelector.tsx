@@ -2,7 +2,21 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { theme } from '../../src/theme';
 
-type LanguageCode = 'de' | 'en' | 'es' | 'fr' | 'he' | 'it' | 'ru' ;
+type LanguageCode =
+  | 'bg'
+  | 'de'
+  | 'en'
+  | 'es'
+  | 'fr'
+  | 'he'
+  | 'it'
+  | 'ka'
+  | 'pl'
+  | 'pt'
+  | 'ru'
+  | 'sr'
+  | 'tr'
+  | 'uk';
 
 type Props = {
   selected: string;
@@ -14,13 +28,17 @@ type Props = {
 export default function LanguageSelector({
   selected,
   onSelect,
-  languages = ['de', 'en', 'es', 'fr', 'he', 'it', 'ru'],
+  languages = ['bg', 'de', 'en', 'es', 'fr', 'he', 'it', 'ka', 'pl', 'pt', 'ru', 'sr', 'tr', 'uk'],
   vertical = false,
 }: Props) {
   return (
     <View style={vertical ? styles.column : styles.row}>
       {languages.map((lang) => (
-        <TouchableOpacity key={lang} onPress={() => onSelect(lang)}>
+        <TouchableOpacity
+          key={lang}
+          onPress={() => onSelect(lang)}
+          style={vertical ? undefined : styles.itemButton}
+        >
           <Text
             style={[
               styles.item,
@@ -38,8 +56,16 @@ export default function LanguageSelector({
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'center',
-    gap: 16,
+    rowGap: 8,
+    width: '100%',
+    maxWidth: '100%',
+  },
+  itemButton: {
+    width: '14.285%',
+    alignItems: 'center',
+    paddingVertical: 2,
   },
   column: {
     flexDirection: 'column',
@@ -47,8 +73,9 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   item: {
+    textAlign: 'center',
     fontSize: 16,
-    color: theme.colors.textSecondary,     // как в Settings (#999)
+    color: theme.colors.textSecondary,
     fontWeight: '400',
   },
   itemActive: {

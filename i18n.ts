@@ -3,18 +3,25 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Localization from "expo-localization";
 import { I18n } from "i18n-js";
 
+import bg from "./locales/bg.json";
 import de from "./locales/de.json";
 import en from "./locales/en.json";
 import es from "./locales/es.json";
 import fr from "./locales/fr.json";
 import he from "./locales/he.json";
 import it from "./locales/it.json";
+import ka from "./locales/ka.json";
+import pl from "./locales/pl.json";
+import pt from "./locales/pt.json";
 import ru from "./locales/ru.json";
+import sr from "./locales/sr.json";
+import tr from "./locales/tr.json";
+import uk from "./locales/uk.json";
 
-const i18n = new I18n({ de, en, es, fr, he, it, ru });
+const i18n = new I18n({ bg, de, en, es, fr, he, it, ka, pl, pt, ru, sr, tr, uk });
 i18n.enableFallback = true;
 
-const SUPPORTED = ["de","en","es","fr","he","it","ru"] as const;
+const SUPPORTED = ["bg", "de", "en", "es", "fr", "he", "it", "ka", "pl", "pt", "ru", "sr", "tr", "uk"] as const;
 type Lang = (typeof SUPPORTED)[number];
 
 const KEY = "selectedLanguage";

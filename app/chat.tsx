@@ -478,6 +478,7 @@ useEffect(() => {
         let result = await chatWithGPT({
           message: messageToSend,
           pet: pet || undefined,
+          userLang: "auto",
           postSummaryUpdateMode: isPostSummaryUpdateMode,
         });
         // ✅ ACK: финализацию запускаем только если это не кейс с рекомендацией начать новую консультацию
@@ -501,6 +502,7 @@ useEffect(() => {
             message: "__MAMASCOTA_FINALIZE__",
             pet: pet || undefined,
             conversationId: cid ?? undefined,
+            userLang: "auto",
             postSummaryUpdateMode: isPostSummaryUpdateMode,
           });
 
@@ -1152,10 +1154,13 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
               </Text>
 
             <View style={styles.pdfLangRow}>
-              {["de", "en", "es", "fr", "he", "it", "ru"].map((langCode) => (
+              {["bg", "de", "en", "es", "fr", "he", "it", "ka", "pl", "pt", "ru", "sr", "tr", "uk"].map((langCode) => (
                 <TouchableOpacity
                   key={langCode}
-                  style={styles.pdfLangChip}
+                  style={[
+                    styles.pdfLangChip,
+                    currentPdfLang === langCode && styles.pdfLangChipActive,
+                  ]}
                   onPress={async () => {
                     // ✅ Открываем окно СИНХРОННО — до любого await,
                     // пока браузер считает это реакцией на клик пользователя
@@ -1552,21 +1557,29 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   pdfLangRow: {
-    width: "100%",
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 12,
-    marginBottom: 4,
+    flexWrap: "wrap",
+    justifyContent: "center",
+    rowGap: 8,
+    width: "100%",
+    maxWidth: 280,
+    alignSelf: "center",
+    marginTop: 6,
   },
   pdfLangChip: {
-    paddingHorizontal: 4,
-    paddingVertical: 6,
+    width: "14.285%",
+    alignItems: "center",
+    paddingVertical: 5,
+    borderRadius: 14,
+  },
+  pdfLangChipActive: {
+    backgroundColor: "#EAF5FF",
   },
   pdfLangChipText: {
+    textAlign: "center",
     fontSize: 13,
     color: "#555",
-    textAlign: "center",
+    fontWeight: "500",
   },
   pdfLangChipTextActive: {
     color: "#42A5F5",

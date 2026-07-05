@@ -537,6 +537,10 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
   const userLang = isNonEmptyString(args.userLang) ? args.userLang : "en";
   const langOverride = isNonEmptyString(args.langOverride) ? args.langOverride : "";
   const effectiveLang = (langOverride || userLang || "en").trim() || "en";
+  const isAutoOutputLanguage = effectiveLang.toLowerCase() === "auto";
+  const outputLanguageInstruction = isAutoOutputLanguage
+    ? "Use the same language as the latest real user message. If the user clearly switches language, switch with them. Do not use the app interface language as the chat reply language."
+    : `Output language must be exactly "${effectiveLang}".`;
 
   // ---- command switch: decisionTree on-demand
   const isDecisionTreeRequest = trimmedMessage === DECISION_TREE_CMD;
@@ -731,7 +735,7 @@ ${JSON.stringify(sections, null, 2)}
             `PROMPT_VERSION=2026-02-09-a\n` +
             `${finalSystemPrompt}\n\n` +
             `RUNTIME_GUARD:\n` +
-            `- Output language must be exactly "${effectiveLang}".\n` +
+            `- ${outputLanguageInstruction}\n` +
             `- Speak as Mamascota in feminine gender.\n` +
             `- Ask for ONLY ONE thing from the user per message (one request). Do not chain requests with "also/and/in addition", naturally, without meta-phrases. Do not announce that you are asking a question.\n` +
             `- You MUST not ignore any provided symptomKeys from APP_CONTEXT_JSON: if 2–3 symptoms are selected, explicitly cover each across the next 1–2 turns.\n` +
@@ -823,7 +827,7 @@ ${JSON.stringify(sections, null, 2)}
           "- Do NOT ask questions.",
           "- Never show raw symptomKeys or internal labels to the user, especially tokens with underscores such as breathing_difficulty. Translate or paraphrase them naturally in the output language.",
           "- Return exactly 3 short standalone blocks.",
-          `- Output language must be exactly "${effectiveLang}".`,
+          `- ${outputLanguageInstruction}`,
           "- Block titles must be translated naturally into the output language.",
           "- Block 1 meaning: what was observed about the animal.",
           "- Block 2 meaning: what to do now.",
