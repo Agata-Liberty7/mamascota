@@ -1,4 +1,5 @@
 import { KNOWLEDGE_BASE } from "./knowledgeBaseData";
+import { selectActiveAlgorithms } from "./algorithmMatcher";
 
 // ВАЖНО: чтобы 1:1 совпало с proxy, алиасы пород должны быть теми же.
 // Самый надёжный путь в рамках воркера — скопировать maps сюда же.
@@ -146,12 +147,31 @@ export async function buildAgentContext(
     if (breedRisksForPet[0]) console.log("[KB] breedRisks sample:", { raza: breedRisksForPet[0]?.raza, fuente: breedRisksForPet[0]?.fuente });
     if (petDimensionsForPet[0]) console.log("[KB] petDimensions sample:", { raza: petDimensionsForPet[0]?.raza, peso: petDimensionsForPet[0]?.peso || petDimensionsForPet[0]?.pesoKg });
 
+    const activeAlgorithms = selectActiveAlgorithms({
+      algorithms: finalAlgorithms,
+      symptomKeys,
+      species: petData.species,
+      ageYears: petData.ageYears,
+      max: 3,
+    });
+
+    const algorithmsForPrompt = activeAlgorithms.length ? activeAlgorithms : finalAlgorithms;
+
+    console.log(
+      "[KB] activeAlgorithms:",
+      activeAlgorithms.map((alg: any) => alg?.id).filter(Boolean)
+    );
+
   return JSON.stringify({
     pet: petData,
     userLang: lang,
     symptomKeys,
     nivelUsuario: nivelFilter,
-    algorithms: finalAlgorithms,
+    algorithms: algorithmsForPrompt,
+    algorithm_selection: {
+      active: activeAlgorithms.length > 0,
+      algorithmIds: activeAlgorithms.map((alg: any) => alg?.id).filter(Boolean),
+    },
     clinical_details_for_species: clinicalDetailsForSpecies,
     breed_risks_for_pet: breedRisksForPet,
     pet_dimensions_for_pet: petDimensionsForPet,

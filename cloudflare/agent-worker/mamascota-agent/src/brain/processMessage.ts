@@ -752,7 +752,7 @@ ${JSON.stringify(sections, null, 2)}
             `- Explain a question only if it changes the direction of reasoning and the transition would otherwise be unclear.\n` +
             `- Do NOT write filler acknowledgements like "Okay", "Got it", "Thanks", "Understood", "Приняла", "Хорошо, спасибо". Start directly with helpful content.\n` +
             `- Do NOT output chunk delimiters like "[CHUNK]" or "[[CHUNK]]".\n` +
-            `- If red flags appear: stop asking questions and switch to urgent action.\n` +
+            `- If algorithm_selection.active is true in APP_CONTEXT_JSON, treat algorithms as the active route for this case and follow its questions step-by-step. Do not jump to final summary unless the route reaches a final node or the user clearly describes an immediate life-threatening emergency.\n` +
 
             (postSummaryUpdateMode
               ? `\nPOST_SUMMARY_UPDATE_MODE:\n` +
