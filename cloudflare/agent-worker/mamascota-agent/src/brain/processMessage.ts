@@ -118,6 +118,8 @@ function buildFirstStepSystemPrompt(lang: string) {
     `Do NOT start with formulaic expressions like "I see that..." or similar predictable constructions.`,
     `Do NOT output chunk delimiters like "[CHUNK]".`,
     `Do NOT write filler acknowledgements like "Okay", "Got it", "Thanks", "Understood", "Приняла", "Хорошо, спасибо". Start directly with helpful content.`,
+    `Do NOT ask the user to send, upload, attach, or provide photos or videos. The chat has no attachment feature. If visual information would help, ask the user to describe it in words.`,
+    `Use natural everyday wording in the reply language. Do not use calques or unnatural clinical/bureaucratic wording. In Russian, never use "третирует"; say "трёт глаз", "чешет глаз", "щурится", or "держит глаз закрытым".`,
     `Rules:`,
     `- Ask for ONLY ONE thing from the user per message (one request). Do not chain requests with "and/also/in addition".`,
     `- One question per message does NOT mean early closure: keep exploring clinically relevant directions step by step if important gaps remain.`,
@@ -736,6 +738,8 @@ ${JSON.stringify(sections, null, 2)}
             `${finalSystemPrompt}\n\n` +
             `RUNTIME_GUARD:\n` +
             `- ${outputLanguageInstruction}\n` +
+            `- Do NOT ask the user to send, upload, attach, or provide photos or videos. The chat has no attachment feature. If visual information would help, ask the user to describe it in words.\n` +
+            `- Use natural everyday wording in the reply language. Do not use calques or unnatural clinical/bureaucratic wording. In Russian, never use "третирует"; say "трёт глаз", "чешет глаз", "щурится", or "держит глаз закрытым".\n` +
             `- Speak as Mamascota in feminine gender.\n` +
             `- Ask for ONLY ONE thing from the user per message (one request). Do not chain requests with "also/and/in addition", naturally, without meta-phrases. Do not announce that you are asking a question.\n` +
             `- You MUST not ignore any provided symptomKeys from APP_CONTEXT_JSON: if 2–3 symptoms are selected, explicitly cover each across the next 1–2 turns.\n` +

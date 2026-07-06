@@ -112,21 +112,23 @@ export default function AboutScreen() {
           })}
         </View>
 
-        <View style={styles.legalLinks}>
-          <TouchableOpacity onPress={() => setLegalMode("terms")}>
-            <Text style={styles.legalLinkText}>
-              {i18n.t("terms_title")}
-            </Text>
-          </TouchableOpacity>
+        {!isFirstEntry && (
+          <View style={styles.legalLinks}>
+            <TouchableOpacity onPress={() => setLegalMode("terms")}>
+              <Text style={styles.legalLinkText}>
+                {i18n.t("terms_title")}
+              </Text>
+            </TouchableOpacity>
 
-          <Text style={styles.legalSeparator}>•</Text>
+            <Text style={styles.legalSeparator}>•</Text>
 
-          <TouchableOpacity onPress={() => setLegalMode("privacy")}>
-            <Text style={styles.legalLinkText}>
-              {i18n.t("privacy_title")}
-            </Text>
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity onPress={() => setLegalMode("privacy")}>
+              <Text style={styles.legalLinkText}>
+                {i18n.t("privacy_title")}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         {isPreTerms ? (
         <>
@@ -184,7 +186,7 @@ export default function AboutScreen() {
             activeOpacity={0.75}
           >
             <Text style={styles.secondaryButtonText}>
-              {i18n.t("about.show_onboarding_again")}
+              {isFirstEntry ? i18n.t("continue") : i18n.t("about.show_onboarding_again")}
             </Text>
           </TouchableOpacity>
         )}
@@ -275,16 +277,16 @@ const stylesMobile = StyleSheet.create({
     color: theme.colors.textSecondary,
   },
   legalLinks: {
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     marginTop: 8,
     marginBottom: 14,
-    flexWrap: "wrap",
+    rowGap: 4,
+    width: "100%",
   },
   legalSeparator: {
-    marginHorizontal: 8,
-    color: theme.colors.textSecondary,
+    display: "none",
   },
 
   legalLinkText: {
