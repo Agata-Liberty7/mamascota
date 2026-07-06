@@ -423,7 +423,7 @@ export default function StartScreen() {
               <Text style={styles.description}>{i18n.t('start_description')}</Text>
 
               <TouchableOpacity style={styles.button} onPress={termsAccepted ? handleStart : handleAboutPress}>
-                <Text style={styles.buttonText}>{termsAccepted ? i18n.t('start_button') : i18n.t('about.tagline')}</Text>
+                <Text style={styles.buttonText}>{i18n.t('start_button')}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -441,7 +441,7 @@ export default function StartScreen() {
             <Text style={styles.description}>{i18n.t('start_description')}</Text>
 
             <TouchableOpacity style={styles.button} onPress={termsAccepted ? handleStart : handleAboutPress}>
-              <Text style={styles.buttonText}>{termsAccepted ? i18n.t('start_button') : i18n.t('about.tagline')}</Text>
+              <Text style={styles.buttonText}>{i18n.t('start_button')}</Text>
             </TouchableOpacity>
           </View>
         )}
