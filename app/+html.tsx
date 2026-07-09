@@ -5,10 +5,20 @@ const seoJsonLd = {
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "Organization",
+      "@id": "https://mamascota.com/#organization",
+      name: "Mamascota",
+      url: "https://mamascota.com/",
+      logo: "https://mamascota.com/apple-touch-icon.png"
+    },
+    {
       "@type": "WebApplication",
       "@id": "https://mamascota.com/#app",
       name: "Mamascota",
       url: "https://mamascota.com/",
+      publisher: {
+        "@id": "https://mamascota.com/#organization"
+      },
       applicationCategory: "HealthApplication",
       operatingSystem: "Web, iOS, Android",
       description:
