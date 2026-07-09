@@ -8,7 +8,7 @@ const seoJsonLd = {
       "@type": "WebApplication",
       "@id": "https://mamascota.com/#app",
       name: "Mamascota",
-      url: "https://mamascota.com",
+      url: "https://mamascota.com/",
       applicationCategory: "HealthApplication",
       operatingSystem: "Web, iOS, Android",
       description:
@@ -72,7 +72,7 @@ export default function Root({ children }: PropsWithChildren) {
           name="description"
           content="Mamascota helps people caring for animals prepare for a veterinary visit, structure observations, and create a report for the veterinarian. It does not diagnose or prescribe treatment."
         />
-        <link rel="canonical" href="https://mamascota.com" />
+        <link rel="canonical" href="https://mamascota.com/" />
 
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Mamascota" />
@@ -80,7 +80,7 @@ export default function Root({ children }: PropsWithChildren) {
           property="og:description"
           content="A multilingual assistant that helps prepare for a veterinary visit and create a structured report for the veterinarian."
         />
-        <meta property="og:url" content="https://mamascota.com" />
+        <meta property="og:url" content="https://mamascota.com/" />
         <meta name="twitter:card" content="summary" />
 
         <meta
