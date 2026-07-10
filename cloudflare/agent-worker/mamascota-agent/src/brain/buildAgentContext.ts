@@ -1,5 +1,6 @@
 import { KNOWLEDGE_BASE } from "./knowledgeBaseData";
 import { selectActiveAlgorithms } from "./algorithmMatcher";
+import { findAlgorithmSignalCandidates } from "./algorithmSignalIndex";
 
 // ВАЖНО: чтобы 1:1 совпало с proxy, алиасы пород должны быть теми же.
 // Самый надёжный путь в рамках воркера — скопировать maps сюда же.
@@ -155,11 +156,53 @@ export async function buildAgentContext(
       max: 3,
     });
 
-    const algorithmsForPrompt = activeAlgorithms.length ? activeAlgorithms : finalAlgorithms;
+    const signalCandidates = findAlgorithmSignalCandidates({
+      algorithms: finalAlgorithms,
+      symptomKeys,
+      petData: {
+        species: petData.species,
+        ageYears: petData.ageYears,
+      },
+      max: 8,
+    });
+
+    const signalCandidateAlgorithms = signalCandidates
+      .map((candidate: any) => candidate.algorithm)
+      .filter(Boolean);
+
+    const algorithmsForPrompt = signalCandidateAlgorithms.length
+      ? signalCandidateAlgorithms
+      : activeAlgorithms.length
+      ? activeAlgorithms
+      : finalAlgorithms;
+
+    const algorithmSelectionSource = signalCandidateAlgorithms.length
+      ? "signal_index"
+      : activeAlgorithms.length
+      ? "symptom_key_matcher"
+      : "fallback_all";
 
     console.log(
       "[KB] activeAlgorithms:",
       activeAlgorithms.map((alg: any) => alg?.id).filter(Boolean)
+    );
+
+    console.log(
+      "[KB] signalCandidates:",
+      signalCandidates.map((c: any) => ({
+        id: c.algorithmId,
+        score: c.score,
+        signals: c.matchedSignals,
+        nodes: c.matchedNodes,
+      }))
+    );
+
+    console.log(
+      "[KB] algorithmsForPrompt:",
+      {
+        source: algorithmSelectionSource,
+        ids: algorithmsForPrompt.map((alg: any) => alg?.id).filter(Boolean),
+      }
     );
 
   return JSON.stringify({
@@ -169,8 +212,9 @@ export async function buildAgentContext(
     nivelUsuario: nivelFilter,
     algorithms: algorithmsForPrompt,
     algorithm_selection: {
-      active: activeAlgorithms.length > 0,
-      algorithmIds: activeAlgorithms.map((alg: any) => alg?.id).filter(Boolean),
+      active: algorithmSelectionSource !== "fallback_all",
+      source: algorithmSelectionSource,
+      algorithmIds: algorithmsForPrompt.map((alg: any) => alg?.id).filter(Boolean),
     },
     clinical_details_for_species: clinicalDetailsForSpecies,
     breed_risks_for_pet: breedRisksForPet,
