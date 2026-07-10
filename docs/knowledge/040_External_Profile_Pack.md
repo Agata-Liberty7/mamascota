@@ -237,7 +237,11 @@ Independent project
 
 ## Founder
 
-TODO: add the approved public founder description.
+Irina Lukina
+
+Founder of Mamascota.
+
+Independent product creator with a background in digital product development and marketing. Mamascota was created to improve communication between people caring for pets and veterinary professionals through structured AI-assisted consultation preparation.
 
 ---
 
