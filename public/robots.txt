@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 
 Sitemap: https://mamascota.com/sitemap.xml
+
+LLMS: https://mamascota.com/llms.txt
