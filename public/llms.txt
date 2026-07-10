@@ -1,0 +1,34 @@
+# Mamascota
+
+> Mamascota is an AI assistant that helps people caring for dogs and cats prepare for veterinary consultations through structured conversations and clear communication with veterinary professionals.
+
+Mamascota does not diagnose diseases, prescribe medication or treatment, replace a veterinarian, or provide emergency veterinary services.
+
+## Main pages
+
+- [Mamascota](https://mamascota.com/): Start using Mamascota.
+- [About Mamascota](https://mamascota.com/about): Purpose, consultation model, limitations, and frequently asked questions.
+- [Mamascota Free](https://mamascota.com/free): Current free product capabilities.
+- [Mamascota Plus](https://mamascota.com/plus): Continuity, saved consultations, and long-term organization.
+- [Contact](https://mamascota.com/contact): Official contact information.
+- [Support Mamascota](https://mamascota.com/paywall): Voluntary support for the independent project.
+
+## Core capabilities
+
+- Structured veterinary visit preparation
+- Step-by-step organization of observations
+- Reports for veterinary consultations
+- Multilingual interface and report generation
+- Navigation toward urgent professional care when warning signs are present
+
+## Supported interface and report languages
+
+English, Spanish, Russian, French, German, Italian, and Hebrew.
+
+## Medical boundaries
+
+Mamascota is a preparation and communication tool. It is not a diagnostic system, treatment service, telemedicine platform, or substitute for professional veterinary care.
+
+## Canonical URL
+
+https://mamascota.com/
