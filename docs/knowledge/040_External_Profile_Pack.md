@@ -37,7 +37,7 @@ Mamascota helps people caring for pets prepare for veterinary visits through a s
 
 ## Short description
 
-Mamascota is an AI assistant that helps people organize observations, answer structured questions, and prepare a report before visiting a veterinarian. It supports seven interface and report languages and does not diagnose or prescribe treatment.
+Mamascota is an AI assistant that helps people organize observations, answer structured questions, and prepare a report before visiting a veterinarian. It supports fourteen interface and report languages and does not diagnose or prescribe treatment.
 
 ---
 
@@ -54,7 +54,7 @@ Mamascota is especially useful when important details may be forgotten or when t
 Mamascota:
 
 - supports consultation preparation for dogs and cats;
-- provides an interface and reports in seven languages;
+- provides an interface and reports in fourteen languages;
 - guides the conversation step by step;
 - creates a structured report for the veterinarian;
 - helps organize observations before a veterinary visit;
@@ -100,13 +100,20 @@ Native iOS and Android distribution should only be listed after publication in t
 
 ## Supported interface and report languages
 
+- Bulgarian
+- German
 - English
 - Spanish
-- Russian
 - French
-- German
-- Italian
 - Hebrew
+- Italian
+- Georgian
+- Polish
+- Portuguese
+- Russian
+- Serbian
+- Turkish
+- Ukrainian
 
 The conversation language may be more flexible than the interface and report language options.
 
@@ -261,7 +268,7 @@ Mamascota creates a structured report that can support communication with a vete
 
 ### Does Mamascota support multiple languages?
 
-Yes. The interface and reports currently support seven languages.
+Yes. The interface and reports currently support fourteen languages.
 
 ### Can Mamascota help when the veterinarian speaks another language?
 

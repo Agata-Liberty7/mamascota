@@ -23,7 +23,7 @@ Mamascota does not diagnose diseases, prescribe medication or treatment, replace
 
 ## Supported interface and report languages
 
-English, Spanish, Russian, French, German, Italian, and Hebrew.
+Bulgarian, German, English, Spanish, French, Hebrew, Italian, Georgian, Polish, Portuguese, Russian, Serbian, Turkish, and Ukrainian.
 
 ## Medical boundaries
 

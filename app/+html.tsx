@@ -23,7 +23,7 @@ const seoJsonLd = {
       operatingSystem: "Web, iOS, Android",
       description:
         "Mamascota helps people caring for animals prepare for a veterinary visit by collecting observations, asking structured questions, and creating a veterinary report. Mamascota does not diagnose or prescribe treatment.",
-      availableLanguage: ["bg", "de", "en", "es", "fr", "he", "it", "ka", "pl", "pt", "ru", "sr", "tr", "uk"],
+      inLanguage: ["bg", "de", "en", "es", "fr", "he", "it", "ka", "pl", "pt", "ru", "sr", "tr", "uk"],
       offers: {
         "@type": "Offer",
         price: "0",
