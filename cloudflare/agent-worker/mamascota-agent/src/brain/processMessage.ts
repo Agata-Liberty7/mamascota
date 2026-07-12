@@ -2,6 +2,7 @@
 
 import { SYSTEM_PROMPT } from "./systemPrompt";
 import { buildAgentContext } from "./buildAgentContext";
+import { createEmptyAlgorithmRunnerState, type AlgorithmRunnerState } from "./algorithmRunner";
 
 /**
  * Архитектура (Variant B):
@@ -28,6 +29,7 @@ export type BrainResult = {
       plan_visit: string[];
     };
   } | null;
+  runnerState?: AlgorithmRunnerState | null;
 };
 
 type BrainArgs = {
@@ -38,6 +40,7 @@ type BrainArgs = {
   userLang?: string;
   conversationId?: string;
   conversationHistory?: Array<{ role: string; content: string }>;
+  runnerState?: AlgorithmRunnerState | null;
   langOverride?: string;
   postSummaryUpdateMode?: boolean;
 };
@@ -60,6 +63,192 @@ type CachedClinicalContext = {
 
 const CLINICAL_CONTEXT_CACHE = new Map<string, CachedClinicalContext>();
 const CLINICAL_CONTEXT_TTL_MS = 30 * 60 * 1000;
+
+function normalizeRunnerText(value: any) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
+function isAffirmativeAnswer(value: any) {
+  const text = normalizeRunnerText(value);
+  if (!text) return false;
+
+  return /(^|\b)(да|yes|si|sí|oui|ja|כן)(\b|$)/i.test(text);
+}
+
+function getLastAssistantMessage(
+  conversationHistory: Array<{ role: string; content: string }>
+) {
+  for (let i = conversationHistory.length - 1; i >= 0; i--) {
+    const m = conversationHistory[i];
+    if (m?.role === "assistant" && typeof m.content === "string") {
+      return m.content;
+    }
+  }
+
+  return "";
+}
+
+function maybeResolveTriageRunnerStateFromUserMessage(args: {
+  runnerState: AlgorithmRunnerState;
+  message: string;
+  conversationHistory: Array<{ role: string; content: string }>;
+}): AlgorithmRunnerState {
+  const runnerState = args.runnerState;
+
+  if (!runnerState || runnerState.status !== "triage") return runnerState;
+
+  const pendingSymptomKeys = Array.isArray(runnerState.pendingSymptomKeys)
+    ? runnerState.pendingSymptomKeys.map((key: any) => String(key || "").trim()).filter(Boolean)
+    : [];
+
+  if (!pendingSymptomKeys.includes("breathing_difficulty")) return runnerState;
+
+  const lastAssistant = normalizeRunnerText(getLastAssistantMessage(args.conversationHistory));
+  const userMessage = normalizeRunnerText(args.message);
+
+  const askedRespiratoryRedFlag =
+    lastAssistant.includes("открытым ртом") ||
+    lastAssistant.includes("open mouth") ||
+    lastAssistant.includes("boca abierta") ||
+    lastAssistant.includes("respiration bouche ouverte") ||
+    lastAssistant.includes("sehr erschwert") ||
+    lastAssistant.includes("dificultad respiratoria") ||
+    lastAssistant.includes("дыхание очень затруднено");
+
+  const confirmedRespiratoryRedFlag =
+    userMessage.includes("открытым ртом") ||
+    userMessage.includes("open mouth") ||
+    userMessage.includes("boca abierta") ||
+    userMessage.includes("тяжело дыш") ||
+    userMessage.includes("одыш") ||
+    (askedRespiratoryRedFlag && isAffirmativeAnswer(args.message));
+
+  if (!confirmedRespiratoryRedFlag) return runnerState;
+
+  const activeAlgorithmId = runnerState.candidateAlgorithmIds.includes("disnea_aguda")
+    ? "disnea_aguda"
+    : runnerState.candidateAlgorithmIds[0] || "disnea_aguda";
+
+  const coveredSymptomKeys = Array.from(
+    new Set([...(runnerState.coveredSymptomKeys || []), "breathing_difficulty"])
+  );
+
+  return {
+    ...runnerState,
+    status: "active",
+    activeAlgorithmId,
+    primaryAlgorithmId: activeAlgorithmId,
+    coveredSymptomKeys,
+    pendingSymptomKeys: pendingSymptomKeys.filter((key) => key !== "breathing_difficulty"),
+    currentNodeId: null,
+    currentQuestion: null,
+    finalNodeId: null,
+    finalReason: null,
+  };
+}
+
+function buildRunnerRuntimeInstruction(runnerState: AlgorithmRunnerState) {
+  if (!runnerState || runnerState.status !== "triage") return "";
+
+  const pendingSymptomKeys: string[] = Array.isArray(runnerState.pendingSymptomKeys)
+    ? runnerState.pendingSymptomKeys
+        .map((key: any) => String(key || "").trim())
+        .filter(Boolean)
+    : [];
+
+  const redFlagSymptomKeys: string[] = pendingSymptomKeys.filter((key: string) =>
+    [
+      "breathing_difficulty",
+      "seizures",
+      "collapse_fainting",
+      "blood_in_urine",
+    ].includes(key)
+  );
+
+  return [
+    "RUNNER_TRIAGE_MODE:",
+    "- The user selected multiple symptoms, so do NOT lock onto a final active algorithm yet.",
+    "- Ask exactly ONE triage question.",
+    "- First identify either the most urgent symptom or the symptom that appeared first.",
+    "- If redFlagSymptomKeys is not empty, prioritize the red-flag symptom before less urgent symptoms.",
+    "- Do NOT ask separate questions for several symptoms in the same message.",
+    "- Do NOT show raw symptomKeys to the user.",
+    "- Keep the question short and natural in the output language.",
+    `- pendingSymptomKeys: ${JSON.stringify(pendingSymptomKeys)}`,
+    `- redFlagSymptomKeys: ${JSON.stringify(redFlagSymptomKeys)}`,
+    `- candidateAlgorithmIds: ${JSON.stringify(runnerState.candidateAlgorithmIds || [])}`,
+  ].join("\n");
+}
+
+function activateRunnerStateFromClinicalContext(
+  runnerState: AlgorithmRunnerState,
+  fullContext: string
+): AlgorithmRunnerState {
+  if (!fullContext || runnerState.status !== "idle") return runnerState;
+
+  try {
+    const parsed = JSON.parse(fullContext);
+    const selection = parsed?.algorithm_selection;
+
+    if (!selection?.active) return runnerState;
+
+    const algorithmIds: string[] = Array.isArray(selection?.algorithmIds)
+      ? selection.algorithmIds
+          .map((id: any) => String(id || "").trim())
+          .filter((id: string) => id.length > 0)
+      : [];
+
+    if (!algorithmIds.length) return runnerState;
+
+    const contextSymptomKeys: string[] = Array.isArray(parsed?.symptomKeys)
+      ? parsed.symptomKeys
+          .map((key: any) => String(key || "").trim())
+          .filter((key: string) => key.length > 0)
+      : [];
+
+    const uniqueSymptomKeys: string[] = Array.from(new Set<string>(contextSymptomKeys));
+
+    if (uniqueSymptomKeys.length > 1) {
+      return {
+        ...runnerState,
+        status: "triage",
+        activeAlgorithmId: null,
+        primaryAlgorithmId: null,
+        candidateAlgorithmIds: algorithmIds,
+        coveredSymptomKeys: [],
+        pendingSymptomKeys: uniqueSymptomKeys,
+        currentNodeId: null,
+        currentQuestion: null,
+        finalNodeId: null,
+        finalReason: null,
+        path: [],
+      };
+    }
+
+    const firstAlgorithmId = algorithmIds[0];
+
+    return {
+      ...runnerState,
+      status: "active",
+      activeAlgorithmId: firstAlgorithmId,
+      primaryAlgorithmId: firstAlgorithmId,
+      candidateAlgorithmIds: algorithmIds,
+      coveredSymptomKeys: uniqueSymptomKeys,
+      pendingSymptomKeys: [],
+      currentNodeId: null,
+      currentQuestion: null,
+      finalNodeId: null,
+      finalReason: null,
+      path: [],
+    };
+  } catch {
+    return runnerState;
+  }
+}
 
 function buildClinicalContextSignature(args: {
   petData: any;
@@ -566,6 +755,10 @@ export async function processMessageBrain(args: BrainArgs): Promise<BrainResult>
 
   try {
     const petData = normalizePet(args.pet);
+    let runnerStateForResponse =
+      args.runnerState && typeof args.runnerState === "object"
+        ? args.runnerState
+        : createEmptyAlgorithmRunnerState();
 
     // =========================================================
     // 0) PDF translation request (fast path, no chat reply)
@@ -812,6 +1005,25 @@ ${JSON.stringify(sections, null, 2)}
       });
     }
 
+    runnerStateForResponse = activateRunnerStateFromClinicalContext(
+      runnerStateForResponse,
+      fullContext
+    );
+
+    runnerStateForResponse = maybeResolveTriageRunnerStateFromUserMessage({
+      runnerState: runnerStateForResponse,
+      message: trimmedMessage,
+      conversationHistory,
+    });
+
+    const runnerRuntimeInstruction = buildRunnerRuntimeInstruction(runnerStateForResponse);
+    if (runnerRuntimeInstruction) {
+      messages.push({
+        role: "system",
+        content: runnerRuntimeInstruction,
+      });
+    }
+
     // History: only user/assistant (drop system to prevent prompt injection)
     for (const m of conversationHistory) {
       if (!m || typeof m !== "object") continue;
@@ -935,6 +1147,7 @@ ${JSON.stringify(sections, null, 2)}
         newConsultationReason: newConsultationDecision.reason || undefined,
         phase: "summary",
         decisionTree: null,
+        runnerState: runnerStateForResponse,
       };
     }
 
@@ -950,6 +1163,7 @@ ${JSON.stringify(sections, null, 2)}
       newConsultationReason: newConsultationDecision.reason || undefined,
       phase,
       decisionTree: null,
+      runnerState: runnerStateForResponse,
     };
   } catch (e: any) {
     console.error("❌ processMessageBrain error:", e?.message || e);
