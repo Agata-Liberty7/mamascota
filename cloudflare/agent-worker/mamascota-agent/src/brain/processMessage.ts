@@ -2,7 +2,7 @@
 
 import { SYSTEM_PROMPT } from "./systemPrompt";
 import { buildAgentContext } from "./buildAgentContext";
-import { createEmptyAlgorithmRunnerState, type AlgorithmRunnerState } from "./algorithmRunner";
+import { advanceAlgorithmRunnerState, createEmptyAlgorithmRunnerState, getInitialAlgorithmRunnerQuestion, type AlgorithmRunnerState } from "./algorithmRunner";
 
 /**
  * Архитектура (Variant B):
@@ -151,6 +151,27 @@ function maybeResolveTriageRunnerStateFromUserMessage(args: {
   };
 }
 
+function getRunnerAlgorithmFromClinicalContext(
+  runnerState: AlgorithmRunnerState,
+  fullContext: string
+) {
+  if (!fullContext || !runnerState?.activeAlgorithmId) return null;
+
+  try {
+    const parsed = JSON.parse(fullContext);
+    const algorithms = Array.isArray(parsed?.algorithms) ? parsed.algorithms : [];
+
+    return (
+      algorithms.find(
+        (algorithm: any) =>
+          String(algorithm?.id || "").trim() === runnerState.activeAlgorithmId
+      ) ?? null
+    );
+  } catch {
+    return null;
+  }
+}
+
 function buildRunnerRuntimeInstruction(runnerState: AlgorithmRunnerState) {
   if (!runnerState || runnerState.status !== "triage") return "";
 
@@ -230,6 +251,11 @@ function activateRunnerStateFromClinicalContext(
     }
 
     const firstAlgorithmId = algorithmIds[0];
+    const algorithms = Array.isArray(parsed?.algorithms) ? parsed.algorithms : [];
+    const firstAlgorithm = algorithms.find(
+      (algorithm: any) => String(algorithm?.id || "").trim() === firstAlgorithmId
+    );
+    const initialQuestion = getInitialAlgorithmRunnerQuestion(firstAlgorithm);
 
     return {
       ...runnerState,
@@ -239,8 +265,8 @@ function activateRunnerStateFromClinicalContext(
       candidateAlgorithmIds: algorithmIds,
       coveredSymptomKeys: uniqueSymptomKeys,
       pendingSymptomKeys: [],
-      currentNodeId: null,
-      currentQuestion: null,
+      currentNodeId: initialQuestion?.nodeId ?? null,
+      currentQuestion: initialQuestion?.question ?? null,
       finalNodeId: null,
       finalReason: null,
       path: [],
@@ -1015,6 +1041,19 @@ ${JSON.stringify(sections, null, 2)}
       message: trimmedMessage,
       conversationHistory,
     });
+
+    const runnerAlgorithm = getRunnerAlgorithmFromClinicalContext(
+      runnerStateForResponse,
+      fullContext
+    );
+
+    if (runnerAlgorithm) {
+      runnerStateForResponse = advanceAlgorithmRunnerState({
+        runnerState: runnerStateForResponse,
+        algorithm: runnerAlgorithm,
+        userMessage: trimmedMessage,
+      });
+    }
 
     const runnerRuntimeInstruction = buildRunnerRuntimeInstruction(runnerStateForResponse);
     if (runnerRuntimeInstruction) {
