@@ -8,7 +8,9 @@
     "start:clear": "npx expo start --tunnel --clear",
     "start:proxy": "cd proxy && npm run proxy:start",
     "dev": "concurrently -n PROXY,EXPO -c magenta,cyan \"npm run start:proxy\" \"npm run start:clear\"",
-    "deploy:worker": "cd cloudflare/agent-worker/mamascota-agent && npx wrangler deploy"
+    "deploy:worker": "cd cloudflare/agent-worker/mamascota-agent && npx wrangler deploy",
+    "deploy": "npx expo export -p web && wrangler deploy",
+    "preview": "npx expo export -p web && wrangler dev"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
@@ -70,6 +72,7 @@
     "eslint-config-expo": "~10.0.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
+    "wrangler": "^4.110.0",
     "yaml": "^2.8.2"
   },
   "private": true
