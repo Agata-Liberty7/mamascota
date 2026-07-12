@@ -23,7 +23,7 @@ const seoJsonLd = {
       operatingSystem: "Web, iOS, Android",
       description:
         "Mamascota helps people caring for animals prepare for a veterinary visit by collecting observations, asking structured questions, and creating a veterinary report. Mamascota does not diagnose or prescribe treatment.",
-      availableLanguage: ["en", "es", "ru", "fr", "de", "it", "he"],
+      availableLanguage: ["bg", "de", "en", "es", "fr", "he", "it", "ka", "pl", "pt", "ru", "sr", "tr", "uk"],
       offers: {
         "@type": "Offer",
         price: "0",
@@ -77,6 +77,16 @@ export default function Root({ children }: PropsWithChildren) {
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
 
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5TWMPXB7');`,
+          }}
+        />
+
         <title>Mamascota — veterinary visit preparation assistant</title>
         <meta
           name="description"
@@ -110,7 +120,17 @@ export default function Root({ children }: PropsWithChildren) {
 
         <ScrollViewStyleReset />
       </head>
-      <body>{children}</body>
+      <body>
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-5TWMPXB7"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
+        {children}
+      </body>
     </html>
   );
 }
