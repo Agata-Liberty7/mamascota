@@ -173,7 +173,34 @@ function getRunnerAlgorithmFromClinicalContext(
 }
 
 function buildRunnerRuntimeInstruction(runnerState: AlgorithmRunnerState) {
-  if (!runnerState || runnerState.status !== "triage") return "";
+  if (!runnerState) return "";
+
+  const currentQuestion =
+    typeof runnerState.currentQuestion === "string"
+      ? runnerState.currentQuestion.trim()
+      : "";
+
+  if (
+    runnerState.status === "active" &&
+    runnerState.currentNodeId &&
+    currentQuestion.length > 0
+  ) {
+    return [
+      "RUNNER_ACTIVE_NODE_MODE:",
+      "- The deterministic runner has selected the next algorithm question.",
+      "- Ask exactly ONE question that preserves the clinical meaning of runnerCurrentQuestion.",
+      "- Translate/adapt the question naturally into the user's output language.",
+      "- Do NOT ask several questions in the same message.",
+      "- Do NOT add new clinical branches outside this runner question.",
+      "- Do NOT show algorithm IDs, node IDs, or internal runner data to the user.",
+      "- Keep the message short, calm, and natural.",
+      `- activeAlgorithmId: ${runnerState.activeAlgorithmId || ""}`,
+      `- currentNodeId: ${runnerState.currentNodeId || ""}`,
+      `- runnerCurrentQuestion: ${JSON.stringify(currentQuestion)}`,
+    ].join("\n");
+  }
+
+  if (runnerState.status !== "triage") return "";
 
   const pendingSymptomKeys: string[] = Array.isArray(runnerState.pendingSymptomKeys)
     ? runnerState.pendingSymptomKeys
