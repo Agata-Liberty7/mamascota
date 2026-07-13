@@ -62,7 +62,7 @@ export function getInitialAlgorithmRunnerQuestion(
   const questionNodes = nodes
     .filter(
       (node: any) =>
-        String(node?.tipo || "").toLowerCase().trim() === "pregunta" &&
+        normalizeNodeType(node?.tipo) === "pregunta" &&
         typeof node?.pregunta === "string" &&
         node.pregunta.trim().length > 0
     )
@@ -77,54 +77,153 @@ export function getInitialAlgorithmRunnerQuestion(
   };
 }
 
-function normalizeRunnerAnswer(value: any) {
+type RunnerOption = {
+  rawKey: string;
+  normalizedKey: string;
+  nextNodeId: string;
+};
+
+function normalizeRunnerText(value: any) {
   return String(value || "")
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[.,;:!?¿¡()[\]{}"'“”‘’]/g, " ")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
-function classifyRunnerAnswer(userMessage: string, question: string): "affirmative" | "negative" | null {
-  const answer = normalizeRunnerAnswer(userMessage);
-  const q = normalizeRunnerAnswer(question);
+function normalizeRunnerAnswer(value: any) {
+  return normalizeRunnerText(value);
+}
 
-  if (!answer) return null;
+function normalizeNodeType(value: any) {
+  const normalized = normalizeRunnerText(value);
 
-  const affirmativePattern = /(^|\b)(да|yes|si|oui|ja|כן)(\b|$)/i;
-  const negativePattern = /(^|\b)(нет|no|non|nein|לא)(\b|$)/i;
+  if (normalized === "diagnostico") return "diagnostico";
+  if (normalized === "accion") return "accion";
 
-  if (affirmativePattern.test(answer)) return "affirmative";
-  if (negativePattern.test(answer)) return "negative";
+  return normalized;
+}
 
+function normalizeOptionKey(value: any) {
+  const normalized = normalizeRunnerText(value);
+
+  if (normalized.startsWith("afirmativo")) return "affirmative";
+  if (normalized.startsWith("negativo")) return "negative";
+
+  return normalized;
+}
+
+function getRunnerOptions(node: any): RunnerOption[] {
+  const options = Array.isArray(node?.opciones) ? node.opciones : [];
+
+  return options
+    .flatMap((option: any) => {
+      if (!option || typeof option !== "object") return [];
+
+      return Object.entries(option)
+        .map(([key, value]) => ({
+          rawKey: String(key || "").trim(),
+          normalizedKey: normalizeOptionKey(key),
+          nextNodeId: value == null ? "" : String(value).trim(),
+        }))
+        .filter((option) => option.rawKey && option.normalizedKey && option.nextNodeId);
+    });
+}
+
+function getOrdinalOptionIndex(answer: string): number | null {
   if (
-    q.includes("repentina") ||
-    q.includes("sudden") ||
-    q.includes("внезап")
+    /(^|\b)(1|primero|primera|first|premier|premiere|erste|primo|prima|первый|первая|первое|первую|ראשון|ראשונה)(\b|$)/i.test(
+      answer
+    )
   ) {
-    if (
-      answer.includes("внезап") ||
-      answer.includes("sudden") ||
-      answer.includes("repentin") ||
-      answer.includes("de golpe") ||
-      answer.includes("soudain")
-    ) {
-      return "affirmative";
-    }
+    return 0;
   }
 
   if (
-    q.includes("boca abierta") ||
-    q.includes("open mouth") ||
-    q.includes("открытым ртом")
+    /(^|\b)(2|segundo|segunda|second|deuxieme|zweite|secondo|seconda|второй|вторая|второе|вторую|שני|שניה)(\b|$)/i.test(
+      answer
+    )
   ) {
-    if (
-      answer.includes("открытым ртом") ||
-      answer.includes("open mouth") ||
-      answer.includes("boca abierta")
-    ) {
-      return "affirmative";
+    return 1;
+  }
+
+  return null;
+}
+
+function textContainsOption(answer: string, optionKey: string) {
+  if (!answer || !optionKey) return false;
+  if (answer === optionKey) return true;
+
+  return ` ${answer} `.includes(` ${optionKey} `);
+}
+
+function classifyRunnerAnswerToOption(
+  userMessage: string,
+  options: RunnerOption[]
+): RunnerOption | null {
+  const answer = normalizeRunnerAnswer(userMessage);
+  if (!answer || !options.length) return null;
+
+  const affirmativeOption = options.find((option) => option.normalizedKey === "affirmative");
+  const negativeOption = options.find((option) => option.normalizedKey === "negative");
+
+  const isBinary = !!affirmativeOption && !!negativeOption && options.length === 2;
+
+  if (isBinary) {
+    const answerWords = answer.split(" ").filter(Boolean);
+
+    if (answerWords.length <= 2) {
+      const compactAnswer = answerWords.join(" ");
+
+      const affirmativeAnswers = new Set([
+        "да",
+        "yes",
+        "si",
+        "oui",
+        "ja",
+        "כן",
+        "ага",
+        "угу",
+        "correcto",
+        "claro",
+      ]);
+
+      const negativeAnswers = new Set([
+        "нет",
+        "no",
+        "non",
+        "nein",
+        "לא",
+      ]);
+
+      if (affirmativeAnswers.has(compactAnswer)) return affirmativeOption;
+      if (negativeAnswers.has(compactAnswer)) return negativeOption;
     }
+  }
+
+  const ordinalIndex = getOrdinalOptionIndex(answer);
+  if (ordinalIndex != null && options[ordinalIndex]) {
+    return options[ordinalIndex];
+  }
+
+  const directMatches = options.filter(
+    (option) =>
+      option.normalizedKey !== "affirmative" &&
+      option.normalizedKey !== "negative" &&
+      textContainsOption(answer, option.normalizedKey)
+  );
+
+  if (directMatches.length === 1) return directMatches[0];
+
+  return null;
+}
+
+function getTerminalReasonFromNode(node: any) {
+  for (const key of ["titulo", "accion", "recomendaciones", "texto", "nota"]) {
+    const value = node?.[key];
+    if (typeof value === "string" && value.trim()) return value.trim();
   }
 
   return null;
@@ -177,13 +276,27 @@ export function advanceAlgorithmRunnerState(args: {
       ? currentNode.pregunta.trim()
       : runnerState.currentQuestion || "";
 
-  const answer = classifyRunnerAnswer(userMessage, currentQuestion);
-  if (!answer) return runnerState;
+  const selectedOption = classifyRunnerAnswerToOption(
+    userMessage,
+    getRunnerOptions(currentNode)
+  );
+  if (!selectedOption) return runnerState;
 
-  const nextNodeId = getNextNodeIdFromOptions(currentNode, answer);
-  if (!nextNodeId) return runnerState;
-
+  const nextNodeId = selectedOption.nextNodeId;
   const nextNode = getNodeById(algorithm, nextNodeId);
+
+  if (!nextNode) return runnerState;
+
+  const nextType = normalizeNodeType(nextNode?.tipo);
+  const isQuestion =
+    nextType === "pregunta" &&
+    typeof nextNode?.pregunta === "string" &&
+    nextNode.pregunta.trim().length > 0;
+
+  const isTerminal =
+    !!nextNode?.fin ||
+    nextType === "diagnostico" ||
+    nextType === "accion";
 
   const step: AlgorithmRunnerStep = {
     algorithmId: runnerState.activeAlgorithmId,
@@ -191,14 +304,8 @@ export function advanceAlgorithmRunnerState(args: {
     question: currentQuestion || undefined,
     answer: userMessage,
     nextNodeId,
-    isFinal: !!nextNode?.fin,
+    isFinal: isTerminal,
   };
-
-  const nextType = String(nextNode?.tipo || "").toLowerCase().trim();
-  const isQuestion =
-    nextType === "pregunta" &&
-    typeof nextNode?.pregunta === "string" &&
-    nextNode.pregunta.trim().length > 0;
 
   if (isQuestion) {
     return {
@@ -211,14 +318,13 @@ export function advanceAlgorithmRunnerState(args: {
 
   return {
     ...runnerState,
-    status: nextNode?.fin ? "final" : runnerState.status,
+    status: isTerminal ? "final" : runnerState.status,
     currentNodeId: nextNodeId,
     currentQuestion: null,
-    finalNodeId: nextNode?.fin ? nextNodeId : runnerState.finalNodeId,
-    finalReason:
-      typeof nextNode?.titulo === "string"
-        ? nextNode.titulo
-        : runnerState.finalReason,
+    finalNodeId: isTerminal ? nextNodeId : runnerState.finalNodeId,
+    finalReason: isTerminal
+      ? getTerminalReasonFromNode(nextNode) || runnerState.finalReason
+      : runnerState.finalReason,
     path: [...(runnerState.path || []), step],
   };
 }
