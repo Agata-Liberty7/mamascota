@@ -2,7 +2,14 @@
 
 import { SYSTEM_PROMPT } from "./systemPrompt";
 import { buildAgentContext } from "./buildAgentContext";
-import { advanceAlgorithmRunnerState, createEmptyAlgorithmRunnerState, getInitialAlgorithmRunnerQuestion, type AlgorithmRunnerState } from "./algorithmRunner";
+import {
+  advanceAlgorithmRunnerState,
+  createEmptyAlgorithmRunnerState,
+  getAlgorithmRunnerQuestionSnapshot,
+  getInitialAlgorithmRunnerQuestion,
+  type AlgorithmRunnerState,
+} from "./algorithmRunner";
+import { classifyRunnerAnswer } from "./runnerAnswerClassifier";
 
 /**
  * Архитектура (Variant B):
@@ -585,6 +592,8 @@ async function callOpenAIChat(args: {
   apiKey: string;
   model: string;
   messages: Array<{ role: "system" | "user" | "assistant"; content: string }>;
+  temperature?: number;
+  responseFormat?: { type: "json_object" };
 }): Promise<string> {
   console.log("[OPENAI] calling chat.completions", {
     model: args.model,
@@ -600,6 +609,12 @@ async function callOpenAIChat(args: {
     body: JSON.stringify({
       model: args.model,
       messages: args.messages,
+      ...(typeof args.temperature === "number"
+        ? { temperature: args.temperature }
+        : {}),
+      ...(args.responseFormat
+        ? { response_format: args.responseFormat }
+        : {}),
     }),
   });
 
@@ -1058,6 +1073,21 @@ ${JSON.stringify(sections, null, 2)}
       });
     }
 
+    const runnerWasAwaitingAnswer =
+      runnerStateForResponse.status === "active" &&
+      !!runnerStateForResponse.currentNodeId &&
+      !!runnerStateForResponse.currentQuestion;
+
+    const lastHistoryMessage =
+      conversationHistory.length > 0
+        ? conversationHistory[conversationHistory.length - 1]
+        : null;
+
+    const hasPriorAssistantQuestion =
+      lastHistoryMessage?.role === "assistant" &&
+      typeof lastHistoryMessage.content === "string" &&
+      /[?¿]/.test(lastHistoryMessage.content);
+
     runnerStateForResponse = activateRunnerStateFromClinicalContext(
       runnerStateForResponse,
       fullContext
@@ -1075,10 +1105,39 @@ ${JSON.stringify(sections, null, 2)}
     );
 
     if (runnerAlgorithm) {
+      const runnerQuestionSnapshot = getAlgorithmRunnerQuestionSnapshot({
+        runnerState: runnerStateForResponse,
+        algorithm: runnerAlgorithm,
+      });
+
+      let selectedOptionKey: string | null = null;
+
+      if (
+        (runnerWasAwaitingAnswer || hasPriorAssistantQuestion) &&
+        runnerQuestionSnapshot &&
+        trimmedMessage
+      ) {
+        const classification = await classifyRunnerAnswer({
+          question: runnerQuestionSnapshot.question,
+          options: runnerQuestionSnapshot.options,
+          userAnswer: trimmedMessage,
+          callModel: (classifierMessages) =>
+            callOpenAIChat({
+              apiKey,
+              model,
+              messages: classifierMessages,
+              responseFormat: { type: "json_object" },
+            }),
+        });
+
+        selectedOptionKey = classification.selectedOptionKey;
+      }
+
       runnerStateForResponse = advanceAlgorithmRunnerState({
         runnerState: runnerStateForResponse,
         algorithm: runnerAlgorithm,
         userMessage: trimmedMessage,
+        selectedOptionKey,
       });
     }
 

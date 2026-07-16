@@ -77,10 +77,16 @@ export function getInitialAlgorithmRunnerQuestion(
   };
 }
 
-type RunnerOption = {
+export type RunnerOption = {
   rawKey: string;
   normalizedKey: string;
   nextNodeId: string;
+};
+
+export type AlgorithmRunnerQuestionSnapshot = {
+  nodeId: string;
+  question: string;
+  options: RunnerOption[];
 };
 
 function normalizeRunnerText(value: any) {
@@ -130,6 +136,34 @@ function getRunnerOptions(node: any): RunnerOption[] {
         }))
         .filter((option) => option.rawKey && option.normalizedKey && option.nextNodeId);
     });
+}
+
+export function getAlgorithmRunnerQuestionSnapshot(args: {
+  runnerState: AlgorithmRunnerState;
+  algorithm: any;
+}): AlgorithmRunnerQuestionSnapshot | null {
+  const { runnerState, algorithm } = args;
+
+  if (!runnerState || runnerState.status !== "active") return null;
+  if (!runnerState.currentNodeId) return null;
+
+  const currentNode = getNodeById(algorithm, runnerState.currentNodeId);
+  if (!currentNode) return null;
+
+  const question =
+    typeof currentNode?.pregunta === "string"
+      ? currentNode.pregunta.trim()
+      : runnerState.currentQuestion || "";
+
+  const options = getRunnerOptions(currentNode);
+
+  if (!question || !options.length) return null;
+
+  return {
+    nodeId: String(runnerState.currentNodeId),
+    question,
+    options,
+  };
 }
 
 function getOrdinalOptionIndex(answer: string): number | null {
@@ -262,8 +296,14 @@ export function advanceAlgorithmRunnerState(args: {
   runnerState: AlgorithmRunnerState;
   algorithm: any;
   userMessage: string;
+  selectedOptionKey?: string | null;
 }): AlgorithmRunnerState {
-  const { runnerState, algorithm, userMessage } = args;
+  const {
+    runnerState,
+    algorithm,
+    userMessage,
+    selectedOptionKey,
+  } = args;
 
   if (!runnerState || runnerState.status !== "active") return runnerState;
   if (!runnerState.activeAlgorithmId || !runnerState.currentNodeId) return runnerState;
@@ -276,10 +316,17 @@ export function advanceAlgorithmRunnerState(args: {
       ? currentNode.pregunta.trim()
       : runnerState.currentQuestion || "";
 
-  const selectedOption = classifyRunnerAnswerToOption(
-    userMessage,
-    getRunnerOptions(currentNode)
-  );
+  const runnerOptions = getRunnerOptions(currentNode);
+
+  const selectedOption =
+    selectedOptionKey === undefined
+      ? classifyRunnerAnswerToOption(userMessage, runnerOptions)
+      : selectedOptionKey
+        ? runnerOptions.find(
+            (option) => option.normalizedKey === selectedOptionKey
+          ) ?? null
+        : null;
+
   if (!selectedOption) return runnerState;
 
   const nextNodeId = selectedOption.nextNodeId;
