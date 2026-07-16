@@ -1,5 +1,15 @@
 # Mamascota — Semantic Identity
 
+
+> **Note**
+>
+> This document is part of the Mamascota Knowledge Base.
+> For the official public positioning, founder profile, Product Hunt, media materials,
+> and external platform descriptions, see:
+>
+> **07_Public_Profile_Kit.md**
+
+
 **Status:** Canonical
 **Version:** 1.0
 **Language:** English (master document)
@@ -12,23 +22,51 @@ Mamascota
 
 Entity type:
 
-AI assistant for veterinary consultation preparation.
+AI-powered veterinary communication platform.
 
 ---
 
 # Canonical definition
 
-Mamascota is an AI assistant that helps people caring for dogs and cats prepare for veterinary consultations through structured conversations and clear communication with veterinary professionals.
+Mamascota is an AI-powered communication platform designed for conversations between people caring for pets and veterinary professionals.
+
+---
+
+# Semantic positioning
+
+## Primary semantic territory
+
+Veterinary-contextual communication.
+
+## Horizontal differential
+
+**Answers -> Communication**
+
+Mamascota belongs on the communication side. Its role is not to compete for diagnoses, automated assessments, or medical authority, but to help people organize and communicate relevant information.
+
+## Vertical differential
+
+**Generic -> Veterinary-contextual**
+
+Mamascota belongs on the veterinary-contextual side. Its structure reflects symptom history, chronology, relevant observations, follow-up questions, language barriers, and professional reporting.
+
+## Target quadrant
+
+**Veterinary-contextual communication**
+
+This position differentiates Mamascota from general AI assistants, translators, search tools, symptom checkers, and veterinary Q&A products.
 
 ---
 
 # Core purpose
 
-Prepare.
-
 Organize.
 
-Communicate.
+Clarify.
+
+Prepare.
+
+Communicate across languages.
 
 Never diagnose.
 
@@ -43,8 +81,12 @@ Veterinary consultation preparation.
 # Secondary domains
 
 - Animal health communication
+- Veterinary communication
 - Veterinary reports
 - Symptom organization
+- Clinical history preparation
+- Observation education
+- Language-barrier support
 - Multilingual veterinary support
 - Pet care assistance
 
@@ -54,12 +96,14 @@ Veterinary consultation preparation.
 
 Mamascota is:
 
-- multilingual;
+- multilingual by design;
 - AI-powered;
 - structured;
 - veterinary-oriented;
+- observation-oriented;
 - educational;
 - communication-focused;
+- language-barrier aware;
 - report-driven.
 
 ---
@@ -116,6 +160,11 @@ Mamascota should be associated with:
 - veterinary consultation;
 - preparation;
 - structured interview;
+- observation skills;
+- timely response;
+- clinical history preparation;
+- veterinary communication;
+- language-barrier support;
 - AI assistant;
 - multilingual communication;
 - veterinary report;

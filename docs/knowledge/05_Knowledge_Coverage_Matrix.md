@@ -1,5 +1,15 @@
 # Mamascota — Knowledge Coverage Matrix
 
+
+> **Note**
+>
+> This document is part of the Mamascota Knowledge Base.
+> For the official public positioning, founder profile, Product Hunt, media materials,
+> and external platform descriptions, see:
+>
+> **07_Public_Profile_Kit.md**
+
+
 **Status:** Canonical
 **Version:** 1.0
 **Language:** English (master document)
@@ -15,10 +25,14 @@
 | Canonical definition | 03_Brand_Identity | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
 | Medical boundaries | 03_Brand_Identity | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
 | Terminology | 01_Canonical_Terminology | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
-| Supported languages | External Profile Pack | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
-| Product capabilities | External Profile Pack | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
+| Supported languages | 07_Public_Profile_Kit | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
+| Product capabilities | 06_External_Profile_Pack | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
 | Product limitations | 03_Brand_Identity | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
-| Founder | External Profile Pack | ☐ | ☐ | — | ☐ | ☐ | ☐ |
+| Observation skills | 03_Brand_Identity | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
+| Language-barrier support | 07_Public_Profile_Kit | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
+| Multilingual communication | 07_Public_Profile_Kit | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
+| Public positioning | 07_Public_Profile_Kit | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
+| Founder profile | 07_Public_Profile_Kit | ☐ | ☐ | — | ☐ | ☐ | ☐ |
 | Contact information | Website | ☐ | ☐ | — | ☐ | ☐ | ☐ |
 | Logo | Website | ☐ | ☐ | — | ☐ | ☐ | ☐ |
 | Canonical URL | Website | ☐ | ☐ | — | ☐ | ☐ | ☐ |
