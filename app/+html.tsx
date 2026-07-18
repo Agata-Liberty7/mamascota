@@ -22,7 +22,7 @@ const seoJsonLd = {
       applicationCategory: "HealthApplication",
       operatingSystem: "Web, iOS, Android",
       description:
-        "Mamascota helps people caring for animals prepare for a veterinary visit by collecting observations, asking structured questions, and creating a veterinary report. Mamascota does not diagnose or prescribe treatment.",
+        "Mamascota helps people caring for pets observe changes more accurately, organize symptoms, communicate clearly with veterinary professionals across language barriers, and prepare structured information for veterinary care. Mamascota does not diagnose, prescribe medication, or replace professional veterinary care.",
       inLanguage: ["bg", "de", "en", "es", "fr", "he", "it", "ka", "pl", "pt", "ru", "sr", "tr", "uk"],
       offers: {
         "@type": "Offer",
@@ -40,7 +40,7 @@ const seoJsonLd = {
           acceptedAnswer: {
             "@type": "Answer",
             text:
-              "Mamascota is a digital assistant for people caring for pets. It helps structure observations before a veterinary visit and creates a report that can be shared with a veterinarian.",
+              "Mamascota is an AI assistant that helps people caring for pets observe changes more accurately, organize symptoms, communicate more clearly with veterinary professionals, overcome language barriers, and prepare a structured veterinary report.",
           },
         },
         {
@@ -58,7 +58,7 @@ const seoJsonLd = {
           acceptedAnswer: {
             "@type": "Answer",
             text:
-              "Mamascota is based on a specialized veterinary knowledge base prepared for pre-visit support, including veterinary guidelines, textbooks, clinical decision-making algorithms, and professional reference materials.",
+              "Mamascota uses a specialized veterinary knowledge base that supports structured observation, symptom clarification, urgent-sign navigation, clearer communication with veterinary professionals, and preparation of veterinary reports.",
           },
         },
       ],
@@ -87,25 +87,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           }}
         />
 
-        <title>Mamascota — veterinary visit preparation assistant</title>
+        <title>Mamascota — AI for clearer veterinary communication</title>
         <meta
           name="description"
-          content="Mamascota helps people caring for animals prepare for a veterinary visit, structure observations, and create a report for the veterinarian. It does not diagnose or prescribe treatment."
+          content="Mamascota helps people caring for pets observe changes, organize symptoms, communicate across language barriers, and prepare for veterinary care. It does not diagnose."
         />
         <link rel="canonical" href="https://mamascota.com/" />
 
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Mamascota" />
+        <meta
+          property="og:title"
+          content="Mamascota — Better observation and clearer veterinary communication"
+        />
         <meta
           property="og:description"
-          content="A multilingual assistant that helps prepare for a veterinary visit and create a structured report for the veterinarian."
+          content="An AI assistant that helps people observe changes, organize symptoms, communicate across language barriers, and prepare clear information for veterinary care."
         />
         <meta property="og:url" content="https://mamascota.com/" />
         <meta name="twitter:card" content="summary" />
 
         <meta
           name="keywords"
-          content="pet health assistant, veterinary visit preparation, pet symptoms, veterinary report, multilingual veterinary assistant, Mamascota"
+          content="veterinary communication, pet observation, structured symptom consultation, multilingual veterinary communication, veterinary report, language barrier support, Mamascota"
         />
 
         <link rel="manifest" href="/manifest.json" />
