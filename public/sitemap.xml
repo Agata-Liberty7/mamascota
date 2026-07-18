@@ -24,8 +24,4 @@
     <loc>https://mamascota.com/paywall</loc>
     <priority>0.7</priority>
   </url>
-  <url>
-    <loc>https://mamascota.com/landing</loc>
-    <priority>0.6</priority>
-  </url>
 </urlset>
