@@ -92,7 +92,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           name="description"
           content="Mamascota helps people caring for pets observe changes, organize symptoms, communicate across language barriers, and prepare for veterinary care. It does not diagnose."
         />
-        <link rel="canonical" href="https://mamascota.com/" />
 
         <meta property="og:type" content="website" />
         <meta

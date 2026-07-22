@@ -9,7 +9,7 @@
     "start:proxy": "cd proxy && npm run proxy:start",
     "dev": "concurrently -n PROXY,EXPO -c magenta,cyan \"npm run start:proxy\" \"npm run start:clear\"",
     "deploy:worker": "cd cloudflare/agent-worker/mamascota-agent && npx wrangler deploy",
-    "build:web": "npx expo export --platform web --clear && node scripts/fix-web-font-paths.mjs",
+    "build:web": "npx expo export --platform web --clear && node scripts/fix-web-font-paths.mjs && node scripts/fix-web-canonicals.mjs",
     "deploy:web": "npm run build:web && npx wrangler pages deploy dist --project-name mamascota"
   },
   "dependencies": {
