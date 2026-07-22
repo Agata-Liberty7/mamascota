@@ -194,9 +194,13 @@ function buildRunnerRuntimeInstruction(runnerState: AlgorithmRunnerState) {
   ) {
     return [
       "RUNNER_ACTIVE_NODE_MODE:",
-      "- The deterministic runner has selected the next algorithm question.",
-      "- Ask exactly ONE question that preserves the clinical meaning of runnerCurrentQuestion.",
-      "- Translate/adapt the question naturally into the user's output language.",
+      "- The deterministic runner has selected the exact next algorithm question.",
+      "- Ask exactly ONE question.",
+      "- Translate or naturally rephrase runnerCurrentQuestion into the user's output language.",
+      "- Preserve exactly the same clinical meaning, scope, time frame, and answer alternatives.",
+      "- You may change wording, grammar, and word order only to make the question sound natural.",
+      "- Do NOT add examples, symptoms, conditions, time ranges, explanations, or answer options that are absent from runnerCurrentQuestion.",
+      "- Do NOT remove, broaden, narrow, reinterpret, or combine any part of the clinical meaning.",
       "- Do NOT ask several questions in the same message.",
       "- Do NOT add new clinical branches outside this runner question.",
       "- Do NOT show algorithm IDs, node IDs, or internal runner data to the user.",
