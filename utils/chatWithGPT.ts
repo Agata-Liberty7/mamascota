@@ -17,6 +17,7 @@ export type ChatResult = {
   newConsultationReason?: string;
   phase?: "intake" | "clarify" | "summary" | "ended";
   decisionTree?: any | null;
+  runnerState?: any | null;
 };
 
 // Универсальный URL агента: сначала берём точный /agent, иначе — из API_URL
@@ -43,6 +44,40 @@ const AGENT_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 const CHAT_HISTORY_LIMIT_REGULAR = 48; // для обычного диалога — больше, чтобы модель видела контекст
 const CHAT_HISTORY_LIMIT_DECISION_TREE = 80;
 const CHAT_HISTORY_LIMIT_FINALIZE = 48;
+
+const ALGORITHM_RUNNER_STATE_KEY_PREFIX = "algorithmRunnerState:";
+
+function algorithmRunnerStateKey(conversationId: string) {
+  return `${ALGORITHM_RUNNER_STATE_KEY_PREFIX}${conversationId}`;
+}
+
+async function readCachedAlgorithmRunnerState(conversationId?: string) {
+  if (!conversationId) return null;
+
+  try {
+    const raw = await AsyncStorage.getItem(algorithmRunnerStateKey(conversationId));
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : null;
+  } catch (e) {
+    console.warn("⚠️ Не удалось прочитать algorithmRunnerState:", e);
+    return null;
+  }
+}
+
+async function writeCachedAlgorithmRunnerState(conversationId?: string, runnerState?: any | null) {
+  if (!conversationId || !runnerState || typeof runnerState !== "object") return;
+
+  try {
+    await AsyncStorage.setItem(
+      algorithmRunnerStateKey(conversationId),
+      JSON.stringify(runnerState)
+    );
+  } catch (e) {
+    console.warn("⚠️ Не удалось сохранить algorithmRunnerState:", e);
+  }
+}
 
 
 /**
@@ -105,6 +140,7 @@ export async function chatWithGPT(params: {
   userLang?: string;
   conversationId?: string; // можно явно задать (например, summary-…)
   conversationHistory?: Array<{ role: "user" | "assistant" | "system"; content: string }>;
+  runnerState?: any | null;
   postSummaryUpdateMode?: boolean;
   sections?: any;
   fromLocale?: string;
@@ -116,6 +152,7 @@ export async function chatWithGPT(params: {
     symptomKeys,
     userLang,
     conversationId,
+    runnerState,
     postSummaryUpdateMode,
     sections,
     fromLocale,
@@ -228,6 +265,9 @@ export async function chatWithGPT(params: {
         ? postSummaryTail
         : baseConversationHistory;
 
+    const effectiveRunnerState =
+      runnerState ?? (await readCachedAlgorithmRunnerState(ensuredConversationId));
+
     const body = {
       message: effectiveMessage,
       internalCommand: effectiveInternalCommand || undefined,
@@ -236,6 +276,7 @@ export async function chatWithGPT(params: {
       userLang: effectiveLang,
       conversationId: ensuredConversationId,
       conversationHistory: effectiveConversationHistory,
+      runnerState: effectiveRunnerState ?? undefined,
       postSummaryUpdateMode: !!postSummaryUpdateMode,
       sections,
       fromLocale,
@@ -391,6 +432,10 @@ export async function chatWithGPT(params: {
             ? data.phase
             : undefined;
 
+        if (data?.runnerState && serverConversationId && !isSummaryConversation) {
+          await writeCachedAlgorithmRunnerState(serverConversationId, data.runnerState);
+        }
+
         // ✅ decisionTree payload (из воркера) — сохраняем только для обычного чата
         if (data?.decisionTree && serverConversationId && !isSummaryConversation) {
           try {
@@ -437,6 +482,7 @@ export async function chatWithGPT(params: {
               : undefined,
           phase,
           decisionTree: data?.decisionTree ?? null,
+          runnerState: data?.runnerState ?? null,
         };
       }
 
@@ -620,6 +666,7 @@ export async function clearActiveConversationData(
         key === `chatHistory:${conversationId}` ||
         key === `chat:history:${conversationId}` ||
         key === `pdfAllowed:${conversationId}` ||
+        key === algorithmRunnerStateKey(conversationId) ||
         key.startsWith(`decisionTree:${conversationId}:`) ||
         key.startsWith(`pdfReport:${conversationId}:`)
     );

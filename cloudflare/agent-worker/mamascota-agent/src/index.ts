@@ -16,6 +16,7 @@ type AgentRequestBody = {
   symptomKeys?: string[];
   userLang?: string;
   conversationId?: string;
+  runnerState?: any | null;
 
   // ✅ NEW: хвост истории (10–20 сообщений)
   conversationHistory?: ChatMsg[];
@@ -164,6 +165,7 @@ export default {
         conversationId,
         conversationHistory,
         langOverride: userLang,
+        runnerState: body?.runnerState ?? null,
       });
 
       return json(result, result.ok ? 200 : 500);
