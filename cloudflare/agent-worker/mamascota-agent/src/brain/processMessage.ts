@@ -1027,7 +1027,10 @@ ${JSON.stringify(sections, null, 2)}
             `- Avoid repeating a question that was already asked in the last 6 turns.\n` +
             `- No checklists.\n` +
             `- Prefer concise wording, but do NOT end early if clinically relevant gaps remain.\n` +
-            `- Before moving to summary, continue step-by-step through relevant symptom axes when they are indicated by the case (for example appetite, thirst, activity, stool/vomiting, recent changes, external triggers).\n` +
+            `- Think across the whole case, not only the selected symptom. Consider relevant medical, behavioral, environmental, situational, dietary, medication-related, and routine-related explanations.\n` +
+            `- Before moving to summary, continue step-by-step through the relevant clinical axes indicated by the case, including appetite, thirst, activity, weight, elimination, pain, gastrointestinal signs, medications, diet, and recent changes.\n` +
+            `- When behavior, urination, defecation, appetite, sleep, activity, or recurrent unexplained signs are involved, explicitly consider changes in the animal's environment and routine: moving home, visitors, renovation or noise, a new or absent family member, the family's vacation or prolonged absence, a new animal, conflict between animals, changed walking schedule, litter tray or litter changes, feeding changes, and altered access to water, food, resting places, or elimination areas.\n` +
+            `- Do not assume a behavioral or idiopathic explanation, but do not omit it merely because medical causes are also possible. Ask the single environmental or behavioral question that best distinguishes the active clinical paths.\n` +
             `- Do NOT explain every question.\n` +
             `- Explain a question only if it changes the direction of reasoning and the transition would otherwise be unclear.\n` +
             `- Do NOT write filler acknowledgements like "Okay", "Got it", "Thanks", "Understood", "Приняла", "Хорошо, спасибо". Start directly with helpful content.\n` +
