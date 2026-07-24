@@ -1,24 +1,69 @@
-import { env, createExecutionContext, waitOnExecutionContext, SELF } from 'cloudflare:test';
-import { describe, it, expect } from 'vitest';
-import worker from '../src/index';
+import {
+  env,
+  createExecutionContext,
+  waitOnExecutionContext,
+  SELF,
+} from "cloudflare:test";
+import { describe, expect, it } from "vitest";
+import worker from "../src/index";
 
-// For now, you'll need to do something like this to get a correctly-typed
-// `Request` to pass to `worker.fetch()`.
 const IncomingRequest = Request<unknown, IncomingRequestCfProperties>;
 
-describe('Hello World worker', () => {
-	it('responds with Hello World! (unit style)', async () => {
-		const request = new IncomingRequest('http://example.com');
-		// Create an empty context to pass to `worker.fetch()`.
-		const ctx = createExecutionContext();
-		const response = await worker.fetch(request, env, ctx);
-		// Wait for all `Promise`s passed to `ctx.waitUntil()` to settle before running test assertions
-		await waitOnExecutionContext(ctx);
-		expect(await response.text()).toMatchInlineSnapshot(`"Hello World!"`);
-	});
+describe("Mamascota Agent Worker", () => {
+  it("responds to /health", async () => {
+    const request = new IncomingRequest("https://example.com/health");
+    const ctx = createExecutionContext();
 
-	it('responds with Hello World! (integration style)', async () => {
-		const response = await SELF.fetch('https://example.com');
-		expect(await response.text()).toMatchInlineSnapshot(`"Hello World!"`);
-	});
+    const response = await worker.fetch(request, env, ctx);
+    await waitOnExecutionContext(ctx);
+
+    const body = await response.json<{
+      ok: boolean;
+      status: string;
+      hasApiKey: boolean;
+    }>();
+
+    expect(response.status).toBe(200);
+    expect(body.ok).toBe(true);
+    expect(body.status).toBe("up");
+    expect(typeof body.hasApiKey).toBe("boolean");
+  });
+
+  it("responds to /agent ping", async () => {
+    const response = await SELF.fetch("https://example.com/agent", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: "ping",
+        conversationId: "test-ping",
+      }),
+    });
+
+    const body = await response.json<{
+      ok: boolean;
+      pong: boolean;
+      conversationId: string;
+    }>();
+
+    expect(response.status).toBe(200);
+    expect(body.ok).toBe(true);
+    expect(body.pong).toBe(true);
+    expect(body.conversationId).toBe("test-ping");
+  });
+
+  it("returns 404 for an unknown route", async () => {
+    const response = await SELF.fetch("https://example.com/unknown");
+    const body = await response.json<{
+      ok: boolean;
+      error: string;
+    }>();
+
+    expect(response.status).toBe(404);
+    expect(body).toEqual({
+      ok: false,
+      error: "Not found",
+    });
+  });
 });
