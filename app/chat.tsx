@@ -27,6 +27,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import SymptomSelector from "../components/SymptomSelector";
 import i18n from "../i18n";
+import { trackAnalyticsEvent } from "../utils/analytics";
 import {
   exportSummaryPDF,
   invalidatePdfReportsForSession,
@@ -166,6 +167,9 @@ export default function ChatScreen() {
   const inputRef = useRef<TextInput>(null);
   const waitingHintIdxRef = useRef(0);
   const dtRefreshPromiseRef = useRef<Promise<void> | null>(null);
+  const chatViewTrackedRef = useRef(false);
+  const firstMessageTrackedRef = useRef(false);
+  const consultationCompletedTrackedRef = useRef(false);
 
 
 
@@ -241,12 +245,23 @@ export default function ChatScreen() {
 
           setChat([...normalized, ...finalizationBubbles]);
 
+          if (normalized.some((message: any) => message?.role === "user")) {
+            firstMessageTrackedRef.current = true;
+          }
+
         } catch {
           setChat([]);
         }
 
         setShowSelector(false);
         setIsPostSummaryUpdateMode(false);
+
+        if (!chatViewTrackedRef.current) {
+          chatViewTrackedRef.current = true;
+          trackAnalyticsEvent("chat_view", i18n.locale, {
+            chat_entry: "resumed",
+          });
+        }
 
         const allowed = await isSessionPdfAllowed(id);
         setPdfConversationId(allowed ? id : null);
@@ -306,12 +321,23 @@ export default function ChatScreen() {
                 : [];
 
               setChat(normalized);
+
+              if (normalized.some((message: any) => message?.role === "user")) {
+                firstMessageTrackedRef.current = true;
+              }
             } catch {
               setChat([]);
             }
 
             setShowSelector(false);
             setIsPostSummaryUpdateMode(true);
+
+            if (!chatViewTrackedRef.current) {
+              chatViewTrackedRef.current = true;
+              trackAnalyticsEvent("chat_view", i18n.locale, {
+                chat_entry: "resumed",
+              });
+            }
 
             // ✅ consultation PDF доступен только для реально финализированной сессии
             const allowed = await isSessionPdfAllowed(id);
@@ -420,8 +446,20 @@ useEffect(() => {
         }))
       );
 
+      if (!chatViewTrackedRef.current) {
+        chatViewTrackedRef.current = true;
+        trackAnalyticsEvent("chat_view", i18n.locale, {
+          chat_entry: "new",
+        });
+      }
+
       // PDF CTA: показываем только если агент явно финализировал
       if (typeof result === "object" && result?.sessionEnded) {
+        if (!consultationCompletedTrackedRef.current) {
+          consultationCompletedTrackedRef.current = true;
+          trackAnalyticsEvent("consultation_completed", i18n.locale);
+        }
+
         const cid = result.conversationId ?? null;
         if (cid) {
           await markSessionPdfAllowed(cid);
@@ -536,6 +574,11 @@ useEffect(() => {
 
         setChat((prev) => [...prev, ...assistantBubbles]);
 
+        if (!firstMessageTrackedRef.current) {
+          firstMessageTrackedRef.current = true;
+          trackAnalyticsEvent("first_message_sent", i18n.locale);
+        }
+
         if (
           typeof result === "object" &&
           (result as any)?.sessionEnded &&
@@ -569,6 +612,11 @@ useEffect(() => {
             await invalidatePdfReportsForSession(invalidateId);
           }
         } else if (typeof result === "object" && result?.sessionEnded) {
+          if (!consultationCompletedTrackedRef.current) {
+            consultationCompletedTrackedRef.current = true;
+            trackAnalyticsEvent("consultation_completed", i18n.locale);
+          }
+
           const cid = result.conversationId ?? null;
           if (cid) {
             await markSessionPdfAllowed(cid);
@@ -989,6 +1037,11 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
 
         await exportSummaryPDF(id, previewWindow);
 
+        trackAnalyticsEvent("pdf_opened", i18n.locale, {
+          pdf_result: "cached",
+          pdf_entry_point: "chat",
+        });
+
         return;
       }
 
@@ -1029,6 +1082,10 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
 
       setPdfGenerating(true);
 
+      trackAnalyticsEvent("pdf_generation_started", i18n.locale, {
+        pdf_entry_point: "chat",
+      });
+
       console.log("📄 PDF step 3: before refreshDecisionTreeIfStale");
       await refreshDecisionTreeIfStale(id);
       console.log("📄 PDF step 4: after refreshDecisionTreeIfStale");
@@ -1039,6 +1096,11 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
 
       console.log("📄 PDF step 7: before exportSummaryPDF");
       await exportSummaryPDF(id, previewWindow);
+
+      trackAnalyticsEvent("pdf_opened", i18n.locale, {
+        pdf_result: "generated",
+        pdf_entry_point: "chat",
+      });
 
       await AsyncStorage.removeItem(finalizationBubblesKey(id));
 

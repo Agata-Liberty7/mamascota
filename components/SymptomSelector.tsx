@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   StyleSheet,
@@ -11,6 +11,7 @@ import {
   Platform,
 } from 'react-native';
 import i18n from '../i18n';
+import { trackAnalyticsEvent } from '../utils/analytics';
 
 const SYMPTOMS = [
   // Общее состояние
@@ -82,6 +83,14 @@ export default function SymptomSelector({ onSubmit }: Props) {
   const [selected, setSelected] = useState<string[]>([]);
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customSymptom, setCustomSymptom] = useState('');
+  const viewTrackedRef = useRef(false);
+
+  useEffect(() => {
+    if (viewTrackedRef.current) return;
+
+    viewTrackedRef.current = true;
+    trackAnalyticsEvent("observation_selection_view", i18n.locale);
+  }, []);
 
   const toggleSymptom = (key: string) => {
     if (key === 'custom') {
@@ -111,6 +120,7 @@ export default function SymptomSelector({ onSubmit }: Props) {
       console.error('❌ Не удалось сохранить selectedSymptoms:', e);
     }
 
+    trackAnalyticsEvent("observations_selected", i18n.locale);
     onSubmit(final);
   };
 

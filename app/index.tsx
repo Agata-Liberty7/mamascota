@@ -1,7 +1,7 @@
 // app/index.tsx
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect, useRouter, type Href } from "expo-router";
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { clearActiveConversationData, clearConversationId } from "../utils/chatWithGPT";
@@ -14,6 +14,7 @@ import { detectAndSetInitialLanguage } from "../utils/detectLanguage";
 import i18n from '../i18n';
 import { theme } from '../src/theme';
 import { useDeviceClass } from '../hooks/useDeviceClass';
+import { trackAnalyticsEvent } from "../utils/analytics";
 
 
 
@@ -27,6 +28,7 @@ export default function StartScreen() {
   const [checking, setChecking] = useState(true);
   const { isWeb, isDesktopLike, isTabletLike } = useDeviceClass();
   const heroWeb = require('../assets/images/Mamascota_2_web.png');
+  const homeViewTrackedRef = useRef(false);
 
   useEffect(() => {
     (async () => {
@@ -60,6 +62,15 @@ export default function StartScreen() {
       init();
     }, [])
   );
+
+  useEffect(() => {
+    if (checking || !currentLanguage || homeViewTrackedRef.current) {
+      return;
+    }
+
+    homeViewTrackedRef.current = true;
+    trackAnalyticsEvent("home_view", currentLanguage);
+  }, [checking, currentLanguage]);
 
   // 🔗 Каноничный входной поток: Условия → Онбординг → Мои питомцы
   const ensureEntryFlow = async () => {
@@ -109,6 +120,23 @@ export default function StartScreen() {
     router.push(
       (termsAccepted ? "/about?source=home" : "/about?source=first_entry") as Href
     );
+  };
+
+  const handlePrimaryPress = async () => {
+    trackAnalyticsEvent(
+      "consultation_start_click",
+      currentLanguage || i18n.locale,
+      {
+        entry_state: termsAccepted ? "ready" : "pre_terms",
+      }
+    );
+
+    if (termsAccepted) {
+      await handleStart();
+      return;
+    }
+
+    handleAboutPress();
   };
 
   const stylesMobile = StyleSheet.create({
@@ -422,7 +450,7 @@ export default function StartScreen() {
             <View style={styles.bottomBlock}>
               <Text style={styles.description}>{i18n.t('start_description')}</Text>
 
-              <TouchableOpacity style={styles.button} onPress={termsAccepted ? handleStart : handleAboutPress}>
+              <TouchableOpacity style={styles.button} onPress={handlePrimaryPress}>
                 <Text style={styles.buttonText}>{i18n.t('start_button')}</Text>
               </TouchableOpacity>
             </View>
@@ -440,7 +468,7 @@ export default function StartScreen() {
 
             <Text style={styles.description}>{i18n.t('start_description')}</Text>
 
-            <TouchableOpacity style={styles.button} onPress={termsAccepted ? handleStart : handleAboutPress}>
+            <TouchableOpacity style={styles.button} onPress={handlePrimaryPress}>
               <Text style={styles.buttonText}>{i18n.t('start_button')}</Text>
             </TouchableOpacity>
           </View>

@@ -16,6 +16,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter, type Href } from "expo-router";
 import { chatWithGPT, restoreSession } from "../utils/chatWithGPT";
 import i18n from "../i18n";
+import { trackAnalyticsEvent } from "../utils/analytics";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ThemedText } from "../components/ThemedText";
 import { createPdfPreviewPlaceholderHtml } from "../utils/pdfPreviewPlaceholder";
@@ -454,15 +455,29 @@ export default function SummaryScreen() {
 
         await exportSummaryPDF(id, previewWindow);
 
+        trackAnalyticsEvent("pdf_opened", i18n.locale, {
+          pdf_result: "cached",
+          pdf_entry_point: "summary",
+        });
+
         return;
       }
 
       setPdfTextKey("pdf.generating");
       setPdfLoading(true);
 
+      trackAnalyticsEvent("pdf_generation_started", i18n.locale, {
+        pdf_entry_point: "summary",
+      });
+
       await ensureDecisionTreeCachedForSummary(id, petName);
 
       await exportSummaryPDF(id, previewWindow);
+
+      trackAnalyticsEvent("pdf_opened", i18n.locale, {
+        pdf_result: "generated",
+        pdf_entry_point: "summary",
+      });
 
       await addPdfLanguage(normalizedLang);
     } catch (err: any) {

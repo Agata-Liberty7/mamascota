@@ -25,6 +25,7 @@ import type { Pet, Species } from '../types/pet';
 import { getPets, upsertPet } from '../utils/pets';
 import { setCurrentPetId } from '../src/data/pets';
 import { warmUpAgentInBackground } from "../utils/chatWithGPT";
+import { trackAnalyticsEvent } from "../utils/analytics";
 
 
 export default function AnimalSelection() {
@@ -67,6 +68,8 @@ export default function AnimalSelection() {
   useEffect(() => {
     if (warmedOnceRef.current) return;
     warmedOnceRef.current = true;
+
+    trackAnalyticsEvent("animal_selection_view", i18n.locale);
 
     // 🔥 прогрев — параллельно, без ожидания
     warmUpAgentInBackground();
@@ -257,6 +260,8 @@ export default function AnimalSelection() {
 
     // ✅ Сразу записываем активного питомца для всех модулей
     await setCurrentPetId(saved.id);
+
+    trackAnalyticsEvent("animal_selected", i18n.locale);
 
     resetFields();
     setModalVisible(false);
