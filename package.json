@@ -8,7 +8,9 @@
     "start:clear": "npx expo start --tunnel --clear",
     "start:proxy": "cd proxy && npm run proxy:start",
     "dev": "concurrently -n PROXY,EXPO -c magenta,cyan \"npm run start:proxy\" \"npm run start:clear\"",
-    "deploy:worker": "cd cloudflare/agent-worker/mamascota-agent && npx wrangler deploy"
+    "deploy:worker": "cd cloudflare/agent-worker/mamascota-agent && npx wrangler deploy",
+    "build:web": "npx expo export --platform web --clear && node scripts/fix-web-font-paths.mjs",
+    "deploy:v2": "npm run build:web && npx wrangler pages deploy dist --project-name mamascota-v2 --branch feature/v2-direct-entry-flow"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
