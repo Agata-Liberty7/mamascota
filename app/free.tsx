@@ -16,7 +16,6 @@ import { theme } from "../src/theme";
 const benefits = [
   "consultation",
   "pdf_report",
-  "pdf_languages",
   "continue_consultation",
   "no_registration",
   "no_diagnosis",

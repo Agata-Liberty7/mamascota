@@ -62,6 +62,12 @@
   "start_subtitle": "Prepare-se para a visita — eu ajudo a explicar tudo ao veterinário",
   "start_description": "Mesmo que o veterinário fale outro idioma.",
   "start_button": "Começar",
+  "quick_check_title": "Verifique se há sinais que não devem ser adiados.",
+  "quick_check_duration": "O Quick Check demora cerca de um minuto.",
+  "quick_check_button": "Iniciar Quick Check",
+  "full_consultation_title": "Consulta completa",
+  "full_consultation_description": "Vamos analisar a situação em detalhe e preparar as informações para o veterinário.",
+  "full_consultation_button": "Iniciar consulta",
   "continue_title": "Continuar?",
   "continue_message": "Pode continuar a consulta atual ou começar uma nova. Na versão gratuita, a Mamascota guarda apenas uma consulta ativa: se começar uma nova, o chat atual e os relatórios associados serão eliminados.",
   "start_new": "Começar de novo",
@@ -335,12 +341,13 @@
     "subtitle": "Tudo o que é necessário para a primeira consulta e preparação da visita.",
     "continue": "Continuar",
     "benefits": {
-      "consultation": "Consulta com a Mamascota",
-      "pdf_report": "Relatório PDF para o veterinário",
-      "pdf_languages": "PDF em 7 idiomas",
+      "consultation": "Consulta com a Mamascota no seu idioma",
+      "pdf_report": "Relatório PDF para o veterinário em 14 idiomas",
+      "pdf_languages": "PDF em 14 idiomas",
       "continue_consultation": "Pode continuar a consulta atual",
       "no_registration": "Sem registo",
       "no_diagnosis": "Sem diagnóstico nem automedicação — apenas preparação para a visita"
     }
-  }
+  },
+  "brand_tagline": "A sua assistente veterinária pessoal"
 }

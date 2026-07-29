@@ -31,16 +31,5 @@ export const theme = {
     start: {
       hero: require('../assets/images/Mamascota_2.png'),
     },
-    animalSelection: {
-      dog: require('../assets/images/perro.png'),
-      cat: require('../assets/images/gato.png'),
-      rabbit: require('../assets/images/conejo.png'),
-      ferret: require('../assets/images/huron.png'),
-      bird: require('../assets/images/ave.png'),
-      rodent: require('../assets/images/roedor.png'),
-      reptile: require('../assets/images/reptiles.png'),
-      fish: require('../assets/images/peces.png'),
-      exotic: require('../assets/images/exoticos.png'),
-    },
   },
 } as const;

@@ -134,7 +134,11 @@ function formatAssistantBubbleContent(
 export default function ChatScreen() {
   const navigation = useNavigation();
   const router = useRouter();
-  const { pet: petParam } = useLocalSearchParams<{ pet?: string }>();
+  const { pet: petParam, consultationMode } = useLocalSearchParams<{
+    pet?: string;
+    consultationMode?: string;
+  }>();
+  const isQuickCheck = consultationMode === "quickCheck";
   const lang = (i18n.locale || "").split("-")[0];
   const isRTL = lang === "he";
 
@@ -166,6 +170,26 @@ export default function ChatScreen() {
   const inputRef = useRef<TextInput>(null);
   const waitingHintIdxRef = useRef(0);
   const dtRefreshPromiseRef = useRef<Promise<void> | null>(null);
+  const quickCheckConversationIdRef = useRef<string | null>(null);
+
+  const resolveActiveConversationId = async (): Promise<string | undefined> => {
+    if (!isQuickCheck) return undefined;
+
+    if (quickCheckConversationIdRef.current) {
+      return quickCheckConversationIdRef.current;
+    }
+
+    const storedId = await AsyncStorage.getItem("quickCheckConversationId");
+    const id = storedId ?? `quick-${Date.now()}`;
+
+    quickCheckConversationIdRef.current = id;
+
+    if (!storedId) {
+      await AsyncStorage.setItem("quickCheckConversationId", id);
+    }
+
+    return id;
+  };
 
 
 
@@ -177,6 +201,16 @@ export default function ChatScreen() {
   // ====================================================== 
   useEffect(() => {
     (async () => {
+      if (isQuickCheck) {
+        await resolveActiveConversationId();
+        setChat([]);
+        setPdfConversationId(null);
+        setIsPdfReady(false);
+        setIsPostSummaryUpdateMode(false);
+        setShowSelector(true);
+        return;
+      }
+
       const id = await AsyncStorage.getItem("conversationId");
       if (!id) {
         // если нет сессии — показываем селектор
@@ -264,6 +298,8 @@ export default function ChatScreen() {
   // ======================================================
   useEffect(() => {
     (async () => {
+      if (isQuickCheck) return;
+
       const flag = await AsyncStorage.getItem("restoreFromSummary");
       if (flag === "1") {
         const id = await AsyncStorage.getItem("conversationId");
@@ -398,10 +434,13 @@ useEffect(() => {
       const allSymptoms = [...selected];
       if (customSymptom) allSymptoms.push(customSymptom.trim());
 
+      const activeConversationId = await resolveActiveConversationId();
+
       const result = await chatWithGPT({
         message: "",
         pet: pet || undefined,
         symptomKeys: allSymptoms,
+        conversationId: activeConversationId,
       });
 
       const replyText =
@@ -475,9 +514,12 @@ useEffect(() => {
         // 3) Запрос к агенту
         let wasFinalizationRequest = false;
 
+        const activeConversationId = await resolveActiveConversationId();
+
         let result = await chatWithGPT({
           message: messageToSend,
           pet: pet || undefined,
+          conversationId: activeConversationId,
           userLang: "auto",
           postSummaryUpdateMode: isPostSummaryUpdateMode,
         });
@@ -493,6 +535,7 @@ useEffect(() => {
 
           const cid =
             (result as any)?.conversationId ??
+            activeConversationId ??
             (await AsyncStorage.getItem("conversationId")) ??
             null;
 
@@ -1212,7 +1255,10 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
         </Modal>
 
         {showSelector ? (
-          <SymptomSelector onSubmit={handleSymptomSubmit} />
+          <SymptomSelector
+            onSubmit={handleSymptomSubmit}
+            maxSelections={isQuickCheck ? 1 : 5}
+          />
         ) : (
           <>
             {(phase || loading) && (

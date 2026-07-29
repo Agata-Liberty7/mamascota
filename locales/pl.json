@@ -62,6 +62,12 @@
   "start_subtitle": "Przygotuj się do wizyty — pomogę wyjaśnić wszystko lekarzowi weterynarii",
   "start_description": "Nawet jeśli lekarz mówi w innym języku.",
   "start_button": "Start",
+  "quick_check_title": "Sprawdź, czy występują objawy, z którymi nie warto zwlekać.",
+  "quick_check_duration": "Quick Check zajmuje około minuty.",
+  "quick_check_button": "Rozpocznij Quick Check",
+  "full_consultation_title": "Pełna konsultacja",
+  "full_consultation_description": "Dokładnie omówimy sytuację i przygotujemy informacje dla lekarza weterynarii.",
+  "full_consultation_button": "Rozpocznij konsultację",
   "continue_title": "Kontynuować?",
   "continue_message": "Możesz kontynuować bieżącą konsultację albo rozpocząć nową. W wersji bezpłatnej Mamascota przechowuje tylko jedną aktywną konsultację: jeśli zaczniesz nową, obecny czat i powiązane raporty zostaną usunięte.",
   "start_new": "Zacznij od nowa",
@@ -335,12 +341,13 @@
     "subtitle": "Wszystko, czego potrzeba do pierwszej konsultacji i przygotowania do wizyty.",
     "continue": "Kontynuuj",
     "benefits": {
-      "consultation": "Konsultacja z Mamascota",
-      "pdf_report": "Raport PDF dla lekarza weterynarii",
-      "pdf_languages": "PDF w 7 językach",
+      "consultation": "Konsultacja z Mamascotą w Twoim języku",
+      "pdf_report": "Raport PDF dla weterynarza w 14 językach",
+      "pdf_languages": "PDF w 14 językach",
       "continue_consultation": "Można kontynuować bieżącą konsultację",
       "no_registration": "Bez rejestracji",
       "no_diagnosis": "Bez diagnozy i samoleczenia — tylko przygotowanie do wizyty"
     }
-  }
+  },
+  "brand_tagline": "Twoja osobista asystentka weterynaryjna"
 }

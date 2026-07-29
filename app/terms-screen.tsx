@@ -14,7 +14,7 @@ export default function TermsScreen() {
       ['termsAccepted', 'true'],
     ]);
     setVisible(false);
-    router.replace("/about?source=first_entry" as any); // после Условий показываем FAQ/About
+    router.replace("/animal-selection");
   };
 
 

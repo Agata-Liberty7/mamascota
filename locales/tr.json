@@ -62,6 +62,12 @@
   "start_subtitle": "Ziyarete hazırlanın — veterinere her şeyi anlatmanıza yardımcı olacağım",
   "start_description": "Veteriner başka bir dil konuşsa bile.",
   "start_button": "Başla",
+  "quick_check_title": "Ertelenmemesi gereken belirtiler olup olmadığını kontrol edin.",
+  "quick_check_duration": "Quick Check yaklaşık bir dakika sürer.",
+  "quick_check_button": "Quick Check’i başlat",
+  "full_consultation_title": "Tam danışma",
+  "full_consultation_description": "Durumu ayrıntılı olarak ele alıp veteriner için bilgileri hazırlayacağız.",
+  "full_consultation_button": "Danışmayı başlat",
   "continue_title": "Devam edilsin mi?",
   "continue_message": "Mevcut danışmaya devam edebilir veya yeni bir danışma başlatabilirsiniz. Mamascota'nın ücretsiz sürümü yalnızca bir aktif danışmayı saklar: yeni bir danışma başlatırsanız mevcut sohbet ve ona bağlı raporlar silinir.",
   "start_new": "Yeniden başla",
@@ -335,12 +341,13 @@
     "subtitle": "İlk danışma ve veteriner ziyaretine hazırlık için gereken her şey.",
     "continue": "Devam et",
     "benefits": {
-      "consultation": "Mamascota ile danışma",
-      "pdf_report": "Veteriner için PDF raporu",
-      "pdf_languages": "7 dilde PDF",
+      "consultation": "Mamascota ile kendi dilinizde danışma",
+      "pdf_report": "Veteriner için 14 dilde PDF raporu",
+      "pdf_languages": "14 dilde PDF",
       "continue_consultation": "Mevcut danışmaya devam edilebilir",
       "no_registration": "Kayıt gerekmez",
       "no_diagnosis": "Tanı ve kendi kendine tedavi yok — yalnızca ziyarete hazırlık"
     }
-  }
+  },
+  "brand_tagline": "Kişisel veteriner asistanınız"
 }

@@ -7,7 +7,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Image,
   Platform,
 } from "react-native";
 import i18n from "../i18n";
@@ -49,11 +48,6 @@ export default function TermsModal({
             ]}
             showsVerticalScrollIndicator
           >
-            <Image
-              source={require("../assets/images/Mamascota_5_1.png")}
-              style={[styles.termsImage, isWeb && styles.termsImageWeb]}
-              resizeMode="contain"
-            />
 
             <Text style={styles.title}>{i18n.t(titleKey)}</Text>
 

@@ -59,6 +59,12 @@
   "start_subtitle": "Bereiten Sie den Besuch vor — ich helfe Ihnen, dem Tierarzt alles zu erklären",
   "start_description": "Auch wenn der Tierarzt eine andere Sprache spricht.",
   "start_button": "Starten",
+  "quick_check_title": "Prüfen Sie, ob es Anzeichen gibt, mit denen Sie nicht warten sollten.",
+  "quick_check_duration": "Der Quick Check dauert etwa eine Minute.",
+  "quick_check_button": "Quick Check starten",
+  "full_consultation_title": "Vollständige Beratung",
+  "full_consultation_description": "Wir gehen die Situation ausführlich durch und bereiten die Informationen für den Tierarzt vor.",
+  "full_consultation_button": "Beratung starten",
   "continue_title": "Fortfahren?",
   "continue_message": "Sie können Ihre aktuelle Beratung fortsetzen oder eine neue starten. In der kostenlosen Version speichert Mamascota nur eine aktive Sitzung: wenn Sie eine neue starten, wird die aktuelle Sitzung und ihre Berichte gelöscht.",
   "start_new": "Neu starten",
@@ -93,7 +99,7 @@
     "faq_2_a": "Ich bin eine digitale tierärztliche Assistentin. Mamascota ist kein KI-Experiment, sondern basiert auf praktischer Erfahrung mit Tieren und den Menschen, die sich um sie kümmern. Deshalb geht es hier nicht um schnelle Antworten, sondern um die richtigen Fragen.",
     "faq_3_q": "Was unterscheidet Mamascota von einer normalen KI und warum stellt sie so viele Fragen?",
     "faq_3_a": "Allgemeine KI-Systeme werden mit Texten aus vielen unterschiedlichen Fachgebieten trainiert. Mamascota arbeitet anders. Sie basiert auf spezialisiertem veterinärmedizinischem Wissen, das eigens zur Vorbereitung auf einen Tierarztbesuch zusammengestellt wurde. Dabei nutzt sie veterinärmedizinische Leitlinien, Fachbücher, klinische Entscheidungsalgorithmen und weitere professionelle Quellen. Selbst die besten Empfehlungen sind ohne genaue Informationen über ein bestimmtes Tier nur begrenzt hilfreich. Deshalb stellt Mamascota ihre Fragen Schritt für Schritt: Wann haben die Symptome begonnen? Wie haben sie sich verändert? Was passiert im Moment? Welche wichtigen Anzeichen fehlen? Aus den Antworten erstellt Mamascota eine strukturierte Beschreibung des Zustands des Tieres sowie einen Bericht, der dem Tierarzt vorgelegt werden kann. Mamascota stellt keine Diagnosen – sie hilft dabei, den Tierarztbesuch vorzubereiten und die Informationen übersichtlich zusammenzustellen.",
-    "faq_4_q": "Kann Mamascota eine Diagnose stellen?",    
+    "faq_4_q": "Kann Mamascota eine Diagnose stellen?",
     "faq_4_a": "Nein – und ein seriöser Dienst sollte das auch nicht versprechen. Selbst Tierärzte stellen ohne Untersuchung keine Diagnose. Sie erhalten einen übersichtlichen Bericht mit Ihren Beobachtungen, dem zeitlichen Verlauf und wichtigen Hinweisen.",
     "faq_5_q": "Werden meine Daten gespeichert?",
     "faq_5_a": "Nur Informationen über Ihr Haustier und Ihre Beobachtungen: Tierart, Rasse, Alter, Symptome und alles, was Sie während der Beratung mitteilen möchten. Für die Nutzung von Mamascota sind weder Registrierung noch persönliche Daten des Halters erforderlich.",
@@ -328,12 +334,13 @@
     "subtitle": "Alles, was Sie für eine erste Beratung und die Vorbereitung auf den Tierarztbesuch brauchen.",
     "continue": "Weiter",
     "benefits": {
-      "consultation": "Beratung mit Mamascota",
-      "pdf_report": "PDF-Bericht für die Tierärztin oder den Tierarzt",
+      "consultation": "Beratung mit Mamascota in Ihrer Sprache",
+      "pdf_report": "PDF-Bericht für die Tierärztin oder den Tierarzt in 14 Sprachen",
       "pdf_languages": "PDF in 7 Sprachen",
       "continue_consultation": "Sie können die aktuelle Beratung fortsetzen",
       "no_registration": "Ohne Registrierung",
       "no_diagnosis": "Keine Diagnose und keine Selbstbehandlung — nur Vorbereitung auf den Tierarztbesuch"
     }
-  }
+  },
+  "brand_tagline": "Ihre persönliche tiermedizinische Assistentin"
 }

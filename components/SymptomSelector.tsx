@@ -76,23 +76,36 @@ const SYMPTOMS = [
 
 interface Props {
   onSubmit: (selected: string[]) => void;
+  maxSelections?: number;
 }
 
-export default function SymptomSelector({ onSubmit }: Props) {
+export default function SymptomSelector({
+  onSubmit,
+  maxSelections = 5,
+}: Props) {
   const [selected, setSelected] = useState<string[]>([]);
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customSymptom, setCustomSymptom] = useState('');
 
   const toggleSymptom = (key: string) => {
     if (key === 'custom') {
+      if (maxSelections === 1) {
+        setSelected([]);
+      }
+
       setShowCustomInput(true);
       return;
+    }
+
+    if (maxSelections === 1 && showCustomInput) {
+      setShowCustomInput(false);
+      setCustomSymptom('');
     }
 
     setSelected(prev =>
       prev.includes(key)
         ? prev.filter(k => k !== key)
-        : prev.length < 5
+        : prev.length < maxSelections
           ? [...prev, key]
           : prev
     );

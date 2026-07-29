@@ -59,6 +59,12 @@
   "start_subtitle": "Prepare for the visit — I’ll help explain everything to the vet",
   "start_description": "Even if the vet speaks another language.",
   "start_button": "Get started",
+  "quick_check_title": "Check for signs that should not be delayed.",
+  "quick_check_duration": "Quick Check takes about one minute.",
+  "quick_check_button": "Start Quick Check",
+  "full_consultation_title": "Full consultation",
+  "full_consultation_description": "We will review the situation in detail and prepare the information for the veterinarian.",
+  "full_consultation_button": "Start consultation",
   "continue_title": "Continue?",
   "continue_message": "You can continue the current consultation or start a new one. In the free version, Mamascota keeps only one active consultation: if you start a new one, the current chat and its reports will be deleted.",
   "start_new": "Start new",
@@ -330,12 +336,13 @@
     "subtitle": "Everything you need for a first consultation and preparation for a vet visit.",
     "continue": "Continue",
     "benefits": {
-      "consultation": "Consultation with Mamascota",
-      "pdf_report": "PDF report for the veterinarian",
-      "pdf_languages": "PDF in 7 languages",
+      "consultation": "Consultation with Mamascota in your language",
+      "pdf_report": "PDF report for the veterinarian in 14 languages",
+      "pdf_languages": "PDF in 14 languages",
       "continue_consultation": "You can continue the current consultation",
       "no_registration": "No registration",
       "no_diagnosis": "No diagnosis or self-treatment — only preparation for a vet visit"
     }
-  }
+  },
+  "brand_tagline": "Your personal veterinary assistant"
 }

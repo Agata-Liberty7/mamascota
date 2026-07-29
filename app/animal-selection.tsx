@@ -12,6 +12,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from 'react-native';
 
@@ -33,6 +34,10 @@ export default function AnimalSelection() {
   const { langKey, from } = useLocalSearchParams();
   const normalizedLangKey = Array.isArray(langKey) ? langKey[0] : langKey ?? 'default';
   const normalizedFrom = Array.isArray(from) ? from[0] : from;
+  const {
+    width: viewportWidth,
+    height: viewportHeight,
+  } = useWindowDimensions();
 
 
 
@@ -262,13 +267,35 @@ export default function AnimalSelection() {
     setModalVisible(false);
 
     // 🔄 Передаём данные в чат
+    const storedConsultationMode =
+      await AsyncStorage.getItem("consultationMode");
+
     router.push({
       pathname: "/chat",
-      params: { pet: JSON.stringify(saved) },
+      params: {
+        pet: JSON.stringify(saved),
+        consultationMode:
+          storedConsultationMode === "quickCheck"
+            ? "quickCheck"
+            : "normal",
+      },
     });
   };
 
   const numColumns = 3;
+  const gridHorizontalPadding = 32;
+  const columnGap = viewportWidth < 600 ? 12 : 16;
+  const availableGridWidth =
+    Math.min(viewportWidth, 980) - gridHorizontalPadding;
+  const cardWidth = Math.min(
+    240,
+    (availableGridWidth - columnGap * (numColumns - 1)) / numColumns
+  );
+  const isCompactHeight = viewportHeight < 900;
+  const iconSize =
+    viewportWidth < 600
+      ? 92
+      : 108;
 
 
   return (
@@ -279,7 +306,10 @@ export default function AnimalSelection() {
         data={animals}
         numColumns={numColumns}
         keyExtractor={(item) => item.id}
-        columnWrapperStyle={styles.columnWrapper}
+        columnWrapperStyle={[
+          styles.columnWrapper,
+          { gap: columnGap },
+        ]}
         contentContainerStyle={styles.grid}
         ListFooterComponent={
           <View style={styles.footerContainer}>
@@ -319,14 +349,29 @@ export default function AnimalSelection() {
             <TouchableOpacity
               style={[
                 styles.card,
-                Platform.OS === "web" && styles.cardWeb,
+                {
+                  width: cardWidth,
+                  paddingVertical: isCompactHeight ? 6 : 8,
+                  marginBottom: isCompactHeight ? 10 : 12,
+                },
                 !isEnabled && styles.cardDisabled,
               ]}
               disabled={!isEnabled}
               onPress={isEnabled ? () => handleSelect(item.id) : undefined}
               activeOpacity={isEnabled ? 0.7 : 1}
             >
-              <Image source={item.image} style={styles.image} resizeMode="contain" />
+              <Image
+                source={item.image}
+                style={[
+                  styles.image,
+                  {
+                    width: iconSize,
+                    height: iconSize,
+                    marginBottom: isCompactHeight ? -8 : -6,
+                  },
+                ]}
+                resizeMode="contain"
+              />
               <Text style={styles.label}>{i18n.t(item.label)}</Text>
 
               {!isEnabled && (
@@ -490,7 +535,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '600',
-    marginBottom: 16,
+    marginBottom: 10,
     textAlign: 'center',
     width: "100%",
     maxWidth: 980,
@@ -500,36 +545,29 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 980,
     paddingHorizontal: 16,
-    paddingBottom: 32,
+    paddingBottom: 12,
     alignSelf: "center",
   },
   columnWrapper: {
     justifyContent: "center",
-    gap: 16,
   },
   // 🟦 Карточка-животное как кнопка
   card: {
     borderRadius: 16,
-    paddingVertical: 10,
-    marginBottom: 16,
+    paddingVertical: 8,
+    marginBottom: 12,
     alignItems: "center",
     backgroundColor: "#F5F7FB",
   },
-  cardWeb: {
-    flexBasis: "31%",
-    maxWidth: 240,
-    flexGrow: 0,
-    flexShrink: 1,
-  },
-
   // 🔒 Для заблокированных видов
   cardDisabled: {
     opacity: 0.4,
   },
-  image: { width: 100, height: 80
-   },
+  image: {
+    flexShrink: 0,
+  },
   label: {
-    marginTop: 8,
+    marginTop: 0,
     fontSize: 14,
     textAlign: "center",
   },
@@ -557,8 +595,8 @@ const styles = StyleSheet.create({
   petItem: { paddingVertical: 8, borderRadius: 6, marginBottom: 6 },
   petName: { fontSize: 15, fontWeight: '600' },
   petsEmpty: { fontSize: 14, textAlign: 'center', paddingVertical: 6 },
-  footerContainer: { alignItems: 'center', marginTop: 20 },
-  footerText: { fontSize: 14, color: '#666', marginBottom: 8 },
+  footerContainer: { alignItems: 'center', marginTop: 14 },
+  footerText: { fontSize: 14, color: '#666', marginBottom: 6 },
   footerButton: { backgroundColor: '#42A5F5', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 20 },
   footerButtonText: { color: '#fff', fontSize: 15, fontWeight: '600' },
 });
