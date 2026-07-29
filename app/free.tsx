@@ -1,4 +1,4 @@
-import { MaterialIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
@@ -40,10 +40,10 @@ export default function FreeScreen() {
           <View style={styles.list}>
             {benefits.map((key) => (
               <View key={key} style={styles.item}>
-                <MaterialIcons
-                  name="check-circle"
-                  size={20}
-                  color={theme.colors.buttonPrimaryBg}
+                <Feather
+                  name="check"
+                  size={19}
+                  color={theme.colors.textSecondary}
                 />
                 <Text style={styles.itemText}>
                   {i18n.t(`free_page.benefits.${key}`)}
@@ -83,14 +83,11 @@ const base = {
     maxWidth: 560,
     alignSelf: "center",
     backgroundColor: "#FFFFFF",
-    borderRadius: 24,
+    borderRadius: 16,
     paddingHorizontal: 24,
     paddingVertical: 28,
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.08,
-    shadowRadius: 18,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
   },
 
   title: {
@@ -127,7 +124,7 @@ const base = {
 
   button: {
     minHeight: 48,
-    borderRadius: 22,
+    borderRadius: 12,
     backgroundColor: theme.colors.buttonPrimaryBg,
     alignItems: "center",
     justifyContent: "center",

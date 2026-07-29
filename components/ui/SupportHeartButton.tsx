@@ -1,4 +1,4 @@
-import { MaterialIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { useRouter, type Href } from "expo-router";
 import React from "react";
 import { Pressable, StyleSheet } from "react-native";
@@ -17,9 +17,9 @@ export default function SupportHeartButton({
       hitSlop={10}
       disabled={disabled}
     >
-      <MaterialIcons
-        name="favorite"
-        size={24}
+      <Feather
+        name="heart"
+        size={22}
         color={disabled ? "#9E9E9E" : "#42A5F5"}
       />
     </Pressable>

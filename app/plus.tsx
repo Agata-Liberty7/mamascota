@@ -9,7 +9,7 @@ import {
   Linking,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 import i18n from "@/i18n";
 import { isPaid } from "@/utils/access";
@@ -18,11 +18,11 @@ const PLUS_GREEN = "#14B8A6";
 const PLUS_DARK = "#0F766E";
 
 const features = [
-  ["folder-outline", "plus.feature_1", "plus.feature_1_desc"],
-  ["calendar-month-outline", "plus.feature_2", "plus.feature_2_desc"],
-  ["file-pdf-box", "plus.feature_3", "plus.feature_3_desc"],
-  ["bell-outline", "plus.feature_4", "plus.feature_4_desc"],
-  ["infinity", "plus.feature_5", "plus.feature_5_desc"],
+  ["folder", "plus.feature_1", "plus.feature_1_desc"],
+  ["calendar", "plus.feature_2", "plus.feature_2_desc"],
+  ["file-text", "plus.feature_3", "plus.feature_3_desc"],
+  ["bell", "plus.feature_4", "plus.feature_4_desc"],
+  ["repeat", "plus.feature_5", "plus.feature_5_desc"],
 ] as const;
 
 export default function PlusScreen() {
@@ -73,7 +73,7 @@ export default function PlusScreen() {
     <SafeAreaView style={styles.root}>
       <ScrollView contentContainerStyle={styles.content}>
         <Pressable style={styles.backButton} onPress={handleClose}>
-          <MaterialCommunityIcons name="chevron-left" size={34} color="#FFFFFF" />
+          <Feather name="chevron-left" size={28} color={PLUS_DARK} />
         </Pressable>
 
         <Text style={styles.title}>{String(i18n.t("plus.title"))}</Text>
@@ -98,9 +98,9 @@ export default function PlusScreen() {
               ]}
             >
               <View style={styles.featureIcon}>
-                <MaterialCommunityIcons
+                <Feather
                   name={icon}
-                  size={24}
+                  size={21}
                   color={PLUS_DARK}
                 />
               </View>
@@ -162,9 +162,9 @@ export default function PlusScreen() {
 
           {isPlusActive ? (
             <View style={styles.activePlanBox}>
-              <MaterialCommunityIcons
+              <Feather
                 name="check-circle"
-                size={20}
+                size={19}
                 color={PLUS_DARK}
               />
               <Text style={styles.activePlanText}>
@@ -198,7 +198,7 @@ export default function PlusScreen() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: PLUS_GREEN,
+    backgroundColor: "#F7FAFA",
   },
 
   content: {
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 4,
     paddingBottom: 16,
-    backgroundColor: PLUS_GREEN,
+    backgroundColor: "#F7FAFA",
   },
 
   backButton: {
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
 
   title: {
     alignSelf: "center",
-    color: "#FFFFFF",
+    color: PLUS_DARK,
     fontSize: 17,
     lineHeight: 22,
     fontWeight: "800",
@@ -238,12 +238,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 18,
     paddingVertical: 5,
-    borderRadius: 999,
-    backgroundColor: "rgba(255, 255, 255, 0.16)",
+    borderRadius: 10,
+    backgroundColor: "#E6FFFA",
+    borderWidth: 1,
+    borderColor: "rgba(20, 184, 166, 0.32)",
   },
 
   headline: {
-    color: "#FFFFFF",
+    color: "#142222",
     fontSize: 21,
     lineHeight: 25,
     fontWeight: "800",
@@ -252,7 +254,7 @@ const styles = StyleSheet.create({
   },
 
   subtitle: {
-    color: "#EFFFFC",
+    color: "#526060",
     fontSize: 14,
     lineHeight: 19,
     fontWeight: "700",
@@ -265,9 +267,11 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 520,
     backgroundColor: "#FFFFFF",
-    borderRadius: 20,
+    borderRadius: 16,
     overflow: "hidden",
     marginBottom: 12,
+    borderWidth: 1,
+    borderColor: "#DCE7E5",
   },
 
   featureRow: {
@@ -284,15 +288,11 @@ const styles = StyleSheet.create({
   },
 
   featureIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    borderWidth: 1.5,
-    borderColor: PLUS_GREEN,
+    width: 28,
+    height: 28,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 14,
-    backgroundColor: "rgba(20, 184, 166, 0.1)",
+    marginRight: 12,
   },
 
   featureTextBlock: {
@@ -316,9 +316,11 @@ const styles = StyleSheet.create({
   priceCard: {
     width: "100%",
     maxWidth: 520,
-    borderRadius: 20,
+    borderRadius: 16,
     padding: 12,
-    backgroundColor: "rgba(255, 255, 255, 0.86)",
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#DCE7E5",
     marginBottom: 12,
   },
 
@@ -347,7 +349,7 @@ const styles = StyleSheet.create({
 
   primaryButton: {
     width: "100%",
-    borderRadius: 13,
+    borderRadius: 12,
     backgroundColor: PLUS_DARK,
     paddingVertical: 11,
     paddingHorizontal: 18,
@@ -362,7 +364,7 @@ const styles = StyleSheet.create({
 
   activePlanBox: {
     width: "100%",
-    borderRadius: 13,
+    borderRadius: 12,
     paddingVertical: 11,
     paddingHorizontal: 18,
     backgroundColor: "#DFFCF6",
@@ -392,7 +394,7 @@ planList: {
 
 planOption: {
   width: "100%",
-  borderRadius: 14,
+  borderRadius: 10,
   paddingVertical: 10,
   paddingHorizontal: 14,
   backgroundColor: "#FFFFFF",
@@ -444,7 +446,7 @@ planTitle: {
 planTitleActive: {
   fontSize: 13,
   fontWeight: "800",
-  color: PLUS_DARK,
+  color: "#314343",
   textAlign: "center",
   marginBottom: 3,
 },
@@ -459,21 +461,21 @@ planPrice: {
 planPriceActive: {
   fontSize: 15,
   fontWeight: "800",
-  color: PLUS_DARK,
+  color: "#314343",
   textAlign: "center",
 },
 
 secondaryButton: {
-  borderRadius: 13,
+  borderRadius: 12,
   borderWidth: 1,
-  borderColor: "rgba(255, 255, 255, 0.7)",
+  borderColor: PLUS_DARK,
   paddingVertical: 10,
   paddingHorizontal: 22,
-  backgroundColor: "rgba(255, 255, 255, 0.12)",
+  backgroundColor: "#FFFFFF",
 },
 
 secondaryButtonText: {
-  color: "#FFFFFF",
+  color: PLUS_DARK,
   fontSize: 14,
   fontWeight: "700",
   textAlign: "center",

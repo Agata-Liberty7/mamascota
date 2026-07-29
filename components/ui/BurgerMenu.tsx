@@ -1,4 +1,4 @@
-import { MaterialIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -125,7 +125,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
   const menuItems = [
       {
         label: String(i18n.t("menu.start_consultation")),
-        icon: "pets",
+        icon: "play-circle",
         // выбор животного доступен только после согласия с условиями
         enabled: termsAccepted,
         action: async () => {
@@ -173,7 +173,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
       },
     {
       label: String(i18n.t("menu.chat")),
-      icon: "chat",
+      icon: "message-circle",
       enabled: !!conversationId,
       action: enterChat,
     },
@@ -183,7 +183,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
     },
     {
       label: String(i18n.t("plus.title")),
-      icon: "add-circle",
+      icon: "plus-circle",
       enabled: true,
       plus: true,
       action: () => {
@@ -194,7 +194,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
 
     {
       label: String(i18n.t("menu.saved_sessions")),
-      icon: "list",
+      icon: "folder",
       enabled: hasSavedSessions,
       action: () => {
         onClose();
@@ -214,7 +214,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
           defaultValue: "Coming soon",
         })
       )}`,
-      icon: "book",
+      icon: "book-open",
       enabled: false,
     },
     {
@@ -227,7 +227,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
           defaultValue: "Coming soon",
         })
       )}`,
-      icon: "local-hospital",
+      icon: "map-pin",
       enabled: false,
     },
     {
@@ -240,7 +240,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
           defaultValue: "Coming soon",
         })
       )}`,
-      icon: "timeline",
+      icon: "activity",
       enabled: false,
     },
     {
@@ -252,7 +252,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
           defaultValue: "Support Mamascota",
         })
       ),
-      icon: "favorite",
+      icon: "heart",
       enabled: true,
       accent: true,
       action: () => {
@@ -271,7 +271,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
     },
     {
       label: String(i18n.t("menu.contact")),
-      icon: "contact-support",
+      icon: "mail",
       enabled: true,
       action: () => {
         onClose();
@@ -280,7 +280,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
     },
     {
       label: String(i18n.t("menu.settings")),
-      icon: "settings",
+      icon: "sliders",
       // язык и базовые настройки — всегда доступны
       enabled: true,
       action: () => {
@@ -321,7 +321,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
                   ]}
                   onPress={action}
                 >
-                  <MaterialIcons
+                  <Feather
                     name={icon as any}
                     size={22}
                     color={
@@ -348,7 +348,7 @@ export default function BurgerMenu({ visible, onClose }: Props) {
 
             return (
               <View key={index} style={styles.menuItem}>
-                <MaterialIcons
+                <Feather
                   name={icon as any}
                   size={22}
                   color="#bbb"
@@ -368,8 +368,8 @@ export default function BurgerMenu({ visible, onClose }: Props) {
           }}
         >
 
-            <MaterialIcons
-              name="logout"
+            <Feather
+              name="log-out"
               size={22}
               color="#999"
               style={styles.icon}

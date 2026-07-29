@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect, useRouter, type Href } from "expo-router";
 import React, { useCallback, useState, useEffect } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { clearActiveConversationData, clearConversationId } from "../utils/chatWithGPT";
 import { handleActiveSessionDecision } from "../utils/handleActiveSessionDecision";
 import { isPaid } from "../utils/access";
@@ -523,7 +523,7 @@ export default function StartScreen() {
     },
     mainStack: {
       justifyContent: "flex-start",
-      transform: [{ translateY: 24 }],
+      transform: [{ translateY: -64 }],
     },
     topBlock: {
       paddingTop: 0,
@@ -563,9 +563,9 @@ export default function StartScreen() {
               onPress={handleAboutPress}
               accessibilityLabel={String(i18n.t("about.tagline"))}
             >
-              <MaterialIcons
-                name="info-outline"
-                size={23}
+              <Feather
+                name="info"
+                size={21}
                 color={theme.colors.textSecondary}
               />
             </TouchableOpacity>
@@ -579,7 +579,11 @@ export default function StartScreen() {
               onPress={() => setLanguageOpen((v) => !v)}
               accessibilityLabel={String(i18n.t("menu.change_language"))}
             >
-              <Text style={styles.languageButtonText}>🌐</Text>
+              <Feather
+                name="globe"
+                size={21}
+                color={theme.colors.textSecondary}
+              />
             </TouchableOpacity>
           </View>
         </View>

@@ -1,3 +1,4 @@
+import { Feather } from "@expo/vector-icons";
 import { useRouter, type Href } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -44,9 +45,18 @@ export default function PlanHeaderStatus() {
         accessibilityRole="button"
         accessibilityLabel={String(i18n.t("free_page.title"))}
       >
-        <Text style={[styles.text, !paid && styles.freeText]}>
-          {paid ? i18n.t("plus.free_label") : `✓ ${i18n.t("plus.free_label")}`}
-        </Text>
+        <View style={styles.pillContent}>
+          {!paid && (
+            <Feather
+              name="check"
+              size={13}
+              color="#42A5F5"
+            />
+          )}
+          <Text style={[styles.text, !paid && styles.freeText]}>
+            {i18n.t("plus.free_label")}
+          </Text>
+        </View>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -55,9 +65,21 @@ export default function PlanHeaderStatus() {
         accessibilityRole="button"
         accessibilityLabel={String(i18n.t("plus.open_plus"))}
       >
-        <Text style={[styles.text, paid ? styles.plusTextActive : styles.plusText]}>
-          {paid ? `✓ ${i18n.t("plus.plus_label")}` : `+ ${i18n.t("plus.plus_label")}`}
-        </Text>
+        <View style={styles.pillContent}>
+          <Feather
+            name={paid ? "check" : "plus"}
+            size={13}
+            color={PLUS_COLOR}
+          />
+          <Text
+            style={[
+              styles.text,
+              paid ? styles.plusTextActive : styles.plusText,
+            ]}
+          >
+            {i18n.t("plus.plus_label")}
+          </Text>
+        </View>
       </TouchableOpacity>
     </View>
   );
@@ -73,12 +95,19 @@ const styles = StyleSheet.create({
 
   pill: {
     minHeight: 28,
-    borderRadius: 999,
+    borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 5,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#F3F4F6",
+  },
+
+  pillContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 3,
   },
 
   freeActive: {
