@@ -1,6 +1,7 @@
 // cloudflare/agent-worker/mamascota-agent/src/index.ts
 
 import { processMessageBrain } from "./brain/processMessage";
+import { answerProductFaq } from "./brain/productFaq";
 
 export interface Env {
   OPENAI_API_KEY: string;
@@ -12,6 +13,7 @@ type ChatMsg = { role: "system" | "user" | "assistant"; content: string };
 type AgentRequestBody = {
   message?: string;
   internalCommand?: string;
+  mode?: "chat" | "product_faq";
   pet?: any;
   symptomKeys?: string[];
   userLang?: string;
@@ -154,6 +156,35 @@ export default {
             env.OPENAI_MODEL ||
             null,
         });
+      }
+
+      if (body?.mode === "product_faq") {
+        const faqResult = await answerProductFaq({
+          env,
+          question: message,
+          userLang,
+          conversationHistory: conversationHistory
+            .filter(
+              (
+                item
+              ): item is {
+                role: "user" | "assistant";
+                content: string;
+              } =>
+                item.role === "user" ||
+                item.role === "assistant"
+            )
+            .slice(-6),
+        });
+
+        return json(
+          {
+            ...faqResult,
+            conversationId,
+            mode: "product_faq",
+          },
+          faqResult.ok ? 200 : 500
+        );
       }
 
       const result = await processMessageBrain({
