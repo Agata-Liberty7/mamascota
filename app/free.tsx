@@ -125,7 +125,7 @@ const base = {
   button: {
     minHeight: 48,
     borderRadius: 12,
-    backgroundColor: theme.colors.buttonPrimaryBg,
+    backgroundColor: "#EEF7FF",
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 20,
@@ -134,7 +134,7 @@ const base = {
   buttonText: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#FFFFFF",
+    color: theme.colors.buttonPrimaryBg,
   },
 } as const;
 
