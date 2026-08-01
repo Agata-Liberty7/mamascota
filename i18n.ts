@@ -18,7 +18,24 @@ import sr from "./locales/sr.json";
 import tr from "./locales/tr.json";
 import uk from "./locales/uk.json";
 
-const i18n = new I18n({ bg, de, en, es, fr, he, it, ka, pl, pt, ru, sr, tr, uk });
+const translations = {
+  bg,
+  de,
+  en,
+  es,
+  fr,
+  he,
+  it,
+  ka,
+  pl,
+  pt,
+  ru,
+  sr,
+  tr,
+  uk,
+};
+
+const i18n = new I18n(translations);
 i18n.enableFallback = true;
 
 const SUPPORTED = ["bg", "de", "en", "es", "fr", "he", "it", "ka", "pl", "pt", "ru", "sr", "tr", "uk"] as const;

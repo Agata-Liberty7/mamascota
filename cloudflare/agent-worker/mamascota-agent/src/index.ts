@@ -10,6 +10,11 @@ export interface Env {
 
 type ChatMsg = { role: "system" | "user" | "assistant"; content: string };
 
+type ProductFaqContextItem = {
+  question: string;
+  answer: string;
+};
+
 type AgentRequestBody = {
   message?: string;
   internalCommand?: string;
@@ -22,6 +27,7 @@ type AgentRequestBody = {
 
   // ✅ NEW: хвост истории (10–20 сообщений)
   conversationHistory?: ChatMsg[];
+  productFaqContext?: ProductFaqContextItem[];
 };
 
 function json(data: any, status = 200) {
@@ -158,6 +164,25 @@ export default {
         });
       }
 
+      const productFaqContext = Array.isArray(body?.productFaqContext)
+        ? body.productFaqContext
+            .filter(
+              (
+                item
+              ): item is ProductFaqContextItem =>
+                !!item &&
+                typeof item.question === "string" &&
+                item.question.trim().length > 0 &&
+                typeof item.answer === "string" &&
+                item.answer.trim().length > 0
+            )
+            .map((item) => ({
+              question: item.question.trim(),
+              answer: item.answer.trim(),
+            }))
+            .slice(0, 12)
+        : [];
+
       if (body?.mode === "product_faq") {
         const faqResult = await answerProductFaq({
           env,
@@ -175,6 +200,7 @@ export default {
                 item.role === "assistant"
             )
             .slice(-6),
+          productFaqContext,
         });
 
         return json(
