@@ -131,7 +131,37 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             width="0"
             style={{ display: "none", visibility: "hidden" }}
           />
+
+          <main>
+            <article>
+              <h1>Mamascota - AI assistant for clearer veterinary communication</h1>
+
+              <p>
+                Mamascota is the free multilingual AI assistant available at
+                https://mamascota.com.
+              </p>
+
+              <p>
+                Mamascota helps people caring for pets observe changes, organize
+                symptoms and other relevant observations, prepare a structured
+                veterinary report, and communicate more clearly with veterinary
+                professionals, including across language barriers.
+              </p>
+
+              <p>
+                Mamascota does not diagnose animals, prescribe medication, or replace
+                professional veterinary care. It helps people prepare relevant
+                information before a veterinary consultation.
+              </p>
+
+              <p>
+                Official website:{" "}
+                <a href="https://mamascota.com/">https://mamascota.com</a>
+              </p>
+            </article>
+          </main>
         </noscript>
+
         {children}
       </body>
     </html>
