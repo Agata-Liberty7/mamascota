@@ -1,7 +1,8 @@
 export function createPdfPreviewPlaceholderHtml(message: string) {
   return `
   <!DOCTYPE html>
-  <html>
+  <html translate="no">
+    <head><meta name="google" content="notranslate" /></head>
     <body style="margin:0;background:#F6F7F9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#111">
       
       <div style="display:flex;justify-content:center;align-items:center;min-height:100vh;padding:24px;box-sizing:border-box">
