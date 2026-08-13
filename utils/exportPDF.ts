@@ -78,9 +78,10 @@ function openWebPdfPreview(
   preview.document.open();
   preview.document.write(`
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no">
 <head>
   <meta charset="UTF-8" />
+  <meta name="google" content="notranslate" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${escapedTitle}</title>
   <style>
@@ -897,7 +898,7 @@ export async function exportSummaryPDF(
 
     const html = `
 <!DOCTYPE html>
-<html lang="${locale}" dir="${isHebrew ? "rtl" : "ltr"}">
+<html lang="${locale}" dir="${isHebrew ? "rtl" : "ltr"}" translate="no">
 <head>
 <meta charset="UTF-8"/>
 <title>${escapeHtml(normalizePdfText(title))}</title>
