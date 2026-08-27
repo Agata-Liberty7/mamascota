@@ -36,29 +36,56 @@ const seoJsonLd = {
       mainEntity: [
         {
           "@type": "Question",
-          name: "What is Mamascota?",
+          name: "Why would I need Mamascota if I see my pet every day?",
           acceptedAnswer: {
             "@type": "Answer",
             text:
-              "Mamascota is an AI assistant that helps people caring for pets observe changes more accurately, organize symptoms, communicate more clearly with veterinary professionals, overcome language barriers, and prepare a structured veterinary report.",
+              "Seeing your pet every day can make gradual changes surprisingly easy to miss. Mamascota helps you observe, notice and evaluate those changes: what matters, what can wait until a routine visit, and what should be discussed with a veterinarian sooner.",
           },
         },
         {
           "@type": "Question",
-          name: "Does Mamascota diagnose animals?",
+          name: "Who created Mamascota and why should I trust it?",
           acceptedAnswer: {
             "@type": "Answer",
             text:
-              "No. Mamascota does not diagnose, prescribe medication, or replace professional veterinary care. It helps prepare information for a veterinary consultation.",
+              "Mamascota was created by a veterinary assistant and grew out of real experience with animals and the people who care for them. It is designed around thoughtful questions rather than quick answers.",
           },
         },
         {
           "@type": "Question",
-          name: "What knowledge does Mamascota use?",
+          name: "How is this different from a regular AI, and why so many questions?",
           acceptedAnswer: {
             "@type": "Answer",
             text:
-              "Mamascota uses a specialized veterinary knowledge base that supports structured observation, symptom clarification, urgent-sign navigation, clearer communication with veterinary professionals, and preparation of veterinary reports.",
+              "Mamascota is built around a specialized veterinary knowledge base designed to help prepare for a veterinary visit. It asks questions step by step to clarify when symptoms began, how they changed, what is happening now, and which important signs are absent. From these answers, Mamascota prepares a structured description and a report that can be shared with a veterinarian.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "What will I get after a consultation? Will Mamascota diagnose my pet?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text:
+              "Mamascota does not diagnose animals. After a consultation, you receive a clear report summarizing your observations, when they started, and what may deserve attention. You can save it, return to it later, or share it with your veterinarian.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Do you collect my data?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text:
+              "Mamascota uses only information related to your pet and your observations, such as species, breed, age, symptoms, and anything else you choose to share during the consultation. No registration and no personal information are required to use Mamascota.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "How much does it cost?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text:
+              "The consultation and report in any language are free. Consultation history, multiple pet profiles, and additional Mamascota Plus features are available through a subscription. Voluntary support is also available.",
           },
         },
       ],
