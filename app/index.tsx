@@ -96,14 +96,34 @@ export default function StartScreen() {
   };
 
   const handleStart = async () => {
-    const activeId = await AsyncStorage.getItem("conversationId");
+    const decision = await handleActiveSessionDecision();
 
-    if (activeId) {
+    if (decision === "resume") {
       await AsyncStorage.setItem("restoreFromSummary", "1");
       await AsyncStorage.setItem("decisionTreeStale", "1");
 
       router.replace("/chat");
       return;
+    }
+
+    if (decision === "plus") {
+      router.push("/plus");
+      return;
+    }
+
+    if (decision === "cancel") {
+      return;
+    }
+
+    if (decision === "start_new") {
+      const activeId = await AsyncStorage.getItem("conversationId");
+      const paid = await isPaid();
+
+      if (activeId && !paid) {
+        await clearActiveConversationData(activeId);
+      }
+
+      await clearConversationId();
     }
 
     await ensureEntryFlow();
