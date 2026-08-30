@@ -315,7 +315,14 @@
     "active_status": "Mamascota Plus is active",
     "free_label": "Free",
     "plus_label": "Plus",
-    "open_plus": "Open Mamascota Plus"
+    "open_plus": "Open Mamascota Plus",
+    "restore_cta": "Restore Plus",
+    "restore_title": "Restore your Mamascota Plus access",
+    "restore_email_placeholder": "Email used for subscription",
+    "restore_send_code": "Send code",
+    "restore_code_placeholder": "6-digit code",
+    "restore_confirm": "Restore access",
+    "restore_error": "We couldn't restore Plus. Check your email and code and try again."
   },
   "contact_page": {
     "title": "Contact",

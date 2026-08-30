@@ -316,7 +316,14 @@
     "active_status": "Mamascota Plus aktif",
     "free_label": "Free",
     "plus_label": "Plus",
-    "open_plus": "Mamascota Plus'ı aç"
+    "open_plus": "Mamascota Plus'ı aç",
+    "restore_cta": "Plus'ı geri yükle",
+    "restore_title": "Mamascota Plus erişimini geri yükle",
+    "restore_email_placeholder": "Abonelik için kullanılan e-posta",
+    "restore_send_code": "Kod gönder",
+    "restore_code_placeholder": "6 haneli kod",
+    "restore_confirm": "Erişimi geri yükle",
+    "restore_error": "Plus geri yüklenemedi. E-posta ve kodu kontrol edip tekrar deneyin."
   },
   "landing": {
     "subtitle": "Hayvanlar her zaman yardıma ihtiyaç duyduklarını gösteremez. Mamascota önemli değişiklikleri fark etmeye ve veteriner ziyaretine hazırlanmaya yardımcı olur.",

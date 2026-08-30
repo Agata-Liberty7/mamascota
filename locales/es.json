@@ -313,7 +313,14 @@
     "active_status": "Mamascota Plus está activo",
     "free_label": "Free",
     "plus_label": "Plus",
-    "open_plus": "Abrir Mamascota Plus"
+    "open_plus": "Abrir Mamascota Plus",
+    "restore_cta": "Restaurar Plus",
+    "restore_title": "Restaura tu acceso a Mamascota Plus",
+    "restore_email_placeholder": "Email usado para la suscripción",
+    "restore_send_code": "Enviar código",
+    "restore_code_placeholder": "Código de 6 dígitos",
+    "restore_confirm": "Restaurar acceso",
+    "restore_error": "No pudimos restaurar Plus. Revisa el email y el código e inténtalo de nuevo."
   },
   "contact_page": {
     "title": "Contacto",

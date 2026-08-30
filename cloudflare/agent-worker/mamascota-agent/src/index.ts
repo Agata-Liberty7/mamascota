@@ -134,7 +134,7 @@ async function verifyPlusRecoveryCode(
   const normalizedEmail = email.trim().toLowerCase();
   const normalizedCode = code.trim();
 
-  if (!normalizedEmail || !/^\\d{6}$/.test(normalizedCode)) {
+  if (!normalizedEmail || !/^\d{6}$/.test(normalizedCode)) {
     return false;
   }
 

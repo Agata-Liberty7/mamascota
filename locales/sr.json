@@ -316,7 +316,14 @@
     "active_status": "Mamascota Plus је активна",
     "free_label": "Free",
     "plus_label": "Plus",
-    "open_plus": "Отвори Mamascota Plus"
+    "open_plus": "Отвори Mamascota Plus",
+    "restore_cta": "Vrati Plus",
+    "restore_title": "Vrati pristup Mamascota Plus",
+    "restore_email_placeholder": "Email korišćen za pretplatu",
+    "restore_send_code": "Pošalji kod",
+    "restore_code_placeholder": "Kod od 6 cifara",
+    "restore_confirm": "Vrati pristup",
+    "restore_error": "Nismo uspeli da vratimo Plus. Proverite email i kod i pokušajte ponovo."
   },
   "landing": {
     "subtitle": "Животиње не могу увек да покажу да им је потребна помоћ. Mamascota помаже да уочите важне промене и припремите се за посету ветеринару.",

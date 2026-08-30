@@ -314,7 +314,14 @@
     "active_status": "Mamascota Plus פעיל",
     "free_label": "Free",
     "plus_label": "Plus",
-    "open_plus": "פתח את Mamascota Plus"
+    "open_plus": "פתח את Mamascota Plus",
+    "restore_cta": "שחזור Plus",
+    "restore_title": "שחזור הגישה ל-Mamascota Plus",
+    "restore_email_placeholder": "האימייל ששימש למנוי",
+    "restore_send_code": "שליחת קוד",
+    "restore_code_placeholder": "קוד בן 6 ספרות",
+    "restore_confirm": "שחזור הגישה",
+    "restore_error": "לא הצלחנו לשחזר את Plus. בדקו את האימייל והקוד ונסו שוב."
   },
   "contact_page": {
     "title": "יצירת קשר",

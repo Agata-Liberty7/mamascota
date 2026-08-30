@@ -316,7 +316,14 @@
     "active_status": "Mamascota Plus активна",
     "free_label": "Free",
     "plus_label": "Plus",
-    "open_plus": "Відкрити Mamascota Plus"
+    "open_plus": "Відкрити Mamascota Plus",
+    "restore_cta": "Відновити Plus",
+    "restore_title": "Відновити доступ до Mamascota Plus",
+    "restore_email_placeholder": "Email, використаний для підписки",
+    "restore_send_code": "Надіслати код",
+    "restore_code_placeholder": "6-значний код",
+    "restore_confirm": "Відновити доступ",
+    "restore_error": "Не вдалося відновити Plus. Перевірте email і код та спробуйте ще раз."
   },
   "landing": {
     "subtitle": "Тварини не завжди можуть показати, що їм потрібна допомога. Mamascota допомагає помітити важливі зміни і підготуватися до візиту до ветеринара.",

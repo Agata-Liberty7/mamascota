@@ -7,15 +7,19 @@ import {
   ScrollView,
   Pressable,
   Linking,
+  TextInput,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import i18n from "@/i18n";
-import { isPaid } from "@/utils/access";
+import { isPaid, setPaid } from "@/utils/access";
 
 const PLUS_GREEN = "#14B8A6";
 const PLUS_DARK = "#0F766E";
+
+const PROXY_URL = process.env.EXPO_PUBLIC_PROXY_URL || "";
+const API_BASE_URL = PROXY_URL.replace(/\/agent\/?$/, "");
 
 const features = [
   ["folder-outline", "plus.feature_1", "plus.feature_1_desc"],
@@ -29,6 +33,12 @@ export default function PlusScreen() {
   const router = useRouter();
     const [selectedPlan, setSelectedPlan] = useState<"monthly" | "yearly">("yearly");
     const [isPlusActive, setIsPlusActive] = useState(false);
+    const [showRecovery, setShowRecovery] = useState(false);
+    const [recoveryEmail, setRecoveryEmail] = useState("");
+    const [recoveryCode, setRecoveryCode] = useState("");
+    const [recoveryCodeSent, setRecoveryCodeSent] = useState(false);
+    const [recoveryBusy, setRecoveryBusy] = useState(false);
+    const [recoveryError, setRecoveryError] = useState(false);
 
     useEffect(() => {
       let alive = true;
@@ -44,6 +54,80 @@ export default function PlusScreen() {
         alive = false;
       };
     }, []);
+
+    const handleRecoveryRequest = async () => {
+      const email = recoveryEmail.trim().toLowerCase();
+
+      if (!email || !API_BASE_URL) {
+        setRecoveryError(true);
+        return;
+      }
+
+      setRecoveryBusy(true);
+      setRecoveryError(false);
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/plus/recovery/request`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Recovery request failed");
+        }
+
+        setRecoveryCodeSent(true);
+      } catch {
+        setRecoveryError(true);
+      } finally {
+        setRecoveryBusy(false);
+      }
+    };
+
+    const handleRecoveryVerify = async () => {
+      const email = recoveryEmail.trim().toLowerCase();
+      const code = recoveryCode.trim();
+
+      if (!email || !/^\d{6}$/.test(code) || !API_BASE_URL) {
+        setRecoveryError(true);
+        return;
+      }
+
+      setRecoveryBusy(true);
+      setRecoveryError(false);
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/plus/recovery/verify`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, code }),
+        });
+
+        const result = (await response.json()) as {
+          ok?: boolean;
+          paid?: boolean;
+        };
+
+        if (!response.ok || !result.ok || !result.paid) {
+          throw new Error("Recovery verification failed");
+        }
+
+        await setPaid(true);
+        setIsPlusActive(true);
+        setShowRecovery(false);
+        setRecoveryCodeSent(false);
+        setRecoveryCode("");
+      } catch {
+        setRecoveryError(true);
+      } finally {
+        setRecoveryBusy(false);
+      }
+    };
 
     const handleSubscribe = () => {
     const url =
@@ -181,14 +265,87 @@ export default function PlusScreen() {
         </View>
 
         {!isPlusActive && (
-          <Pressable
-            style={styles.secondaryButton}
-            onPress={handleClose}
-          >
-            <Text style={styles.secondaryButtonText}>
-              {String(i18n.t("plus.continue_free"))}
-            </Text>
-          </Pressable>
+          <>
+            <Pressable
+              style={styles.recoveryButton}
+              onPress={() => {
+                setShowRecovery((value) => !value);
+                setRecoveryError(false);
+              }}
+            >
+              <Text style={styles.recoveryButtonText}>
+                {String(i18n.t("plus.restore_cta"))}
+              </Text>
+            </Pressable>
+
+            {showRecovery && (
+              <View style={styles.recoveryCard}>
+                <Text style={styles.recoveryTitle}>
+                  {String(i18n.t("plus.restore_title"))}
+                </Text>
+
+                <TextInput
+                  style={styles.recoveryInput}
+                  value={recoveryEmail}
+                  onChangeText={setRecoveryEmail}
+                  placeholder={String(i18n.t("plus.restore_email_placeholder"))}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  keyboardType="email-address"
+                  editable={!recoveryBusy && !recoveryCodeSent}
+                />
+
+                {!recoveryCodeSent ? (
+                  <Pressable
+                    style={styles.recoveryAction}
+                    onPress={handleRecoveryRequest}
+                    disabled={recoveryBusy}
+                  >
+                    <Text style={styles.recoveryActionText}>
+                      {String(i18n.t("plus.restore_send_code"))}
+                    </Text>
+                  </Pressable>
+                ) : (
+                  <>
+                    <TextInput
+                      style={styles.recoveryInput}
+                      value={recoveryCode}
+                      onChangeText={setRecoveryCode}
+                      placeholder={String(i18n.t("plus.restore_code_placeholder"))}
+                      keyboardType="number-pad"
+                      maxLength={6}
+                      editable={!recoveryBusy}
+                    />
+
+                    <Pressable
+                      style={styles.recoveryAction}
+                      onPress={handleRecoveryVerify}
+                      disabled={recoveryBusy}
+                    >
+                      <Text style={styles.recoveryActionText}>
+                        {String(i18n.t("plus.restore_confirm"))}
+                      </Text>
+                    </Pressable>
+                  </>
+                )}
+
+                {recoveryError && (
+                  <Text style={styles.recoveryError}>
+                    {String(i18n.t("plus.restore_error"))}
+                  </Text>
+                )}
+              </View>
+            )}
+
+            <Pressable
+              style={styles.secondaryButton}
+              onPress={handleClose}
+            >
+              <Text style={styles.secondaryButtonText}>
+                {String(i18n.t("plus.continue_free"))}
+              </Text>
+            </Pressable>
+          </>
         )}
       </ScrollView>
     </SafeAreaView>
@@ -460,6 +617,73 @@ planPriceActive: {
   fontSize: 15,
   fontWeight: "800",
   color: PLUS_DARK,
+  textAlign: "center",
+},
+
+recoveryButton: {
+  borderRadius: 13,
+  borderWidth: 1,
+  borderColor: "rgba(255, 255, 255, 0.7)",
+  paddingVertical: 10,
+  paddingHorizontal: 22,
+  backgroundColor: "rgba(255, 255, 255, 0.12)",
+  marginBottom: 10,
+},
+
+recoveryButtonText: {
+  color: "#FFFFFF",
+  fontSize: 14,
+  fontWeight: "700",
+  textAlign: "center",
+},
+
+recoveryCard: {
+  width: "100%",
+  maxWidth: 520,
+  borderRadius: 16,
+  padding: 14,
+  backgroundColor: "#FFFFFF",
+  marginBottom: 10,
+},
+
+recoveryTitle: {
+  fontSize: 15,
+  fontWeight: "800",
+  color: PLUS_DARK,
+  marginBottom: 10,
+},
+
+recoveryInput: {
+  width: "100%",
+  borderWidth: 1,
+  borderColor: "rgba(15, 118, 110, 0.28)",
+  borderRadius: 12,
+  paddingVertical: 10,
+  paddingHorizontal: 12,
+  fontSize: 15,
+  backgroundColor: "#FFFFFF",
+  marginBottom: 10,
+},
+
+recoveryAction: {
+  width: "100%",
+  borderRadius: 12,
+  backgroundColor: PLUS_DARK,
+  paddingVertical: 10,
+  paddingHorizontal: 16,
+},
+
+recoveryActionText: {
+  color: "#FFFFFF",
+  textAlign: "center",
+  fontSize: 15,
+  fontWeight: "800",
+},
+
+recoveryError: {
+  marginTop: 8,
+  fontSize: 13,
+  color: "#9B1C1C",
   textAlign: "center",
 },
 

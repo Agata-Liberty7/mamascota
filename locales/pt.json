@@ -316,7 +316,14 @@
     "active_status": "Mamascota Plus ativa",
     "free_label": "Free",
     "plus_label": "Plus",
-    "open_plus": "Abrir Mamascota Plus"
+    "open_plus": "Abrir Mamascota Plus",
+    "restore_cta": "Restaurar Plus",
+    "restore_title": "Restaurar o acesso ao Mamascota Plus",
+    "restore_email_placeholder": "Email usado na subscrição",
+    "restore_send_code": "Enviar código",
+    "restore_code_placeholder": "Código de 6 dígitos",
+    "restore_confirm": "Restaurar acesso",
+    "restore_error": "Não foi possível restaurar o Plus. Verifique o email e o código e tente novamente."
   },
   "landing": {
     "subtitle": "Os animais nem sempre conseguem mostrar que precisam de ajuda. A Mamascota ajuda a notar mudanças importantes e a preparar a visita ao veterinário.",
