@@ -3,6 +3,10 @@ import { Platform } from "react-native";
 export type AnalyticsEventName =
   | "home_view"
   | "consultation_start_click"
+  | "entry_faq_view"
+  | "entry_onboarding_view"
+  | "entry_terms_view"
+  | "entry_terms_accepted"
   | "animal_selection_view"
   | "animal_selected"
   | "observation_selection_view"

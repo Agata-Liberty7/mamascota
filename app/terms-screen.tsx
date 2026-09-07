@@ -1,19 +1,29 @@
 // app/terms-screen.tsx
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TermsModal from '../components/TermsModal';
-import { getUiVariant } from "../utils/analytics";
+import i18n from '../i18n';
+import {
+  getUiVariant,
+  trackAnalyticsEvent,
+} from "../utils/analytics";
 
 export default function TermsScreen() {
   const router = useRouter();
   const [visible, setVisible] = useState(true); // показываем модалку сразу
+
+  useEffect(() => {
+    trackAnalyticsEvent("entry_terms_view", i18n.locale);
+  }, []);
 
   const handleAccept = async () => {
     await AsyncStorage.multiSet([
       ['acceptedTerms', 'true'],
       ['termsAccepted', 'true'],
     ]);
+
+    trackAnalyticsEvent("entry_terms_accepted", i18n.locale);
     setVisible(false);
     const uiVariant = getUiVariant();
 

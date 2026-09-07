@@ -16,6 +16,7 @@ import { theme } from "../src/theme";
 import MenuButton from "../components/ui/MenuButton";
 import SupportHeartButton from "../components/ui/SupportHeartButton";
 import TermsModal from "../components/TermsModal";
+import { trackAnalyticsEvent } from "../utils/analytics";
 
 
 export default function AboutScreen() {
@@ -31,6 +32,12 @@ export default function AboutScreen() {
   const isPreTerms = normalizedSource === "home";
   const isFirstEntry = normalizedSource === "first_entry";
   const isOnboardingLocked = isPreTerms || isFirstEntry;
+
+  useEffect(() => {
+    if (!isFirstEntry) return;
+
+    trackAnalyticsEvent("entry_faq_view", i18n.locale);
+  }, [isFirstEntry]);
 
   useEffect(() => {
   navigation.setOptions({

@@ -99,6 +99,7 @@ export default function AnimalSelection() {
       const legacy = await AsyncStorage.getItem('termsAccepted');
 
       if (accepted !== 'true' && legacy !== 'true') {
+        trackAnalyticsEvent('entry_terms_view', i18n.locale);
         setShowTermsModal(true);
       }
     };
@@ -111,6 +112,8 @@ export default function AnimalSelection() {
       ['acceptedTerms', 'true'],
       ['termsAccepted', 'true'],
     ]);
+
+    trackAnalyticsEvent('entry_terms_accepted', i18n.locale);
     setShowTermsModal(false);
   };
 

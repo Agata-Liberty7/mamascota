@@ -1,7 +1,7 @@
 // app/onboarding.tsx
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Image,
   Platform,
@@ -14,6 +14,7 @@ import Onboarding from 'react-native-onboarding-swiper';
 import { Ionicons } from '@expo/vector-icons';
 
 import i18n from '../i18n';
+import { trackAnalyticsEvent } from '../utils/analytics';
 import { theme } from '../src/theme';
 
 const stylesMobile = StyleSheet.create({
@@ -356,6 +357,18 @@ export default function OnboardingScreen() {
   ] as const;
 
   const lastIndex = webSlides.length - 1;
+
+  useEffect(() => {
+    const trackEntryOnboarding = async () => {
+      const seen = await AsyncStorage.getItem('seenOnboarding');
+
+      if (seen !== 'true') {
+        trackAnalyticsEvent('entry_onboarding_view', i18n.locale);
+      }
+    };
+
+    trackEntryOnboarding();
+  }, []);
 
   const handleDone = async () => {
     await AsyncStorage.setItem('seenOnboarding', 'true');
