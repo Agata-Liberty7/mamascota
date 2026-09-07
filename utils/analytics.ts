@@ -25,6 +25,32 @@ type AnalyticsWindow = Window & {
 };
 
 const PRODUCT_VERSION = "v1_0";
+const UI_VARIANT_KEY = "mamascota.ui_variant";
+
+export type UiVariant = "v1" | "v2";
+
+export function getUiVariant(): UiVariant {
+  if (typeof window === "undefined") {
+    return "v1";
+  }
+
+  const stored = window.localStorage.getItem(UI_VARIANT_KEY);
+
+  if (stored === "v1" || stored === "v2") {
+    return stored;
+  }
+
+  const randomValue =
+    typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function"
+      ? crypto.getRandomValues(new Uint32Array(1))[0] / 4294967296
+      : Math.random();
+
+  const variant: UiVariant = randomValue < 0.5 ? "v1" : "v2";
+
+  window.localStorage.setItem(UI_VARIANT_KEY, variant);
+
+  return variant;
+}
 
 function getAppMode(): "browser" | "standalone" {
   if (typeof window === "undefined") {
@@ -81,6 +107,7 @@ export function trackAnalyticsEvent(
     ...safeParams,
     event,
     product_version: PRODUCT_VERSION,
+    ui_variant: getUiVariant(),
     app_mode: getAppMode(),
     interface_locale: normalizeLocale(interfaceLocale),
   });

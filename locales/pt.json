@@ -349,5 +349,7 @@
       "no_registration": "Sem registo",
       "no_diagnosis": "Sem diagnóstico nem automedicação — apenas preparação para a visita"
     }
-  }
+  },
+  "brand_tagline": "A sua assistente veterinária pessoal",
+  "full_consultation_button": "Iniciar consulta"
 }

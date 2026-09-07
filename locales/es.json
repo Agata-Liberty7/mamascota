@@ -342,5 +342,7 @@
       "no_registration": "Sin registro",
       "no_diagnosis": "Sin diagnóstico ni automedicación — solo preparación para la visita al veterinario"
     }
-  }
+  },
+  "brand_tagline": "Tu auxiliar veterinaria personal",
+  "full_consultation_button": "Iniciar consulta"
 }

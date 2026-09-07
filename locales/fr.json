@@ -343,5 +343,7 @@
       "no_registration": "Sans inscription",
       "no_diagnosis": "Sans diagnostic ni automédication — uniquement une préparation à la visite vétérinaire"
     }
-  }
+  },
+  "brand_tagline": "Votre assistante vétérinaire personnelle",
+  "full_consultation_button": "Commencer la consultation"
 }

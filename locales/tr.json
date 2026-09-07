@@ -349,5 +349,7 @@
       "no_registration": "Kayıt gerekmez",
       "no_diagnosis": "Tanı ve kendi kendine tedavi yok — yalnızca ziyarete hazırlık"
     }
-  }
+  },
+  "brand_tagline": "Kişisel veteriner asistanınız",
+  "full_consultation_button": "Danışmayı başlat"
 }

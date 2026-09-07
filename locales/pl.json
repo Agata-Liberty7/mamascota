@@ -349,5 +349,7 @@
       "no_registration": "Bez rejestracji",
       "no_diagnosis": "Bez diagnozy i samoleczenia — tylko przygotowanie do wizyty"
     }
-  }
+  },
+  "brand_tagline": "Twoja osobista asystentka weterynaryjna",
+  "full_consultation_button": "Rozpocznij konsultację"
 }

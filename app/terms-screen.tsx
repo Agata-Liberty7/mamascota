@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import TermsModal from '../components/TermsModal';
+import { getUiVariant } from "../utils/analytics";
 
 export default function TermsScreen() {
   const router = useRouter();
@@ -14,7 +15,14 @@ export default function TermsScreen() {
       ['termsAccepted', 'true'],
     ]);
     setVisible(false);
-    router.replace("/about?source=first_entry" as any); // после Условий показываем FAQ/About
+    const uiVariant = getUiVariant();
+
+    if (uiVariant === "v2") {
+      router.replace("/animal-selection");
+      return;
+    }
+
+    router.replace("/about?source=first_entry" as any);
   };
 
 

@@ -344,5 +344,7 @@
       "no_registration": "No registration",
       "no_diagnosis": "No diagnosis or self-treatment — only preparation for a vet visit"
     }
-  }
+  },
+  "brand_tagline": "Your personal veterinary assistant",
+  "full_consultation_button": "Start consultation"
 }
