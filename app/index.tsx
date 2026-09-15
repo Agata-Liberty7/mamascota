@@ -587,14 +587,14 @@ export default function StartScreen() {
       width: "100%",
       maxWidth: 960,
       alignItems: "center",
-      justifyContent: "flex-start",
+      justifyContent: "center",
       alignSelf: "center",
     },
     topBlock: {
       width: "100%",
       maxWidth: 620,
       alignItems: "center",
-      paddingTop: 34,
+      paddingTop: 0,
       pointerEvents: "none",
     },
     logoMark: {
@@ -637,7 +637,7 @@ export default function StartScreen() {
     actionGroup: {
       width: "100%",
       maxWidth: 620,
-      marginTop: 44,
+      marginTop: 34,
       alignItems: "center",
     },
     primaryAction: {
