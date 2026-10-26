@@ -41,25 +41,20 @@ type SummaryItem = {
 // перевод с fallback
 const t = (k: string, def: string) => i18n.t(k, { defaultValue: def });
 
-function isIosStandalonePwa(): boolean {
+function isIosWeb(): boolean {
   if (
     Platform.OS !== "web" ||
-    typeof window === "undefined" ||
     typeof navigator === "undefined"
   ) {
     return false;
   }
 
-  const nav = navigator as Navigator & { standalone?: boolean };
-  const isIos =
+  const nav = navigator as Navigator;
+
+  return (
     /iPhone|iPad|iPod/i.test(nav.userAgent) ||
-    (nav.platform === "MacIntel" && nav.maxTouchPoints > 1);
-
-  const isStandalone =
-    nav.standalone === true ||
-    window.matchMedia?.("(display-mode: standalone)")?.matches === true;
-
-  return isIos && isStandalone;
+    (nav.platform === "MacIntel" && nav.maxTouchPoints > 1)
+  );
 }
 
 function downloadPreparedWebPdf(file: File) {
@@ -802,7 +797,7 @@ export default function SummaryScreen() {
                       // обработчике клика. setTimeout и любой await после
                       // него уже не дадут открыть окно без блокировки.
                       const useIosPwaFileFlow =
-                        pendingPdfType === "summary" && isIosStandalonePwa();
+                        pendingPdfType === "summary" && isIosWeb();
 
                       const previewWindow: Window | null =
                         pendingPdfType === "summary" &&
