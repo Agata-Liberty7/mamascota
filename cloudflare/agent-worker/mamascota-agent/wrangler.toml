@@ -1,6 +1,6 @@
 name = "mamascota-agent"
 main = "src/index.ts"
-compatibility_date = "2024-12-01"
+compatibility_date = "2026-03-24"
 
 [vars]
 OPENAI_MODEL = "gpt-5-mini"
@@ -10,3 +10,6 @@ OPENAI_MODEL = "gpt-5-mini"
 binding = "PLUS_RECOVERY"
 id = "377f6d2ddcc24df4a84bd4b45f9ce0c8"
 preview_id = "5328e042f8ea40f092708cf0db9e1269"
+
+[browser]
+binding = "BROWSER"
