@@ -12,17 +12,21 @@ import * as IntentLauncher from "expo-intent-launcher";
 import { generateObservationDiaryPdf } from "./generateObservationDiaryPdf";
 import { generateObservationDiaryCsv } from "./generateObservationDiaryCsv";
 
-const PDF_RENDER_URL = (() => {
-  const agentUrl =
-    process.env.EXPO_PUBLIC_PROXY_URL ||
-    (process.env.EXPO_PUBLIC_API_URL ? `${process.env.EXPO_PUBLIC_API_URL}` : "");
+const PDF_RENDER_URL =
+  process.env.EXPO_PUBLIC_PDF_RENDER_URL?.trim() ||
+  (() => {
+    const agentUrl =
+      process.env.EXPO_PUBLIC_PROXY_URL ||
+      (process.env.EXPO_PUBLIC_API_URL
+        ? `${process.env.EXPO_PUBLIC_API_URL}`
+        : "");
 
-  if (!agentUrl) return "";
+    if (!agentUrl) return "";
 
-  return /\/agent\/?$/.test(agentUrl)
-    ? agentUrl.replace(/\/agent\/?$/, "/pdf")
-    : agentUrl.replace(/\/$/, "") + "/pdf";
-})();
+    return /\/agent\/?$/.test(agentUrl)
+      ? agentUrl.replace(/\/agent\/?$/, "/pdf")
+      : agentUrl.replace(/\/$/, "") + "/pdf";
+  })();
 
 async function renderWebPdfFile(
   html: string,
