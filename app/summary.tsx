@@ -468,7 +468,7 @@ export default function SummaryScreen() {
             )
           );
         }
-        return;
+        return null;
       }
 
       const selectedLang =
