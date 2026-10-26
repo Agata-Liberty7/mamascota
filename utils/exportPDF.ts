@@ -12,6 +12,48 @@ import * as IntentLauncher from "expo-intent-launcher";
 import { generateObservationDiaryPdf } from "./generateObservationDiaryPdf";
 import { generateObservationDiaryCsv } from "./generateObservationDiaryCsv";
 
+const PDF_RENDER_URL = (() => {
+  const agentUrl =
+    process.env.EXPO_PUBLIC_PROXY_URL ||
+    (process.env.EXPO_PUBLIC_API_URL ? `${process.env.EXPO_PUBLIC_API_URL}` : "");
+
+  if (!agentUrl) return "";
+
+  return /\/agent\/?$/.test(agentUrl)
+    ? agentUrl.replace(/\/agent\/?$/, "/pdf")
+    : agentUrl.replace(/\/$/, "") + "/pdf";
+})();
+
+async function renderWebPdfFile(
+  html: string,
+  fileName: string
+): Promise<File> {
+  if (!PDF_RENDER_URL) {
+    throw new Error("PdfRenderUrlMissing");
+  }
+
+  const response = await fetch(PDF_RENDER_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      html,
+      fileName,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`PdfRenderFailed:${response.status}`);
+  }
+
+  const blob = await response.blob();
+
+  return new File([blob], fileName, {
+    type: "application/pdf",
+  });
+}
+
 function normalizePdfText(input: any): string {
   if (input === null || input === undefined) return "";
   let s = String(input);
@@ -689,7 +731,8 @@ async function getDecisionTreeCached(sessionId: string, locale: string) {
 
 export async function exportSummaryPDF(
   sessionId: string,
-  previewWindow?: Window | null
+  previewWindow?: Window | null,
+  webFileMode = false
 ) {
   try {
     const chatRaw =
@@ -738,6 +781,13 @@ export async function exportSummaryPDF(
 
     if (cachedReport) {
       if (Platform.OS === "web") {
+        if (webFileMode) {
+          return await renderWebPdfFile(
+            cachedReport.html,
+            cachedReport.fileName
+          );
+        }
+
         openWebPdfPreview(cachedReport.html, cachedReport.title, previewWindow);
         return;
       }
@@ -1149,6 +1199,10 @@ h3 {
     });
 
     if (Platform.OS === "web") {
+      if (webFileMode) {
+        return await renderWebPdfFile(html, fileName);
+      }
+
       openWebPdfPreview(html, title, previewWindow);
       return;
     }
