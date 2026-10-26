@@ -41,6 +41,40 @@ type SummaryItem = {
 // перевод с fallback
 const t = (k: string, def: string) => i18n.t(k, { defaultValue: def });
 
+function isIosStandalonePwa(): boolean {
+  if (
+    Platform.OS !== "web" ||
+    typeof window === "undefined" ||
+    typeof navigator === "undefined"
+  ) {
+    return false;
+  }
+
+  const nav = navigator as Navigator & { standalone?: boolean };
+  const isIos =
+    /iPhone|iPad|iPod/i.test(nav.userAgent) ||
+    (nav.platform === "MacIntel" && nav.maxTouchPoints > 1);
+
+  const isStandalone =
+    nav.standalone === true ||
+    window.matchMedia?.("(display-mode: standalone)")?.matches === true;
+
+  return isIos && isStandalone;
+}
+
+function downloadPreparedWebPdf(file: File) {
+  const url = URL.createObjectURL(file);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = file.name;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 async function getPetByName(petName: string) {
   try {
     const petsRaw = await AsyncStorage.getItem("pets:list");
@@ -185,6 +219,8 @@ export default function SummaryScreen() {
   const [shouldStartCsvExport, setShouldStartCsvExport] = useState(false);
   const [currentPdfLang, setCurrentPdfLang] = useState<string>("en");
   const [hasPlusAccess, setHasPlusAccess] = useState(false);
+  const [pendingWebPdfFile, setPendingWebPdfFile] = useState<File | null>(null);
+  const [webPdfShareModalVisible, setWebPdfShareModalVisible] = useState(false);
   const router = useRouter();
 
   const showWebConfirm = async ({
@@ -403,8 +439,9 @@ export default function SummaryScreen() {
   const handleExportPDF = async (
     id: string,
     petName: string,
-    previewWindow?: Window | null
-  ) => {
+    previewWindow?: Window | null,
+    webFileMode = false
+  ): Promise<File | null> => {
     try {
       const allowed = await isSessionPdfAllowed(id);
 
@@ -453,14 +490,18 @@ export default function SummaryScreen() {
         setPdfTextKey("pdf.generating");
         setPdfLoading(true);
 
-        await exportSummaryPDF(id, previewWindow);
+        const exported = await exportSummaryPDF(
+          id,
+          previewWindow,
+          webFileMode
+        );
 
         trackAnalyticsEvent("pdf_opened", i18n.locale, {
           pdf_result: "cached",
           pdf_entry_point: "summary",
         });
 
-        return;
+        return webFileMode && exported ? (exported as File) : null;
       }
 
       setPdfTextKey("pdf.generating");
@@ -472,7 +513,11 @@ export default function SummaryScreen() {
 
       await ensureDecisionTreeCachedForSummary(id, petName);
 
-      await exportSummaryPDF(id, previewWindow);
+      const exported = await exportSummaryPDF(
+        id,
+        previewWindow,
+        webFileMode
+      );
 
       trackAnalyticsEvent("pdf_opened", i18n.locale, {
         pdf_result: "generated",
@@ -480,6 +525,8 @@ export default function SummaryScreen() {
       });
 
       await addPdfLanguage(normalizedLang);
+
+      return webFileMode && exported ? (exported as File) : null;
     } catch (err: any) {
       previewWindow?.close();
       console.error("PDF export error:", err);
@@ -495,6 +542,40 @@ export default function SummaryScreen() {
     } finally {
       setPdfLoading(false);
     }
+
+    return null;
+  };
+
+  const handleSharePreparedWebPdf = async () => {
+    const file = pendingWebPdfFile;
+    if (!file || Platform.OS !== "web") return;
+
+    try {
+      const nav = navigator as Navigator;
+
+      if (
+        typeof nav.share === "function" &&
+        (typeof nav.canShare !== "function" ||
+          nav.canShare({ files: [file] }))
+      ) {
+        await nav.share({
+          files: [file],
+          title: file.name,
+        });
+
+        setWebPdfShareModalVisible(false);
+        setPendingWebPdfFile(null);
+        return;
+      }
+    } catch (err: any) {
+      if (err?.name === "AbortError") {
+        return;
+      }
+
+      console.warn("PDF share failed, using download fallback:", err);
+    }
+
+    downloadPreparedWebPdf(file);
   };
 
   const handleExportObservationDiaryPDF = async (
@@ -720,8 +801,13 @@ export default function SummaryScreen() {
                       // ✅ Открываем окно ЗДЕСЬ — мы ещё в синхронном
                       // обработчике клика. setTimeout и любой await после
                       // него уже не дадут открыть окно без блокировки.
+                      const useIosPwaFileFlow =
+                        pendingPdfType === "summary" && isIosStandalonePwa();
+
                       const previewWindow: Window | null =
-                        pendingPdfType === "summary" && Platform.OS === "web"
+                        pendingPdfType === "summary" &&
+                        Platform.OS === "web" &&
+                        !useIosPwaFileFlow
                           ? window.open("", "_blank")
                           : null;
 
@@ -746,10 +832,27 @@ export default function SummaryScreen() {
 
                         if (pendingPdfType === "summary") {
                           setPdfTextKey("pdf.preparing_language");
+
+                          if (useIosPwaFileFlow) {
+                            const pdfFile = await handleExportPDF(
+                              pendingPdfItem.id,
+                              pendingPdfItem.petName,
+                              null,
+                              true
+                            );
+
+                            if (pdfFile) {
+                              setPendingWebPdfFile(pdfFile);
+                              setWebPdfShareModalVisible(true);
+                            }
+
+                            return;
+                          }
+
                           await handleExportPDF(
                             pendingPdfItem.id,
                             pendingPdfItem.petName,
-                            previewWindow  // передаём уже открытое окно
+                            previewWindow
                           );
                           return;
                         }
@@ -850,6 +953,54 @@ export default function SummaryScreen() {
             </View>
           </View>
         </Modal>
+
+      <Modal
+        transparent
+        animationType="fade"
+        visible={webPdfShareModalVisible}
+      >
+        <View style={styles.overlay}>
+          <View style={styles.box}>
+            <Text style={styles.text}>
+              {i18n.t("chat.share_pdf")}
+            </Text>
+
+            <TouchableOpacity
+              style={styles.csvPrimaryButton}
+              onPress={handleSharePreparedWebPdf}
+            >
+              <Text style={styles.csvPrimaryButtonText}>
+                {i18n.t("chat.share_pdf")}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.pdfLangCancel}
+              onPress={() => {
+                if (pendingWebPdfFile) {
+                  downloadPreparedWebPdf(pendingWebPdfFile);
+                }
+              }}
+            >
+              <Text style={styles.pdfLangCancelText}>
+                {i18n.t("csv.download_button")}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.pdfLangCancel}
+              onPress={() => {
+                setWebPdfShareModalVisible(false);
+                setPendingWebPdfFile(null);
+              }}
+            >
+              <Text style={styles.pdfLangCancelText}>
+                {i18n.t("cancel")}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       {/* 🔥 МОДАЛКА ЗАГРУЗКИ PDF */}
       <LoadingPDF visible={Platform.OS !== "web" && pdfLoading} textKey={pdfTextKey} />
