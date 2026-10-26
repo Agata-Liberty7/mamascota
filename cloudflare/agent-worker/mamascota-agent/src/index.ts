@@ -8,6 +8,12 @@ export interface Env {
   STRIPE_SECRET_KEY: string;
   RESEND_API_KEY: string;
   PLUS_RECOVERY: KVNamespace;
+  BROWSER: {
+    quickAction(
+      action: "pdf",
+      options: { html: string }
+    ): Promise<Response>;
+  };
 }
 
 type ChatMsg = { role: "system" | "user" | "assistant"; content: string };
@@ -339,6 +345,53 @@ export default {
           },
           200
         );
+      }
+
+      if (url.pathname === "/pdf") {
+        if (req.method !== "POST") {
+          return json({ ok: false, error: "Method not allowed" }, 405);
+        }
+
+        let body: { html?: unknown; fileName?: unknown };
+
+        try {
+          body = (await req.json()) as {
+            html?: unknown;
+            fileName?: unknown;
+          };
+        } catch {
+          return json({ ok: false, error: "Invalid JSON" }, 400);
+        }
+
+        const html =
+          typeof body.html === "string" ? body.html.trim() : "";
+
+        if (!html) {
+          return json({ ok: false, error: "HTML is required" }, 400);
+        }
+
+        const fileName =
+          typeof body.fileName === "string" && body.fileName.trim()
+            ? body.fileName.trim().replace(/[\\/\r\n"]/g, "_")
+            : "mamascota-report.pdf";
+
+        const pdfResponse = await env.BROWSER.quickAction("pdf", {
+          html,
+        });
+
+        const headers = new Headers(pdfResponse.headers);
+        headers.set("Content-Type", "application/pdf");
+        headers.set(
+          "Content-Disposition",
+          `attachment; filename="${fileName}"`
+        );
+        headers.set("Access-Control-Allow-Origin", "*");
+        headers.set("Access-Control-Expose-Headers", "Content-Disposition");
+
+        return new Response(pdfResponse.body, {
+          status: pdfResponse.status,
+          headers,
+        });
       }
 
       if (url.pathname === "/plus/recovery/request") {
