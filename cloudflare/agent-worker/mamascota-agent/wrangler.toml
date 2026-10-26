@@ -13,3 +13,4 @@ preview_id = "5328e042f8ea40f092708cf0db9e1269"
 
 [browser]
 binding = "BROWSER"
+remote = true
