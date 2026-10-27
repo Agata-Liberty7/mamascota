@@ -42,6 +42,31 @@ function json(data: any, status = 200) {
   });
 }
 
+function isAllowedPdfOrigin(req: Request): boolean {
+  const origin = req.headers.get("Origin");
+
+  if (!origin) {
+    return false;
+  }
+
+  try {
+    const parsed = new URL(origin);
+
+    if (parsed.protocol !== "https:") {
+      return false;
+    }
+
+    return (
+      parsed.hostname === "mamascota.com" ||
+      parsed.hostname === "www.mamascota.com" ||
+      parsed.hostname === "mamascota.pages.dev" ||
+      parsed.hostname.endsWith(".mamascota.pages.dev")
+    );
+  } catch {
+    return false;
+  }
+}
+
 async function sha256Hex(value: string): Promise<string> {
   const bytes = new TextEncoder().encode(value);
   const digest = await crypto.subtle.digest("SHA-256", bytes);
@@ -352,6 +377,15 @@ export default {
           return json({ ok: false, error: "Method not allowed" }, 405);
         }
 
+        if (!isAllowedPdfOrigin(req)) {
+          return json({ ok: false, error: "Forbidden" }, 403);
+        }
+
+        const contentLength = Number(req.headers.get("Content-Length") || 0);
+        if (contentLength > 2_000_000) {
+          return json({ ok: false, error: "Payload too large" }, 413);
+        }
+
         let body: { html?: unknown; fileName?: unknown };
 
         try {
@@ -368,6 +402,10 @@ export default {
 
         if (!html) {
           return json({ ok: false, error: "HTML is required" }, 400);
+        }
+
+        if (html.length > 2_000_000) {
+          return json({ ok: false, error: "Payload too large" }, 413);
         }
 
         const fileName =
