@@ -1268,7 +1268,10 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
         behavior="padding"
         keyboardVerticalOffset={headerHeight}
       >
-        <LoadingPDF visible={Platform.OS !== "web" && pdfGenerating} textKey={pdfTextKey} />
+        <LoadingPDF
+          visible={pdfGenerating && (Platform.OS !== "web" || isIosWeb())}
+          textKey={pdfTextKey}
+        />
         
         <Modal
           transparent
