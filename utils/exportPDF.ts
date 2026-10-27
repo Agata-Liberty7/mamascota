@@ -6,11 +6,12 @@ import i18n from "../i18n";
 import { chatWithGPT } from "./chatWithGPT";
 
 import { Platform } from "react-native";
-import { Asset } from "expo-asset";
 import * as FileSystem from "expo-file-system/legacy";
 import * as IntentLauncher from "expo-intent-launcher";
 import { generateObservationDiaryPdf } from "./generateObservationDiaryPdf";
 import { generateObservationDiaryCsv } from "./generateObservationDiaryCsv";
+
+const PDF_REPORT_TEMPLATE_VERSION = 2;
 
 const PDF_RENDER_URL =
   process.env.EXPO_PUBLIC_PDF_RENDER_URL?.trim() ||
@@ -315,6 +316,10 @@ async function getCachedPdfReport(
     const savedMessagesCount =
       typeof parsed?.messagesCount === "number" ? parsed.messagesCount : -1;
 
+    if (parsed?.templateVersion !== PDF_REPORT_TEMPLATE_VERSION) {
+      return null;
+    }
+
     if (savedMessagesCount !== currentMessagesCount) {
       return null;
     }
@@ -349,6 +354,7 @@ async function saveCachedPdfReport(
       JSON.stringify({
         createdAt: new Date().toISOString(),
         locale,
+        templateVersion: PDF_REPORT_TEMPLATE_VERSION,
         messagesCount: payload.messagesCount,
         title: payload.title,
         html: payload.html,
@@ -582,45 +588,6 @@ function localizeSpecies(species: string, sex: string, locale?: string): string 
   }
 
   return species;
-}
-
-async function getSpeciesImageUri(species: string): Promise<string> {
-  const value = (species || "").trim().toLowerCase();
-
-  let moduleRef: Parameters<typeof Asset.fromModule>[0] | null = null;
-
-  if (value === "cat") {
-    moduleRef = require("../assets/images/gato.png");
-  } else if (value === "dog") {
-    moduleRef = require("../assets/images/perro.png");
-  } else {
-    return "";
-  }
-
-  try {
-    if (!moduleRef) return "";
-
-    const asset = Asset.fromModule(moduleRef);
-
-    if (Platform.OS === "web") {
-      return asset.uri || "";
-    }
-
-    if (!asset.localUri) {
-      await asset.downloadAsync();
-    }
-
-    const fileUri = asset.localUri || asset.uri;
-    if (!fileUri) return "";
-
-    const base64 = await FileSystem.readAsStringAsync(fileUri, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
-
-    return `data:image/png;base64,${base64}`;
-  } catch {
-    return "";
-  }
 }
 
 async function buildDecisionTree(conversationId: string, locale: string) {
@@ -863,8 +830,6 @@ export async function exportSummaryPDF(
     const species =
       localizeSpecies(pet?.species || "", pet?.sex || "", locale) || "";
 
-    const speciesImageUri = await getSpeciesImageUri(pet?.species || "");
-
     let anamnesisShort = "";
     let nextSteps: any = {};
 
@@ -1026,31 +991,12 @@ h3 {
 }
 
 .animal-card {
-  display: table;
   width: 100%;
   margin-bottom: 8px;
 }
 
-.animal-card-text,
-.animal-card-image {
-  display: table-cell;
-  vertical-align: top;
-}
-
 .animal-card-text {
-  width: 65%;
-  padding-right: 16px;
-}
-
-.animal-card-image {
-  width: 35%;
-  text-align: right;
-}
-
-.animal-card-image img {
-  max-width: 160px;
-  max-height: 160px;
-  object-fit: contain;
+  width: 100%;
 }
 
 .footer {
@@ -1130,15 +1076,6 @@ h3 {
     }
   </div>
 
-  <div class="animal-card-image">
-    ${
-      speciesImageUri
-        ? `<img src="${speciesImageUri}" alt="${escapeHtml(
-            normalizePdfText(species || pet?.species || "pet")
-          )}" />`
-        : ""
-    }
-  </div>
 </div>
 
 <h2>${escapeHtml(normalizePdfText(dateLabel))}</h2>
