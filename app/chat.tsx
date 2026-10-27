@@ -1281,7 +1281,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
           <View style={styles.overlay}>
             <View style={styles.box}>
               <Text style={styles.text}>
-                {i18n.t("chat.share_pdf")}
+                {i18n.t("chat.pdf_ready")}
               </Text>
 
               <TouchableOpacity
