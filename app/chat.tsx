@@ -1279,41 +1279,41 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
           visible={webPdfShareModalVisible}
         >
           <View style={styles.overlay}>
-            <View style={styles.box}>
-              <Text style={styles.text}>
+            <View style={styles.webPdfBox}>
+              <Text style={styles.webPdfTitle}>
                 {i18n.t("chat.pdf_ready")}
               </Text>
 
               <TouchableOpacity
-                style={styles.pdfBtnPrimary}
+                style={styles.webPdfPrimaryBtn}
                 onPress={handleSharePreparedWebPdf}
               >
-                <Text style={styles.pdfBtnPrimaryText}>
+                <Text style={styles.webPdfPrimaryBtnText}>
                   {i18n.t("chat.share_pdf")}
                 </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={styles.pdfLangCancel}
+                style={styles.webPdfSecondaryBtn}
                 onPress={() => {
                   if (pendingWebPdfFile) {
                     downloadPreparedWebPdf(pendingWebPdfFile);
                   }
                 }}
               >
-                <Text style={styles.pdfLangCancelText}>
+                <Text style={styles.webPdfSecondaryBtnText}>
                   {i18n.t("csv.download_button")}
                 </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={styles.pdfLangCancel}
+                style={styles.webPdfCancelBtn}
                 onPress={() => {
                   setWebPdfShareModalVisible(false);
                   setPendingWebPdfFile(null);
                 }}
               >
-                <Text style={styles.pdfLangCancelText}>
+                <Text style={styles.webPdfCancelBtnText}>
                   {i18n.t("cancel", { defaultValue: "Cancel" })}
                 </Text>
               </TouchableOpacity>
@@ -1756,6 +1756,67 @@ const styles = StyleSheet.create({
     marginTop: 12,
     fontSize: 16,
     color: "#333",
+    textAlign: "center",
+  },
+  webPdfBox: {
+    backgroundColor: "#fff",
+    paddingHorizontal: 20,
+    paddingTop: 24,
+    paddingBottom: 18,
+    borderRadius: 18,
+    alignItems: "center",
+    width: "64%",
+    maxWidth: 300,
+  },
+  webPdfTitle: {
+    fontSize: 18,
+    lineHeight: 24,
+    color: "#333",
+    textAlign: "center",
+    marginBottom: 18,
+  },
+  webPdfPrimaryBtn: {
+    width: "100%",
+    minHeight: 46,
+    borderRadius: 14,
+    backgroundColor: "#42A5F5",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 16,
+    marginBottom: 10,
+  },
+  webPdfPrimaryBtnText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#fff",
+    textAlign: "center",
+  },
+  webPdfSecondaryBtn: {
+    width: "100%",
+    minHeight: 46,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: "#42A5F5",
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 16,
+    marginBottom: 8,
+  },
+  webPdfSecondaryBtnText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#42A5F5",
+    textAlign: "center",
+  },
+  webPdfCancelBtn: {
+    marginTop: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  webPdfCancelBtnText: {
+    fontSize: 15,
+    color: "#666",
     textAlign: "center",
   },
   pdfLangRow: {
