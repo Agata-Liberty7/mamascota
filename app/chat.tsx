@@ -132,6 +132,32 @@ function formatAssistantBubbleContent(
   return `${title.toLocaleUpperCase(i18n.locale || "en")}\n${rest}`;
 }
 
+function isIosWeb(): boolean {
+  if (Platform.OS !== "web" || typeof navigator === "undefined") {
+    return false;
+  }
+
+  const nav = navigator as Navigator;
+
+  return (
+    /iPhone|iPad|iPod/i.test(nav.userAgent) ||
+    (nav.platform === "MacIntel" && nav.maxTouchPoints > 1)
+  );
+}
+
+function downloadPreparedWebPdf(file: File) {
+  const url = URL.createObjectURL(file);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = file.name;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 export default function ChatScreen() {
   const navigation = useNavigation();
   const router = useRouter();
@@ -150,7 +176,9 @@ export default function ChatScreen() {
   const [pdfTextKey, setPdfTextKey] = useState<"pdf.generating" | "pdf.preparing_language">("pdf.generating");
   const [finalizing, setFinalizing] = useState(false);
   const [pdfLangModalVisible, setPdfLangModalVisible] = useState(false);
-  const [currentPdfLang, setCurrentPdfLang] = useState<string>("en");   
+  const [currentPdfLang, setCurrentPdfLang] = useState<string>("en");
+  const [pendingWebPdfFile, setPendingWebPdfFile] = useState<File | null>(null);
+  const [webPdfShareModalVisible, setWebPdfShareModalVisible] = useState(false);
 
   const [phase, setPhase] = useState<"intake" | "clarify" | "summary" | "ended" | null>(null);
   const [isPdfReady, setIsPdfReady] = useState(false);
@@ -957,7 +985,10 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
     }
   }
 
-  const handlePdfNowActual = async (previewWindow?: Window | null) => {
+  const handlePdfNowActual = async (
+    previewWindow?: Window | null,
+    webFileMode = false
+  ): Promise<File | null> => {
     if (pdfGenerating) return;
 
     try {
@@ -970,7 +1001,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
 
       if (!id) {
         previewWindow?.close();
-        return;
+        return null;
       }
 
       const selectedLang =
@@ -1035,14 +1066,18 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
         setPdfTextKey("pdf.generating");
         setPdfGenerating(true);
 
-        await exportSummaryPDF(id, previewWindow);
+        const exported = await exportSummaryPDF(
+          id,
+          previewWindow,
+          webFileMode
+        );
 
         trackAnalyticsEvent("pdf_opened", i18n.locale, {
           pdf_result: "cached",
           pdf_entry_point: "chat",
         });
 
-        return;
+        return webFileMode && exported ? (exported as File) : null;
       }
 
       const accessAllowed = true;
@@ -1077,7 +1112,7 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
             String(i18n.t("chat.pdf_not_ready"))
           );
         }
-        return;
+        return null;
       }
 
       setPdfGenerating(true);
@@ -1095,7 +1130,11 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
       console.log("📄 PDF step 6: after saveSessionSilently");
 
       console.log("📄 PDF step 7: before exportSummaryPDF");
-      await exportSummaryPDF(id, previewWindow);
+      const exported = await exportSummaryPDF(
+        id,
+        previewWindow,
+        webFileMode
+      );
 
       trackAnalyticsEvent("pdf_opened", i18n.locale, {
         pdf_result: "generated",
@@ -1108,6 +1147,8 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
 
       await refreshPdfReadyState(id);
       console.log("📄 PDF step 9: done");
+
+      return webFileMode && exported ? (exported as File) : null;
     } catch (e) {
       previewWindow?.close();
       console.error("❌ PDF now error:", e);
@@ -1118,6 +1159,40 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
     } finally {
       setPdfGenerating(false);
     }
+
+    return null;
+  };
+
+  const handleSharePreparedWebPdf = async () => {
+    const file = pendingWebPdfFile;
+    if (!file || Platform.OS !== "web") return;
+
+    try {
+      const nav = navigator as Navigator;
+
+      if (
+        typeof nav.share === "function" &&
+        (typeof nav.canShare !== "function" ||
+          nav.canShare({ files: [file] }))
+      ) {
+        await nav.share({
+          files: [file],
+          title: file.name,
+        });
+
+        setWebPdfShareModalVisible(false);
+        setPendingWebPdfFile(null);
+        return;
+      }
+    } catch (err: any) {
+      if (err?.name === "AbortError") {
+        return;
+      }
+
+      console.warn("PDF share failed, using download fallback:", err);
+    }
+
+    downloadPreparedWebPdf(file);
   };
 
   const handlePdfNow = async () => {
@@ -1195,6 +1270,54 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
       >
         <LoadingPDF visible={Platform.OS !== "web" && pdfGenerating} textKey={pdfTextKey} />
         
+        <Modal
+          transparent
+          animationType="fade"
+          visible={webPdfShareModalVisible}
+        >
+          <View style={styles.overlay}>
+            <View style={styles.box}>
+              <Text style={styles.text}>
+                {i18n.t("chat.share_pdf")}
+              </Text>
+
+              <TouchableOpacity
+                style={styles.pdfBtnPrimary}
+                onPress={handleSharePreparedWebPdf}
+              >
+                <Text style={styles.pdfBtnPrimaryText}>
+                  {i18n.t("chat.share_pdf")}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.pdfLangCancel}
+                onPress={() => {
+                  if (pendingWebPdfFile) {
+                    downloadPreparedWebPdf(pendingWebPdfFile);
+                  }
+                }}
+              >
+                <Text style={styles.pdfLangCancelText}>
+                  {i18n.t("csv.download_button")}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.pdfLangCancel}
+                onPress={() => {
+                  setWebPdfShareModalVisible(false);
+                  setPendingWebPdfFile(null);
+                }}
+              >
+                <Text style={styles.pdfLangCancelText}>
+                  {i18n.t("cancel", { defaultValue: "Cancel" })}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
         <Modal transparent animationType="fade" visible={finalizing}>
           <View style={styles.overlay}>
             <View style={styles.box}>
@@ -1224,10 +1347,12 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
                     currentPdfLang === langCode && styles.pdfLangChipActive,
                   ]}
                   onPress={async () => {
-                    // ✅ Открываем окно СИНХРОННО — до любого await,
-                    // пока браузер считает это реакцией на клик пользователя
+                    const useIosWebFileFlow = isIosWeb();
+
                     const previewWindow: Window | null =
-                      Platform.OS === "web" ? window.open("", "_blank") : null;
+                      Platform.OS === "web" && !useIosWebFileFlow
+                        ? window.open("", "_blank")
+                        : null;
 
                     if (previewWindow) {
                       previewWindow.document.open();
@@ -1246,6 +1371,18 @@ async function refreshDecisionTreeIfStale(conversationId: string) {
                     setPdfLangModalVisible(false);
 
                     setPdfTextKey("pdf.preparing_language");
+
+                    if (useIosWebFileFlow) {
+                      const pdfFile = await handlePdfNowActual(null, true);
+
+                      if (pdfFile) {
+                        setPendingWebPdfFile(pdfFile);
+                        setWebPdfShareModalVisible(true);
+                      }
+
+                      return;
+                    }
+
                     await handlePdfNowActual(previewWindow);
                   }}
                 >
