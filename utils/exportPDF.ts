@@ -834,14 +834,22 @@ export async function exportSummaryPDF(
     let nextSteps: any = {};
 
     try {
-      const workerDt = await getWorkerDecisionTreeFromChatCache(sessionId, locale);
-      if (workerDt) {
+      const parsedDt = JSON.parse(dtRaw);
+      const workerDt = parsedDt?.decisionTree ?? parsedDt;
 
+      const sourceLocale = String(
+        dtKey.split(":").pop() || chatLocale
+      )
+        .toLowerCase()
+        .split("-")[0]
+        .trim();
+
+      if (workerDt && typeof workerDt === "object") {
         const mapped = mapDecisionTreeToPdfSections(workerDt);
 
         const translated = await translatePdfSectionsIfNeeded(
           mapped,
-          chatLocale,
+          sourceLocale,
           locale,
           sessionId
         );

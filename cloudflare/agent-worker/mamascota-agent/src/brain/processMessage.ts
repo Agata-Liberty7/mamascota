@@ -40,6 +40,8 @@ type BrainArgs = {
   conversationHistory?: Array<{ role: string; content: string }>;
   langOverride?: string;
   postSummaryUpdateMode?: boolean;
+  sections?: any;
+  fromLocale?: string;
 };
 
 // =====================
@@ -629,7 +631,6 @@ ${JSON.stringify(sections, null, 2)}
         body: JSON.stringify({
           model,
           messages: translateMessages,
-          temperature: 0,
           response_format: { type: "json_object" },
         }),
       });
