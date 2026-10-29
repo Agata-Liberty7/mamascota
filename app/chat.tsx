@@ -709,8 +709,7 @@ useEffect(() => {
         setIsPdfReady(false);
         return;
       }
-      const locale = i18n.locale || "en";
-      const dtKey = `decisionTree:${conversationId}:${locale}`;
+      const dtKey = `decisionTree:${conversationId}:canonical`;
       const raw = await AsyncStorage.getItem(dtKey);
       setIsPdfReady(!!raw);
     } catch {
@@ -745,21 +744,109 @@ useEffect(() => {
 }
 
 async function ensureDecisionTreeCached(conversationId: string) {
-  const selectedPdfLang =
-    (await AsyncStorage.getItem("pdfLanguage")) ||
+  const dtKey = `decisionTree:${conversationId}:canonical`;
+
+  const storedChatLocale = await AsyncStorage.getItem("chatLocale");
+
+  let sourceLocale = String(
+    storedChatLocale ||
     i18n.locale ||
-    "en";
+    "en"
+  )
+    .toLowerCase()
+    .split("-")[0]
+    .trim();
 
-  const locale = selectedPdfLang;
-  const dtKey = `decisionTree:${conversationId}:${locale}`;
+  // Canonical DT is unique per consultation.
+  // Existing production sessions must reuse an already generated DT
+  // instead of creating new clinical content only because PDF language changed.
+  let raw = await AsyncStorage.getItem(dtKey);
 
-  // если есть кэш и он не помечен как stale — ничего не делаем
-  const raw = await AsyncStorage.getItem(dtKey);
+  if (!raw) {
+    const legacyPrefix = `decisionTree:${conversationId}:`;
+
+    const preferredLocales = Array.from(
+      new Set(
+        [
+          storedChatLocale,
+          i18n.locale,
+        ]
+          .filter(Boolean)
+          .map((value) =>
+            String(value)
+              .toLowerCase()
+              .split("-")[0]
+              .trim()
+          )
+      )
+    );
+
+    let legacyKey: string | null = null;
+    let legacyRaw: string | null = null;
+
+    for (const preferredLocale of preferredLocales) {
+      const candidateKey = `${legacyPrefix}${preferredLocale}`;
+      const candidateRaw = await AsyncStorage.getItem(candidateKey);
+
+      if (candidateRaw) {
+        legacyKey = candidateKey;
+        legacyRaw = candidateRaw;
+        break;
+      }
+    }
+
+    if (!legacyRaw) {
+      const allKeys = await AsyncStorage.getAllKeys();
+
+      const fallbackKey = allKeys.find(
+        (key) =>
+          key.startsWith(legacyPrefix) &&
+          key !== dtKey
+      );
+
+      if (fallbackKey) {
+        legacyKey = fallbackKey;
+        legacyRaw = await AsyncStorage.getItem(fallbackKey);
+      }
+    }
+
+    if (legacyKey && legacyRaw) {
+      try {
+        const parsedLegacy = JSON.parse(legacyRaw);
+
+        sourceLocale = String(
+          legacyKey.split(":").pop() ||
+          sourceLocale
+        )
+          .toLowerCase()
+          .split("-")[0]
+          .trim();
+
+        raw = JSON.stringify({
+          ...parsedLegacy,
+          sourceLocale,
+        });
+
+        await AsyncStorage.setItem(dtKey, raw);
+      } catch {}
+    }
+  }
 
   let savedMessagesCount = -1;
   if (raw) {
     try {
       const parsedDt = JSON.parse(raw);
+
+      if (
+        typeof parsedDt?.sourceLocale === "string" &&
+        parsedDt.sourceLocale.trim()
+      ) {
+        sourceLocale = parsedDt.sourceLocale
+          .toLowerCase()
+          .split("-")[0]
+          .trim();
+      }
+
       savedMessagesCount =
         typeof parsedDt?.messagesCount === "number" ? parsedDt.messagesCount : -1;
     } catch {}
@@ -792,7 +879,7 @@ async function ensureDecisionTreeCached(conversationId: string) {
   const dtRes = await chatWithGPT({
     message: "__MAMASCOTA_DECISION_TREE__",
     conversationId,
-    userLang: locale,
+    userLang: sourceLocale,
     conversationHistory,
     pet: pet || undefined,
   });
@@ -811,6 +898,7 @@ async function ensureDecisionTreeCached(conversationId: string) {
     JSON.stringify({
       createdAt: new Date().toISOString(),
       messagesCount: currentMessagesCount,
+      sourceLocale,
       decisionTree,
     })
   );
@@ -820,11 +908,7 @@ async function ensureDecisionTreeCached(conversationId: string) {
 }
 
 async function refreshDecisionTreeIfStale(conversationId: string) {
-  const locale =
-    (await AsyncStorage.getItem("pdfLanguage")) ||
-    i18n.locale ||
-    "en";
-  const dtKey = `decisionTree:${conversationId}:${locale}`;
+  const dtKey = `decisionTree:${conversationId}:canonical`;
   const raw = await AsyncStorage.getItem(dtKey);
 
   const historyRawA = await AsyncStorage.getItem(`chatHistory:${conversationId}`);

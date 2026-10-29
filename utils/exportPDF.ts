@@ -11,7 +11,7 @@ import * as IntentLauncher from "expo-intent-launcher";
 import { generateObservationDiaryPdf } from "./generateObservationDiaryPdf";
 import { generateObservationDiaryCsv } from "./generateObservationDiaryCsv";
 
-const PDF_REPORT_TEMPLATE_VERSION = 2;
+const PDF_REPORT_TEMPLATE_VERSION = 3;
 
 const PDF_RENDER_URL =
   process.env.EXPO_PUBLIC_PDF_RENDER_URL?.trim() ||
@@ -795,21 +795,38 @@ export async function exportSummaryPDF(
       return;
     }
 
-    const preferredDtKey = `decisionTree:${sessionId}:${locale}`;
-    const fallbackDtKey = `decisionTree:${sessionId}:${chatLocale}`;
+    const canonicalDtKey = `decisionTree:${sessionId}:canonical`;
 
-    const preferredDtRaw = await AsyncStorage.getItem(preferredDtKey);
-    const fallbackDtRaw =
-      preferredDtKey === fallbackDtKey
-        ? null
-        : await AsyncStorage.getItem(fallbackDtKey);
+    let dtKey = canonicalDtKey;
+    let dtRaw = await AsyncStorage.getItem(canonicalDtKey);
 
-    const dtKey = preferredDtRaw ? preferredDtKey : fallbackDtKey;
-    const dtRaw = preferredDtRaw || fallbackDtRaw;
+    // Backward compatibility for existing production sessions.
+    // Never prefer a decisionTree only because it matches the selected PDF language.
+    if (!dtRaw) {
+      const legacyPrefix = `decisionTree:${sessionId}:`;
+      const chatDtKey = `${legacyPrefix}${chatLocale}`;
+      const chatDtRaw = await AsyncStorage.getItem(chatDtKey);
+
+      if (chatDtRaw) {
+        dtKey = chatDtKey;
+        dtRaw = chatDtRaw;
+      } else {
+        const keys = await AsyncStorage.getAllKeys();
+        const fallbackLegacyKey = keys.find(
+          (key) =>
+            key.startsWith(legacyPrefix) &&
+            key !== canonicalDtKey
+        );
+
+        if (fallbackLegacyKey) {
+          dtKey = fallbackLegacyKey;
+          dtRaw = await AsyncStorage.getItem(fallbackLegacyKey);
+        }
+      }
+    }
 
     console.log("PDF DT CHECK", {
-      preferredDtKey,
-      fallbackDtKey,
+      canonicalDtKey,
       dtKey,
       hasDtRaw: !!dtRaw,
       currentMessagesCount,
@@ -838,7 +855,9 @@ export async function exportSummaryPDF(
       const workerDt = parsedDt?.decisionTree ?? parsedDt;
 
       const sourceLocale = String(
-        dtKey.split(":").pop() || chatLocale
+        parsedDt?.sourceLocale ||
+        dtKey.split(":").pop() ||
+        chatLocale
       )
         .toLowerCase()
         .split("-")[0]
